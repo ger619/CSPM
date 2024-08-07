@@ -1,6 +1,6 @@
 
 ![](https://img.shields.io/badge/Microverse-blueviolet)
-# The CSpM A project Management tool for Craft Silicon
+# The CSPM A project Management tool for Craft Silicon
 
 > 
 
