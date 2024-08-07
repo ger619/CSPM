@@ -70,3 +70,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
 end
+
+# gems to be used
+# gem 'rails admin'
+gem 'devise', '~> 4.9'
