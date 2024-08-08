@@ -23,18 +23,18 @@
             <div class="flex items-start">
               <div class="flex items-center h-5">
                 <% if devise_mapping.rememberable? %>
-                  <%= f.check_box :remember_me, class: "w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %>
+                  <%= f.check_box :remember_me, class: "w-4 h-4 border border-gray-900 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %>
                 <% end %>
               </div>
               <div class="ml-3 text-sm">
-                <%= f.label :remember_me, class: "text-gray-500 dark:text-gray-300" %>
+                <%= f.label :remember_me, class: "text-gray-900 dark:text-gray-300" %>
               </div>
             </div>
             <a href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"><%= render "devise/shared/forgot_password" %></a>
           </div>
-          <%= f.submit 'LOG IN', class: 'w-full text-gray-900 border border-black p-2 rounded font-semibold'  %>
-          <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-           <a href="#" class="font-medium text-primary-600 hover:underline dark:text-primary-500"><%= render "devise/shared/links" %></a>
+          <%= f.submit 'LOG IN', class: 'mt-6 w-full text-gray-900 border border-black border-b-4 border-r-2 p-2 rounded font-semibold rounded'  %>
+          <p class="text-sm font-light text-gray-900 dark:text-gray-400">
+           <%= render "devise/shared/links" %>
           </p>
         </div>
       </div>

@@ -1,16 +1,25 @@
-<h2>Forgot your password?</h2>
+
 
 <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <section class="bg-gray-50 dark:bg-gray-900 mx-auto ">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-[600px] ">
+      <h2>Forgot your password?</h2>
+      <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <%= image_tag 'logo.png', class: 'w-72 '%>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+      </div>
+          <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
+          <div class="field w-3/5">
+            <%= f.label :email, :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true %>
+          </div>
+
+          <div class="actions w-3/5">
+            <%= f.submit "Send me reset password instructions", class: 'mt-6 w-full text-gray-900 hover:bg-gray-300  border border-gray-300 border-b-4   p-2 rounded font-semibold rounded' %>
+          </div>
+    </div>
+  </section>
 <% end %>
 
 <%= render "devise/shared/links" %>
