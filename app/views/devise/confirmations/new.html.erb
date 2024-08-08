@@ -1,24 +1,30 @@
 
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
   <section class="bg-gray-50 dark:bg-gray-900 mx-auto ">
-    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-[600px]">
-      <h2>Resend confirmation instructions</h2>
-      <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-        <%= image_tag 'logo.png', class: 'w-72 '%>
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-[600px] ">
+        <h2>Resend confirmation instructions</h2>
+        <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <%= image_tag 'logo.png', class: 'w-72 '%>
 
-      </a>
-      <%= render "devise/shared/error_messages", resource: resource %>
+        </div>
+      <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+        <%= render "devise/shared/error_messages", resource: resource %>
+      </p>
 
 
-      <div class="field">
-        <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %><br />
-        <%= f.email_field :email, autofocus: true, class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
-      </div>
+        <div class="field w-3/5">
+          <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %><br />
+          <%= f.email_field :email, autofocus: true, class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+        </div>
 
-      <div class="actions mt-2">
-        <%= f.submit "Resend Instructions", class: 'w-full text-gray-900 bg-gray-50 border-2 border-blue-600 p-2 rounded font-semibold' %>
-      </div>
-      <%= render "devise/shared/links" %>
+        <div class="actions mt-2 w-3/5">
+          <%= f.submit "Resend Instructions", class: 'w-full text-gray-900 hover:text-white bg-gray-50 hover:bg-blue-600 border-2 border-blue-600 p-2 rounded font-semibold ' %>
+        </div>
+
+        <p class="w-3/5 text-sm font-light text-gray-500 dark:text-gray-400">
+          <%= render "devise/shared/links" %>
+        </p>
+
     </div>
   </section>
 <% end %>
