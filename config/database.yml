@@ -24,8 +24,6 @@ default: &default
 development:
   <<: *default
   database: cspm_development
-  username: 'ab'
-  password: 'abol_ger'
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -60,8 +58,7 @@ development:
 test:
   <<: *default
   database: cspm_test
-  username: 'ab'
-  password: 'abol_ger'
+
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

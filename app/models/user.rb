@@ -5,4 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable, :lockable, :timeoutable, :trackable
 
   has_one_attached :profile_picture
+
+  def name_initials
+    first_name.first + last_name.first
+  end
 end
