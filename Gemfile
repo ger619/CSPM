@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rubocop', '>= 1.0', '< 2.0'
 
-ruby '3.3.4'
+ruby '~> 3.1.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
@@ -39,7 +39,6 @@ gem 'jbuilder'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
@@ -71,3 +70,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
 end
+
+# gems to be used
+# gem 'rails admin'
+gem 'devise', '~> 4.9'

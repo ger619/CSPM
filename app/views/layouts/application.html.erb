@@ -12,7 +12,11 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <main class="mx-auto">
+      <%= render 'layouts/sidebar' %>
+      <% if current_user %>
+        <%= link_to 'LOG OUT', destroy_user_session_path, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } %>
+      <% end %>
       <%= yield %>
     </main>
   </body>
