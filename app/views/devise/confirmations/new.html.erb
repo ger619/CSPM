@@ -2,7 +2,7 @@
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
   <section class="bg-gray-50 dark:bg-gray-900 mx-auto ">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-[600px] ">
-        <h2>Resend confirmation instructions</h2>
+        <h2 class="text-gray-900 dark:text-white">Resend confirmation instructions</h2>
         <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           <%= image_tag 'logo.png', class: 'w-72 '%>
 
@@ -18,10 +18,10 @@
         </div>
 
         <div class="actions mt-2 w-3/5">
-          <%= f.submit "Resend Instructions", class: 'mt-6 w-full text-gray-900 border border-black border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+          <%= f.submit "Resend Instructions", class: 'mt-6 w-full text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
         </div>
 
-        <p class="w-3/5 text-sm font-light text-gray-900 dark:text-gray-400">
+        <p class="mt-2 w-3/5 text-sm font-light text-gray-900 dark:text-white">
           <%= render "devise/shared/links" %>
         </p>
 
