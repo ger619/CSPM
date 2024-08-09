@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable, :lockable, :timeoutable, :trackable
 
   has_one_attached :profile_picture
-
+  has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :destroy
   def name_initials
     if first_name.present? && last_name.present?
       "#{first_name[0]}#{last_name[0]}"
@@ -16,5 +16,9 @@ class User < ApplicationRecord
     else
       blank?
     end
+  end
+
+  def name
+    "#{first_name} #{last_name}"
   end
 end
