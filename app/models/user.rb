@@ -7,6 +7,14 @@ class User < ApplicationRecord
   has_one_attached :profile_picture
 
   def name_initials
-    first_name.first + last_name.first
+    if first_name.present? && last_name.present?
+      "#{first_name[0]}#{last_name[0]}"
+    elsif first_name.present?
+      first_name[0]
+    elsif last_name.present?
+      last_name[0]
+    else
+      blank?
+    end
   end
 end
