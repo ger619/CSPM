@@ -1,11 +1,23 @@
 <div class="grid grid-cols-2 ">
   <div class="flex justify-start">
-    <h1 class="font-bold capitalize text-2xl">Projects</h1>
+    <%= link_to 'Add New Project +', new_project_path, class: 'mb-4 w-2/5 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded'  %>
+
   </div>
   <!-- Search on the right -->
   <div class="flex justify-end">
-    <input type="text" class="w-64 border border-gray-300 rounded-lg mb-4 focus:ring-primary-600 focus:border-primary-600 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" />
-  </div>
 
+
+  <div class="flex mt-4 flex-col md:flex-row items-start md:items-center w-full">
+    <%= form_with url: project_index_path, method: :get, class: 'flex' do |form| %>
+      <%= form.text_field :query, placeholder: "Search ", class: "border-b-4 h-12" %>
+      <%= form.submit "Submit", class: "mb-4 ml-4 h-12 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+    <% end %>
+
+    <%= form_with url: project_index_path, method: :get, class: 'flex' do |form| %>
+      <%= form.submit "Clear", class: "ml-4 mb-4 h-12 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+    <% end %>
+
+  </div>
+  </div>
 
 </div>

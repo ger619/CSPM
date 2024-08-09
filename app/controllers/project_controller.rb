@@ -4,12 +4,16 @@ class ProjectController < ApplicationController
 
   # GET /projects
   def index
-    @project = Project.all
+    @project = if params[:query].present?
+                 Project.where('title LIKE ?', "%#{params[:query]}%")
+               else
+                 Project.all
+               end
   end
 
   # GET /projects/id
   def show
-    @project = Project.find(params[:id])
+    # @project = Project.find(params[:id])
   end
 
   # GET /projects/new

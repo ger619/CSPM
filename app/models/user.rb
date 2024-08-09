@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_one_attached :profile_picture
   has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :destroy
+  has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :destroy
   def name_initials
     if first_name.present? && last_name.present?
       "#{first_name[0]}#{last_name[0]}"

@@ -1,5 +1,6 @@
 class Project < ApplicationRecord
   belongs_to :user
+  has_many :tickets, dependent: :destroy
   has_rich_text :content
 
   def name
