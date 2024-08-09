@@ -8,13 +8,13 @@
 
 
   <div class="flex mt-4 flex-col md:flex-row items-start md:items-center w-full">
-    <%= form_with url: project_index_path, method: :get, class: 'flex' do |form| %>
-      <%= form.text_field :query, placeholder: "Search ", class: "border-b-4 h-12" %>
-      <%= form.submit "Submit", class: "mb-4 ml-4 h-12 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+    <%= form_with url: project_index_path, method: :get, class: 'flex' do |f| %>
+      <%= f.text_field :query, placeholder: "Search ", class: "border-b-4 h-12" %>
+      <%= f.submit "Search", class: "mb-4 ml-4 h-12 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
     <% end %>
 
-    <%= form_with url: project_index_path, method: :get, class: 'flex' do |form| %>
-      <%= form.submit "Clear", class: "ml-4 mb-4 h-12 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+    <%= form_with url: project_index_path, method: :get, class: 'flex' do |f| %>
+      <%= f.submit "Clear", class: "ml-4 mb-4 h-12 text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
     <% end %>
 
   </div>

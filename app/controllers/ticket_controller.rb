@@ -3,7 +3,7 @@ class TicketController < ApplicationController
   before_action :set_post
 
   def create
-    @ticket = @project.ticket.create(ticket_params)
+    @ticket = @project.ticket.new(ticket_params)
     @ticket.user = current_user
 
     if @ticket.save
@@ -12,6 +12,10 @@ class TicketController < ApplicationController
     else
       redirect_to project_path(@project), alert: 'Ticket was not created.'
     end
+  end
+
+  def new
+    @ticket = @project.ticket.new
   end
 
   def destroy
