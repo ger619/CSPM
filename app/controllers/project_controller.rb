@@ -14,7 +14,7 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     # @project = Project.find(params[:id])
-    @ticket = @project.tickets.all.order('created_at ASC')
+    @ticket = @project.tickets.all.order('created_at DESC')
   end
 
   # GET /projects/new
