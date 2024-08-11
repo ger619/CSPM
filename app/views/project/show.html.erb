@@ -32,10 +32,20 @@
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
         </svg>
       </p>
+
+
+
+
+        <% @ticket.each do |ticket| %>
+          <%= render 'tickets/ticket', project: @project, ticket: ticket %>
+        <% end %>
+
+
     </div>
 
     <div class="flex items-center justify-center m-4 rounded bg-gray-50 dark:bg-gray-800 w-full">
-        <%= render 'ticket/form', project: @project %>
+        <%= render 'tickets/form', project: @project %>
     </div>
+
   </div>
 </div>

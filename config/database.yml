@@ -3,7 +3,7 @@
 # Install the pg driver:
 #   gem install pg
 # On macOS with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
+#    gem install pg -- --with-pg-config=/usr/local/bin/pg_config
 # On Windows:
 #   gem install pg
 #       Choose the win32 build.
@@ -24,8 +24,8 @@ default: &default
 development:
   <<: *default
   database: cspm_development
-  username: ab
-  password: 'abol_ger'
+  #username: ab
+  #password: 'abol_ger'
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -60,8 +60,8 @@ development:
 test:
   <<: *default
   database: cspm_test
-  username: ab
-  password: 'abol_ger'
+  #username: ab
+  #password: 'abol_ger'
 
 
 

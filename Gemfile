@@ -74,3 +74,5 @@ end
 # gems to be used
 # gem 'rails admin'
 gem 'devise', '~> 4.9'
+
+gem 'friendly_id', '~> 5.5.0'

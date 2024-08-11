@@ -5,7 +5,7 @@ class ProjectController < ApplicationController
   # GET /projects
   def index
     @project = if params[:query].present?
-                 Project.where('title LIKE ?', "%#{params[:query]}%")
+                 Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
                else
                  Project.all
                end
@@ -14,6 +14,7 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     # @project = Project.find(params[:id])
+    @ticket = @project.tickets.all.order("created_at ASC")
   end
 
   # GET /projects/new
@@ -64,7 +65,7 @@ class ProjectController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project
-    @project = Project.find(params[:id])
+    @project = Project.friendly.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
