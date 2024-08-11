@@ -10,9 +10,9 @@ class Project < ApplicationRecord
   private
 
   def end_date_after_start_date
-    if end_date.present? && start_date.present? && end_date < start_date
-      errors.add(:end_date, 'End Date must be greater than Start Date')
-    end
+    return unless end_date.present? && start_date.present? && end_date < start_date
+
+    errors.add(:end_date, 'End Date must be greater than Start Date')
   end
 
   extend FriendlyId
