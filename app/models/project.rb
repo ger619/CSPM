@@ -5,6 +5,16 @@ class Project < ApplicationRecord
 
   validates :title, presence: true, uniqueness: true
 
+  validate :end_date_after_start_date
+
+  private
+
+  def end_date_after_start_date
+    if end_date.present? && start_date.present? && end_date < start_date
+      errors.add(:end_date, 'End Date must be greater than Start Date')
+    end
+  end
+
   extend FriendlyId
   friendly_id :title, use: :slugged
 
