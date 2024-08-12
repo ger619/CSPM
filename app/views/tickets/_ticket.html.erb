@@ -35,7 +35,7 @@
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          <%= link_to ticket.issue, project_ticket_path(ticket.id) %>
+          <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)  %>
         </th>
         <td class="px-6 py-4">
           <%#= project.description %>
@@ -44,7 +44,7 @@
           <%#= project.start_date %>
         </td>
         <td class="px-6 py-4">
-          <%= ticket.created_at %>
+          <%= ticket.created_at.strftime("%I:%M %p at %d %B %Y") %>
         </td>
         <td class="px-6 py-4">
           <%= ticket.user.name %>

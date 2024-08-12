@@ -7,7 +7,7 @@ class ProjectController < ApplicationController
     @project = if params[:query].present?
                  Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
                else
-                 Project.all
+                 Project.all.order('created_at DESC')
                end
   end
 
@@ -24,7 +24,7 @@ class ProjectController < ApplicationController
 
   # GET /projects/id/edit
   def edit
-    @project = Project.find(params[:id])
+    # @project = Project.find(params[:id])
   end
 
   # POST /projects
@@ -46,7 +46,7 @@ class ProjectController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        format.html { respond_to project_url(@project), notice: 'Project was successfully updated.' }
+        format.html { redirect_to project_index_path, notice: 'Project was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end

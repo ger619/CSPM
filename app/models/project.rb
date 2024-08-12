@@ -19,8 +19,9 @@ class Project < ApplicationRecord
   friendly_id :title, use: :slugged
 
   def name
-    # Pick team name from the team and display it
-    "#{create_user.first_name} #{create_user.last_name}"
+    # Pick name name from the user_id assigned
+    # to the project
+    user.name
   end
 
   def count

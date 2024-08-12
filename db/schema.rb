@@ -74,7 +74,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_11_113214) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
-    t.index ["title"], name: "index_projects_on_title", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
