@@ -7,7 +7,7 @@ class ProjectController < ApplicationController
     @project = if params[:query].present?
                  Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
                else
-                 Project.all.order('created_at DESC')
+                 Project.all.with_rich_text_content.order('created_at DESC')
                end
   end
 

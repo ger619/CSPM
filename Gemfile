@@ -76,3 +76,7 @@ end
 gem 'devise', '~> 4.9'
 
 gem 'friendly_id', '~> 5.5.0'
+
+gem 'mini_magick', '~> 4.13'
+
+#   gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
