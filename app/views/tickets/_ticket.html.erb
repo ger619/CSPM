@@ -10,22 +10,22 @@
         Priority
       </th>
       <th scope="col" class="px-6 py-3">
-        Start Date
-      </th>
-      <th scope="col" class="px-6 py-3">
         Description
       </th>
       <th scope="col" class="px-6 py-3">
-        Person who raised it
+        Start Date
       </th>
       <th scope="col" class="px-6 py-3">
-        State of the Ticket
+        Person who raised it
       </th>
       <th scope="col" class="px-6 py-3">
         Person who raised it
       </th>
       <th scope="col" class="px-6 py-3">
         Open/Closed
+      </th>
+      <th scope="col" class="px-6 py-3">
+        EDIT
       </th>
     </tr>
     </thead>
@@ -38,17 +38,20 @@
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)  %>
         </th>
         <td class="px-6 py-4">
-          <%#= project.description %>
-        </td>
-        <td class="px-6 py-4">
-          <%#= project.start_date %>
+          <%= ticket.priority %>
         </td>
         <td class="px-6 py-4">
           <%= ticket.created_at.strftime("%I:%M %p at %d %B %Y") %>
         </td>
-        <td class="px-6 py-4">
+        <td class="px-6 py-4 truncate w-64">
+          <%= ticket.body %>
+        </td>
+        <td class="px-6 py-4 truncate w-64">
           <%= ticket.user.name %>
         </td>
+
+
+
 
 
       </tr>
