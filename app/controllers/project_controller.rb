@@ -14,7 +14,13 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     # @project = Project.find(params[:id])
-    @ticket = @project.tickets.all.order('created_at DESC')
+    # @ticket = @project.tickets.all.order('created_at DESC')
+
+    @ticket = if params[:query].present?
+                @project.tickets.where('issue LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+              else
+                @project.tickets.order('created_at DESC')
+              end
   end
 
   # GET /projects/new

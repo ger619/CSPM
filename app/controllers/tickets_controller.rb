@@ -1,14 +1,11 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project
+  before_action :set_ticket, only: %i[show destroy]
 
-  def index
-    @tickets = @project.tickets.search(params[:query]).order('created_at DESC')
-  end
+  def index; end
 
-  def show
-    @ticket = @project.tickets.find(params[:id])
-  end
+  def show; end
 
   def new
     @ticket = @project.tickets.new
@@ -38,7 +35,11 @@ class TicketsController < ApplicationController
     @project = Project.friendly.find(params[:project_id])
   end
 
+  def set_ticket
+    @ticket = @project.tickets.find(params[:id])
+  end
+
   def ticket_params
-    params.require(:ticket).permit(:issue, :priority, :body, :project_id, :user_id)
+    params.require(:ticket).permit(:issue, :priority, :body, :project_id, :user_id, :image)
   end
 end
