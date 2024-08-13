@@ -1,7 +1,7 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project
-  before_action :set_ticket, only: %i[show destroy]
+  before_action :set_ticket, only: %i[show destroy edit update]
 
   def index; end
 
@@ -27,6 +27,16 @@ class TicketsController < ApplicationController
     @ticket = @project.tickets.find(params[:id])
     @comment.destroy
     redirect_to project_path(@project)
+  end
+
+  def edit; end
+
+  def update
+    if @ticket.update(ticket_params)
+      redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private

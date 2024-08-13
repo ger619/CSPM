@@ -30,7 +30,9 @@
     </tr>
     </thead>
     <tbody>
+
     <% @ticket.each do |ticket| %>
+
 
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
 
@@ -49,8 +51,14 @@
         <td class="px-6 py-4 truncate w-64 ">
           <%= (ticket.body) %>
         </td>
-        <td class="px-6 py-4 truncate w-64">
+        <td class="px-6 py-4 ">
           <%= ticket.user.name %>
+        </td>
+        <td class="px-4 py-4 ">
+          OPEN/CLOSED
+        </td>
+        <td class="px-4 py-4">
+          <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket) %>
         </td>
 
       </tr>
