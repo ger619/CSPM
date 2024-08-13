@@ -36,7 +36,6 @@ class TicketsController < ApplicationController
 
   def set_project
     @project = Project.friendly.find(params[:project_id])
-    # @ticket = @project.tickets.find(params[:id])
   end
 
   def ticket_params

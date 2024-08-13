@@ -3,6 +3,7 @@
 <div class="p-8 sm:ml-64">
   <div class="mt-14 p-4">
     <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
+      <%= [@project, project_index_path] %>
       <div class="md:gap-6">
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :title, :Title, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />

@@ -32,19 +32,22 @@
     <tbody>
     <% @ticket.each do |ticket| %>
 
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
 
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)  %>
+          <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
         </th>
         <td class="px-6 py-4">
           <%= ticket.priority %>
         </td>
+        <td class="px-6 py-4 truncate w-64 ">
+          <%= (ticket.body) %>
+        </td>
         <td class="px-6 py-4">
           <%= ticket.created_at.strftime("%I:%M %p at %d %B %Y") %>
         </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= ticket.body %>
+        <td class="px-6 py-4 truncate w-64 ">
+          <%= (ticket.body) %>
         </td>
         <td class="px-6 py-4 truncate w-64">
           <%= ticket.user.name %>
