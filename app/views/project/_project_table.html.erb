@@ -1,0 +1,65 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">
+        Name of Project
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Project Description
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Start Date
+      </th>
+      <th scope="col" class="px-6 py-3">
+        End Date
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Assignee
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Details
+      </th>
+      <th scope="col" class="px-6 py-3">
+        EDIT/REMOVE
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @project.each do |project|  %>
+
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12">
+
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <%= link_to project.title, project_path(project.id) %>
+        </th>
+        <td class="px-6 py-4">
+          <%= project.description %>
+        </td>
+        <td class="px-6 py-4">
+          <%= project.start_date.strftime("%d %B %Y") %>
+        </td>
+        <td class="px-6 py-4">
+          <% if project.end_date.present? %>
+            <%= project.end_date.strftime("%d %B %Y") %>
+          <% end %>
+        </td>
+        <td class="px-6 py-4">
+          <%= project.user.name %>
+        </td>
+        <td class="px-6 py-4 h-2">
+          <%= project.content %>
+        </td>
+        <td class="px-6 py-4 flex  gap-2">
+          <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-gray-900 font-bold dark:text-white"  %>
+
+          <%= button_to 'Destroy', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+        </td>
+
+
+      </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+</div>
