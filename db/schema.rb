@@ -91,7 +91,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_13_133357) do
   end
 
   create_table "tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "issues"
+    t.string "issue"
     t.string "priority"
     t.uuid "project_id", null: false
     t.uuid "user_id", null: false

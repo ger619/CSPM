@@ -17,11 +17,12 @@ class IssuesController < ApplicationController
     @issue = @ticket.issues.new(issue_params)
     @issue.user = current_user
 
-    if @issue.save
-      flash[:notice] = 'Issue was successfully created.'
-      redirect_to project_ticket_path(@project, @ticket)
-    else
-      redirect_to project_ticket_path(@project, @ticket), alert: 'Issue was not created.'
+    respond_to do |format|
+      if @issue.save
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
+      else
+        format.html { redirect_to new_project_ticket_issue_path(@project, @ticket), alert: 'Issue was not created.' }
+      end
     end
   end
 

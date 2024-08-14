@@ -40,7 +40,6 @@ class ProjectController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        puts @project
         format.html { redirect_to project_url(@project), notice: 'Project was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
