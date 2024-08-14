@@ -23,9 +23,9 @@ class ProjectController < ApplicationController
     # @ticket = @project.tickets.all.order('created_at DESC')
 
     @ticket = if params[:query].present?
-                @project.tickets.where('issues LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+                @project.tickets.where('issue LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
               else
-                @project.tickets.order('created_at DESC')
+                @project.tickets.all.order('created_at DESC')
               end
   end
 
