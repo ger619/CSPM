@@ -4,11 +4,23 @@ class ProjectController < ApplicationController
 
   # GET /projects
   def index
-    @project = if params[:query].present?
-                 Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
-               else
-                 Project.all.with_rich_text_content.order('created_at DESC')
-               end
+    # @pagy,  @project = pagy(Project.all.with_rich_text_content.order('created_at DESC'), items: 5)
+    @pagy, @project = if params[:query].present?
+                        pagy_countless(Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%",
+                                                     "%#{params[:query]}%"))
+                      else
+                        pagy_countless(Project.all.with_rich_text_content.order('created_at DESC'), items: 10)
+                      end
+    # @project = if params[:query].present?
+    #            Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+    #           else
+    #             Project.all.with_rich_text_content.order('created_at DESC')
+    #           end
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   # GET /projects/id
