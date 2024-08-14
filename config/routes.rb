@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "home#index"
   resources :project do
-    resources :tickets
+    resources :tickets do
+      resources :issues
+    end
   end
 
 end
