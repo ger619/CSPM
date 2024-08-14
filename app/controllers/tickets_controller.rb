@@ -5,7 +5,9 @@ class TicketsController < ApplicationController
 
   def index; end
 
-  def show; end
+  def show
+    @issue = @ticket.issues.order('created_at DESC')
+  end
 
   def new
     @ticket = @project.tickets.new
@@ -19,23 +21,27 @@ class TicketsController < ApplicationController
       flash[:notice] = 'ticket was successfully created.'
       redirect_to project_path(@project)
     else
-      redirect_to project_path(@project), alert: 'ticket was not created.'
+      redirect_to new_project_path(@project), alert: 'ticket was not created.'
     end
   end
 
   def destroy
     @ticket = @project.tickets.find(params[:id])
-    @comment.destroy
+    @ticket.destroy
     redirect_to project_path(@project)
   end
 
   def edit; end
 
   def update
+    @ticket = @project.tickets.find(params[:id])
+    @ticket.user = current_user # Optional: If you want to ensure the user is always the current user
+
     if @ticket.update(ticket_params)
-      redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully updated.'
+      flash[:notice] = 'Ticket was successfully updated.'
+      redirect_to project_path(@project)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, alert: 'Ticket was not updated.'
     end
   end
 
@@ -50,6 +56,6 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:issue, :priority, :body, :project_id, :user_id, :image)
+    params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image)
   end
 end

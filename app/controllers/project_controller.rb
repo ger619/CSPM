@@ -17,7 +17,7 @@ class ProjectController < ApplicationController
     # @ticket = @project.tickets.all.order('created_at DESC')
 
     @ticket = if params[:query].present?
-                @project.tickets.where('issue LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+                @project.tickets.where('issues LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
               else
                 @project.tickets.order('created_at DESC')
               end
@@ -40,7 +40,6 @@ class ProjectController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        puts @project
         format.html { redirect_to project_url(@project), notice: 'Project was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
