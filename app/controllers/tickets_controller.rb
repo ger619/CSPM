@@ -56,6 +56,6 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :image)
+    params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image)
   end
 end
