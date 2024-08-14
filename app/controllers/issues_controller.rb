@@ -15,6 +15,7 @@ class IssuesController < ApplicationController
 
   def create
     @issue = @ticket.issues.new(issue_params)
+    @issue.project = @project
     @issue.user = current_user
 
     respond_to do |format|
@@ -36,7 +37,7 @@ class IssuesController < ApplicationController
 
   def update
     if @issue.update(issue_params)
-      redirect_to project_ticket_issue_path(@project, @ticket, @issue), notice: 'Issue was successfully updated.'
+      redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -57,6 +58,6 @@ class IssuesController < ApplicationController
   end
 
   def issue_params
-    params.require(:issue).permit(:subject, :ticket_id, :project_id, :user_id)
+    params.require(:issue).permit(:content, :ticket_id, :project_id, :user_id)
   end
 end

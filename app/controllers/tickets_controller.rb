@@ -5,7 +5,9 @@ class TicketsController < ApplicationController
 
   def index; end
 
-  def show; end
+  def show
+    @issue = @ticket.issues.order('created_at DESC')
+  end
 
   def new
     @ticket = @project.tickets.new
@@ -25,13 +27,11 @@ class TicketsController < ApplicationController
 
   def destroy
     @ticket = @project.tickets.find(params[:id])
-    @comment.destroy
+    @ticket.destroy
     redirect_to project_path(@project)
   end
 
-  def edit
-    @ticket = @project.tickets.find(params[:id])
-  end
+  def edit; end
 
   def update
     @ticket = @project.tickets.find(params[:id])

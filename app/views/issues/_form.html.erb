@@ -1,8 +1,6 @@
-<div class="p-8 sm:ml-64 ">
+
   <%= form_with(model: [project, ticket, ticket.issues.build]) do |f|%>
     <h3> Issue </h3>
-    <%= f.rich_text_area :subject  %>
+    <%= f.rich_text_area :content %>
     <%= f.submit "Submit" %>
-
   <% end %>
-</div>
