@@ -4,11 +4,17 @@ class ProjectController < ApplicationController
 
   # GET /projects
   def index
-    @project = if params[:query].present?
-                 Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
-               else
-                 Project.all.with_rich_text_content.order('created_at DESC')
-               end
+    @pagy, @project = if params[:query].present?
+                        pagy_countless(Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%",
+                                                     "%#{params[:query]}%"), items: 10)
+                      else
+                        pagy_countless(Project.all.with_rich_text_content.order('created_at DESC'), items: 10)
+                      end
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   # GET /projects/id
@@ -17,9 +23,9 @@ class ProjectController < ApplicationController
     # @ticket = @project.tickets.all.order('created_at DESC')
 
     @ticket = if params[:query].present?
-                @project.tickets.where('issues LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+                @project.tickets.where('issue LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
               else
-                @project.tickets.order('created_at DESC')
+                @project.tickets.all.order('created_at DESC')
               end
   end
 
