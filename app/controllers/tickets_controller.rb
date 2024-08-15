@@ -17,11 +17,13 @@ class TicketsController < ApplicationController
     @tickets = @project.tickets.new(ticket_params)
     @tickets.user = current_user
 
-    if @tickets.save
-      flash[:notice] = 'ticket was successfully created.'
-      redirect_to project_path(@project)
-    else
-      redirect_to new_project_path(@project), alert: 'ticket was not created.'
+    respond_to do |format|
+      if @tickets.save
+        format.html { redirect_to project_path(@project), notice: 'ticket was successfully created.' }
+      else
+        # redirect_to new_project_path(@project), alert: 'ticket was not created.'
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

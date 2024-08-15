@@ -14,7 +14,7 @@
   <div class="w-full pt-2">
     <div class="dark:bg-gray-700 mb-4 font-bold uppercase">Type of Issue: <span class="font-medium"><%= @ticket.issue %></span></div>
     <div class="dark:bg-gray-700 mb-2.5 font-bold uppercase">Priority: <span class="font-medium"><%= @ticket.priority %></span></div>
-    <div class="dark:bg-gray-700 mb-2.5 font-bold capitalize">Content: <span class="font-extralight"><%= @ticket.body %></span></div>
+    <div class="dark:bg-gray-700 mb-2.5 font-bold capitalize">Content: <span class="font-extralight"><%= @ticket.body.to_plain_text.truncate(500) %></span></div>
   </div>
   </div>
 

@@ -675,6 +675,41 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="bullet (v7.2.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="bullet" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/bullet-7.2.0" />
+          <option name="version" value="7.2.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/bullet-7.2.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/bullet-7.2.0/tasks" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/bullet-7.2.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/bullet-7.2.0/tasks" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/bullet-7.2.0/tasks" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="capybara (v3.40.0) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">
@@ -706,6 +741,44 @@
         </SOURCES>
         <excluded>
           <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/capybara-3.40.0/spec" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="childprocess (v5.1.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="childprocess" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0" />
+          <option name="version" value="5.1.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/.github" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/.github" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/childprocess-5.1.0/.github" />
         </excluded>
       </library>
     </orderEntry>
@@ -912,6 +985,45 @@
           <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise-4.9.4/lib" />
           <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise-4.9.4/config" />
         </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="devise_invitable (v2.0.9) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="devise_invitable" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9" />
+          <option name="version" value="2.0.9" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/app" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/test" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/config" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/app" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/test" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/config" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/devise_invitable-2.0.9/test" />
+        </excluded>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -1404,6 +1516,76 @@
         <SOURCES>
           <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/language_server-protocol-3.17.0.3/lib" />
         </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="launchy (v3.0.1) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="launchy" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/launchy-3.0.1" />
+          <option name="version" value="3.0.1" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/launchy-3.0.1/exe" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/launchy-3.0.1/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/launchy-3.0.1/exe" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/launchy-3.0.1/lib" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/launchy-3.0.1/exe" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="letter_opener (v1.10.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="letter_opener" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/letter_opener-1.10.0" />
+          <option name="version" value="1.10.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/letter_opener-1.10.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/letter_opener-1.10.0/spec" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/letter_opener-1.10.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/letter_opener-1.10.0/spec" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/letter_opener-1.10.0/spec" />
+        </excluded>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -2245,6 +2427,46 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="pundit (v2.3.2) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="pundit" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2" />
+          <option name="version" value="2.3.2" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/config" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/.github" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/config" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/.github" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/pundit-2.3.2/.github" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="racc (v1.8.1) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">
@@ -2769,6 +2991,47 @@
         </SOURCES>
         <excluded>
           <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rexml-3.3.5/doc" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="rolify (v6.0.1) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="rolify" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1" />
+          <option name="version" value="6.0.1" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/.github" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/gemfiles" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/.github" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/gemfiles" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/.github" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/rolify-6.0.1/gemfiles" />
         </excluded>
       </library>
     </orderEntry>
@@ -3503,6 +3766,44 @@
         </SOURCES>
         <excluded>
           <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/unicode-display_width-2.5.0/data" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="uniform_notifier (v1.16.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="uniform_notifier" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0" />
+          <option name="version" value="1.16.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/.github" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/lib" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/.github" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/spec" />
+          <root url="file://$MODULE_DIR$/.bundle/ruby/3.3.0/gems/uniform_notifier-1.16.0/.github" />
         </excluded>
       </library>
     </orderEntry>
