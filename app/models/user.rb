@@ -10,6 +10,13 @@ class User < ApplicationRecord
   has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :destroy
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :destroy
 
+  # Include the UserRoles module
+  after_create :assign_default_role
+
+  def assign_default_role
+    add_role(:agent) if roles.blank?
+  end
+
   def name_initials
     if first_name.present? && last_name.present?
       "#{first_name[0]}#{last_name[0]}"

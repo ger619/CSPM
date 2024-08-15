@@ -1,0 +1,71 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">
+        Name of the user
+      </th>
+      <th scope="col" class="px-6 py-3">
+        email
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Roles
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Date Created
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Projects Assigned
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Active
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Locked/Unlocked
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <% @users.each do |user|  %>
+      <%#= turbo_frame_tag dom_id(project) do %>
+
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12">
+
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <%= link_to user.name, users_path(user.id) %>
+          </th>
+          <td class="px-6 py-4">
+            <%= user.email %>
+          </td>
+          <td class="px-6 py-4">
+
+            <%= user.roles.pluck(:name) %>
+          </td>
+          <td class="px-6 py-4">
+            <%= user.created_at.strftime("%d %B %Y") %>
+          </td>
+          <td class="px-6 py-4">
+            Projects Assigned
+          </td>
+          <td class="px-6 py-4">
+            Active Status
+          </td>
+          <td class="px-6 py-4 ">
+            <%#= project.content.to_plain_text.truncate(50) %>
+          </td>
+          <td class="px-6 py-4 flex  gap-2">
+            <%= link_to 'Edit Roles', edit_user_path(user), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-gray-900 font-bold dark:text-white"  %>
+
+            <%= button_to 'Destroy', user,  data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+          </td>
+
+
+        </tr>
+      <% end %>
+
+    <%# end %>
+
+    </tbody>
+  </table>
+</div>
