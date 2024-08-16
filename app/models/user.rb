@@ -10,11 +10,12 @@ class User < ApplicationRecord
   has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :destroy
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :destroy
 
-  # Include the UserRoles module
   after_create :assign_default_role
 
+  validate :must_have_a_role, on: :update
+
   def assign_default_role
-    add_role(:agent) if roles.blank?
+    add_role == 'agent' if roles.blank?
   end
 
   def name_initials
@@ -31,5 +32,13 @@ class User < ApplicationRecord
 
   def name
     "#{first_name} #{last_name}"
+  end
+
+  private
+
+  def must_have_a_role
+    return if roles.any?
+
+    errors.add(:roles, 'must have at least one role')
   end
 end
