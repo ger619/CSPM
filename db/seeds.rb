@@ -11,10 +11,7 @@
 
 # Create Roles on the system
 
-roles = ['Admin', 'Project Manager', 'Developer', 'QA', 'Agent']
-
-roles.each do |role|
-  # Role.find_or_create_by!(name: role)
-    Role.create!(name: client) unless Role.exists?(name: client)
-   Role.create!(name: admin) unless Role.exists?(name: admin)
-end
+Role.create!([name: 'Agent'])
+Role.create!([name: 'Admin'])
+Role.create!([name: 'Project Manager'])
+Role.create!([name: 'Client'])

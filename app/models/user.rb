@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validate :must_have_a_role, on: :update
 
   def assign_default_role
-    add_role(:agent) if roles.blank?
+    add_role(:Agent) if roles.blank?
   end
 
   def name_initials
