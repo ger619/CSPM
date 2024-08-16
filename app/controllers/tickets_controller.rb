@@ -45,11 +45,10 @@ class TicketsController < ApplicationController
         current_user.add_role :editor, @ticket
         format.html { redirect_to project_path(@project), notice: 'Ticket was successfully updated.' }
       else
-        format.html { render 'edit', status: :unprocessable_entity , alert: 'Ticket was not updated.'}
+        format.html { render 'edit', status: :unprocessable_entity, alert: 'Ticket was not updated.' }
       end
     end
   end
-
 
   private
 
