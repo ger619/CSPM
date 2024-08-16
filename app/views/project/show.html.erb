@@ -11,9 +11,12 @@
       </div>
       <div class="font-semibold p-4 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
         <h1 class="text-gray-900 dark:text-white ">Date Created: <span class="font-light"><%= @project.created_at.strftime("%I:%M %p at %d %B %Y") %></span></h1>
-        <h1  class="text-gray-900 dark:text-white">Date to Commence <span class="font-light"><%= @project.start_date.strftime("%d %B %Y") %></span></h1>
-        <h1 class="text-gray-900 dark:text-white ">Expected Date of Completion <span class="font-light"><%= @project.end_date %></span></h1>
-        <h1  class="text-gray-900 dark:text-white">Date to Commence</h1>
+        <h1  class="text-gray-900 dark:text-white">Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %B %Y") %></span></h1>
+        <h1 class="text-gray-900 dark:text-white ">Expected Date of Completion: <span class="font-light"><%= @project.end_date %></span></h1>
+        <h1  class="text-gray-900 dark:text-white">Date to Commence: </h1>
+        <h1  class="text-gray-900 dark:text-white">Number of Tickets:   <span class="font-semibold"><%= @project.tickets.count %> / <%= @project.tickets.count %></span></h1>
+
+
 
       </div>
 

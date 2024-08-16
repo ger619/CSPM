@@ -7,6 +7,12 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
+    <!-- app/views/layouts/application.html.erb -->
+    <!-- app/views/layouts/application.html.erb -->
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+
+
+
 
     <%= favicon_link_tag asset_path('logo.png') %>
 
@@ -18,9 +24,6 @@
   <body>
     <main class="mx-auto">
       <%= render 'layouts/sidebar' %>
-      <% if current_user %>
-        <%= link_to 'LOG OUT', destroy_user_session_path, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } %>
-      <% end %>
       <%= yield %>
     </main>
   </body>

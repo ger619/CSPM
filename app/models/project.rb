@@ -5,6 +5,11 @@ class Project < ApplicationRecord
 
   has_rich_text :content
 
+  resourcify
+
+  has_many :users, through: :roles, class_name: 'User', source: :users
+  has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
+
   validates :title, presence: true, uniqueness: true
 
   validate :end_date_after_start_date

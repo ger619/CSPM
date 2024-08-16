@@ -19,9 +19,6 @@
         Person who raised it
       </th>
       <th scope="col" class="px-6 py-3">
-        Person who raised it
-      </th>
-      <th scope="col" class="px-6 py-3">
         Open/Closed
       </th>
       <th scope="col" class="px-6 py-3">
@@ -39,25 +36,22 @@
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
         </th>
-        <td class="px-6 py-4">
+        <td class="px-6 py-4 ">
           <% if ticket.priority == 'CRITICAL' %>
-            <p class='bg-red-900 p-2 text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-red-900 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% elsif ticket.priority == 'HIGH' %>
-            <p class='bg-orange-600 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-orange-600 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% elsif ticket.priority == 'MEDIUM' %>
-            <p class='bg-yellow-500 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-yellow-500 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% else %>
-            <p class='bg-green-500 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-green-500 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
           <% end %>
         </td>
         <td class="px-6 py-4 truncate w-64 ">
-          <%= (ticket.body) %>
+          <%= ticket.body.to_plain_text.truncate(50) %>
         </td>
         <td class="px-6 py-4">
           <%= ticket.created_at.strftime("%I:%M %p at %d %B %Y") %>
-        </td>
-        <td class="px-6 py-4 truncate w-64 ">
-          <%= (ticket.body) %>
         </td>
         <td class="px-6 py-4 ">
           <%= ticket.user.name %>

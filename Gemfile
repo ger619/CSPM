@@ -63,6 +63,8 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'bullet', group: :development # For detecting N+1 queries
+  gem 'letter_opener', group: :development # For opening emails in browser during development
 end
 
 group :test do
@@ -72,12 +74,10 @@ group :test do
 end
 
 # gems to be used
-# gem 'rails admin'
 gem 'devise', '~> 4.9'
-
+gem 'devise_invitable', '~> 2.0'
 gem 'friendly_id', '~> 5.5.0'
-
 gem 'mini_magick', '~> 4.13'
-
-#   gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
 gem 'pagy', '~> 6.0'
+gem 'pundit'
+gem 'rolify', '~> 6.0'

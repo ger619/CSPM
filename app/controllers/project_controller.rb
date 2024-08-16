@@ -46,7 +46,8 @@ class ProjectController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to project_url(@project), notice: 'Project was successfully created.' }
+        current_user.add_role :creator, @project
+        format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -57,7 +58,8 @@ class ProjectController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to project_index_path, notice: 'Project was successfully updated.' }
+        current_user.add_role :editor, @project
+        format.html { redirect_to project_path(@project), notice: 'Project was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end
