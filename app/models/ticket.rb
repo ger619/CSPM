@@ -13,6 +13,7 @@ class Ticket < ApplicationRecord
   validate :content_length_within_limit
 
   private
+
   # To ensure that the ticket content is within the limit i.e. 800 characters
   def content_length_within_limit
     max_length = 800 # Set your desired character limit
