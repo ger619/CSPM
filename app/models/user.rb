@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :destroy
 
   has_many :projects, through: :roles, source: :resource, source_type: :Project
+  has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
+  has_many :issues, through: :roles, source: :resource, source_type: :Issue
 
   after_create :assign_default_role
 

@@ -7,6 +7,12 @@ class Ticket < ApplicationRecord
   has_rich_text :body
   has_one_attached :image
 
+
+  resourcify
+
+  has_many :users, through: :roles, class_name: 'User', source: :users
+  has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
+
   validate :content_length_within_limit
 
   private

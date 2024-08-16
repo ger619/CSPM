@@ -19,7 +19,7 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       if @tickets.save
-        # current_user.add_role :creator, @tickets
+        current_user.add_role :creator, @tickets
         format.html { redirect_to project_path(@project), notice: 'ticket was successfully created.' }
       else
         # redirect_to new_project_path(@project), alert: 'ticket was not created.'
@@ -40,13 +40,16 @@ class TicketsController < ApplicationController
     @ticket = @project.tickets.find(params[:id])
     @ticket.user = current_user # Optional: If you want to ensure the user is always the current user
 
-    if @ticket.update(ticket_params)
-      flash[:notice] = 'Ticket was successfully updated.'
-      redirect_to project_path(@project)
-    else
-      render :edit, alert: 'Ticket was not updated.'
+    respond_to do |format|
+      if @ticket.update(ticket_params)
+        current_user.add_role :editor, @ticket
+        format.html { redirect_to project_path(@project), notice: 'Ticket was successfully updated.' }
+      else
+        format.html { render 'edit', status: :unprocessable_entity , alert: 'Ticket was not updated.'}
+      end
     end
   end
+
 
   private
 
