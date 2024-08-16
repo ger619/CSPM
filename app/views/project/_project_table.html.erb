@@ -18,6 +18,12 @@
         Assignee
       </th>
       <th scope="col" class="px-6 py-3">
+        Users
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Creator
+      </th>
+      <th scope="col" class="px-6 py-3">
         Details
       </th>
       <th scope="col" class="px-6 py-3">
@@ -48,6 +54,12 @@
         </td>
         <td class="px-6 py-4">
           <%= project.user.name %>
+        </td>
+        <td class="px-6 py-4">
+          <%= project.users.distinct.pluck(:email).join(', ')%>
+        </td>
+        <td class="px-6 py-4">
+          <%= project.creators.distinct.pluck(:email).join(', ')%>
         </td>
         <td class="px-6 py-4 ">
           <%= project.content.to_plain_text.truncate(50) %>

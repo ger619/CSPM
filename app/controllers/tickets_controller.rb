@@ -19,6 +19,7 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       if @tickets.save
+        # current_user.add_role :creator, @tickets
         format.html { redirect_to project_path(@project), notice: 'ticket was successfully created.' }
       else
         # redirect_to new_project_path(@project), alert: 'ticket was not created.'
