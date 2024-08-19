@@ -4,9 +4,10 @@ class Ticket < ApplicationRecord
   has_one_attached :ticket_image
   has_many :issues, dependent: :destroy
   has_rich_text :body
+  has_one_attached :image
 
   resourcify
-  # To ensure that the ticket are connected to the user and their roles well definedhas_one_attached :imagehas_one_attached :image
+  # To ensure that the ticket are connected to the user and their roles well defined
   has_many :users, through: :roles, class_name: 'User', source: :users
   has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
 

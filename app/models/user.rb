@@ -24,6 +24,11 @@ class User < ApplicationRecord
     add_role(:Agent) if roles.blank?
   end
 
+  # To have a list of user who only have a specific role
+  def self.with_agent_role
+    joins(:roles).where(roles: { name: 'Agent' })
+  end
+
   # To ensure either the first name or last name is present and they appear in the initials
   def name_initials
     if first_name.present? && last_name.present?
