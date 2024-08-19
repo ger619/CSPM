@@ -46,6 +46,12 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  after_initialize :set_default_profile_completed, if: :new_record?
+
+  def set_default_profile_completed
+    self.first_login ||= false
+  end
+
   private
 
   def must_have_a_role
