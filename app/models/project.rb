@@ -8,7 +8,7 @@ class Project < ApplicationRecord
   resourcify
 
   has_many :users, through: :roles, class_name: 'User', source: :users
-  has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
+  has_many :creators, -> { where(roles: { name: :admin }) }, class_name: 'User', through: :roles, source: :users
 
   validates :title, presence: true, uniqueness: true
 

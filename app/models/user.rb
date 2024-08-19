@@ -21,12 +21,12 @@ class User < ApplicationRecord
   validate :must_have_a_role, on: :update
 
   def assign_default_role
-    add_role(:Agent) if roles.blank?
+    add_role(:agent) if roles.blank?
   end
 
   # To have a list of user who only have a specific role
   def self.with_agent_role
-    joins(:roles).where(roles: { name: 'Agent' })
+    joins(:roles).where(roles: { name: 'agent' })
   end
 
   # To ensure either the first name or last name is present and they appear in the initials

@@ -45,11 +45,17 @@ class ProjectController < ApplicationController
     @project.user_id = current_user.id
 
     respond_to do |format|
-      if @project.save
-        current_user.add_role :creator, @project
-        format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
+      if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
+        if @project.save
+          current_user.add_role :creator, @project
+          format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+        end
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html do
+          render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a project.'
+        end
       end
     end
   end

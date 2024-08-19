@@ -11,7 +11,7 @@
 
 # Create Roles on the system
 
-Role.create!([name: 'Agent'])
-Role.create!([name: 'Admin'])
-Role.create!([name: 'Project Manager'])
-Role.create!([name: 'Client'])
+Role.create!([name: 'agent'])
+Role.create!([name: 'admin'])
+Role.create!([name: 'project manager'])
+Role.create!([name: 'client'])

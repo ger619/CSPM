@@ -1,7 +1,7 @@
 <div class="grid grid-cols-2 ">
 
   <div class="grid col-span-1">
-    <% if current_user.has_role? :Admin or current_user.has_role?('Project Manager') %>
+    <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
       <%= link_to 'Add New Project +', new_project_path, class: 'mb-4 w-2/5 h-12 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
   <% end %>
   </div>
