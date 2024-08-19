@@ -20,6 +20,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
+        current_user.add_role :creator, @issue
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
       else
         format.html { redirect_to new_project_ticket_issue_path(@project, @ticket), alert: 'Issue was not created.' }

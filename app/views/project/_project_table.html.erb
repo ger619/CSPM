@@ -26,9 +26,11 @@
       <th scope="col" class="px-6 py-3">
         Details
       </th>
-      <th scope="col" class="px-6 py-3">
-        EDIT/REMOVE
-      </th>
+      <% if current_user.has_role? :Admin or current_user.has_role?('Project Manager') %>
+        <th scope="col" class="px-6 py-3">
+          EDIT/REMOVE
+        </th>
+      <% end %>
     </tr>
     </thead>
     <tbody>
@@ -58,16 +60,17 @@
         <td class="px-6 py-4">
           <%= project.users.distinct.pluck(:email).join(', ')%>
         </td>
-        <td class="px-6 py-4">
-          <%= project.creators.distinct.pluck(:email).join(', ')%>
+        <td class="px-6 py-4 gap-2">
+          <%= project.creators.distinct.pluck(:first_name , :last_name).join('  ') %>
         </td>
         <td class="px-6 py-4 ">
           <%= project.content.to_plain_text.truncate(50) %>
         </td>
         <td class="px-6 py-4 flex  gap-2">
-          <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-gray-900 font-bold dark:text-white"  %>
-
-          <%= button_to 'Destroy', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+          <% if current_user.has_role? :Admin or current_user.has_role?('Project Manager') %>
+            <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-gray-900 font-bold dark:text-white"  %>
+            <%= button_to 'Destroy', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+          <% end %>
         </td>
 
 

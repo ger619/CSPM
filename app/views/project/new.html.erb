@@ -3,6 +3,10 @@
 <div class="pl-8 sm:ml-64 ">
   <div class=" p-4 border border-dashed">
     <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
+      <div>
+        <%= render 'layouts/alert' %>
+
+      </div>
       <div class="md:gap-6">
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :title, :Title, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
@@ -10,12 +14,13 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div class="relative z-0 w-full mb-6 group">
-            <%= f.label :title, :Subject, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+            <%= f.label :title, ('Project Description'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
             <%= f.text_field :description, class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
           </div>
           <div class="relative z-0 w-full mb-6 group">
             <%= f.label :Assignee, :Assignee, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-            <%= f.select :user_id, User.order(:first_name).map { |user| [user.name, user.id] }, {}, class: "form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", placeholder: 'Assign User', required: true %>
+            <%= f.select :user_id, User.with_agent_role.order(:first_name, :last_name).map { |user| [user.name, user.id] }, {}, class: "form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", placeholder: 'Assign User', required: true %>
+
           </div>
         </div>
         <div>
