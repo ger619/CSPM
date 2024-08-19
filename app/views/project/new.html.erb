@@ -1,6 +1,6 @@
 
 
-<div class="pl-8 sm:ml-64 ">
+
   <div class=" p-4 border border-dashed">
     <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
       <div class="md:gap-6">
@@ -53,5 +53,5 @@
       <%= f.submit class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
     <% end %>
   </div>
-</div>
+
 
