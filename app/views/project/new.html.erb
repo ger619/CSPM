@@ -1,7 +1,7 @@
 
 
 
-  <div class=" p-4 border border-dashed">
+  <div class="p-2 border border-dashed">
     <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
       <div class="md:gap-6">
         <div class="relative z-0 w-full mb-6 group">
@@ -50,8 +50,9 @@
 
 
       </div>
-      <%= f.submit class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
-    <% end %>
+      <%= f.submit  class: 'mb-4 w-2/5 h-12 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+
+  <% end %>
   </div>
 
 

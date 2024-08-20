@@ -23,6 +23,9 @@
       <th scope="col" class="px-6 py-3">
         Locked/Unlocked
       </th>
+      <th scope="col" class="px-6 py-3">
+        Created by invite
+      </th>
     </tr>
     </thead>
     <tbody>
@@ -56,13 +59,19 @@
           <td class="px-6 py-4">
             <%= user.created_at.strftime("%d %B %Y") %>
           </td>
+
           <td class="px-6 py-4 ">
-            Active Status
+            <%= user.created_by_invite? %>
           </td>
+          <td class="px-6 py-4 ">
+            <%= user.invitees.count %>
+          </td>
+
+
           <td class="px-6 py-4 flex  gap-2">
             <%= link_to 'Edit Roles', edit_user_path(user), class: "border border-b-4 border-r-4 p-2.5 self-center text-center content-center rounded-lg uppercase text-gray-900 font-bold dark:text-white text-sm flex flex-row w-[110px]"  %>
 
-            <%= button_to 'Destroy', user,  data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+            <%= button_to 'Delete', user,  data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
           </td>
 
 

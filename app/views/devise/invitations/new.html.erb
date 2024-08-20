@@ -1,0 +1,26 @@
+<h2><%= t "devise.invitations.new.header" %></h2>
+
+<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <% resource.class.invite_key_fields.each do |field| -%>
+    <div class="field">
+      <%= f.label field %><br />
+      <%= f.text_field field %>
+    </div>
+  <% end -%>
+
+  <div class="field">
+    <%= f.label :role %>
+    <%#= select_tag :role, options_for_select(Role.pluck(:name, :name)) %>
+
+    <%#= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator]), :id, :name, class: "gap-4" %>
+    <%#= select_tag :role, options_for_select(Role.distinct.pluck(:name, :name).reject { |role| %w[creator editor].include?(role) }) %>
+    <%= select_tag :role, options_for_select(Role.where.not(name: %w[creator editor]).distinct.pluck(:name, :name)) %>
+
+  </div>
+
+  <div class="actions">
+    <%= f.submit t("devise.invitations.new.submit_button") %>
+  </div>
+<% end %>

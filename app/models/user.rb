@@ -15,6 +15,10 @@ class User < ApplicationRecord
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
 
+  # To show which user invited a user
+
+  has_many :invitees, class_name: 'User', foreign_key: :invited_by_id
+
   # To ensure that a user has at least one role
   after_create :assign_default_role
   # To ensure that a user has at least one role
