@@ -2,7 +2,7 @@
 
   <div class="grid col-span-1">
     <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-      <%= link_to 'Add New Project +', new_project_path, class: 'mb-4 w-2/5 h-12 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+      <%= link_to 'Add New Project +', new_project_path, class: 'mb-4 w-2/5 h-12 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
   <% end %>
   </div>
   <!-- Search on the right -->
@@ -12,11 +12,11 @@
   <div class="flex flex-col md:flex-row items-start md:items-center w-full">
     <%= form_with url: project_index_path, method: :get, class: 'flex' do |f| %>
       <%= f.text_field :query, placeholder: "Search ", class: "border-b-4 h-12" %>
-      <%= f.submit "Search", class: "mb-4 ml-4 h-12 text-gray-900 dark:text-gray-800 border border-black dark:border-gray-800 border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+      <%= f.submit "Search", class: "mb-4 ml-4 h-12 border border-black dark:border-gray-800 border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
     <% end %>
 
     <%= form_with url: project_index_path, method: :get, class: 'flex' do |f| %>
-      <%= f.submit "Clear", class: "ml-4 mb-4 h-12 text-gray-900 dark:text-gray-800 border border-black dark:border-gray-800 border border-black  border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+      <%= f.submit "Clear", class: "ml-4 mb-4 h-12 border border-black dark:border-gray-800 border border-black  border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
     <% end %>
 
   </div>
