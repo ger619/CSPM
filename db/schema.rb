@@ -133,7 +133,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_140143) do
     t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
-    t.boolean "first_login"
+    t.boolean "first_login", default: false
     t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
