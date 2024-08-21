@@ -1,7 +1,7 @@
 # app/controllers/invitations_controller.rb
 class InvitationsController < Devise::InvitationsController
   before_action :authenticate_user!
-  #before_action :set_user, only: %i[new create]
+  # before_action :set_user, only: %i[new create]
 
   def new
     @user = User.new
@@ -22,9 +22,9 @@ class InvitationsController < Devise::InvitationsController
 
   private
 
-  #def set_user
+  # def set_user
   # @user = User.find(params[:id])
-  #end
+  # end
 
   def invite_params
     params.require(:user).permit(:email)

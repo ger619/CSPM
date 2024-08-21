@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: %i[ edit update]
+  before_action :set_user, only: %i[edit update]
 
   def index
     @users = User.all.order('created_at DESC')
@@ -18,7 +18,6 @@ class UsersController < ApplicationController
     end
   end
 
-
   private
 
   def set_user
@@ -26,6 +25,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(role_ids: [] )
+    params.require(:user).permit(role_ids: [])
   end
 end
