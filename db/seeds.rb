@@ -15,3 +15,7 @@ Role.create!([name: 'agent'])
 Role.create!([name: 'admin'])
 Role.create!([name: 'project manager'])
 Role.create!([name: 'client'])
+
+c = User.create!(email: 'abolger254@gmai.com', password: 'password')
+c.add_role(:admin)
+c.confirmation_token = true
