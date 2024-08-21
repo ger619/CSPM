@@ -2,7 +2,7 @@ class User < ApplicationRecord
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable, :lockable, :timeoutable, :trackable
   # To ensure that a user has at least one role
   has_one_attached :profile_picture
@@ -14,6 +14,10 @@ class User < ApplicationRecord
   has_many :projects, through: :roles, source: :resource, source_type: :Project
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
+
+  # To show which user invited a user
+
+  has_many :invitees, class_name: 'User', foreign_key: :invited_by_id
 
   # To ensure that a user has at least one role
   after_create :assign_default_role

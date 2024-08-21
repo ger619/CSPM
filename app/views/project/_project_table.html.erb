@@ -1,6 +1,6 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
     <tr>
       <th scope="col" class="px-6 py-3">
         Name of Project
@@ -26,7 +26,7 @@
       <th scope="col" class="px-6 py-3">
         Details
       </th>
-      <% if current_user.has_role? :Admin or current_user.has_role?('Project Manager') %>
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
         <th scope="col" class="px-6 py-3">
           EDIT/REMOVE
         </th>
@@ -38,9 +38,9 @@
     <% @project.each do |project|  %>
       <%= turbo_frame_tag dom_id(project) do %>
 
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12">
+      <tr class="bg-white border-b  dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12">
 
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap ">
           <%= link_to project.title, project_path(project.id) %>
         </th>
         <td class="px-6 py-4">
@@ -67,9 +67,9 @@
           <%= project.content.to_plain_text.truncate(50) %>
         </td>
         <td class="px-6 py-4 flex  gap-2">
-          <% if current_user.has_role? :Admin or current_user.has_role?('Project Manager') %>
-            <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-gray-900 font-bold dark:text-white"  %>
-            <%= button_to 'Destroy', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+            <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase font-bold "  %>
+            <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
           <% end %>
         </td>
 
@@ -85,10 +85,10 @@
 
 <div class="flex gap-10 mt-5">
   <% if @pagy.prev %>
-    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 w-24 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
   <% end %>
   <% if @pagy.next %>
-    <%= link_to "Next ", url_for(page: @pagy.next), class: 'mb-4  h-12 w-24 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+    <%= link_to "Next ", url_for(page: @pagy.next), class: 'mb-4  h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
   <% end %>
 
 </div>
