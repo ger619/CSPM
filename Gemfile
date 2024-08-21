@@ -74,9 +74,9 @@ group :test do
 end
 
 # gems to be used
+gem 'cancancan', '~> 3.5'
 gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
-gem 'friendly_id', '~> 5.5.0'
 gem 'mini_magick', '~> 4.13'
 gem 'pagy', '~> 6.0'
 gem 'pundit'

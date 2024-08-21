@@ -1,7 +1,7 @@
 class ProjectController < ApplicationController
   before_action :set_project, only: %i[show edit update destroy]
   before_action :authenticate_user!
-
+  load_and_authorize_resource
   # GET /projects
   def index
     @pagy, @project = if params[:query].present?
@@ -84,7 +84,7 @@ class ProjectController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project
-    @project = Project.friendly.find(params[:id])
+    @project = Project.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
