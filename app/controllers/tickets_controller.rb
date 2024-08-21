@@ -43,7 +43,7 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
-        format.html { redirect_to project_path(@project), notice: 'Ticket was successfully updated.' }
+        format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity, alert: 'Ticket was not updated.' }
       end
@@ -53,7 +53,7 @@ class TicketsController < ApplicationController
   private
 
   def set_project
-    @project = Project.friendly.find(params[:project_id])
+    @project = Project.find(params[:project_id])
   end
 
   def set_ticket

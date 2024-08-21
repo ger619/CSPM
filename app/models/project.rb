@@ -24,9 +24,6 @@ class Project < ApplicationRecord
     errors.add(:end_date, 'End Date must be greater than Start Date')
   end
 
-  extend FriendlyId
-  friendly_id :title, use: :slugged
-
   def name
     # Pick name name from the user_id assigned
     # to the project

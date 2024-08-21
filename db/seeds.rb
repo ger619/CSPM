@@ -15,3 +15,6 @@ Role.create!([name: 'agent'])
 Role.create!([name: 'admin'])
 Role.create!([name: 'project manager'])
 Role.create!([name: 'client'])
+
+c = User.create!(email: 'admin@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now)
+c.add_role(:admin)

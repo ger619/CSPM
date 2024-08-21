@@ -1,7 +1,7 @@
 class ProjectController < ApplicationController
   before_action :set_project, only: %i[show edit update destroy]
   before_action :authenticate_user!
-
+  load_and_authorize_resource
   # GET /projects
   def index
     @pagy, @project = if params[:query].present?
@@ -19,14 +19,18 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-    # @project = Project.find(params[:id])
-    # @ticket = @project.tickets.all.order('created_at DESC')
-
-    @ticket = if params[:query].present?
-                @project.tickets.where('issue LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
-              else
-                @project.tickets.all.order('created_at DESC')
-              end
+    @pagy, @ticket = if params[:query].present?
+                       pagy_countless(
+                         @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body LIKE ?',
+                                                                            "%#{params[:query]}%"), items: 10
+                       )
+                     else
+                       pagy_countless(@project.tickets.with_rich_text_body.order('created_at DESC'), items: 10)
+                     end
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   # GET /projects/new
@@ -84,7 +88,7 @@ class ProjectController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project
-    @project = Project.friendly.find(params[:id])
+    @project = Project.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
