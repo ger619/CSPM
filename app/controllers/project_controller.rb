@@ -19,14 +19,16 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-    # @project = Project.find(params[:id])
-    # @ticket = @project.tickets.all.order('created_at DESC')
 
-    @ticket = if params[:query].present?
-                @project.tickets.where('issue LIKE ? OR body LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
-              else
-                @project.tickets.all.order('created_at DESC')
-              end
+    @pagy, @ticket = if params[:query].present?
+                      pagy_countless(@project.tickets.where('issue LIKE ? OR priority LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%"), items: 10)
+                     else
+                       pagy_countless(@project.tickets.all.order('created_at DESC'), items:10)
+                     end
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   # GET /projects/new
