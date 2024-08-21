@@ -19,11 +19,13 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-
     @pagy, @ticket = if params[:query].present?
-                      pagy_countless(@project.tickets.where('issue LIKE ? OR priority LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%"), items: 10)
+                       pagy_countless(
+                         @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body LIKE ?',
+                                                                            "%#{params[:query]}%"), items: 10
+                       )
                      else
-                       pagy_countless(@project.tickets.all.order('created_at DESC'), items:10)
+                       pagy_countless(@project.tickets.with_rich_text_body.order('created_at DESC'), items: 10)
                      end
     respond_to do |format|
       format.html
