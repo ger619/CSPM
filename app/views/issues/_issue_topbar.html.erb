@@ -8,12 +8,12 @@
 
 
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
-      <%= form_with url: project_tickets_path(@project.id, @ticket), method: :get, class: 'flex' do |f| %>
+      <%= form_with url: project_tickets_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
         <%= f.text_field :query, placeholder: "Search ", class: "border-b-4 h-12" %>
         <%= f.submit "Search", class: "mb-4 ml-4 h-12 text-gray-900 dark:text-gray-800 border border-black dark:border-gray-800 border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
       <% end %>
 
-      <%= form_with url: project_tickets_path(@project.id), method: :get, class: 'flex' do |f| %>
+      <%= form_with url: project_tickets_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
         <%= f.submit "Clear", class: "ml-4 mb-4 h-12 text-gray-900 dark:text-gray-800 border border-black dark:border-gray-800 border border-black  border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
       <% end %>
 

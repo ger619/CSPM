@@ -6,7 +6,21 @@ class TicketsController < ApplicationController
   def index; end
 
   def show
-    @issue = @ticket.issues.order('created_at DESC')
+    # Issues search
+    # This code is used to search for issues in the ticket
+    # It uses the search query to search for issues in the ticket
+    @pagy, @issue = if params[:query].present?
+                      pagy_countless(
+                        @ticket.issues.left_joins(:rich_text_content).where('action_text_rich.content LIKE ?',
+                                                                            "%#{params[:query]}%"), items: 10
+                      )
+                    else
+                      pagy_countless(@ticket.issues.with_rich_text_content.order('created_at DESC'), items: 10)
+                    end
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def new
