@@ -7,9 +7,9 @@ class User < ApplicationRecord
   # To ensure that a user has at least one role
   has_one_attached :profile_picture
   # To ensure that a user has at least one role
-  has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :destroy
-  has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :destroy
-  has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :destroy
+  has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :nullify
+  has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :nullify
+  has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :nullify
   # To ensure that a user has at least one role
   has_many :projects, through: :roles, source: :resource, source_type: :Project
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket

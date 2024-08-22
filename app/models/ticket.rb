@@ -2,7 +2,7 @@ class Ticket < ApplicationRecord
   belongs_to :project
   belongs_to :user
   has_one_attached :ticket_image
-  has_many :issues, dependent: :destroy
+  has_many :issues, dependent: :nullify
   has_rich_text :body
   has_one_attached :image
 
