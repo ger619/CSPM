@@ -1,6 +1,6 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
-  before_action :set_project
+  before_action :set_project, only: %i[show destroy edit update]
   before_action :set_ticket, only: %i[show destroy edit update]
 
   def index; end
@@ -9,18 +9,16 @@ class TicketsController < ApplicationController
     # Issues search
     # This code is used to search for issues in the ticket
     # It uses the search query to search for issues in the ticket
-    @pagy, @issue = if params[:query].present?
-                      pagy_countless(
-                        @ticket.issues.left_joins(:rich_text_content).where('action_text_rich.content LIKE ?',
-                                                                            "%#{params[:query]}%"), items: 10
-                      )
-                    else
-                      pagy_countless(@ticket.issues.with_rich_text_content.order('created_at DESC'), items: 10)
-                    end
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
+    @issue = if params[:query].present?
+               @ticket.issues.left_joins(:rich_text_content).where('action_text_rich.content LIKE ?',
+                                                                   "%#{params[:query]}%")
+             else
+               @ticket.issues.with_rich_text_content.order('created_at DESC')
+             end
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@issue.count / @per_page.to_f).ceil
+    @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def new
