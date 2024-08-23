@@ -21,9 +21,16 @@
       <th scope="col" class="px-6 py-3">
         Open/Closed
       </th>
+      <% if can? :edit, @ticket %>
       <th scope="col" class="px-6 py-3">
         EDIT
       </th>
+      <% end %>
+      <% if can? :edit, @ticket %>
+        <th scope="col" class="px-6 py-3">
+          DELETE
+        </th>
+      <% end %>
     </tr>
     </thead>
     <tbody>
@@ -60,12 +67,17 @@
         <td class="px-4 py-4 ">
           OPEN/CLOSED
         </td>
+        <% if can? :edit, ticket %>
+          <td class="px-4 py-4">
 
+            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket) %>
+
+          </td>
+        <% end %>
         <td class="px-4 py-4">
-          <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket) %>
-        </td>
-        <td class="px-4 py-4">
-          <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }  %>
+          <% if can? :delete, ticket %>
+             <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }  %>
+          <% end %>
         </td>
 
       </tr>
