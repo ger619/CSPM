@@ -19,18 +19,16 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-    @pagy, @ticket = if params[:query].present?
-                       pagy_countless(
-                         @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body LIKE ?',
-                                                                            "%#{params[:query]}%"), items: 10
-                       )
-                     else
-                       pagy_countless(@project.tickets.with_rich_text_body.order('created_at DESC'), items: 10)
-                     end
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
+    @ticket = if params[:query].present?
+                @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body LIKE ?',
+                                                                   "%#{params[:query]}%")
+              else
+                @project.tickets.with_rich_text_body.order('created_at DESC')
+              end
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@ticket.count / @per_page.to_f).ceil
+    @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   # GET /projects/new
