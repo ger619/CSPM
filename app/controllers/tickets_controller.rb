@@ -6,9 +6,7 @@ class TicketsController < ApplicationController
   def index; end
 
   def show
-    # Issues search
-    # This code is used to search for issues in the ticket
-    # It uses the search query to search for issues in the ticket
+    # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
                @ticket.issues.left_joins(:rich_text_content).where('action_text_rich.content LIKE ?',
                                                                    "%#{params[:query]}%")

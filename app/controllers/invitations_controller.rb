@@ -22,10 +22,6 @@ class InvitationsController < Devise::InvitationsController
 
   private
 
-  # def set_user
-  # @user = User.find(params[:id])
-  # end
-
   def invite_params
     params.require(:user).permit(:email)
   end
