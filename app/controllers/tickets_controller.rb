@@ -1,6 +1,6 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
-  before_action :set_project # This line ensures that the project is set before any action is taken
+  before_action :set_project, only: %i[new create show destroy edit update] # This line ensures that the project is set before any action is taken
   before_action :set_ticket, only: %i[show destroy edit update]
 
   def index; end
@@ -8,10 +8,11 @@ class TicketsController < ApplicationController
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
-               @ticket.issues.left_joins(:rich_text_content).where('action_text_rich.content LIKE ?',
-                                                                   "%#{params[:query]}%")
+               @ticket.issues.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
+                                                                "%#{params[:query]}%")
+
              else
-               @ticket.issues.with_rich_text_content.order('created_at DESC')
+               @ticket.issues.with_rich_text_body.order('created_at DESC')
              end
     @per_page = 10
     @page = (params[:page] || 1).to_i
