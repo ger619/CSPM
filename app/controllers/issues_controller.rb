@@ -59,6 +59,6 @@ class IssuesController < ApplicationController
   end
 
   def issue_params
-    params.require(:issue).permit(:content, :ticket_id, :project_id, :user_id)
+    params.require(:issue).permit(:body, :ticket_id, :project_id, :user_id)
   end
 end
