@@ -15,6 +15,10 @@ class User < ApplicationRecord
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
 
+  has_many :assignees
+  has_many :projects, through: :assignees
+  has_many :tickets, through: :assignees
+
   # To show which user invited a user
 
   has_many :invitees, class_name: 'User', foreign_key: :invited_by_id
