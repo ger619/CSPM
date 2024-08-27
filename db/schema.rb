@@ -56,11 +56,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_130126) do
   create_table "assignees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "user_id", null: false
-    t.uuid "ticket_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_assignees_on_project_id"
-    t.index ["ticket_id"], name: "index_assignees_on_ticket_id"
     t.index ["user_id"], name: "index_assignees_on_user_id"
   end
 
@@ -160,7 +158,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_130126) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "assignees", "projects"
-  add_foreign_key "assignees", "tickets"
   add_foreign_key "assignees", "users"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"

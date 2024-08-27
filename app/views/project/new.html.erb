@@ -1,21 +1,21 @@
 
 
 
-  <div class="p-2 border border-dashed">
+  <div class="p-4 border border-dashed rounded">
     <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
       <div class="md:gap-6">
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :title, :Title, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-          <%= f.text_field :title, class: " border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+          <%= f.text_field :title, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div class="relative z-0 w-full mb-6 group">
             <%= f.label :title, ('Project Description'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-            <%= f.text_field :description, class: "border border-gray-300  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+            <%= f.text_field :description, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
           </div>
           <div class="relative z-0 w-full mb-6 group">
             <%= f.label :Assignee, :Assignee, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-            <%= f.select :user_id, User.with_agent_role.order(:first_name, :last_name).map { |user| [user.name, user.id] }, {}, class: "form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", placeholder: 'Assign User', required: true %>
+            <%= f.select :user_id, User.with_agent_project_manager_role.order(:first_name, :last_name).map { |user| [user.name, user.id] }, {},class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Assign User', required: true %>
 
           </div>
         </div>
@@ -40,17 +40,17 @@
           </div>
           <div class="relative z-0 w-full mb-6 group">
             <%= f.label :end_date, 'End Date', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-            <%= f.date_field :end_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+            <%= f.date_field :end_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
           </div>
         </div>
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :title, :Subject, class: "capitalize block mb-1 text-sm font-medium"  %><br />
-          <%= f.rich_text_area :content, class: "w-[100%] min-h-[350px] border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+          <%= f.rich_text_area :content, class: "w-[100%] min-h-[300px] border border-gray-300 dark:border-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
         </div>
 
 
       </div>
-      <%= f.submit  class: 'mb-4 w-2/5 h-12 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+      <%= f.submit  class: 'mb-4 w-2/5 h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
 
   <% end %>
   </div>

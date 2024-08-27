@@ -5,7 +5,6 @@ class Ticket < ApplicationRecord
   has_many :issues, dependent: :nullify
   has_rich_text :body
   has_one_attached :image
-  has_many :users, through: :assignees
 
   resourcify
   # To ensure that the ticket are connected to the user and their roles well defined

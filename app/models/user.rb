@@ -17,7 +17,6 @@ class User < ApplicationRecord
 
   has_many :assignees
   has_many :projects, through: :assignees
-  has_many :tickets, through: :assignees
 
   # To show which user invited a user
 
@@ -33,6 +32,10 @@ class User < ApplicationRecord
   end
 
   # To have a list of user who only have a specific role
+  def self.with_agent_project_manager_role
+    joins(:roles).where(roles: { name: 'project manager' })
+  end
+
   def self.with_agent_role
     joins(:roles).where(roles: { name: 'agent' })
   end
