@@ -1,7 +1,8 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project # This line ensures that the project is set before any action is taken
-  before_action :set_ticket, only: %i[show destroy edit update]
+  # This line ensures that the ticket is set before any action is taken
+  before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag]
 
   def index; end
 
@@ -61,20 +62,26 @@ class TicketsController < ApplicationController
     end
   end
 
-  def assign_user
-    @project = Project.find(params[:project_id])
-    @ticket = @project.tickets.find(params[:id])
-    user = User.find(params[:user_id])
-    @ticket.users << user
-    redirect_to @ticket, notice: 'User was successfully assigned.'
+  def assign_tag
+    # if user is already assigned to the ticket do not assign again
+
+    if @ticket.users.include?(User.find(params[:user_id]))
+      redirect_to project_tickets_path(@ticket), notice: 'User has already been assigned .'
+    else
+      @project = Project.find(params[:project_id])
+      @ticket = @project.tickets.find(params[:id])
+      user = User.find(params[:user_id])
+      @ticket.users << user
+      redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully assigned.'
+    end
   end
 
-  def unassign_user
+  def unassign_tag
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
     user = User.find(params[:user_id])
-    @project.users.delete(user)
-    redirect_to @project, notice: 'User was successfully unassigned.'
+    @ticket.users.delete(user)
+    redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully unassigned.'
   end
 
   private
@@ -88,6 +95,7 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image)
+    params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image,
+                                   user_ids: [])
   end
 end
