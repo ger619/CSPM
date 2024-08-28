@@ -17,10 +17,6 @@ Rails.application.routes.draw do
       delete :unassign_user
     end
     resources :tickets do
-      member do
-        post :assign_user
-        delete :unassign_user
-      end
       resources :issues
     end
   end

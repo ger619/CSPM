@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_130126) do
 
   create_table "assignees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
-    t.uuid "user_id", null: false
+    t.uuid "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_assignees_on_project_id"
