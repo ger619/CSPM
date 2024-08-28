@@ -61,6 +61,22 @@ class TicketsController < ApplicationController
     end
   end
 
+  def assign_user
+    @project = Project.find(params[:project_id])
+    @ticket = @project.tickets.find(params[:id])
+    user = User.find(params[:user_id])
+    @ticket.users << user
+    redirect_to @ticket, notice: 'User was successfully assigned.'
+  end
+
+  def unassign_user
+    @project = Project.find(params[:project_id])
+    @ticket = @project.tickets.find(params[:id])
+    user = User.find(params[:user_id])
+    @project.users.delete(user)
+    redirect_to @project, notice: 'User was successfully unassigned.'
+  end
+
   private
 
   def set_project

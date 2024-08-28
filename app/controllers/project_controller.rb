@@ -1,5 +1,5 @@
 class ProjectController < ApplicationController
-  before_action :set_project, only: %i[show edit update destroy]
+  before_action :set_project, only: %i[show edit update destroy assign_user unassign_user]
   before_action :authenticate_user!
   load_and_authorize_resource
   # GET /projects
@@ -80,6 +80,24 @@ class ProjectController < ApplicationController
     respond_to do |format|
       format.html { redirect_to project_url, notice: 'Project was successfully destroyed.' }
     end
+  end
+
+  def assign_user
+    if @project.users.include?(User.find(params[:user_id]))
+      redirect_to @project, notice: 'User has already been assigned.'
+    else
+      @project = Project.find(params[:id])
+      user = User.find(params[:user_id])
+      @project.users << user
+      redirect_to @project, notice: 'User was successfully assigned.'
+    end
+  end
+
+  def unassign_user
+    @project = Project.find(params[:id])
+    user = User.find(params[:user_id])
+    @project.users.delete(user)
+    redirect_to @project, notice: 'User was successfully unassigned.'
   end
 
   private
