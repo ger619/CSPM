@@ -1,26 +1,12 @@
-<h3>Assigned Users</h3>
-<ul class="flex flex-col">
+<h3>Assigned Agents</h3>
+<div class="grid md:grid-cols-3 grid-cols-1 gap-2">
   <% @project.users.each do |user| %>
-    <li><%= user.name %> (<%= user.email %>)</li>
+    <p class="border-b-4 border-black border p-2 min-w-3 gap-4 col-span-1" >
+      <% if user.name.present? %>
+        <%= user.name %>
+        <% else %>
+        <%= truncate(user.email, length: 15, omission: '...') %>
+      <% end %>
+    </p>
   <% end %>
-</ul>
-<% if current_user.has_role? :admin %>
-<div class="grid grid-cols-2 mt-2">
-  <div class="col-span-1 text-xs">
-    <%= form_with url: assign_user_project_path(@project), local: true do %>
-      <%= label_tag :user_id, "Select User" %>
-      <p class="flex flex-col ">
-      <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role, :id, :name), class: "form-select mt-1 block w-2/5 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-      <%= submit_tag "Assign User" %>
-      </p>
-    <% end %>
-  </div>
-  <div class="col-span-1 text-xs">
-    <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
-      <%= label_tag :user_id, "Select User to Unassign" %>
-      <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: "form-select mt-1 block w-2/5 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-      <%= submit_tag "Unassign User" %>
-    <% end %>
-  </div>
 </div>
-<% end %>
