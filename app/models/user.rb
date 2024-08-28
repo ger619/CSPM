@@ -27,6 +27,10 @@ class User < ApplicationRecord
   # To ensure that a user has at least one role
   validate :must_have_a_role, on: :update
 
+  # Tagging the user to the ticket
+  has_many :taggings
+  has_many :tickets, through: :taggings
+
   def assign_default_role
     add_role(:agent) if roles.blank?
   end

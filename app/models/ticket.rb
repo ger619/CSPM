@@ -13,6 +13,9 @@ class Ticket < ApplicationRecord
 
   validate :content_length_within_limit
 
+  has_many :taggings
+  has_many :users, through: :taggings
+
   private
 
   # To ensure that the ticket content is within the limit i.e. 800 characters

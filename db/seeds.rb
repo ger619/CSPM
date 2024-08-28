@@ -16,8 +16,14 @@ Role.create!([name: 'admin'])
 Role.create!([name: 'project manager'])
 Role.create!([name: 'client'])
 
-c = User.create!(email: 'admin@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
-c.add_role(:admin)
+a = User.create!(email: 'admin@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
+a.add_role(:admin)
 
-d = User.create!(email: 'user@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
-d.add_role(:agent)
+b = User.create!(email: 'project@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
+b.add_role('project manager')
+
+c = User.create!(email: 'agent@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
+c.add_role(:agent)
+
+d = User.create!(email: 'client@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
+d.add_role(:client)
