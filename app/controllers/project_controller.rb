@@ -83,10 +83,14 @@ class ProjectController < ApplicationController
   end
 
   def assign_user
-    @project = Project.find(params[:id])
-    user = User.find(params[:user_id])
-    @project.users << user
-    redirect_to @project, notice: 'User was successfully assigned.'
+    if @project.users.include?(User.find(params[:user_id]))
+      redirect_to @project, notice: 'User has already been assigned.'
+    else
+      @project = Project.find(params[:id])
+      user = User.find(params[:user_id])
+      @project.users << user
+      redirect_to @project, notice: 'User was successfully assigned.'
+    end
   end
 
   def unassign_user
