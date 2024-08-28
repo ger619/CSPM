@@ -9,7 +9,7 @@ class Ability
       can :create, Project
       can :edit, Project, user_id: user.id
       can :read, Project
-      cannot :delete, Project, user_id: user.id
+      can :delete, Project, user_id: user.id
       can :create, Ticket
       can :edit, Ticket, user_id: user.id
       can :read, Ticket
