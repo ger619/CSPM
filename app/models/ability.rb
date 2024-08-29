@@ -18,6 +18,10 @@ class Ability
       can :edit, Issue, user_id: user.id
       can :read, Issue
       can :delete, Issue, user_id: user.id
+      can :assign_user, Project
+      can :unassign_user, Project
+      can :assign_tag, Ticket
+      can :unassign_tag, Ticket
     elsif user.has_role? :client
       can :read, Project
       can :manage, Ticket, user_id: user.id
