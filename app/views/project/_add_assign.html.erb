@@ -3,17 +3,27 @@
     <div class="col-span-1 text-xs">
       <%= form_with url: assign_user_project_path(@project), local: true do %>
         <%= label_tag :user_id, "Select User" %>
-        <p class="flex flex-col ">
-          <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role, :id, :name || :email), class: "form-select mt-1 block w-2/5 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-          <%= submit_tag "Assign User" %>
-        </p>
+        <div class="grid grid-cols-2">
+          <div class="col-span-1 gap-2">
+          <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role, :id, :name || :email), class: "mr-1 form-select block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+          </div>
+          <div>
+            <%= submit_tag "Assign User", class: 'ml-2  border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+          </div>
+        </div>
       <% end %>
     </div>
     <div class="col-span-1 text-xs">
-      <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
-        <%= label_tag :user_id, "Select User to Unassign" %>
-        <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: "form-select mt-1 block w-2/5 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-        <%= submit_tag "Unassign User" %>
+      <% if @project.users.present? %>
+        <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
+          <%= label_tag :user_id, "Select User to Unassign" %>
+          <div class="grid grid-cols-2">
+            <div class="col-span-1 gap-2">
+          <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: "mr-1 form-select block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"  %>
+            </div>
+              <%= submit_tag "Unassign User", class: 'ml-2  border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
