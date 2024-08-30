@@ -16,6 +16,10 @@ class Project < ApplicationRecord
 
   validate :end_date_after_start_date
 
+  def assigned_to?(user)
+    users.include?(user)
+  end
+
   # To have pick a list of users who have role agent only on a dropdown list at the view to assign a project
 
   private
