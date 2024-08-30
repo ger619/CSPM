@@ -16,6 +16,16 @@ class Ticket < ApplicationRecord
   has_many :taggings
   has_many :users, through: :taggings
 
+
+
+    # Check if user has been assigned into the project
+    # before tagging the ticket
+    # If not assigned, the user cannot tag the ticket
+    # If assigned, the user can tag the ticket
+  def tag_user(user)
+    users << user if project.users.include?(user)
+  end
+
   private
 
   # To ensure that the ticket content is within the limit i.e. 800 characters
