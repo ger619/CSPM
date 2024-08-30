@@ -39,3 +39,4 @@
 node_modules
 .ruby-version
 Gemfile.lock
+/config/database.yml
