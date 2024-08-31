@@ -19,11 +19,11 @@ Role.create!([name: 'client'])
 a = User.create!(email: 'admin@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
 a.add_role(:admin)
 
-b = User.create!(email: 'project@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
+b = User.create!(email: 'project@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Project', last_name: 'Manager')
 b.add_role('project manager')
 
-c = User.create!(email: 'agent@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
+c = User.create!(email: 'agent@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Agent', last_name: 'Active')
 c.add_role(:agent)
 
-d = User.create!(email: 'client@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'User', last_name: 'User')
+d = User.create!(email: 'client@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Client', last_name: 'Active')
 d.add_role(:client)

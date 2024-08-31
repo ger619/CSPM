@@ -2,30 +2,31 @@
 
   <%= render 'tickets/ticket_topbar' %>
 
-  <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+  <div class="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
     <div class="grid grid-cols-3 gap-4 mb-4 h-full">
-      <div class="p-4 items-center justify-center rounded bg-gray-50 dark:bg-gray-800 col-span-1">
+      <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
         <%= render 'layouts/alert', class: "" %>
 
-        <h1 class="text-2xl text-gray-400 dark:text-white">
+        <h1 class="text-2xl">
           <%= @project.title %>
         </h1>
-        <p class="text-sm dark:text-white capitalize"><%= @project.description %></p>
-        <%= render 'project/add_assign' %>
+        <p class="capitalize"><%= @project.description %></p>
+        <div>
+          <%= render 'project/add_assign' %>
+
+        </div>
 
       </div>
-      <div class="font-semibold p-4 justify-between rounded bg-gray-50 dark:bg-gray-800 col-span-2 flex grid grid-cols-2">
-        <div  >
+      <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2">
         <h1 class="text-gray-900 dark:text-white ">Date Created: <span class="font-light"><%= @project.created_at.strftime("%I:%M %p at %d %B %Y") %></span></h1>
         <h1  class="text-gray-900 dark:text-white">Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %B %Y") %></span></h1>
         <h1 class="text-gray-900 dark:text-white ">Expected Date of Completion: <span class="font-light"><%= @project.end_date %></span></h1>
         <h1  class="text-gray-900 dark:text-white">Date to Commence: </h1>
         <h1  class="text-gray-900 dark:text-white">Number of Tickets:   <span class="font-semibold"><%= @project.tickets.count %> / <%= @project.tickets.count %></span></h1>
 
-        </div>
-        <div>
-          <%= render 'assign_people' %>
-        </div>
+      </div>
+      <div class="col-span-1">
+        <%= render 'assign_people' %>
       </div>
 
     </div>
