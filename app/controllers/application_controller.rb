@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   def update_allowed_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password) }
     devise_parameter_sanitizer.permit(:account_update) do |u|
-      u.permit(:name, :email, :password, :current_password, :profile_picture, :first_name, :last_name)
+      u.permit(:name, :email, :password, :current_password, :profile_picture, :first_name, :last_name, :first_login)
     end
   end
 
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   def check_profile_completion
     if user_signed_in? && !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
-      render edit_user_registration_path, alert: 'Please complete your profile before continuing.'
+      redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.'
     end
     return unless user_signed_in? && controller_name == 'registrations' && action_name == 'update'
 
