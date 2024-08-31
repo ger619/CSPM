@@ -105,15 +105,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_28_071739) do
     t.index ["user_id"], name: "index_taggings_on_user_id"
   end
 
-  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.uuid "ticket_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ticket_id"], name: "index_tasks_on_ticket_id"
-    t.index ["user_id"], name: "index_tasks_on_user_id"
-  end
-
   create_table "tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "issue"
     t.string "priority"
@@ -183,8 +174,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_28_071739) do
   add_foreign_key "projects", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
-  add_foreign_key "tasks", "tickets"
-  add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "projects"
   add_foreign_key "tickets", "users"
 end

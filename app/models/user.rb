@@ -17,6 +17,7 @@ class User < ApplicationRecord
 
   has_many :assignees
   has_many :projects, through: :assignees
+  after_initialize :set_default_profile_completed, if: :new_record?
 
   # To show which user invited a user
 
@@ -60,8 +61,6 @@ class User < ApplicationRecord
   def name
     "#{first_name} #{last_name}"
   end
-
-  after_initialize :set_default_profile_completed, if: :new_record?
 
   def set_default_profile_completed
     self.first_login ||= false
