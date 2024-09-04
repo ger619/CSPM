@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(filtered_user_params)
         format.html { redirect_to users_path, notice: 'User was successfully updated.' }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -26,5 +26,15 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(role_ids: [])
+  end
+
+  def filtered_user_params
+    if current_user.has_role?(:admin)
+      user_params
+    else
+      user_params.tap do |params|
+        params[:role_ids] -= [Role.find_by(name: 'admin').id.to_s]
+      end
+    end
   end
 end
