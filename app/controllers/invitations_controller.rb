@@ -18,7 +18,6 @@ class InvitationsController < Devise::InvitationsController
       flash.now[:alert] = 'There was an error inviting the user.'
       render :new
     end
-
   end
 
   private

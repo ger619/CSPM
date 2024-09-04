@@ -5,8 +5,8 @@ class UsersController < ApplicationController
   def index
     @users = if params[:query].present?
                User.where('email LIKE ?', "%#{params[:query]}%").order('created_at DESC')
-              else
-                User.all.order('created_at DESC')
+             else
+               User.all.order('created_at DESC')
              end
 
     # Pagination for users
