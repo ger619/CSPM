@@ -25,4 +25,17 @@ class InvitationsController < Devise::InvitationsController
   def invite_params
     params.require(:user).permit(:email)
   end
+
+  def assign_role(invited_user)
+    return unless params[:role].present?
+
+    if current_user.has_role?(:admin)
+      invited_user.add_role(params[:role])
+    elsif current_user.has_role?(:project_manager)
+      invited_user.add_role(params[:role]) unless params[:role] == 'admin'
+    else
+      invited_user.add_role(params[:role]) unless params[:role] == 'admin' || params[:role] == 'project_manager'
+
+    end
+  end
 end

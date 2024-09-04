@@ -17,19 +17,29 @@
       <div class="col-span-1 text-xs">
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket), local: true do %>
           <%= label_tag :user_id, "Select User" %>
-          <p class="flex flex-col ">
-            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-            <%= submit_tag "Assign User" %>
-          </p>
+          <div class="flex flex-row">
+            <% available_users = User.with_agent_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)) %>
+            <% if available_users.any? %>
+              <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+
+              <div class=" col-span-1">
+                <%= submit_tag "ASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+              </div>
+            <% end %>
+          </div>
         <% end %>
       </div>
       <div class="col-span-1 text-xs">
         <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
-          <%= label_tag :user_id, "Select User to Unassign" %>
+          <%= label_tag :user_id, "SELECT USER TO UNASSIGN" %>
+          <div class="flex flex-row">
           <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-          <%= submit_tag "Unassign User" %>
+          <div class=" col-span-1">
+            <%= submit_tag "UNASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+          </div>
         <% end %>
       </div>
+    </div>
     </div>
   <% end %>
   </div>

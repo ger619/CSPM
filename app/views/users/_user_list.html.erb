@@ -1,3 +1,4 @@
+
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
@@ -83,3 +84,16 @@
     </tbody>
   </table>
 </div>
+
+<div class="pagination mt-4">
+  <% if @page > 1 %>
+    <%= link_to 'Previous', users_path(@users, page: @page - 1), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+  <% end %>
+
+  <span>Page <%= @page %> of <%= @total_pages %></span>
+
+  <% if @page < @total_pages %>
+    <%= link_to 'Next', users_path(@users, page: @page + 1), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+  <% end %>
+</div>
+

@@ -5,7 +5,7 @@
         <%= label_tag :user_id, "SELECT USER" %>
         <div class="flex flex-row">
           <div>
-            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role, :id, :name), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role.where.not(id: @project.users.pluck(:id)), :id, :name), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
           </div>
           <div class=" col-span-1">
             <%= submit_tag "ASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>

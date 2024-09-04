@@ -2,7 +2,7 @@ class Ticket < ApplicationRecord
   belongs_to :project
   belongs_to :user
   has_one_attached :ticket_image
-  has_many :issues, dependent: :nullify
+  has_many :issues, dependent: :destroy
   has_rich_text :body
   has_one_attached :image
 
@@ -14,15 +14,12 @@ class Ticket < ApplicationRecord
   validate :content_length_within_limit
 
   has_many :taggings
-  has_many :users, through: :taggings
+  has_many :users, through: :taggings, dependent: :destroy
 
   # Check if user has been assigned into the project
   # before tagging the ticket
   # If not assigned, the user cannot tag the ticket
   # If assigned, the user can tag the ticket
-  def tagging_to?(user)
-    users << user if project.users.include?(user)
-  end
 
   private
 
