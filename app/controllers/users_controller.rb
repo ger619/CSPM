@@ -3,7 +3,11 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update]
 
   def index
-    @users = User.all.order('created_at DESC')
+    @users = if params[:query].present?
+               User.where('email LIKE ?', "%#{params[:query]}%").order('created_at DESC')
+              else
+                User.all.order('created_at DESC')
+             end
 
     # Pagination for users
     @per_page = 10
