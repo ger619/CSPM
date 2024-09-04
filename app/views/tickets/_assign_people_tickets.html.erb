@@ -18,8 +18,11 @@
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket), local: true do %>
           <%= label_tag :user_id, "Select User" %>
           <p class="flex flex-col ">
-            <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-            <%= submit_tag "Assign User" %>
+            <% available_users = User.with_agent_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)) %>
+            <% if available_users.any? %>
+              <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+              <%= submit_tag "Assign User" %>
+            <% end %>
           </p>
         <% end %>
       </div>
