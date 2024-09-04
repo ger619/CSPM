@@ -18,7 +18,7 @@
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket), local: true do %>
           <%= label_tag :user_id, "Select User" %>
           <p class="flex flex-col ">
-            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+            <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
             <%= submit_tag "Assign User" %>
           </p>
         <% end %>

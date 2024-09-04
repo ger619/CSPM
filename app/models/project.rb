@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :user
-  has_many :tickets, dependent: :nullify
-  has_many :issues, foreign_key: :project_id, class_name: 'Issue', dependent: :nullify
+  has_many :tickets, dependent: :destroy
+  has_many :issues, foreign_key: :project_id, class_name: 'Issue', dependent: :destroy
 
   has_rich_text :content
 
@@ -10,7 +10,7 @@ class Project < ApplicationRecord
   has_many :creators, -> { where(roles: { name: :admin }) }, class_name: 'User', through: :roles, source: :users
   # Assingnee
   has_many :assignees
-  has_many :users, through: :assignees
+  has_many :users, through: :assignees, dependent: :destroy
 
   validates :title, presence: true, uniqueness: true
 

@@ -45,6 +45,14 @@ class User < ApplicationRecord
     joins(:roles).where(roles: { name: 'agent' })
   end
 
+  def tagging_to(user)
+    # if project has user added show the list of users
+    # who have been added to the project
+    return false unless project.users.include?(user)
+
+    users.include?(user)
+  end
+
   # To ensure either the first name or last name is present and they appear in the initials
   def name_initials
     if first_name.present? && last_name.present?
