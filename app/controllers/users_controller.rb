@@ -4,6 +4,12 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all.order('created_at DESC')
+
+    # Pagination for users
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@users.count / @per_page.to_f).ceil
+    @users = @users.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def edit; end

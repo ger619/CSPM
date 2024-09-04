@@ -18,6 +18,7 @@ class InvitationsController < Devise::InvitationsController
       flash.now[:alert] = 'There was an error inviting the user.'
       render :new
     end
+
   end
 
   private
@@ -29,13 +30,13 @@ class InvitationsController < Devise::InvitationsController
   def assign_role(invited_user)
     return unless params[:role].present?
 
-    case current_user.role
-    when 'admin'
+    if current_user.has_role?(:admin)
       invited_user.add_role(params[:role])
-    when 'project manager'
+    elsif current_user.has_role?(:project_manager)
       invited_user.add_role(params[:role]) unless params[:role] == 'admin'
     else
-      # type code here
+      invited_user.add_role(params[:role]) unless params[:role] == 'admin' || params[:role] == 'project_manager'
+
     end
   end
 end
