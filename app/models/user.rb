@@ -42,7 +42,7 @@ class User < ApplicationRecord
   end
 
   def self.with_agent_role
-    joins(:roles).where(roles: { name: 'agent' })
+    joins(:roles).where(roles: { name: 'agent' }, first_login: true)
   end
 
   def tagging_to(user)

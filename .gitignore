@@ -38,5 +38,4 @@
 !/app/assets/builds/.keep
 node_modules
 .ruby-version
-Gemfile.lock
 /config/database.yml
