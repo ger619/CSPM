@@ -2,7 +2,7 @@ class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project # This line ensures that the project is set before any action is taken
   # This line ensures that the ticket is set before any action is taken
-  before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag]
+  before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag add_condition]
 
   def index; end
 
@@ -96,6 +96,6 @@ class TicketsController < ApplicationController
 
   def ticket_params
     params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image,
-                                   user_ids: [])
+                                   user_ids: [], condition: [])
   end
 end

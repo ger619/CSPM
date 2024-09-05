@@ -65,7 +65,11 @@
         </td>
 
         <td class="px-4 py-4 ">
-          OPEN/CLOSED
+          <% if ticket.condition == 'OPEN' %>
+            <p class='bg-green-500 p-2 text-center text-white font-bold rounded'><%= ticket.condition %></p>
+          <% else %>
+            <p class='bg-red-900 p-2 text-center text-white font-bold rounded'><%= ticket.condition %></p>
+            <% end %>
         </td>
         <% if can? :edit, ticket %>
           <td class="px-4 py-4">
@@ -86,4 +90,3 @@
     </tbody>
   </table>
 </div>
-
