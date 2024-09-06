@@ -16,20 +16,6 @@ class Ticket < ApplicationRecord
   has_many :taggings
   has_many :users, through: :taggings, dependent: :destroy
   # Ticket Condition
-  enum condition: {
-    open: 0,
-    assigned: 1,
-    awaiting_build: 2,
-    client_confirmation_pending: 3,
-    closed: 4,
-    declined: 5,
-    on_hold: 6,
-    qa_testing: 7,
-    reopened: 8,
-    resolved: 9,
-    under_development: 10,
-    work_in_progress: 11
-  }
 
   # after_create :set_default_status, if: :new_record?
 
