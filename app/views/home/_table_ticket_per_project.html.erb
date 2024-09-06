@@ -26,30 +26,27 @@
     </tr>
     </thead>
     <tbody>
-    <% @project_ticket_counts.each do |project_title, ticket_count| %>
+    <% @issues_count_per_project_for_current_user.each do |project_title, issue_count| %>
+
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center">
-        <th scope="row" class="text-left capitalize px-6 py-4 font-medium whitespace-nowrap ">
-          <%= project_title %>
-        </th>
-        <td class="px-6 py-4">
-          <%= ticket_count %>
-        </td>
-        <td class="px-6 py-4">
-          <%= ticket_count %>
-        </td>
-        <td class="px-6 py-4">
-          <%= ticket_count %>
-        </td>
-        <td class="px-6 py-4">
-          <%= ticket_count %>
-        </td>
-        <td class="px-6 py-4">
-          <%= ticket_count %>
-        </td>
+
+              <th scope="row" class="text-left capitalize px-6 py-4 font-medium whitespace-nowrap ">
+                <p>Project: <%= project_title %></p>
+              </th>
+
+              <td class="px-6 py-4">
+                <p>Total Tickets: <%= @tickets_count_per_project[project_title] %></p>
+              </td>
+
+              <td>
+                <p>Issues by You: <%= issue_count %></p>
+              </td>
+
       </tr>
 
     <% end %>
     </tbody>
+
   </table>
 </div>
 </div>
