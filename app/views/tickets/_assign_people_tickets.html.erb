@@ -1,8 +1,8 @@
   <div>
   <h3>Assigned Agents</h3>
-    <div class="grid md:grid-cols-3 grid-cols-1 gap-2">
+    <div class="grid md:grid-cols-3 grid-cols-1 gap-2 mt-2">
     <% @ticket.users.each do |user| %>
-      <p class="border-b-4 border-black border p-2 min-w-3 gap-4 col-span-1" >
+      <p class="border-b-4 border-r-2 border p-2 min-w-3 gap-4 col-span-1" >
         <% if user.name.present? %>
           <%= user.name %>
         <% else %>
@@ -23,7 +23,7 @@
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
 
               <div class=" col-span-1">
-                <%= submit_tag "ASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+                <%= submit_tag "ASSIGN", class: 'border border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
               </div>
             <% end %>
           </div>
@@ -35,7 +35,7 @@
           <div class="flex flex-row">
           <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
           <div class=" col-span-1">
-            <%= submit_tag "UNASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+            <%= submit_tag "UNASSIGN", class: 'border border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
           </div>
         <% end %>
       </div>

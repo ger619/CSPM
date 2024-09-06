@@ -39,7 +39,7 @@
       <%= turbo_frame_tag dom_id(project) do %>
 
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-          <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+          <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
           <%= link_to project.title, project_path(project.id) %>
           </th>
         <td class="px-6 py-4">
@@ -57,7 +57,7 @@
           <%= project.user.name %>
         </td>
         <td class="px-6 py-4">
-          <%= project.users.distinct.pluck(:email).join(', ')%>
+          <%= project.users.distinct.limit(2).pluck(:email).join(', ')%>
         </td>
         <td class="px-6 py-4 gap-2">
           <%= project.creators.distinct.pluck(:first_name , :last_name).join('  ') %>
@@ -75,7 +75,6 @@
             <% end %>
           </td>
         <% end %>
-
 
       </tr>
     <% end %>

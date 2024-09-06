@@ -1,27 +1,27 @@
 
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }, data: {turbo: false}) do |f| %>
-  <section class="bg-gray-50 dark:bg-gray-900 mx-auto ">
-    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-[600px] ">
+  <section class="mx-auto ">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-[600px]">
         <h2>Resend confirmation instructions</h2>
-        <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <div class="flex items-center mb-6 text-2xl font-semibold">
           <%= image_tag 'logo.png', class: 'w-72 '%>
 
         </div>
-      <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+      <p class="text-sm font-light">
         <%= render "devise/shared/error_messages", resource: resource %>
       </p>
 
 
         <div class="field w-3/5">
-          <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %><br />
-          <%= f.email_field :email, autofocus: true, class: "bg-gray-50 border border-black text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+          <%= f.label :email, class: "block mb-2 text-sm font-medium" %><br />
+          <%= f.email_field :email, autofocus: true, class: "bg-gray-50 border border-black  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
         </div>
 
         <div class="actions mt-2 w-3/5">
-          <%= f.submit "Resend Instructions", class: 'mt-6 w-full text-gray-900 dark:text-white border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+          <%= f.submit "Resend Instructions", class: 'mt-6 w-full border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
         </div>
 
-        <p class="mt-2 w-3/5 text-sm font-light text-gray-900 dark:text-white">
+        <p class="mt-2 w-3/5 text-sm font-light">
           <%= render "devise/shared/links" %>
         </p>
 
