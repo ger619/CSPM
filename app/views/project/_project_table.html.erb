@@ -57,7 +57,7 @@
           <%= project.user.name %>
         </td>
         <td class="px-6 py-4">
-          <%= project.users.distinct.pluck(:email).join(', ')%>
+          <%= project.users.distinct.limit(2).pluck(:email).join(', ')%>
         </td>
         <td class="px-6 py-4 gap-2">
           <%= project.creators.distinct.pluck(:first_name , :last_name).join('  ') %>

@@ -45,6 +45,7 @@
 
           <div class="field">
             <%= f.label :current_password %> <i class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">(we need your current password to confirm your changes)</i><br />
+
             <%= f.password_field :current_password, autocomplete: "current-password", class: 'shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light', required: true %>
           </div>
 
@@ -54,7 +55,7 @@
 
   <div class="actions mt-2">
 
-    <%= f.submit "Update", class: 'mb-4 w-2/5 h-12 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+    <%= f.submit "Update", class: 'mb-4 w-2/5 h-12 text-gray-900 dark:text-slate-100 border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
 
 
 
