@@ -39,6 +39,7 @@ class Ability
       can :read, Project
       can :read, Ticket
       can :read, Issue
+      can :read, User, user_id: user.id
     end
   end
 end

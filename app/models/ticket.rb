@@ -15,11 +15,9 @@ class Ticket < ApplicationRecord
 
   has_many :taggings
   has_many :users, through: :taggings, dependent: :destroy
+  # Ticket Condition
 
-  # Check if user has been assigned into the project
-  # before tagging the ticket
-  # If not assigned, the user cannot tag the ticket
-  # If assigned, the user can tag the ticket
+  # after_create :set_default_status, if: :new_record?
 
   private
 
