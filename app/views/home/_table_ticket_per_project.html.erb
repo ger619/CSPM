@@ -2,26 +2,17 @@
 
 <div class="p-4 border-white rounded-lg w-full">
 <div class="relative overflow-x-auto w-full">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+  <table class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
     <tr>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-6 py-3 text-left">
         Name of The Project
       </th>
       <th scope="col" class="px-6 py-3">
-        Number of Tickets
+       Total Number Of Tickets Available
       </th>
       <th scope="col" class="px-6 py-3">
-        Number of Tickets Open
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Number of Tickets Closed
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Number of Tickets Resolved
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Number of Tickets Resolved
+        Number of Issues Published
       </th>
     </tr>
     </thead>
@@ -29,18 +20,15 @@
     <% @issues_count_per_project_for_current_user.each do |project_title, issue_count| %>
 
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center">
-
-              <th scope="row" class="text-left capitalize px-6 py-4 font-medium whitespace-nowrap ">
-                <p>Project: <%= project_title %></p>
-              </th>
-
-              <td class="px-6 py-4">
-                <p>Total Tickets: <%= @tickets_count_per_project[project_title] %></p>
-              </td>
-
-              <td>
-                <p>Issues by You: <%= issue_count %></p>
-              </td>
+        <th scope="row" class="text-left capitalize px-6 py-4 font-medium whitespace-nowrap ">
+            <%= project_title %>
+        </th>
+        <td class="px-6 py-4">
+            <%= @tickets_count_per_project[project_title] %>
+        </td>
+        <td>
+            <%= issue_count %>
+        </td>
 
       </tr>
 
