@@ -9,6 +9,12 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def create
+    if invite_params[:email].blank?
+      flash.now[:alert] = 'Email cannot be blank.'
+      render :new
+      return
+    end
+
     invited_user = User.find_by(email: invite_params[:email])
 
     if invited_user
