@@ -1,6 +1,6 @@
 # app/mailers/user_mailer.rb
 class UserMailer < ApplicationMailer
-  default from: 'notifications@example.com'
+  default from: 'cspm@craftsilicon.com'
 
   def assignment_email(user, project)
     @user = user
