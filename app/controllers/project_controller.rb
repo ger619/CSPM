@@ -5,7 +5,7 @@ class ProjectController < ApplicationController
   # GET /projects
   def index
     @pagy, @project = if params[:query].present?
-                        pagy_countless(Project.where('title LIKE ? OR description LIKE ?', "%#{params[:query]}%",
+                        pagy_countless(Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%",
                                                      "%#{params[:query]}%"), items: 10)
                       else
                         pagy_countless(Project.all.with_rich_text_content.order('created_at DESC'), items: 10)
@@ -20,7 +20,7 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     @ticket = if params[:query].present?
-                @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body LIKE ?',
+                @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
                                                                    "%#{params[:query]}%")
               else
                 @project.tickets.with_rich_text_body.order('created_at DESC')
@@ -89,7 +89,15 @@ class ProjectController < ApplicationController
       @project = Project.find(params[:id])
       user = User.find(params[:user_id])
       @project.users << user
+
+      # Send email to the newly assigned user
       UserMailer.assignment_email(user, @project).deliver_now
+
+      # Send email to all users assigned to the project
+      @project.users.each do |project_user|
+        UserMailer.project_assigned_email(project_user, @project).deliver_now
+      end
+
       redirect_to @project, notice: 'User was successfully assigned.'
     end
   end
