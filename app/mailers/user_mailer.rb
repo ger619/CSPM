@@ -15,4 +15,10 @@ class UserMailer < ApplicationMailer
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @user.email, subject: 'You have been assigned to a new ticket')
   end
+
+  def project_assigned_email(user, project)
+    @user = user
+    @project = project
+    mail(to: @user.email, subject: 'You have been assigned to a project')
+  end
 end
