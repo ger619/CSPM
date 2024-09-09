@@ -5,14 +5,23 @@ class InvitationsController < Devise::InvitationsController
 
   def new
     @user = User.new
+    self.resource = @user
   end
 
   def create
-    invited_user = User.invite!(invite_params, current_user)
+    invited_user = User.find_by(email: invite_params[:email])
+
+    if invited_user
+      invited_user.invite!(current_user)
+      notice_message = 'Invitation resent successfully.'
+    else
+      invited_user = User.invite!(invite_params, current_user)
+      notice_message = 'User has been invited successfully.' if invited_user.errors.blank?
+    end
 
     if invited_user.errors.blank?
       invited_user.add_role(params[:role]) if params[:role].present?
-      redirect_to users_path, notice: 'User has been invited successfully.'
+      redirect_to users_path, notice: notice_message
     else
       Rails.logger.debug invited_user.errors.full_messages.to_sentence
       flash.now[:alert] = 'There was an error inviting the user.'
