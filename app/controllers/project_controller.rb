@@ -89,6 +89,7 @@ class ProjectController < ApplicationController
       @project = Project.find(params[:id])
       user = User.find(params[:user_id])
       @project.users << user
+      UserMailer.assignment_email(user, @project).deliver_now
       redirect_to @project, notice: 'User was successfully assigned.'
     end
   end
