@@ -1,33 +1,40 @@
 
   <%= render 'issues/issue_topbar' %>
   <%= render 'layouts/alert', class: "" %>
-  <div role="status" class="space-y-8  md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center ">
-      <div class="flex items-center h-48 rounded w-96 ">
-          <% if @ticket.ticket_image.present? %>
-            <%= image_tag @ticket.ticket_image, class: 'h-48 w-72' %>
-          <% else %>
-            <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
-            </svg>
-          <% end %>
-      </div>
-
-      <div class="grid-cols-2 grid gap-2">
-        <div class="w-full col-span-1">
+  <div class="grid md:grid-cols-3 md:items-center ">
+        <div class="w-full col-span-1 h-full content-center ">
+            <% if @ticket.ticket_image.present? %>
+              <%= image_tag @ticket.ticket_image %>
+            <% else %>
+              <svg class="w-10 h-10 text-gray-200 dark:text-gray-600 items-center"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+              </svg>
+            <% end %>
+        </div>
+        <div class="w-full col-span-1 col-span-1 h-full">
           <div class="mb-4 font-bold uppercase">Type of Issue: <span class="font-medium"><%= @ticket.issue %></span></div>
           <div class="mb-2.5 font-bold uppercase">Priority: <span class="font-medium"><%= @ticket.priority %></span></div>
           <div class="mb-2.5 font-bold capitalize">Content: <span class="font-extralight"><%= @ticket.body.to_plain_text.truncate(800) %></span></div>
         </div>
-        <div class="col-span-1">
+
+        <div class="w-full col-span-1 col-span-1 border border-black h-full p-2">
           <%= render 'tickets/assign_people_tickets' %>
         </div>
-      </div>
+
+
 
   </div>
-  <div class="mt-2">
+  <div class="grid grid-cols-3">
+
+  <div class="mt-2 col-span-2">
     <%= render partial: 'issues/issues_table' %>
   </div>
+  <div class="w-full col-span-1 border border-black h-full  place-content-center w-full">
+      <%= render 'tickets/ticket_action' %>
 
+  </div>
+
+  </div>
 
 
 

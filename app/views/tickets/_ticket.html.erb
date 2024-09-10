@@ -19,7 +19,7 @@
         Person who raised it
       </th>
       <th scope="col" class="px-6 py-3">
-        Open/Closed
+        Status
       </th>
       <% if can? :edit, @ticket %>
       <th scope="col" class="px-6 py-3">
@@ -65,7 +65,15 @@
         </td>
 
         <td class="px-4 py-4 ">
-          Ticket Status
+          <% if ticket.status == 'Resolved' || ticket.status == 'Closed' %>
+            <p class='bg-green-500 p-2 text-center text-white font-bold rounded'>
+              <%= ticket.status %>
+            </p>
+          <% else %>
+            <p class="text-red font-bold">
+              <%= ticket.status %>
+            </p>
+          <% end %>
         </td>
         <% if can? :edit, ticket %>
           <td class="px-4 py-4">

@@ -4,6 +4,10 @@ import '@hotwired/turbo-rails';
 import 'controllers';
 import 'trix';
 import '@rails/actiontext';
+//= require rails-ujs
+//= require turbolinks
+//= require_tree .
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const richTextArea = document.querySelector('[data-rich-text-area]');
