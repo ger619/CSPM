@@ -2,7 +2,7 @@ class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project # This line ensures that the project is set before any action is taken
   # This line ensures that the ticket is set before any action is taken
-  before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag]
+  before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag update_status]
 
   def index; end
 
@@ -85,6 +85,20 @@ class TicketsController < ApplicationController
     redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully unassigned.'
   end
 
+  def update_status
+    if @ticket.update(ticket_params)
+      respond_to do |format|
+        format.html { redirect_to project_tickets_path(@ticket), notice: 'Status updated successfully' }
+        format.js
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to project_tickets_path(@ticket), alert: 'Failed to update status' }
+        format.js
+      end
+    end
+  end
+
   private
 
   def set_project
@@ -97,6 +111,6 @@ class TicketsController < ApplicationController
 
   def ticket_params
     params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image,
-                                   user_ids: [])
+                                   :status, user_ids: [])
   end
 end

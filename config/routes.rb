@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       member do
         post :assign_tag
         delete :unassign_tag
+        patch :update_status
       end
       resources :issues
     end
