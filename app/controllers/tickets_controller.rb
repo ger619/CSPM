@@ -87,14 +87,15 @@ class TicketsController < ApplicationController
 
   def update_status
     if @ticket.update(ticket_params)
+      @ticket.users.each do |ticket_user|
+        UserMailer.status_update_email(ticket_user, @ticket).deliver_now
+      end
       respond_to do |format|
         format.html { redirect_to project_tickets_path(@ticket), notice: 'Status updated successfully' }
-        format.js
       end
     else
       respond_to do |format|
         format.html { redirect_to project_tickets_path(@ticket), alert: 'Failed to update status' }
-        format.js
       end
     end
   end

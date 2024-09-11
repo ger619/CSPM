@@ -21,4 +21,10 @@ class UserMailer < ApplicationMailer
     @project = project
     mail(to: @user.email, subject: 'You have been assigned to a project')
   end
+
+  def status_update_email(user, ticket)
+    @user = user
+    @ticket = ticket
+    mail(to: @user.email, subject: 'Ticket status updated')
+  end
 end

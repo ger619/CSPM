@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+<h1>Hello, <%= @user.name %></h1>
+<p>The status of the ticket: <%= @ticket.title %> has been updated to <%= @ticket.status %>.</p>
+<p>Ticket Description: <%= @ticket.description %></p>
+<p>Click <a href="<%= @url %>">here</a> to view the ticket.</p>
+<p>Best regards,</p>
+<p>Your Team</p>
+</body>
+</html>
