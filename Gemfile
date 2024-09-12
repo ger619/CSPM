@@ -65,6 +65,12 @@ group :development do
   # gem "spring"
   gem 'bullet', group: :development # For detecting N+1 queries
   gem 'letter_opener', group: :development # For opening emails in browser during development
+  gem 'capistrano', '~> 3.17'
+  gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
+  gem 'capistrano-passenger', '~> 0.2.1'
+  gem 'capistrano-rbenv', '~> 2.2'
+  gem 'ed25519', '~> 1.3'
+  gem 'bcrypt_pbkdf', '~> 1.1'
 end
 
 group :test do
