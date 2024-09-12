@@ -26,7 +26,8 @@ class InvitationsController < Devise::InvitationsController
     end
 
     if invited_user.errors.blank?
-      invited_user.add_role(params[:role]) if params[:role].present?
+      # Assign role safely
+      assign_role(invited_user)
       redirect_to users_path, notice: notice_message
     else
       Rails.logger.debug invited_user.errors.full_messages.to_sentence

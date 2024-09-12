@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'rubocop', '>= 1.0', '< 2.0'
-
 ruby '3.3.5'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
@@ -52,6 +50,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]
   gem 'rspec-rails'
+  gem 'rubocop', '>= 1.0', '< 2.0'
 end
 
 group :development do
@@ -75,6 +74,10 @@ end
 
 # gems to be used
 gem 'cancancan', '~> 3.5'
+gem 'capistrano', '~> 3.11'
+gem 'capistrano-passenger', '~> 0.2.0'
+gem 'capistrano-rails', '~> 1.4'
+gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
 gem 'mini_magick', '~> 4.13'
