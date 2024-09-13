@@ -87,3 +87,7 @@ gem 'mini_magick', '~> 4.13'
 gem 'pagy', '~> 6.0'
 gem 'pundit'
 gem 'rolify', '~> 6.0'
+# Gemfile
+
+# Add Passenger gem
+gem 'passenger'

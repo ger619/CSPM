@@ -220,6 +220,10 @@ GEM
     parser (3.3.5.0)
       ast (~> 2.4.1)
       racc
+    passenger (6.0.23)
+      rack (>= 1.6.13)
+      rackup
+      rake (>= 12.3.3)
     pg (1.5.8)
     psych (5.1.2)
       stringio
@@ -409,6 +413,7 @@ DEPENDENCIES
   letter_opener
   mini_magick (~> 4.13)
   pagy (~> 6.0)
+  passenger
   pg (~> 1.1)
   puma (>= 5.0)
   pundit
