@@ -66,6 +66,7 @@ group :development do
   gem 'bcrypt_pbkdf', '~> 1.1'
   gem 'bullet', group: :development # For detecting N+1 queries
   gem 'capistrano', '~> 3.17'
+  gem 'capistrano-bundler'
   gem 'capistrano-passenger', '~> 0.2.1'
   gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
   gem 'capistrano-rbenv', '~> 2.2'

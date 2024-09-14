@@ -27,7 +27,7 @@ append :linked_files, "config/database.yml", 'config/master.key'
 
 # Default value for linked_dirs is []
 
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage", "app/assets/images", "vendor/JavaScript", "app/assets/stylesheets"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage", "app/assets/images", "app/assets/stylesheets"
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
@@ -39,11 +39,28 @@ set :keep_releases, 5
 
 set :default_env, { path: "/home/cspm/.rbenv/shims:/home/cspm/.rbenv/bin:$PATH" }
 
+# config/deploy.rb
+namespace :deploy do
+  after :updated, 'deploy:compile_assets'
+end
+# From Mac OS X
 
 namespace :deploy do
-  after :updated, 'deploy:compile_assets' do
+  desc "Compile assets"
+  task :compile_assets do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'assets:precompile'
+        end
+      end
+    end
   end
 end
+
+set :assets_roles, [:web, :app]
+set :assets_prefix, 'precompiled-assets'
+set :local_precompile, true
 
 
   # Uncomment the following to require manually verifying the host key before first deploy.
