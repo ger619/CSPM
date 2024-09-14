@@ -52,8 +52,22 @@ namespace :deploy do
         end
       end
     end
+
+    desc 'Restore the assets manifest'
+    task :restore_manifest do
+      on roles(fetch(:assets_roles)) do
+        within release_path do
+          if test("[ -f #{shared_path.join('public/assets/.sprockets-manifest*')} ]")
+            execute :cp, shared_path.join('public/assets/.sprockets-manifest*'), release_path.join('public/assets/')
+          else
+            warn "Rails assets manifest file not found."
+          end
+        end
+      end
+    end
   end
 
+  before 'deploy:assets:precompile', 'deploy:assets:restore_manifest'
   after 'deploy:assets:precompile', 'deploy:assets:backup_manifest'
 end
 
