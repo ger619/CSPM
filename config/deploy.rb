@@ -5,7 +5,7 @@ set :application, "CSPM"
 set :repo_url, "https://github.com/ger619/CSPM.git"
 set :branch, "dep"
 
-# Default deploy_to directory is /var/www/my_app_name
+# Default deploy_to directory is /home/cspm/CSPM
 set :deploy_to, "/home/cspm/CSPM"
 
 # Default value for :linked_files is []
@@ -57,7 +57,11 @@ namespace :deploy do
     task :restore_manifest do
       on roles(fetch(:assets_roles)) do
         within release_path do
-          execute :cp, shared_path.join('public/assets/.sprockets-manifest*'), release_path.join('public/assets/')
+          if test("[ -f #{shared_path.join('public/assets/.sprockets-manifest*')} ]")
+            execute :cp, shared_path.join('public/assets/.sprockets-manifest*'), release_path.join('public/assets/')
+          else
+            warn "Rails assets manifest file not found."
+          end
         end
       end
     end
