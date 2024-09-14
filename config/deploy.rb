@@ -43,5 +43,5 @@ end
 
 
 set :assets_roles, [:web, :app]
-set :assets_prefix, 'precompiled-assets'
+set :assets_prefix, 'packs'
 set :local_precompile, true
