@@ -413,6 +413,7 @@ DEPENDENCIES
   jbuilder
   letter_opener
   mini_magick (~> 4.13)
+  ostruct
   pagy (~> 6.0)
   passenger
   pg (~> 1.1)

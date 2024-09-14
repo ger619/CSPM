@@ -90,5 +90,5 @@ gem 'pundit'
 gem 'rolify', '~> 6.0'
 # Gemfile
 
-# Add Passenger gem
+gem 'ostruct'
 gem 'passenger'
