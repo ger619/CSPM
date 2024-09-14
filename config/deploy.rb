@@ -41,6 +41,23 @@ namespace :deploy do
   end
 end
 
+# Ensure the manifest file is backed up and restored correctly
+namespace :deploy do
+  namespace :assets do
+    desc 'Backup the assets manifest'
+    task :backup_manifest do
+      on roles(fetch(:assets_roles)) do
+        within release_path do
+          execute :cp, release_path.join('public/assets/.sprockets-manifest*'), shared_path.join('public/assets/')
+        end
+      end
+    end
+  end
+
+  before 'deploy:assets:precompile', 'deploy:assets:restore_manifest'
+  after 'deploy:assets:precompile', 'deploy:assets:backup_manifest'
+end
+
 set :assets_roles, [:web, :app]
 set :assets_prefix, 'precompiled-assets'
 set :local_precompile, true
