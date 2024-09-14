@@ -27,9 +27,11 @@ append :linked_files, "config/database.yml", 'config/master.key'
 
 # Default value for linked_dirs is []
 
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage", "app/assets/images","app/assets/stylesheets", "app/assets/stylesheets/application.tailwind.css"
+#append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage", "app/assets/images","app/assets/stylesheets", "app/assets/stylesheets/application.tailwind.css"
+set :linked_dirs, fetch(:linked_dirs, []).push('public/assets', 'node_modules')
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :rails_env, 'production'
 
 # Default value for local_user is ENV['USER']
 # set :local_user, -> { `git config user.name`.chomp }
