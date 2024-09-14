@@ -54,7 +54,6 @@ namespace :deploy do
     end
   end
 
-  before 'deploy:assets:precompile', 'deploy:assets:restore_manifest'
   after 'deploy:assets:precompile', 'deploy:assets:backup_manifest'
 end
 
