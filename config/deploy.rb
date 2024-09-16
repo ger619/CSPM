@@ -22,7 +22,7 @@ set :deploy_to, "/home/deploy/#{fetch(:application)}"
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", 'config/master.key'
+append :linked_files, "config/database.yml", "config/master.key"
 
 # Default value for linked_dirs is []
 
@@ -30,6 +30,8 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bund
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# config/deploy.rb
 
 # Default value for local_user is ENV['USER']
 # set :local_user, -> { `git config user.name`.chomp }
@@ -39,9 +41,3 @@ set :keep_releases, 5
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-set :default_env, {
-  'RAILS_MASTER_KEY' => 'd8e78266ae275f400e02493c39d27741',
-  'DB_USERNAME' => 'deploy',
-  'DB_PASSWORD' => 'M9&vQ#4Kp7@ZsG8!B2r5*LxW3e^YzT1',
-  'DB_HOST' => 'localhost'
-}

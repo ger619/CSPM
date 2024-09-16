@@ -15,10 +15,10 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  host: <%= ENV['DB_HOST'] %>
+  host: localhost
 
 
 development:
@@ -85,14 +85,8 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-
-
 production:
   <<: *default
   database: cspm_production
-  username: deploy
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  host: localhost
-  password: 'M9&vQ#4Kp7@ZsG8!B2r5*LxW3e^YzT1'
+  username: cspm
+  password: <%= ENV["CSPM_DATABASE_PASSWORD"] %>
