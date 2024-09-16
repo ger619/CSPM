@@ -87,6 +87,8 @@ class ProjectController < ApplicationController
       redirect_to @project, notice: 'User has already been assigned.'
     else
       @project = Project.find(params[:id])
+      @project.user = current_user
+
       user = User.find(params[:user_id])
       @project.users << user
 
@@ -95,7 +97,7 @@ class ProjectController < ApplicationController
 
       # Send email to all users assigned to the project
       @project.users.each do |project_user|
-        UserMailer.project_assigned_email(project_user, @project).deliver_now
+        UserMailer.project_assigned_email(project_user, @project, current_user).deliver_now
       end
 
       redirect_to @project, notice: 'User was successfully assigned.'

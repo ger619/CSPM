@@ -70,9 +70,10 @@ class TicketsController < ApplicationController
     else
       @project = Project.find(params[:project_id])
       @ticket = @project.tickets.find(params[:id])
+      @ticket.user = current_user
       user = User.find(params[:user_id])
       @ticket.users << user
-      UserMailer.ticket_assignment_email(user, @ticket).deliver_now
+      UserMailer.ticket_assignment_email(user, @ticket, current_user).deliver_now
       redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully assigned.'
     end
   end
