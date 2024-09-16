@@ -91,4 +91,8 @@ production:
   <<: *default
   database: cspm_production
   username: deploy
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: localhost
   password: 'M9&vQ#4Kp7@ZsG8!B2r5*LxW3e^YzT1'
