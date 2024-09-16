@@ -74,6 +74,10 @@ end
 
 # gems to be used
 gem 'cancancan', '~> 3.5'
+gem 'capistrano'
+gem 'capistrano-passenger'
+gem 'capistrano-rails'
+gem 'capistrano-rbenv'
 gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
 gem 'mini_magick', '~> 4.13'
