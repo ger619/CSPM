@@ -60,12 +60,12 @@ group :development do
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
-
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   gem 'bcrypt_pbkdf', '~> 1.1'
   gem 'bullet', group: :development # For detecting N+1 queries
   gem 'capistrano', '~> 3.17'
+  gem 'capistrano-bundler'
   gem 'capistrano-passenger', '~> 0.2.1'
   gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
   gem 'capistrano-rbenv', '~> 2.2'
@@ -89,5 +89,5 @@ gem 'pundit'
 gem 'rolify', '~> 6.0'
 # Gemfile
 
-# Add Passenger gem
+gem 'ostruct'
 gem 'passenger'

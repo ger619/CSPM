@@ -399,6 +399,7 @@ DEPENDENCIES
   bullet
   cancancan (~> 3.5)
   capistrano (~> 3.17)
+  capistrano-bundler
   capistrano-passenger (~> 0.2.1)
   capistrano-rails (~> 1.6, >= 1.6.2)
   capistrano-rbenv (~> 2.2)
@@ -412,6 +413,7 @@ DEPENDENCIES
   jbuilder
   letter_opener
   mini_magick (~> 4.13)
+  ostruct
   pagy (~> 6.0)
   passenger
   pg (~> 1.1)
