@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'rubocop', '>= 1.0', '< 2.0'
-
 ruby '3.3.5'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
@@ -65,6 +63,7 @@ group :development do
   # gem "spring"
   gem 'bullet', group: :development # For detecting N+1 queries
   gem 'letter_opener', group: :development # For opening emails in browser during development
+  gem 'rubocop', '>= 1.0', '< 2.0'
 end
 
 group :test do

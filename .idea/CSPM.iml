@@ -64,12 +64,12 @@
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.13.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ffi (v1.17.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v1.2.1, rbenv: 3.3.5) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="i18n (v1.14.5, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="i18n (v1.14.6, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="image_processing (v1.13.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="importmap-rails (v2.0.1, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="io-console (v0.7.2, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="irb (v1.14.0, rbenv: 3.3.5) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="jbuilder (v2.12.0, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="jbuilder (v2.13.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="json (v2.7.2, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="language_server-protocol (v3.17.0.3, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="launchy (v3.0.1, rbenv: 3.3.5) [gem]" level="application" />
@@ -131,12 +131,12 @@
     <orderEntry type="library" scope="PROVIDED" name="sprockets-rails (v3.5.2, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="stimulus-rails (v1.3.4, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="stringio (v3.1.1, rbenv: 3.3.5) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tailwindcss-rails (v2.7.3, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tailwindcss-rails (v2.7.4, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v1.3.2, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="timeout (v0.4.1, rbenv: 3.3.5) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="turbo-rails (v2.0.6, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="turbo-rails (v2.0.7, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v2.0.6, rbenv: 3.3.5) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="unicode-display_width (v2.5.0, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="unicode-display_width (v2.6.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uniform_notifier (v1.16.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="useragent (v0.16.10, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="warden (v1.2.9, rbenv: 3.3.5) [gem]" level="application" />
@@ -155,164 +155,76 @@
   <component name="RailsGeneratorsCache">
     <option name="generators">
       <list>
-        <option value="active_record:application_record" />
-        <option value="active_record:devise" />
-        <option value="active_record:devise_invitable" />
-        <option value="active_record:multi_db" />
-        <option value="active_record:rolify" />
-        <option value="application_record" />
-        <option value="benchmark" />
-        <option value="bullet:install" />
-        <option value="cancan:ability" />
-        <option value="channel" />
+        <option value="active_record:migration" />
+        <option value="active_record:model" />
+        <option value="active_record:observer" />
+        <option value="active_record:session_migration" />
         <option value="controller" />
-        <option value="devcontainer" />
-        <option value="devise" />
-        <option value="devise:controllers" />
-        <option value="devise:install" />
-        <option value="devise:views" />
-        <option value="devise_invitable" />
-        <option value="devise_invitable:form_for" />
-        <option value="devise_invitable:install" />
-        <option value="devise_invitable:invitation_views" />
-        <option value="devise_invitable:simple_form_for" />
-        <option value="devise_invitable:views" />
         <option value="erb:controller" />
         <option value="erb:mailer" />
         <option value="erb:scaffold" />
         <option value="generator" />
         <option value="helper" />
         <option value="integration_test" />
-        <option value="jbuilder" />
-        <option value="job" />
-        <option value="mailbox" />
         <option value="mailer" />
+        <option value="metal" />
         <option value="migration" />
         <option value="model" />
-        <option value="mongoid:devise" />
-        <option value="mongoid:devise_invitable" />
-        <option value="pundit:install" />
-        <option value="pundit:policy" />
+        <option value="model_subclass" />
+        <option value="observer" />
+        <option value="performance_test" />
+        <option value="plugin" />
         <option value="resource" />
-        <option value="responders:install" />
-        <option value="responders_controller" />
-        <option value="rolify" />
-        <option value="rolify:user" />
-        <option value="rspec:channel" />
-        <option value="rspec:controller" />
-        <option value="rspec:feature" />
-        <option value="rspec:generator" />
-        <option value="rspec:helper" />
-        <option value="rspec:install" />
-        <option value="rspec:job" />
-        <option value="rspec:mailbox" />
-        <option value="rspec:mailer" />
-        <option value="rspec:model" />
-        <option value="rspec:policy" />
-        <option value="rspec:request" />
-        <option value="rspec:scaffold" />
-        <option value="rspec:system" />
-        <option value="rspec:view" />
         <option value="scaffold" />
         <option value="scaffold_controller" />
-        <option value="stimulus" />
-        <option value="system_test" />
-        <option value="task" />
-        <option value="test_unit:channel" />
+        <option value="session_migration" />
+        <option value="stylesheets" />
         <option value="test_unit:controller" />
-        <option value="test_unit:generator" />
         <option value="test_unit:helper" />
-        <option value="test_unit:install" />
         <option value="test_unit:integration" />
-        <option value="test_unit:job" />
-        <option value="test_unit:mailbox" />
         <option value="test_unit:mailer" />
         <option value="test_unit:model" />
+        <option value="test_unit:observer" />
+        <option value="test_unit:performance" />
         <option value="test_unit:plugin" />
-        <option value="test_unit:policy" />
         <option value="test_unit:scaffold" />
-        <option value="test_unit:system" />
       </list>
     </option>
     <option name="myGenerators">
       <list>
-        <option value="active_record:application_record" />
-        <option value="active_record:devise" />
-        <option value="active_record:devise_invitable" />
-        <option value="active_record:multi_db" />
-        <option value="active_record:rolify" />
-        <option value="application_record" />
-        <option value="benchmark" />
-        <option value="bullet:install" />
-        <option value="cancan:ability" />
-        <option value="channel" />
+        <option value="active_record:migration" />
+        <option value="active_record:model" />
+        <option value="active_record:observer" />
+        <option value="active_record:session_migration" />
         <option value="controller" />
-        <option value="devcontainer" />
-        <option value="devise" />
-        <option value="devise:controllers" />
-        <option value="devise:install" />
-        <option value="devise:views" />
-        <option value="devise_invitable" />
-        <option value="devise_invitable:form_for" />
-        <option value="devise_invitable:install" />
-        <option value="devise_invitable:invitation_views" />
-        <option value="devise_invitable:simple_form_for" />
-        <option value="devise_invitable:views" />
         <option value="erb:controller" />
         <option value="erb:mailer" />
         <option value="erb:scaffold" />
         <option value="generator" />
         <option value="helper" />
         <option value="integration_test" />
-        <option value="jbuilder" />
-        <option value="job" />
-        <option value="mailbox" />
         <option value="mailer" />
+        <option value="metal" />
         <option value="migration" />
         <option value="model" />
-        <option value="mongoid:devise" />
-        <option value="mongoid:devise_invitable" />
-        <option value="pundit:install" />
-        <option value="pundit:policy" />
+        <option value="model_subclass" />
+        <option value="observer" />
+        <option value="performance_test" />
+        <option value="plugin" />
         <option value="resource" />
-        <option value="responders:install" />
-        <option value="responders_controller" />
-        <option value="rolify" />
-        <option value="rolify:user" />
-        <option value="rspec:channel" />
-        <option value="rspec:controller" />
-        <option value="rspec:feature" />
-        <option value="rspec:generator" />
-        <option value="rspec:helper" />
-        <option value="rspec:install" />
-        <option value="rspec:job" />
-        <option value="rspec:mailbox" />
-        <option value="rspec:mailer" />
-        <option value="rspec:model" />
-        <option value="rspec:policy" />
-        <option value="rspec:request" />
-        <option value="rspec:scaffold" />
-        <option value="rspec:system" />
-        <option value="rspec:view" />
         <option value="scaffold" />
         <option value="scaffold_controller" />
-        <option value="stimulus" />
-        <option value="system_test" />
-        <option value="task" />
-        <option value="test_unit:channel" />
+        <option value="session_migration" />
+        <option value="stylesheets" />
         <option value="test_unit:controller" />
-        <option value="test_unit:generator" />
         <option value="test_unit:helper" />
-        <option value="test_unit:install" />
         <option value="test_unit:integration" />
-        <option value="test_unit:job" />
-        <option value="test_unit:mailbox" />
         <option value="test_unit:mailer" />
         <option value="test_unit:model" />
+        <option value="test_unit:observer" />
+        <option value="test_unit:performance" />
         <option value="test_unit:plugin" />
-        <option value="test_unit:policy" />
         <option value="test_unit:scaffold" />
-        <option value="test_unit:system" />
       </list>
     </option>
   </component>
@@ -706,7 +618,6 @@
                   <RakeTaskImpl description="Install Turbo into the app with bun" fullCommand="turbo:install:bun" id="bun" />
                   <RakeTaskImpl description="Install Turbo into the app with asset pipeline" fullCommand="turbo:install:importmap" id="importmap" />
                   <RakeTaskImpl description="Install Turbo into the app with webpacker" fullCommand="turbo:install:node" id="node" />
-                  <RakeTaskImpl description="Switch on Redis and use it in development" fullCommand="turbo:install:redis" id="redis" />
                 </subtasks>
               </RakeTaskImpl>
             </subtasks>
