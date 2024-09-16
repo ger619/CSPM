@@ -90,4 +90,5 @@ test:
 production:
   <<: *default
   database: cspm_production
-  password: <%= ENV["CSPM_DATABASE_PASSWORD"] %>
+  username: deploy
+  password: 'M9&vQ#4Kp7@ZsG8!B2r5*LxW3e^YzT1'
