@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update) do |u|
       u.permit(:name, :email, :password, :current_password, :profile_picture, :first_name, :last_name, :first_login)
     end
+    devise_parameter_sanitizer.permit(:invite, keys: %i[email role])
   end
 
   private
