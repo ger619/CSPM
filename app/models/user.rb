@@ -18,6 +18,9 @@ class User < ApplicationRecord
   has_many :assignees
   has_many :projects, through: :assignees
   after_initialize :set_default_profile_completed, if: :new_record?
+  validate :email_domain_must_be_certified, on: :create
+
+
 
   # To show which user invited a user
 
@@ -75,6 +78,14 @@ class User < ApplicationRecord
   end
 
   private
+
+  def email_domain_must_be_certified
+    allowed_domains = %w[craftsilicon.com iandm.com]
+    domain = email.split('@').last
+    return if allowed_domains.include?(domain)
+
+    errors.add(:email, 'must be from a certified domain (craftsilicon.com')
+  end
 
   def must_have_a_role
     return if roles.any?
