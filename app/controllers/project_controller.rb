@@ -94,8 +94,10 @@ class ProjectController < ApplicationController
       # Send email to the newly assigned user
       UserMailer.assignment_email(user, @project, current_user).deliver_now
 
-      # Send email to all users assigned to the project
+      # Send email to all users assigned to the project, except the current user
       @project.users.each do |project_user|
+        next if project_user == current_user
+
         UserMailer.assignment_email(project_user, @project, current_user).deliver_now
       end
 
