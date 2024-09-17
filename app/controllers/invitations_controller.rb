@@ -9,6 +9,9 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def create
+    Rails.logger.debug "Invite Params: #{invite_params.inspect}"
+    Rails.logger.debug "Current User: #{current_user.inspect}"
+
     if invite_params[:email].blank?
       flash.now[:alert] = 'Email cannot be blank.'
       render :new
@@ -16,6 +19,7 @@ class InvitationsController < Devise::InvitationsController
     end
 
     invited_user = User.find_by(email: invite_params[:email])
+    Rails.logger.debug "Invited User: #{invited_user.inspect}"
 
     if invited_user
       invited_user.invite!(current_user)
@@ -38,7 +42,7 @@ class InvitationsController < Devise::InvitationsController
   private
 
   def invite_params
-    params.require(:user).permit(:email)
+    params.require(:user).permit(:email, roles: [])
   end
 
   def assign_role(invited_user)
