@@ -83,7 +83,7 @@ class TicketsController < ApplicationController
     @ticket = @project.tickets.find(params[:id])
     user = User.find(params[:user_id])
     @ticket.users.delete(user)
-    redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully unassigned.'
+    redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
   def update_status
@@ -98,7 +98,7 @@ class TicketsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to project_tickets_path(@ticket), alert: 'Failed to update status' }
+        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
       end
     end
   end
