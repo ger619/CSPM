@@ -28,4 +28,9 @@ class Ticket < ApplicationRecord
 
     errors.add(:body, "cannot be longer than #{max_length} characters.")
   end
+
+  # def set_sla_deadline
+  #   sla_calculator = SlaCalculator.new(created_at, 24) # Assuming SLA duration is 24 hours
+  #   self.sla_deadline = sla_calculator.calculate_sla_deadline
+  # end
 end

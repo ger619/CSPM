@@ -16,14 +16,14 @@ Role.create!([name: 'admin'])
 Role.create!([name: 'project manager'])
 Role.create!([name: 'client'])
 
-a = User.create!(email: 'admin@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
+a = User.create!(email: 'admin@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
 a.add_role(:admin)
 
-b = User.create!(email: 'project@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Project', last_name: 'Manager')
+b = User.create!(email: 'project@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Project', last_name: 'Manager')
 b.add_role('project manager')
 
-c = User.create!(email: 'agent@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Agent', last_name: 'Active')
+c = User.create!(email: 'agent@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Agent', last_name: 'Active')
 c.add_role(:agent)
 
-d = User.create!(email: 'client@craft.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Client', last_name: 'Active')
+d = User.create!(email: 'client@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Client', last_name: 'Active')
 d.add_role(:client)
