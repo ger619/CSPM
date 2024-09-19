@@ -49,7 +49,7 @@ class ProjectController < ApplicationController
     respond_to do |format|
       if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
         if @project.save
-          current_user.add_role :creator, @project
+          current_user.add_role(:creator, @project) unless current_user.has_role?(:creator, @project)
           format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
         else
           format.html { render :new, status: :unprocessable_entity }

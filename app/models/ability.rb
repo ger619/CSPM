@@ -6,6 +6,7 @@ class Ability
     if user.has_role? :admin
       can :manage, :all # allow super admins to do anything
     elsif user.has_role?('project manager')
+      can :read, User, roles: { name: %w[agent client project_manager] }
       can :create, Project
       can :edit, Project, user_id: user.id
       can :read, Project

@@ -22,7 +22,7 @@
       </div>
       <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
       <p class="text-sm">
-          Number of Issues Assigned
+          Number of Issues Published
         </p>
         <span class="text-xl font-bold">
             <%= current_user.issues.distinct.pluck(:id).count %>
