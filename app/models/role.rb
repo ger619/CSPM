@@ -10,6 +10,4 @@ class Role < ApplicationRecord
             allow_nil: true
 
   scopify
-
-  validates :name, uniqueness: true
 end
