@@ -36,7 +36,10 @@
     <tbody>
 
     <% @project.each do |project|  %>
-      <%= turbo_frame_tag dom_id(project) do %>
+      <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) %>
+
+    <%= turbo_frame_tag dom_id(project) do %>
+
 
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
           <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
@@ -77,9 +80,11 @@
         <% end %>
 
       </tr>
+
     <% end %>
 
     <% end %>
+      <% end %>
 
     </tbody>
   </table>
