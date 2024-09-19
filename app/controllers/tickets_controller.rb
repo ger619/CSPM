@@ -73,8 +73,8 @@ class TicketsController < ApplicationController
       @ticket.user = current_user
       user = User.find(params[:user_id])
       @ticket.users << user
-      UserMailer.ticket_assignment_email(user, @ticket, current_user).deliver_now
-      redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully assigned.'
+      UserMailer.ticket_assignment_email(user, @ticket, current_user).deliver_later
+      redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end
 
@@ -91,10 +91,10 @@ class TicketsController < ApplicationController
     @ticket.user = current_user # O
     if @ticket.update(ticket_params)
       @ticket.users.each do |ticket_user|
-        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_now
+        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
       respond_to do |format|
-        format.html { redirect_to project_tickets_path(@ticket), notice: 'Status updated successfully' }
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
       end
     else
       respond_to do |format|
