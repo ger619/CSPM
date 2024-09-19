@@ -92,13 +92,13 @@ class ProjectController < ApplicationController
       @project.users << user
 
       # Send email to the newly assigned user
-      UserMailer.assignment_email(user, @project, current_user).deliver_now
+      UserMailer.assignment_email(user, @project, current_user).deliver_later
 
       # Send email to all users assigned to the project, except the current user
       @project.users.each do |project_user|
         next if project_user == current_user
 
-        UserMailer.assignment_email(project_user, @project, current_user).deliver_now
+        UserMailer.assignment_email(project_user, @project, current_user).deliver_later
       end
 
       redirect_to @project, notice: 'User was successfully assigned.'
