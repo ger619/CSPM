@@ -33,5 +33,4 @@ class Ticket < ApplicationRecord
   #   sla_calculator = SlaCalculator.new(created_at, 24) # Assuming SLA duration is 24 hours
   #   self.sla_deadline = sla_calculator.calculate_sla_deadline
   # end
-
 end
