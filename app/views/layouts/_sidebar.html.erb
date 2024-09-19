@@ -55,7 +55,7 @@
             <% if current_user.projects.exists?  %>
               <%= current_user.projects.count %>
             <% elsif current_user.has_role?(:admin) %>
-                Project.count
+                <%= Project.count %>
               <% else %>
                 0
             <% end %>
