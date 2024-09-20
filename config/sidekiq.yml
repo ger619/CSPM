@@ -3,3 +3,5 @@
 :queues:
   - default
   - mailers
+:redis:
+  url: redis://:your_password@172.17.20.11:6379/0
