@@ -88,4 +88,3 @@ gem 'passenger', require: 'phusion_passenger/rack_handler'
 gem 'pundit'
 gem 'rolify', '~> 6.0'
 gem 'sidekiq'
-
