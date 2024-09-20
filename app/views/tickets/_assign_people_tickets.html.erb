@@ -23,7 +23,7 @@
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
 
               <div class=" col-span-1">
-                <%= submit_tag "ASSIGN", class: 'border border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+                <%= submit_tag "ASSIGN", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded' %>
               </div>
             <% end %>
           </div>
@@ -35,7 +35,7 @@
           <div class="flex flex-row">
           <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
           <div class=" col-span-1">
-            <%= submit_tag "UNASSIGN", class: 'border border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+            <%= submit_tag "UNASSIGN", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded' %>
           </div>
         <% end %>
       </div>
