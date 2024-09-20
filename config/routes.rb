@@ -3,9 +3,10 @@ Rails.application.routes.draw do
   resources :users
 
   require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
 
-
+  authenticate :user, ->(user) { user.has_role?(:admin) } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

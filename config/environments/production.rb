@@ -116,5 +116,9 @@ Rails.application.configure do
     enable_starttls_auto: true, # Automatically start TLS if available
     openssl_verify_mode: 'none' # To avoid certificate verification issues (use cautiously)
   }
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL'] || 'redis://172.17.11:6379/0',
+    expires_in: 90.minutes
+  }
 
 end
