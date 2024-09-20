@@ -102,6 +102,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: '172.17.20.11'}
 
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  config.active_job.queue_adapter = :sidekiq
+
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
@@ -115,10 +119,6 @@ Rails.application.configure do
     tls: true, # Enforce TLS
     enable_starttls_auto: true, # Automatically start TLS if available
     openssl_verify_mode: 'none' # To avoid certificate verification issues (use cautiously)
-  }
-  config.cache_store = :redis_cache_store, {
-    url: ENV['REDIS_URL'] || 'redis://172.17.11:6379/0',
-    expires_in: 90.minutes
   }
 
 end
