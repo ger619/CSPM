@@ -78,13 +78,13 @@
         <% if can? :edit, ticket %>
           <td class="px-4 py-4">
 
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket) %>
+            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
 
           </td>
         <% end %>
         <td class="px-4 py-4">
           <% if can? :delete, ticket %>
-             <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }  %>
+             <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold"  %>
           <% end %>
         </td>
 
