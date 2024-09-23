@@ -1,7 +1,7 @@
 <h3>Assigned Agents</h3>
-<div class="grid md:grid-cols-3 grid-cols-1 gap-2">
+<div class="flex flex-wrap gap-2">
   <% @project.users.each do |user| %>
-    <p class="border-b-4 border-black border dark:border-slate-100 p-2 min-w-3 gap-4 col-span-1 text-xs" >
+    <p class="border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs" >
       <% if user.name.present? %>
           <%= user.name %>
       <% else %>
