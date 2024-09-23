@@ -3,7 +3,7 @@ lock "~> 3.19.1"
 
 set :application, "CSPM"
 set :repo_url, "https://github.com/ger619/CSPM.git"
-set :branch, 'dev'
+set :branch, 'emails'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
