@@ -88,4 +88,3 @@ gem 'pundit'
 gem 'redis'
 gem 'rolify', '~> 6.0'
 gem 'sidekiq'
-
