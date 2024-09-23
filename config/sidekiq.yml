@@ -1,3 +1,7 @@
+
+:concurrency: 5
 :queues:
   - default
   - mailers
+:redis:
+  url: redis://default:your_password@172.17.20.11:6379/0
