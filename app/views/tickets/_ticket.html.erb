@@ -16,7 +16,7 @@
         Start Date
       </th>
       <th scope="col" class="px-6 py-3">
-        Person who raised it
+        Person Assigned
       </th>
       <th scope="col" class="px-6 py-3">
         Status
@@ -58,10 +58,14 @@
           <%= ticket.body.to_plain_text.truncate(50) %>
         </td>
         <td class="px-6 py-4">
-          <%= ticket.created_at.strftime("%I:%M %p at %d %B %Y") %>
+          <%= ticket.created_at.strftime("%I:%M %p at %d-%b-%Y") %>
         </td>
-        <td class="px-6 py-4 ">
-          <%= ticket.user.name %>
+        <td class="px-6 py-4 font-bold">
+          <% ticket.users.each do |user| %>
+            <% if user.name.present? %>
+                <%= user.name %>
+            <% end %>
+          <% end %>
         </td>
 
         <td class="px-4 py-4 ">
