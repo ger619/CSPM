@@ -87,13 +87,13 @@
 
 <div class="pagination mt-4">
   <% if @page > 1 %>
-    <%= link_to 'Previous', users_path(@users, page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
+    <%= link_to 'Previous', users_path(@users, page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 border-black dark:border-slate-100 font-semibold rounded' %>
   <% end %>
 
   <span>Page <%= @page %> of <%= @total_pages %></span>
 
   <% if @page < @total_pages %>
-    <%= link_to 'Next', users_path(@users, page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3  font-semibold rounded' %>
+    <%= link_to 'Next', users_path(@users, page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3  border-black dark:border-slate-100 font-semibold rounded' %>
   <% end %>
 </div>
 

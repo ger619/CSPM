@@ -31,7 +31,7 @@
     </div>
 
     <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
-      <% if @project.assigned_to?(current_user) %>
+      <% if @project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
         <%= render 'tickets/ticket' %>
       <% end %>
 

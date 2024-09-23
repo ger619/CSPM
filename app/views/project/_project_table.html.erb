@@ -36,47 +36,49 @@
     <tbody>
 
     <% @project.each do |project|  %>
-      <%= turbo_frame_tag dom_id(project) do %>
+      <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
 
+          <%= turbo_frame_tag dom_id(project) do %>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
           <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
           <%= link_to project.title, project_path(project.id) %>
           </th>
-        <td class="px-6 py-4">
-          <%= project.description %>
-        </td>
-        <td class="px-6 py-4">
-          <%= project.start_date.strftime("%d-%b-%y") %>
-        </td>
-        <td class="px-6 py-4">
-          <% if project.end_date.present? %>
-            <%= project.end_date.strftime("%d-%b-%y") %>
-          <% end %>
-        </td>
-        <td class="px-6 py-4">
-          <%= project.user.name %>
-        </td>
-        <td class="px-6 py-4">
-          <%= project.users.distinct.limit(2).pluck(:email).join(', ')%>
-        </td>
-        <td class="px-6 py-4 gap-2">
-          <%= project.creators.distinct.pluck(:first_name , :last_name).join('  ') %>
-        </td>
-        <td class="px-6 py-4 ">
-          <%= project.content.to_plain_text.truncate(50) %>
-        </td>
-        <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-          <td class="px-6 py-4 flex  gap-2">
-            <% if can? :edit, project %>
-              <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
-            <% end %>
-            <% if can? :delete, project %>
-              <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+          <td class="px-6 py-4">
+            <%= project.description %>
+          </td>
+          <td class="px-6 py-4">
+            <%= project.start_date.strftime("%d-%b-%y") %>
+          </td>
+          <td class="px-6 py-4">
+            <% if project.end_date.present? %>
+              <%= project.end_date.strftime("%d-%b-%y") %>
             <% end %>
           </td>
-        <% end %>
+          <td class="px-6 py-4">
+            <%= project.user.name %>
+          </td>
+          <td class="px-6 py-4">
+            <%= project.users.distinct.limit(2).pluck(:email).join(', ')%>
+          </td>
+          <td class="px-6 py-4 gap-2">
+            <%= project.creators.distinct.pluck(:first_name , :last_name).join('  ') %>
+          </td>
+          <td class="px-6 py-4 ">
+            <%= project.content.to_plain_text.truncate(50) %>
+          </td>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+            <td class="px-6 py-4 flex  gap-2">
+              <% if can? :edit, project %>
+                <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
+              <% end %>
+              <% if can? :delete, project %>
+                <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+              <% end %>
+            </td>
+          <% end %>
 
       </tr>
+    <% end %>
     <% end %>
 
     <% end %>
