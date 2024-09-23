@@ -68,10 +68,10 @@
         <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
           <td class="px-6 py-4 flex  gap-2">
             <% if can? :edit, project %>
-              <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase font-bold "  %>
+              <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
             <% end %>
             <% if can? :delete, project %>
-              <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 p-3 rounded-lg uppercase text-red-900 font-bold" %>
+              <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
             <% end %>
           </td>
         <% end %>

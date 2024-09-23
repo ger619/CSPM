@@ -74,7 +74,7 @@ class TicketsController < ApplicationController
       user = User.find(params[:user_id])
       @ticket.users << user
       UserMailer.ticket_assignment_email(user, @ticket, current_user).deliver_now
-      redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully assigned.'
+      redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end
 
@@ -83,7 +83,7 @@ class TicketsController < ApplicationController
     @ticket = @project.tickets.find(params[:id])
     user = User.find(params[:user_id])
     @ticket.users.delete(user)
-    redirect_to project_tickets_path(@ticket), notice: 'Ticket was successfully unassigned.'
+    redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
   def update_status
