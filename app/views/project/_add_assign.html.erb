@@ -3,12 +3,12 @@
     <div class="col-span-1 text-xs">
       <%= form_with url: assign_user_project_path(@project), local: true do %>
         <%= label_tag :user_id, "SELECT USER" %>
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap gap-2">
           <div>
             <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role.where.not(id: @project.users.pluck(:id)), :id, :name), class: "max-w-[120px] mr-1 form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
           </div>
           <div class=" col-span-1">
-            <%= submit_tag "ASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+            <%= submit_tag "ASSIGN", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded cursor-pointer' %>
           </div>
         </div>
       <% end %>
@@ -21,7 +21,7 @@
             <div>
                <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: "max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"  %>
             </div>
-              <%= submit_tag "UNASSING", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded' %>
+              <%= submit_tag "UNASSING", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded cursor-pointer' %>
           </div>
         <% end %>
       <% end %>
