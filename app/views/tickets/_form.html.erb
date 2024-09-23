@@ -9,10 +9,45 @@
          <%= f.label :priority, :Priority, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
          <%= f.select :priority, options_for_select(%w[CRITICAL HIGH MEDIUM LOW]), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
        </div>
+     </div>
+     <div class="relative z-0 w-full mb-6 group">
+       <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+       <%= f.file_field :ticket_image, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
+     </div>
+
+     <div class="grid grid-cols-2 gap-2 h-[100%] w-[100%]">
+       <div class="relative z-0 w-[100%] mb-6 group">
+         <%= f.label :topic, :topic, class: "capitalize block mb-1 text-sm font-medium"  %><br />
+         <%= f.text_field :topic, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Topic', required: true %>
+       </div>
+       <div class="relative z-0 w-full mb-6 group">
+         <%= f.label :description, :Description, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+         <%= f.text_field :description, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Description', required: true %>
+       </div>
+     </div>
+     <div>
+       <% if @project.errors.any? %>
+         <div id="error_explanation " class="flex flex-row justify-center gap-10">
+           <h2><%= pluralize(@project.errors.count, "error") %> prohibited this event from being saved:</h2>
+           <ul>
+             <% @project.errors.full_messages.each do |message| %>
+               <li class="text-red-900 font-semibold"><%= message %></li>
+             <% end %>
+           </ul>
+         </div>
+       <% end %>
+
+     </div>
+
+     <div class="grid grid-cols-2 gap-2">
 
        <div class="relative z-0 w-full mb-6 group">
-         <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-         <%= f.file_field :ticket_image, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
+         <%= f.label :start_date, 'Start Date', class: "capitalize block mb-1 text-sm font-medium"  %><br />
+         <%= f.datetime_field :start_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+       </div>
+       <div class="relative z-0 w-full mb-6 group">
+         <%= f.label :end_date, 'End Date', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+         <%= f.datetime_field :end_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
        </div>
      </div>
 
@@ -28,6 +63,6 @@
      0/800
    </p>
 
-   <%= f.submit "Submit",  class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 p-3 font-semibold rounded'  %>
+   <%= f.submit "Submit",  class: 'mt-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
 
  <% end %>

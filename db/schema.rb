@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_23_095319) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -93,7 +93,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", unique: true
-    t.index ["name"], name: "index_roles_on_name", unique: true
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
@@ -114,6 +113,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status", default: "new"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string "topic"
+    t.string "description"
     t.index ["project_id"], name: "index_tickets_on_project_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
