@@ -11,10 +11,11 @@
 
 # Create Roles on the system
 
-Role.create!([name: 'agent'])
-Role.create!([name: 'admin'])
-Role.create!([name: 'project manager'])
-Role.create!([name: 'client'])
+Role.find_or_create_by!(name: 'agent')
+Role.find_or_create_by!(name: 'admin')
+Role.find_or_create_by!(name: 'project manager')
+Role.find_or_create_by!(name: 'client')
+
 
 a = User.create!(email: 'admin@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
 a.add_role(:admin)
