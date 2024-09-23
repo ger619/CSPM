@@ -1,5 +1,5 @@
  <%= form_with(model: [project, project.tickets.build]) do |f|%>
-   <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%]">
+   <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%] p-1">
      <div class="grid grid-cols-2 gap-2 h-[100%] w-[100%]">
        <div class="relative z-0 w-[100%] mb-6 group">
          <%= f.label :issue, :issue, class: "capitalize block mb-1 text-sm font-medium"  %><br />
@@ -28,6 +28,6 @@
      0/800
    </p>
 
-   <%= f.submit "Submit",  class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 p-3 font-semibold rounded'  %>
+   <%= f.submit "Submit",  class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
 
  <% end %>
