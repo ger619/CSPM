@@ -16,4 +16,8 @@ class Product < ApplicationRecord
 
   has_many :addusers
   has_many :users, through: :addusers, dependent: :destroy
+
+  def added_to?(user)
+    users.include?(user)
+  end
 end

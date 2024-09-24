@@ -6,40 +6,33 @@ class Ability
     if user.has_role? :admin
       can :manage, :all # allow super admins to do anything
     elsif user.has_role?('project manager')
-      can :create, Project
-      can :edit, Project, user_id: user.id
-      can :read, Project
-      can :delete, Project, user_id: user.id
-      can :create, Ticket
-      can :edit, Ticket, user_id: user.id
-      can :read, Ticket
-      can :delete, Ticket, user_id: user.id
-      can :create, Issue
-      can :edit, Issue, user_id: user.id
-      can :read, Issue
-      can :delete, Issue, user_id: user.id
-      can :assign_user, Project
-      can :unassign_user, Project
-      can :assign_tag, Ticket
-      can :unassign_tag, Ticket
+      can %i[create read unassign_user unassign_user], Project
+      can %i[edit delete], Project, user_id: user.id
+      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[edit delete], Ticket, user_id: user.id
+      can %i[create read], Issue
+      can %i[edit delete], Issue, user_id: user.id
+      can %i[create Product], Product
+      can %i[edit delete], Product, user_id: user.id
     elsif user.has_role? :client
       can :read, Project
-      can :manage, Ticket, user_id: user.id
-      can :create, Issue, user_id: user.id
-      can :edit, Issue, user_id: user.id
-      can :delete, Issue, user_id: user.id
+      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[edit delete], Ticket, user_id: user.id
       can :read, Issue
+      can :read, Product
     elsif user.has_role? :agent
       can :read, Project
-      can :manage, Ticket, user_id: user.id
-      can :create, Issue, user_id: user.id
-      can :edit, Issue, user_id: user.id
-      can :delete, Issue, user_id: user.id
+      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[edit delete], Ticket, user_id: user.id
+      can :manage, Issue, user_id: user.id
+      can :read, Product
     else
       can :read, Project
-      can :read, Ticket
+      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[edit delete], Ticket, user_id: user.id
       can :read, Issue
       can :read, User, user_id: user.id
+      can :read, Product
     end
   end
 end
