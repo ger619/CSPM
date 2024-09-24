@@ -22,6 +22,9 @@ class Ability
       can :unassign_user, Project
       can :assign_tag, Ticket
       can :unassign_tag, Ticket
+      can :create, Project
+      can :edit, Product, user_id: user.id
+      can :read, Product
     elsif user.has_role? :client
       can :read, Project
       can :manage, Ticket, user_id: user.id
@@ -29,17 +32,22 @@ class Ability
       can :edit, Issue, user_id: user.id
       can :delete, Issue, user_id: user.id
       can :read, Issue
+      can :read, Product
     elsif user.has_role? :agent
       can :read, Project
       can :manage, Ticket, user_id: user.id
       can :create, Issue, user_id: user.id
       can :edit, Issue, user_id: user.id
       can :delete, Issue, user_id: user.id
+      can :read, Product
+
     else
       can :read, Project
       can :read, Ticket
       can :read, Issue
       can :read, User, user_id: user.id
+      can :read, Product
+
     end
   end
 end
