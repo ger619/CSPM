@@ -1,0 +1,80 @@
+
+<div class="grid grid-cols-3 gap-4 mb-4 h-full">
+  <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
+    <%= render 'layouts/alert' %>
+
+    <h1 class="text-xl">
+      Name of the Project: <%= @product.name %>
+    </h1>
+    <p class="capitalize text-sm"><%= @product.description %></p>
+    <div>
+      <%= render 'product/add_users' %>
+    </div>
+
+  </div>
+  <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2">
+    <h1>Date Created: <span class="font-light"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></span></h1>
+    <h1>Date to Commence: <span class="font-light"><%= @product.start_date.strftime("%d %b %y") %></span></h1>
+    <h1 class="flex gap-1">Expected Date of Completion:
+      <span class="font-light">
+        <% if @product.end_date.present? %>
+          <% if @product.end_date <= Date.today %>
+            <p class="bg-red-900  rounded">
+              <%= @product.end_date.strftime("%d-%b-%y") %>
+            </p>
+          <% else %>
+            <p class="bg-red-green  rounded">
+              <%= @product.end_date.strftime("%d-%b-%y") %>
+            </p>
+          <% end %>
+        <% end %>
+        <span class="font-light">
+    </span>
+      </span>
+    </h1>
+    <h1>Date to Commence: </h1>
+    <h1>Plan:
+        <% if @product.plan.attached? %>
+              <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold ">
+                <%= link_to 'View Plan', rails_blob_path(@product.plan, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
+              </span>
+        <% end %>
+    </h1>
+    <h1>FSD: <% if @product.fod.attached? %>
+                <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold ">
+                <%= link_to 'View Functional Specification Document', rails_blob_path(@product.fod, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
+              </span>
+      <% end %>
+    </h1>
+    <h1>Scope: <% if @product.scope.attached? %>
+                <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold ">
+                    <%= link_to 'View Scope', rails_blob_path(@product.scope, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
+                  </span>
+               <% end %>
+    </h1>
+    <h1>BRD:  <% if @product.brd.attached? %>
+                <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold ">
+                  <%= link_to 'View Business Requirement Document', rails_blob_path(@product.brd, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
+                </span>
+              <% end %>
+    </h1>
+
+
+
+
+
+  </div>
+  <div class="col-span-1">
+    <%#= render 'assign_people' %>
+  </div>
+
+</div>
+
+<div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
+  <%# if @project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
+    <%#= render 'tickets/ticket' %>
+  <%# end %>
+
+</div>
+
+

@@ -10,15 +10,21 @@ class User < ApplicationRecord
   has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :nullify
   has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :nullify
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :nullify
+  # Products to Projects
+  has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
+
   # To ensure that a user has at least one role
   has_many :projects, through: :roles, source: :resource, source_type: :Project
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
+  # Products to Projects
+  has_many :products, through: :roles, source: :resource, source_type: :Product
 
   has_many :assignees
   has_many :projects, through: :assignees
   after_initialize :set_default_profile_completed, if: :new_record?
   validate :email_domain_must_be_certified, on: %i[create invitation_create]
+  has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
 
   # To show which user invited a user
 
@@ -32,6 +38,9 @@ class User < ApplicationRecord
   # Tagging the user to the ticket
   has_many :taggings
   has_many :tickets, through: :taggings
+
+  has_many :addusers
+  has_many :products, through: :addusers
 
   def assign_default_role
     add_role(:agent) if roles.blank?

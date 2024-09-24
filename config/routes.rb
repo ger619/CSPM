@@ -16,6 +16,17 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "home#index"
+
+  resources :client
+  resources :product do
+    member do
+      post :add_user
+      delete :remove_user
+    end
+  end
+
+
+
   resources :project do
     member do
       post :assign_user
@@ -30,5 +41,7 @@ Rails.application.routes.draw do
       resources :issues
     end
   end
+
+
 
 end
