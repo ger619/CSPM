@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_24_052925) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -62,6 +62,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
     t.index ["user_id"], name: "index_assignees_on_user_id"
   end
 
+  create_table "clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.string "address"
+    t.string "client_contact_person"
+    t.string "client_contact_phone_number"
+    t.string "client_contact_person_email"
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_clients_on_user_id"
+  end
+
   create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "subject"
     t.uuid "ticket_id", null: false
@@ -72,6 +86,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["ticket_id"], name: "index_issues_on_ticket_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
+  end
+
+  create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "topic"
+    t.string "description"
+    t.date "start_date"
+    t.date "end_date"
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_products_on_user_id"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -92,8 +118,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
     t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", unique: true
-    t.index ["name"], name: "index_roles_on_name", unique: true
+    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
@@ -170,9 +195,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_10_055727) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "assignees", "projects"
   add_foreign_key "assignees", "users"
+  add_foreign_key "clients", "users"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"
   add_foreign_key "issues", "users"
+  add_foreign_key "products", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
