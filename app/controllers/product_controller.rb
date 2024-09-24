@@ -56,7 +56,7 @@ class ProductController < ApplicationController
 
   def destroy
     @product.destroy
-    redirect_to products_url, notice: 'Product was successfully destroyed.'
+    redirect_to product_url, notice: 'Product was successfully destroyed.'
   end
 
   private
@@ -67,6 +67,6 @@ class ProductController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :description, :start_date, :end_date, :image, :content, :scope, :fod, :brd,
-                                    :user_id, images: [])
+                                    :plan, :user_id, images: [])
   end
 end
