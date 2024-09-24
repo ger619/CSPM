@@ -6,7 +6,6 @@
   <!-- Search on the right -->
   <div class="grid col-span-1 justify-end">
 
-
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
         <%= f.text_field :query, placeholder: "Search ", class: "h-12 border border-b-4 border-r-2 p-2 rounded" %>
