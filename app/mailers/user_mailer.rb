@@ -25,4 +25,12 @@ class UserMailer < ApplicationMailer
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @user.email, subject: 'Ticket status updated')
   end
+
+  def assign_product_email(user, product, current_user)
+    @user = user
+    @product = product
+    @current_user = current_user
+    @url = product_url(@product)
+    mail(to: @user.email, subject: 'You have been assigned to a new product')
+  end
 end
