@@ -27,16 +27,18 @@ class ProductController < ApplicationController
   def create
     @product = Product.new(product_params)
     @product.user_id = current_user.id
-    if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
-      if @product.save
-        current_user.add_role :creator, @product
-        format.html { redirect_to product_path(@product), notice: 'Product was successfully created.' }
+    respond_to do |format|
+      if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
+        if @product.save
+          current_user.add_role :creator, @product
+          format.html { redirect_to product_path(@product), notice: 'Product was successfully created.' }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+        end
       else
-        format.html { render :new, status: :unprocessable_entity }
-      end
-    else
-      format.html do
-        render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a product.'
+        format.html do
+          render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a product.'
+        end
       end
     end
   end
@@ -52,6 +54,36 @@ class ProductController < ApplicationController
         format.html { render 'edit', status: :unprocessable_entity }
       end
     end
+  end
+
+  def add_user
+    if @product.users.include?(User.find(params[:user_id]))
+      redirect_to @product, notice: 'User has already been assigned.'
+    else
+      @product = Product.find(params[:id])
+      user = User.find(params[:user_id])
+      @product.user = current_user
+      @product.users << user
+
+      # Send email to the newly assigned user
+      UserMailer.assignment_email(user, @product, current_user).deliver_later
+
+      # Send email to all users assigned to the project, except the current user
+      @product.users.each do |product_user|
+        next if product_user == current_user
+
+        UserMailer.assignment_email(product_user, @product, current_user).deliver_later
+      end
+
+      redirect_to @product, notice: 'User was successfully assigned.'
+    end
+  end
+
+  def remove_user
+    @product = Product.find(params[:id])
+    user = User.find(params[:user_id])
+    @product.users.delete(user)
+    redirect_to @product, notice: 'User was successfully removed.'
   end
 
   def destroy

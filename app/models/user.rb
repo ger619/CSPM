@@ -39,6 +39,9 @@ class User < ApplicationRecord
   has_many :taggings
   has_many :tickets, through: :taggings
 
+  has_many :addusers
+  has_many :products, through: :addusers
+
   def assign_default_role
     add_role(:agent) if roles.blank?
   end

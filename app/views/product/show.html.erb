@@ -1,15 +1,14 @@
-<p> Product show page </p>
 
 <div class="grid grid-cols-3 gap-4 mb-4 h-full">
   <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
     <%= render 'layouts/alert' %>
 
-    <h1 class="text-2xl">
-      <%#= @project.title %>
+    <h1 class="text-xl">
+      Name of the Project: <%= @product.name %>
     </h1>
-    <p class="capitalize"><%#= @project.description %></p>
+    <p class="capitalize text-sm"><%= @product.description %></p>
     <div>
-      <%#= render 'project/add_assign' %>
+      <%= render 'product/add_users' %>
     </div>
 
   </div>
@@ -79,6 +78,3 @@
 </div>
 
 
-
-
-</div>

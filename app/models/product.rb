@@ -8,7 +8,12 @@ class Product < ApplicationRecord
   has_one_attached :brd
   has_one_attached :plan
 
+  # Tagging users to a projec
+
   resourcify
   has_many :users, through: :roles, class_name: 'User', source: :users
   has_many :creators, -> { where(roles: { name: :admin }) }, class_name: 'User', through: :roles, source: :users
+
+  has_many :addusers
+  has_many :users, through: :addusers, dependent: :destroy
 end
