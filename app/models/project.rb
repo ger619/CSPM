@@ -20,7 +20,6 @@ class Project < ApplicationRecord
     users.include?(user)
   end
 
-
   # To have pick a list of users who have role agent only on a dropdown list at the view to assign a project
 
   private

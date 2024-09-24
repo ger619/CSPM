@@ -12,13 +12,12 @@
     <% end %>
   </div>
 
-  <% if current_user.has_role?('project manager') or current_user.has_role? :admin %>
     <div class="flex flex-wrap mt-2 gap-2">
       <div class="text-xs">
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket), local: true do %>
           <%= label_tag :user_id, "Select User" %>
           <div class="flex flex-wrap">
-            <% available_users = User.with_agent_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)) %>
+            <% available_users = User.with_agent_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)).distinct %>
             <% if available_users.any? %>
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
 
@@ -41,7 +40,7 @@
       </div>
     </div>
     </div>
-  <% end %>
+
   </div>
 
 
