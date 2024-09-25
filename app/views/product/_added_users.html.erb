@@ -1,0 +1,12 @@
+<h3>Assigned Agents</h3>
+<div class="flex flex-wrap gap-2">
+  <% @product.users.each do |user| %>
+    <p class="border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs rounded" >
+      <% if user.name.present? %>
+        <%= user.name %>
+      <% else %>
+        <%= truncate(user.email, length: 15, omission: '...') %>
+      <% end %>
+    </p>
+  <% end %>
+</div>
