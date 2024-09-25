@@ -14,7 +14,7 @@ class Ability
       can %i[edit delete], Issue, user_id: user.id
       can %i[create read add_user remove_user edit], Product
       cannot %i[delete], Product
-      can :read, User, roles: { name: %w[agent client project_manager] }
+      can :manage, User, roles: { name: %w[agent client project_manager] }
       cannot :manage, User, roles: { name: 'admin' }
     elsif user.has_role? :client
       can :read, Project
