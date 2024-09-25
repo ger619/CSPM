@@ -44,7 +44,6 @@ class BoardsController < ApplicationController
     redirect_to product_path(@product)
   end
 
-
   private
 
   def set_product
@@ -58,5 +57,4 @@ class BoardsController < ApplicationController
   def board_params
     params.require(:board).permit(:status, :product_id)
   end
-
 end
