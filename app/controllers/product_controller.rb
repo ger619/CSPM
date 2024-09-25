@@ -18,7 +18,22 @@ class ProductController < ApplicationController
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def show; end
+  def show
+    # Display boards of the project
+
+    @boards = @product.boards
+
+    # @ticket = if params[:query].present?
+    #            @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
+    #                                                               "%#{params[:query]}%")
+    #          else
+    #            @project.tickets.with_rich_text_body.order('created_at DESC')
+    #          end
+    # @per_page = 10
+    # @page = (params[:page] || 1).to_i
+    # @total_pages = (@ticket.count / @per_page.to_f).ceil
+    # @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
+  end
 
   def new
     @product = Product.new

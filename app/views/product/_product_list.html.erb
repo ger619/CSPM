@@ -44,8 +44,8 @@
             </td>
             <td class="px-6 py-4">
               <% if product.end_date.present? %>
-                <% if product.end_date >= Date.today %>
-                  <p class="bg-red-900 p-1 rounded">
+                <% if product.end_date <= Date.today %>
+                  <p class="text-red-900 p-1 rounded font-bold">
                     <%= product.end_date.strftime("%d-%b-%y") %>
                   </p>
                 <% else %>
