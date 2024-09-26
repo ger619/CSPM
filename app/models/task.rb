@@ -11,7 +11,6 @@ class Task < ApplicationRecord
   has_many :users, through: :roles, class_name: 'User', source: :users
   has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
 
-
   def end_date_after_start_date
     return unless end_date.present? && start_date.present? && end_date < start_date
 

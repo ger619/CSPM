@@ -12,7 +12,6 @@ class Ticket < ApplicationRecord
   has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
   has_many :editors, -> { where(roles: { name: :admin }) }, class_name: 'User', through: :roles, source: :users
 
-
   validate :content_length_within_limit
 
   has_many :taggings

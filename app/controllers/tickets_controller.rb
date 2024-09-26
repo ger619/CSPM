@@ -5,7 +5,6 @@ class TicketsController < ApplicationController
   before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag update_status]
   load_and_authorize_resource
 
-
   def index; end
 
   def show

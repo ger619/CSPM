@@ -4,7 +4,6 @@ class IssuesController < ApplicationController
   before_action :set_issue, only: %i[show destroy edit update]
   load_and_authorize_resource
 
-
   def index
     @issues = @ticket.issues
   end
