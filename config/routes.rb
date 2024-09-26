@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       post :add_user
       delete :remove_user
     end
+    resources :boards do
+      resources :tasks
+    end
   end
 
 

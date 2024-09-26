@@ -1,4 +1,4 @@
-
+<%= render 'boards/top_board' %>
 <div class="grid grid-cols-3 gap-4 mb-4 h-full">
   <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
     <%= render 'layouts/alert' %>
@@ -72,8 +72,9 @@
 
 <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
   <%# if @project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
-    <%#= render 'tickets/ticket' %>
   <%# end %>
+
+  <%= render 'boards/board_display' %>
 
 </div>
 

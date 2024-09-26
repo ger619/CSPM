@@ -1,9 +1,7 @@
-class CreateTasks < ActiveRecord::Migration[7.2]
+class CreateBoards < ActiveRecord::Migration[7.2]
   def change
-    create_table :tasks, id: :uuid do |t|
-      t.string :name
-      t.string :topic
-      t.string :description
+    create_table :boards, id: :uuid do |t|
+      t.string :status
       t.references :product, null: false, foreign_key: true, type: :uuid
       t.references :user, null: false, foreign_key: true, type: :uuid
 
@@ -11,4 +9,3 @@ class CreateTasks < ActiveRecord::Migration[7.2]
     end
   end
 end
-

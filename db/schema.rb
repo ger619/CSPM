@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_24_110403) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_26_081323) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -69,6 +69,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_110403) do
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_assignees_on_project_id"
     t.index ["user_id"], name: "index_assignees_on_user_id"
+  end
+
+  create_table "boards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "product_id", null: false
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_boards_on_product_id"
+    t.index ["user_id"], name: "index_boards_on_user_id"
   end
 
   create_table "clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -144,11 +154,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_110403) do
     t.string "name"
     t.string "topic"
     t.string "description"
-    t.uuid "project_id", null: false
+    t.uuid "product_id", null: false
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_tasks_on_project_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.uuid "board_id", null: false
+    t.index ["board_id"], name: "index_tasks_on_board_id"
+    t.index ["product_id"], name: "index_tasks_on_product_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -218,6 +232,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_110403) do
   add_foreign_key "addusers", "users"
   add_foreign_key "assignees", "projects"
   add_foreign_key "assignees", "users"
+  add_foreign_key "boards", "products"
+  add_foreign_key "boards", "users"
   add_foreign_key "clients", "users"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"
@@ -226,7 +242,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_110403) do
   add_foreign_key "projects", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
-  add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "boards"
+  add_foreign_key "tasks", "products"
   add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "projects"
   add_foreign_key "tickets", "users"
