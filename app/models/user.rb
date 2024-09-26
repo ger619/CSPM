@@ -24,7 +24,6 @@ class User < ApplicationRecord
   has_many :boards, through: :roles, source: :resource, source_type: :Board
   has_many :tasks, through: :roles, source: :resource, source_type: :Task
 
-
   has_many :assignees
   has_many :projects, through: :assignees
   after_initialize :set_default_profile_completed, if: :new_record?
