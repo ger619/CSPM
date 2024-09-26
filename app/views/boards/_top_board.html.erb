@@ -1,0 +1,26 @@
+
+<div class="grid grid-cols-2 ">
+  <div class="grid col-span-1">
+    <%= button_to 'Add New Board +', new_product_board_path(@product.id), method: :get, class: 'mb-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 rounded font-semibold rounded'  %>
+
+  </div>
+  <!-- Search on the right -->
+  <div class="grid col-span-1 justify-end">
+
+    <div class="flex flex-col md:flex-row items-start md:items-center w-full">
+
+      <%= form_with url: product_path(@product), method: :get, class: 'flex' do |f| %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border border-r-4 border-b-4 rounded h-12" %>
+        <%= f.submit "Search", class: "mb-4 ml-4 h-12 border border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+      <% end %>
+
+      <%= form_with url: product_path(@product), method: :get, class: 'flex' do |f| %>
+        <%= f.submit "Clear", class: "ml-4 mb-4 h-12 border border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+      <% end %>
+
+    </div>
+
+
+
+  </div>
+</div>
