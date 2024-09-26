@@ -2,6 +2,8 @@ class IssuesController < ApplicationController
   before_action :set_project # This line ensures that the project is set before any action is taken
   before_action :set_ticket # This line ensures that the ticket is set before any action is taken
   before_action :set_issue, only: %i[show destroy edit update]
+  load_and_authorize_resource
+
 
   def index
     @issues = @ticket.issues

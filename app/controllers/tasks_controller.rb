@@ -4,41 +4,38 @@ class TasksController < ApplicationController
   before_action :set_board
   before_action :set_task, only: %i[show edit update destroy]
 
+
   def index
-    @tasks = @boards.tasks.all
+    @task = @board.tasks
   end
 
   def new
-    @tasks = @boards.tasks.new
+    @task = @board.tasks.new
   end
 
   def create
-    @tasks = @boards.tasks.new(task_params)
-    @tasks.user = current_user
-    @tasks.product = @product
+    @task = @board.tasks.new(task_params)
+    @task.product = @product
+    @task.user = current_user
 
     respond_to do |format|
-      if @tasks.save
-        # current_user.add_role :creator, @tasks
-        # format.html { redirect_to product_board_path(@product, @boards), notice: 'Task was successfully created.' }
-        format.html do
-          redirect_to product_board_tasks_path(@product, @boards), notice: 'Task was successfully created.'
-        end
-
+      if @task.save
+        current_user.add_role :creator, @task
+        format.html { redirect_to product_board_path(@product, @board), notice: 'Task was successfully created.' }
       else
-        format.html { redirect_to new_product_board_task_path(@product, @boards), alert: 'Task was not created.' }
+        format.html { redirect_to new_product_board_task_path(@product, @board), alert: 'Task was not created.' }
       end
     end
   end
 
   def show
-    @tasks = @boards.tasks.find(params[:id])
+    @task = @board.tasks.find(params[:id])
   end
 
   def edit; end
 
   def update
-    if @tasks.update(task_params)
+    if @task.update(task_params)
       redirect_to product_board_path(@product, @boards)
     else
       render :edit
@@ -46,7 +43,7 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @tasks.destroy
+    @task.destroy
     redirect_to product_board_path(@product, @boards)
   end
 
@@ -57,11 +54,11 @@ class TasksController < ApplicationController
   end
 
   def set_board
-    @boards = @product.boards.find(params[:board_id])
+    @board = @product.boards.find(params[:board_id])
   end
 
   def set_task
-    @tasks = @boards.tasks.find(params[:id])
+    @tasks = @board.tasks.find(params[:id])
   end
 
   def task_params
