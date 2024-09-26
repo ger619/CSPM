@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :nullify
   # Products to Projects
   has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
+  has_many :boards, foreign_key: :user_id, class_name: 'Board', dependent: :nullify
+  has_many :tasks, foreign_key: :user_id, class_name: 'Task', dependent: :nullify
 
   # To ensure that a user has at least one role
   has_many :projects, through: :roles, source: :resource, source_type: :Project
@@ -19,6 +21,9 @@ class User < ApplicationRecord
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
   # Products to Projects
   has_many :products, through: :roles, source: :resource, source_type: :Product
+  has_many :boards, through: :roles, source: :resource, source_type: :Board
+  has_many :tasks, through: :roles, source: :resource, source_type: :Task
+
 
   has_many :assignees
   has_many :projects, through: :assignees
