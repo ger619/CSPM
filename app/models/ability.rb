@@ -16,12 +16,14 @@ class Ability
       cannot %i[delete], Product
       can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
       cannot :manage, User, roles: { name: 'admin' }
+      can :manage, Board
     elsif user.has_role? :client
       can :read, Project
       can %i[create read assign_tag unassign_tag], Ticket
       can %i[edit delete], Ticket, user_id: user.id
       can :read, Issue
       can :read, Product
+      can :read, Board
 
     elsif user.has_role? :agent
       can :read, Project

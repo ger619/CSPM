@@ -20,8 +20,11 @@ class ProductController < ApplicationController
 
   def show
     # Display boards of the project
-
-    @boards = @product.boards
+    if current_user.has_role?(:admin) || @product.users.include?(current_user)
+      @boards = @product.boards
+    else
+      redirect_to root_path, alert: 'You are not authorized to view this content.'
+    end
 
     # @ticket = if params[:query].present?
     #            @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
