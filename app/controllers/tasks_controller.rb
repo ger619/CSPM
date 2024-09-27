@@ -23,7 +23,7 @@ class TasksController < ApplicationController
         format.html { redirect_to product_path(@product), notice: 'Task was successfully created.' }
       else
         format.html { redirect_to new_product_board_task_path(@product, @board), alert: 'Task was not created.' }
-        #format.html { render :new, alert: 'Task was not created.' }
+        # format.html { render :new, alert: 'Task was not created.' }
       end
     end
   end
