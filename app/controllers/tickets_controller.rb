@@ -3,6 +3,7 @@ class TicketsController < ApplicationController
   before_action :set_project # This line ensures that the project is set before any action is taken
   # This line ensures that the ticket is set before any action is taken
   before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag update_status]
+  load_and_authorize_resource
 
   def index; end
 
