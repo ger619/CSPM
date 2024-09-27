@@ -1,26 +1,23 @@
-<%= link_to product_board_task_path(task.product, task.board, task) do %>
 
-  <div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white max-w-sm">
+<div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white max-w-sm">
   <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
     <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
 
       <div class="flex justify-center p-1">
-        <% if task.image.present? %>
-          <%= image_tag(task.image, class: 'object-cover w-[300px] h-[200px]') %>
+        <% if @task.image.present? %>
+          <%= image_tag(@task.image, class: 'object-cover w-[300px] h-[200px]') %>
         <% end %>
       </div>
-      <h3 class="text-lg font-semibold "><%= task.name %></h3>
-      <p class="my-4"><%= task.description %></p>
+      <h3 class="text-lg font-semibold "><%= @task.name %></h3>
+      <p class="my-4"><%= @task.description %></p>
     </blockquote>
     <figcaption class="flex items-center justify-center ">
       <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture">
       <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
         <div>Bonnie Green</div>
-        <div class="text-sm text-gray-500 dark:text-gray-400 "><%= task.topic %></div>
+        <div class="text-sm text-gray-500 dark:text-gray-400 "><%= @task.topic %></div>
       </div>
     </figcaption>
   </figure>
 
 </div>
-
-<% end %>

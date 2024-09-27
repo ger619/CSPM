@@ -7,15 +7,15 @@ class BoardsController < ApplicationController
   def index; end
 
   def new
-    @boards = Board.new
+    @board = Board.new
   end
 
   def create
-    @boards = @product.boards.new(board_params)
-    @boards.user = current_user
+    @board = @product.boards.new(board_params)
+    @board.user = current_user
 
     respond_to do |format|
-      if @boards.save
+      if @board.save
         current_user.add_role :creator, @board
         format.html { redirect_to product_path(@product), notice: 'Board was successfully created.' }
       else
@@ -30,7 +30,7 @@ class BoardsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @boards.update(board_params)
+      if @board.update(board_params)
         current_user.add_role :editor, @board
         format.html { redirect_to product_path(@product.id), notice: 'Board was successfully updated.' }
       else
@@ -40,7 +40,7 @@ class BoardsController < ApplicationController
   end
 
   def destroy
-    @boards.destroy
+    @board.destroy
     redirect_to product_path(@product)
   end
 
@@ -51,7 +51,7 @@ class BoardsController < ApplicationController
   end
 
   def set_board
-    @boards = @product.boards.find(params[:id])
+    @board = @product.boards.find(params[:id])
   end
 
   def board_params
