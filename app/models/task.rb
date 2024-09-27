@@ -1,15 +1,17 @@
 class Task < ApplicationRecord
-  belongs_to :product
   belongs_to :user
+  belongs_to :product
   belongs_to :board
   has_one_attached :image
 
-  validate :end_date_after_start_date
-
   resourcify
 
-  has_many :users, through: :roles, class_name: 'User', source: :users
-  has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
+  has_many :role_users, through: :roles, class_name: 'User', source: :user
+  has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :user
+
+  validate :end_date_after_start_date
+
+  private
 
   def end_date_after_start_date
     return unless end_date.present? && start_date.present? && end_date < start_date

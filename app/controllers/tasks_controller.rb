@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
 
   def index
-    @task = @board.tasks
+    @tasks = @board.tasks
   end
 
   def new
@@ -20,9 +20,9 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.save
         current_user.add_role :creator, @task
-        format.html { redirect_to product_board_path(@product, @board), notice: 'Task was successfully created.' }
+        format.html { redirect_to product_path(@product), notice: 'Task was successfully created.' }
       else
-        format.html { redirect_to new_product_board_task_path(@product, @board), alert: 'Task was not created.' }
+        format.html { render :new, alert: 'Task was not created.' }
       end
     end
   end
@@ -35,7 +35,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to product_board_path(@product, @boards)
+      redirect_to product_board_path(@product, @board)
     else
       render :edit
     end
@@ -43,7 +43,7 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
-    redirect_to product_board_path(@product, @boards)
+    redirect_to product_board_path(@product, @board)
   end
 
   private
@@ -57,7 +57,7 @@ class TasksController < ApplicationController
   end
 
   def set_task
-    @tasks = @board.tasks.find(params[:id])
+    @task = @board.tasks.find(params[:id])
   end
 
   def task_params
