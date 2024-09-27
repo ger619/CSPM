@@ -1,7 +1,7 @@
 class Product < ApplicationRecord
   belongs_to :user
   has_many :boards, dependent: :destroy
-  has_many :tasks
+  has_many :tasks, dependent: :destroy
 
   has_rich_text :content
   has_many_attached :images
