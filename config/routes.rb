@@ -17,19 +17,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "home#index"
 
-  resources :client
-  resources :product do
-    member do
-      post :add_user
-      delete :remove_user
-    end
-    resources :boards do
-      resources :tasks
-    end
-  end
-
-
-
   resources :project do
     member do
       post :assign_user
@@ -44,6 +31,21 @@ Rails.application.routes.draw do
       resources :issues
     end
   end
+
+  resources :product do
+    member do
+      post :add_user
+      delete :remove_user
+    end
+    resources :boards do
+      resources :tasks
+    end
+  end
+
+
+
+  resources :client
+
 
 
 
