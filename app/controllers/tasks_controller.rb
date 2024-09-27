@@ -3,6 +3,7 @@ class TasksController < ApplicationController
   before_action :set_product
   before_action :set_board
   before_action :set_task, only: %i[show edit update destroy]
+  load_and_authorize_resource
 
   def index
     @tasks = @board.tasks

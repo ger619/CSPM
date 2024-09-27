@@ -4,8 +4,11 @@ class CreateTasks < ActiveRecord::Migration[7.2]
       t.string :name
       t.string :topic
       t.string :description
+      t.date :start_date
+      t.date :end_date
       t.references :product, null: false, foreign_key: true, type: :uuid
       t.references :user, null: false, foreign_key: true, type: :uuid
+      t.references :board, null: false, foreign_key: true, type: :uuid
 
       t.timestamps
     end
