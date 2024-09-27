@@ -17,6 +17,7 @@ class Ability
       can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
       cannot :manage, User, roles: { name: 'admin' }
       can :manage, Board
+      can :manage, Task
     elsif user.has_role? :client
       can :read, Project
       can %i[create read assign_tag unassign_tag], Ticket
