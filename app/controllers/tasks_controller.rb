@@ -19,7 +19,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        current_user.add_role :creator, @task
+        # current_user.add_role :creator, @task
         format.html { redirect_to product_path(@product), notice: 'Task was successfully created.' }
       else
         format.html { render :new, alert: 'Task was not created.' }
