@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_product
   before_action :set_board
-  before_action :set_task, only: %i[show edit update destroy]
+  before_action :set_task, only: %i[show edit update destroy add_task remove_task]
 
   def index
     @tasks = @board.tasks
@@ -48,6 +48,12 @@ class TasksController < ApplicationController
     @task.destroy
     redirect_to product_board_path(@product, @board)
   end
+
+  # Assigning User a Task
+
+  def add_task; end
+
+  def remove_task; end
 
   private
 

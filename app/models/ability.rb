@@ -17,6 +17,7 @@ class Ability
       can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
       cannot :manage, User, roles: { name: 'admin' }
       can :manage, Board
+      can :manage, Task
     elsif user.has_role? :client
       can :read, Project
       can %i[create read assign_tag unassign_tag], Ticket
@@ -24,6 +25,7 @@ class Ability
       can :read, Issue
       can :read, Product
       can :read, Board
+      can :read, Task
 
     elsif user.has_role? :agent
       can :read, Project
@@ -31,6 +33,8 @@ class Ability
       can %i[edit delete], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       can :read, Product
+      can :read, Board
+      can :read, Task
     else
       can :read, Project
       can %i[create read assign_tag unassign_tag], Ticket
@@ -38,6 +42,8 @@ class Ability
       can :read, Issue
       can :read, User, user_id: user.id
       can :read, Product
+      can :read, Board
+      can :read, Task
     end
   end
 end

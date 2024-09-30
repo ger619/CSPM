@@ -11,6 +11,9 @@ class Task < ApplicationRecord
 
   validate :end_date_after_start_date
 
+  has_many :add_tasks
+  has_many :users, through: :add_tasks, dependent: :destroy
+
   private
 
   def end_date_after_start_date
