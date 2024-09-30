@@ -88,3 +88,7 @@ gem 'pundit'
 gem 'redis'
 gem 'rolify', '~> 6.0'
 gem 'sidekiq'
+# sentry
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'stackprof'
