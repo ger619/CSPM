@@ -5,4 +5,4 @@
   - active_storage_analysis
   - active_storage_purge
 :redis:
-  url: redis://:your_redis_password@localhost:6379/0
+  url: redis://:your_password@localhost:6379/0
