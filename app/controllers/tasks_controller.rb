@@ -14,7 +14,7 @@ class TasksController < ApplicationController
 
   def create
     @task = @board.tasks.new(task_params)
-    @task.product = @product
+    @task.product_id = params[:product_id]
     @task.user = current_user
 
     respond_to do |format|

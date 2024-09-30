@@ -47,7 +47,7 @@ class User < ApplicationRecord
   has_many :products, through: :addusers
 
   def assign_default_role
-    add_role(:agent) if roles.blank?
+    add_role(:client) if roles.blank?
   end
 
   # To have a list of user who only have a specific role
@@ -90,11 +90,11 @@ class User < ApplicationRecord
   private
 
   def email_domain_must_be_certified
-    allowed_domains = %w[craftsilicon.com iandm.com]
+    allowed_domains = %w[craftsilicon.com little.africa]
     domain = email.split('@').last
     return if allowed_domains.include?(domain)
 
-    errors.add(:email, 'must be from a certified domain (craftsilicon.com')
+    errors.add(:email, 'must be from a certified domain (craftsilicon.com or little.africa)')
   end
 
   def must_have_a_role
