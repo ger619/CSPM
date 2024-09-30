@@ -55,6 +55,6 @@ class BoardsController < ApplicationController
   end
 
   def board_params
-    params.require(:board).permit(:status, :product_id)
+    params.require(:board).permit(:status, :product_id, :user_id)
   end
 end
