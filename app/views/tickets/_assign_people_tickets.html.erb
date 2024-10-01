@@ -28,18 +28,20 @@
           </div>
         <% end %>
       </div>
-      <div class="text-xs flex flex-wrap gap-2">
-        <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
-            <%= label_tag :user_id, "UNASSIGN USER" %>
-          <div class="flex flex-wrap">
-            <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-          <div class="">
-            <%= submit_tag "UNASSIGN", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
+      <% if @ticket.users.any? %>
+          <div class="text-xs flex flex-wrap gap-2">
+            <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
+                <%= label_tag :user_id, "UNASSIGN USER" %>
+              <div class="flex flex-wrap">
+                <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+                <%= submit_tag "UNASSIGN", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
+              </div>
+            <% end %>
+
           </div>
-        <% end %>
-      </div>
+
+      <% end %>
     </div>
     </div>
-  </div>
 
 
