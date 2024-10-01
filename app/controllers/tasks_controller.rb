@@ -67,7 +67,10 @@ class TasksController < ApplicationController
 
   end
 
-  def remove_task; end
+  def remove_task
+    @task.users.delete(User.find(params[:user_id]))
+    redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully unassigned.'
+  end
 
   private
 
