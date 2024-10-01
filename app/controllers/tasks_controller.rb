@@ -54,7 +54,7 @@ class TasksController < ApplicationController
   def add_task
 
     if @task.users.include?(User.find(params[:user_id]))
-      redirect_to product_board_path(@product, @board), notice: 'User has already been assigned .'
+      redirect_to product_board_task_path(@product, @board, @task), notice: 'User has already been assigned .'
     else
       @task = @board.tasks.find(params[:id])
       @task.user = current_user
@@ -62,7 +62,7 @@ class TasksController < ApplicationController
       @task.users.clear
       @task.users << user
       UserMailer.task_assignment_email(user, @task, current_user).deliver_later
-      redirect_to product_board_path(@product, @board), notice: 'Task was successfully assigned.'
+      redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully assigned.'
     end
 
   end

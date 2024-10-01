@@ -1,7 +1,19 @@
+<div class="flex flex-wrap gap-2 mt-2">
+  <% @task.users.each do |user| %>
+    <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2S col-span-1 text-sm rounded" >
+      <% if user.name.present? %>
+        <%= user.name %>
+      <% else %>
+        <%= truncate(user.email, length: 15, omission: '...') %>
+      <% end %>
+    </p>
+  <% end %>
+</div>
+
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
   <div class="grid grid-cols-2 mt-2 gap-2">
     <div class="col-span-1 text-xs">
-      <%= form_with url: add_task_product_board_path(@product, @board), local: true do %>
+      <%= form_with url: add_task_product_board_task_path(@product, @board, @task), local: true do %>
         <%= label_tag :user_id, "SELECT USER" %>
         <div class="flex flex-wrap gap-2">
           <div>
@@ -16,6 +28,18 @@
           </div>
         </div>
       <% end %>
+    </div>
+  </div>
+
+  <div class="text-xs flex flex-wrap gap-2">
+    <%= form_with url: remove_task_product_board_task_path(@product, @board, @task), method: :delete, local: true do %>
+      <%= label_tag :user_id, "UNASSIGN USER" %>
+      <div class="flex flex-wrap">
+        <%= select_tag :user_id, options_from_collection_for_select(@task.users, :id, :name), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+        <div class="">
+          <%= submit_tag "UNASSIGN", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
+        </div>
+    <% end %>
     </div>
   </div>
 <% end %>
