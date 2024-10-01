@@ -19,13 +19,12 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        # current_user.add_role :creator, @task
-        Rails.logger.info('Task was successfully created.')
         current_user.add_role :creator, @task
         format.html { redirect_to product_path(@product), notice: 'Task was successfully created.' }
       else
-        Rails.logger.debug 'Task save failed: #{@task.errors.full_messages.join(', ')}'
-        format.html { render :new, alert: 'Task was not created.' }
+        format.html do
+          redirect_to new_product_board_task_path(@product, @board, @task), notice: 'Task was not created.'
+        end
       end
     end
   end

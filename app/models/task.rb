@@ -4,6 +4,8 @@ class Task < ApplicationRecord
   belongs_to :board
   has_one_attached :image
 
+  validates :name, :topic, :description, :start_date, :end_date
+
   resourcify
 
   has_many :role_users, through: :roles, class_name: 'User', source: :user
