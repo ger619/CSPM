@@ -19,7 +19,7 @@ class BoardsController < ApplicationController
         current_user.add_role :creator, @board
         format.html { redirect_to product_path(@product), notice: 'Board was successfully created.' }
       else
-        #flash.now[:alert] = @board.errors.full_messages.join(', ').to_s
+        # flash.now[:alert] = @board.errors.full_messages.join(', ').to_s
         format.html { redirect_to product_path(@product), notice: 'Status already exist created.' }
       end
     end

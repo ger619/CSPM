@@ -22,7 +22,9 @@ class TasksController < ApplicationController
         current_user.add_role :creator, @task
         format.html { redirect_to product_path(@product), notice: 'Task was successfully created.' }
       else
-        format.html { redirect_to new_product_board_task_path(@product, @board, @task), notice: 'Task was not created.' }
+        format.html do
+          redirect_to new_product_board_task_path(@product, @board, @task), notice: 'Task was not created.'
+        end
       end
     end
   end

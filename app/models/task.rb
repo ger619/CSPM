@@ -4,7 +4,6 @@ class Task < ApplicationRecord
   belongs_to :board
   has_one_attached :image
 
-
   validates :name, :topic, :description, :start_date, :end_date
 
   resourcify
