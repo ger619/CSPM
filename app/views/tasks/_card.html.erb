@@ -11,12 +11,26 @@
       </div>
       <h3 class="text-lg font-semibold "><%= task.name %></h3>
       <p class="my-4"><%= task.description %></p>
+      <div class="text-sm text-gray-500 dark:text-gray-400 "><%= task.topic %></div>
     </blockquote>
     <figcaption class="flex items-center justify-center ">
-      <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture">
+      <% task.users.each do |user| %>
+        <% if user.profile_picture.attached? %>
+          <%= image_tag user.profile_picture, class: 'w-12 h-12 rounded-full' %>
+        <% elsif user.name_initials.present? %>
+          <p class="rounded-full p-1 capitalize"><%= user.name_initials %></p>
+        <% else %>
+          <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
+        <% end %>
+      <% end %>
       <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
-        <div>Bonnie Green</div>
-        <div class="text-sm text-gray-500 dark:text-gray-400 "><%= task.topic %></div>
+        <div class="capitalize"><% task.users.each do |user| %>
+            <% if user.name.present? %>
+              <%= user.name %>
+            <% else %>
+              <%= truncate(user.email, length: 15, omission: '...') %>
+            <% end %>
+          <% end %></div>
       </div>
     </figcaption>
   </figure>

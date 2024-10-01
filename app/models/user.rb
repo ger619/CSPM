@@ -46,6 +46,9 @@ class User < ApplicationRecord
   has_many :addusers
   has_many :products, through: :addusers
 
+  has_many :add_tasks
+  has_many :tasks, through: :add_tasks
+
   def assign_default_role
     add_role(:client) if roles.blank?
   end

@@ -96,11 +96,11 @@ class TicketsController < ApplicationController
         UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
       respond_to do |format|
-        format.html { redirect_to project_tickets_path(@ticket), notice: 'Status updated successfully' }
+        format.html { redirect_to project_tickets_path(@project, @ticket), notice: 'Status updated successfully' }
       end
     else
       respond_to do |format|
-        format.html { redirect_to project_tickets_path(@ticket), alert: 'Failed to update status' }
+        format.html { redirect_to project_tickets_path(@project, @ticket), alert: 'Failed to update status' }
       end
     end
   end
