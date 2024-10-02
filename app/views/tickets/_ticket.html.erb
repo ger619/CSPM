@@ -34,12 +34,8 @@
     </tr>
     </thead>
     <tbody>
-
     <% @ticket.each do |ticket| %>
-
-
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
-
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
         </th>
@@ -67,7 +63,6 @@
             <% end %>
           <% end %>
         </td>
-
         <td class="px-4 py-4 ">
           <% if ticket.status == 'Resolved' || ticket.status == 'Closed' %>
             <p class='bg-green-500 p-2 text-center text-white font-bold rounded'>
@@ -81,9 +76,7 @@
         </td>
         <% if can? :edit, ticket %>
           <td class="px-4 py-4">
-
             <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
-
           </td>
         <% end %>
         <td class="px-4 py-4">
@@ -91,10 +84,8 @@
              <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold"  %>
           <% end %>
         </td>
-
       </tr>
     <% end %>
-
     </tbody>
   </table>
 </div>
