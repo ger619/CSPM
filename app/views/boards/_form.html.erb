@@ -1,7 +1,5 @@
 <%= form_with(model: [@product, @board]) do |f| %>
   <div class="gap-2 m-2">
-
-
     <%= f.label :status, :Status, class: 'pt-3' %>
     <% if flash[:alert] %>
       <div class="alert alert-danger">

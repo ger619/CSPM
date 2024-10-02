@@ -27,6 +27,20 @@
         </div>
       <% end %>
 
+    <div>
+      <% if @task.errors.any? %>
+        <div id="error_explanation " class="flex flex-row justify-center gap-10">
+          <h2><%= pluralize(@task.errors.count, "error") %> prohibited this event from being saved:</h2>
+          <ul>
+            <% @task.errors.full_messages.each do |message| %>
+              <li class="text-red-900 font-semibold"><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+    </div>
+
       <div class="grid grid-cols-2 gap-2">
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :start_date, 'Start Date', class: "capitalize block mb-1 text-sm font-medium"  %><br />

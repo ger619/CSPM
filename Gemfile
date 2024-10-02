@@ -92,3 +92,5 @@ gem 'sidekiq'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'stackprof'
+
+gem 'acts_as_list', '~> 1.2'
