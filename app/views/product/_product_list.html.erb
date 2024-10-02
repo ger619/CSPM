@@ -31,53 +31,48 @@
 
     <% @product.each do |product|  %>
       <% if product.added_to?(current_user) or current_user.has_role?(:admin) %>
-
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
-            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
-              <%= link_to product.name, product_path(product.id) %>
-            </th>
-            <td class="px-6 py-4">
-              <%= product.description %>
-            </td>
-            <td class="px-6 py-4">
-              <%= product.start_date.strftime("%d-%b-%y") %>
-            </td>
-            <td class="px-6 py-4">
-              <% if product.end_date.present? %>
-                <% if product.end_date <= Date.today %>
-                  <p class="text-red-900 p-1 rounded font-bold">
-                    <%= product.end_date.strftime("%d-%b-%y") %>
-                  </p>
-                <% else %>
-                  <p class="bg-red-green p-1 rounded">
-                    <%= product.end_date.strftime("%d-%b-%y") %>
-                  </p>
-                <% end %>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
+          <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
+            <%= link_to product.name, product_path(product.id) %>
+          </th>
+          <td class="px-6 py-4">
+            <%= product.description %>
+          </td>
+          <td class="px-6 py-4">
+            <%= product.start_date.strftime("%d-%b-%y") %>
+          </td>
+          <td class="px-6 py-4">
+            <% if product.end_date.present? %>
+              <% if product.end_date <= Date.today %>
+                <p class="text-red-900 p-1 rounded font-bold">
+                  <%= product.end_date.strftime("%d-%b-%y") %>
+                </p>
+              <% else %>
+                <p class="bg-red-green p-1 rounded">
+                  <%= product.end_date.strftime("%d-%b-%y") %>
+                </p>
+              <% end %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4">
+            <%= product.user.name %>
+          </td>
+          <td class="px-6 py-4 ">
+            <%= product.content.to_plain_text.truncate(50) %>
+          </td>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+            <td class="px-6 py-4 flex  gap-2">
+              <% if can? :edit, product %>
+                <%= link_to 'Edit', edit_product_path(product), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
+              <% end %>
+              <% if can? :delete, product %>
+                <%= button_to 'delete', product, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
               <% end %>
             </td>
-            <td class="px-6 py-4">
-              <%= product.user.name %>
-            </td>
-            <td class="px-6 py-4 ">
-              <%= product.content.to_plain_text.truncate(50) %>
-            </td>
-            <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-              <td class="px-6 py-4 flex  gap-2">
-                <% if can? :edit, product %>
-                  <%= link_to 'Edit', edit_product_path(product), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
-                <% end %>
-                <% if can? :delete, product %>
-                  <%= button_to 'delete', product, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
-                <% end %>
-              </td>
-            <% end %>
-
-          </tr>
-
-        <% end %>
+          <% end %>
+        </tr>
       <% end %>
-
-
+    <% end %>
     </tbody>
   </table>
 </div>
