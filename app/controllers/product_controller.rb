@@ -21,7 +21,7 @@ class ProductController < ApplicationController
   def show
     # Display boards of the project
     if current_user.has_role?(:admin) || @product.users.include?(current_user)
-      @boards = @product.boards.includes(:tasks).order('tasks.created_at ASC').references(:tasks)
+      @boards = @product.boards.includes(:tasks) # order('tasks.created_at ASC').references(:tasks)
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
