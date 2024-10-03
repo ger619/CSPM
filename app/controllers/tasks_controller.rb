@@ -69,6 +69,8 @@ class TasksController < ApplicationController
     redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully unassigned.'
   end
 
+  def add_status; end
+
   private
 
   def set_product

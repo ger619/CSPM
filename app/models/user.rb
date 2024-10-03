@@ -26,6 +26,7 @@ class User < ApplicationRecord
 
   has_many :assignees
   has_many :projects, through: :assignees
+
   after_initialize :set_default_profile_completed, if: :new_record?
   validate :email_domain_must_be_certified, on: %i[create invitation_create]
   has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
@@ -48,6 +49,9 @@ class User < ApplicationRecord
 
   has_many :add_tasks
   has_many :tasks, through: :add_tasks
+
+  has_many :states
+  has_many :tasks, through: :states
 
   def assign_default_role
     add_role(:client) if roles.blank?

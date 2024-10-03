@@ -1,8 +1,7 @@
 
-<div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white w-full">
+<div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white w-full h-full">
   <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
     <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-
       <div class="flex justify-center p-1">
         <% if @task.image.present? %>
           <%= image_tag(@task.image, class: 'object-cover w-[300px] h-[200px]') %>
@@ -10,8 +9,9 @@
       </div>
       <h3 class="text-lg font-semibold "><%= @task.name %></h3>
       <p class="my-4"><%= @task.description %></p>
-      <div class="text-sm text-gray-500 dark:text-gray-400 "><%= @task.topic %></div>
-
+      <div class="text-sm text-gray-500 dark:text-gray-400 ">
+        <%= @task.topic %>
+      </div>
     </blockquote>
     <figcaption class="flex items-center justify-center ">
       <% @task.users.each do |user| %>
@@ -37,6 +37,14 @@
       </div>
     </figcaption>
   </figure>
+  <%= render 'tasks/add_task' %>
+  <%= render 'tasks/add_state' %>
+
+  <div class="flex justify-end p-2">
+    <%= link_to 'Edit Task', edit_product_board_task_path(@product, @board, @task), class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold cursor-pointer' %>
+  </div>
+
+
+  <%#= render 'tasks/add_comment' %>
 
 </div>
-<%= render 'tasks/add_task' %>
