@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_product
   before_action :set_board
-  before_action :set_task, only: %i[show edit update destroy add_task remove_task]
+  before_action :set_task, only: %i[show edit update destroy add_task remove_task add_state]
 
   def index
     @tasks = @board.tasks
@@ -69,7 +69,12 @@ class TasksController < ApplicationController
     redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully unassigned.'
   end
 
-  def add_status; end
+  def add_state
+    @task = @board.tasks.find(params[:id])
+    @task.board_id = params[:status]
+    @task.save
+    redirect_to product_path(@product)
+  end
 
   private
 
