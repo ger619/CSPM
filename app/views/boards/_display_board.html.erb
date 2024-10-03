@@ -1,11 +1,3 @@
 <% board.tasks.each do |task| %>
-  <% if board.status == 'New' %>
-    <%= render 'tasks/card', task: task %>
-  <% elsif board.status == 'Closed'%>
-    <%= render 'tasks/card', task: task %>
-  <% elsif board.status == 'Under Development'%>
-    <%= render 'tasks/card', task: task %>
-  <% elsif board.status == 'On-Hold'%>
-    <%= render 'tasks/card', task: task %>
-  <% end %>
+  <%= render 'tasks/card', task: task %>
 <% end %>

@@ -8,7 +8,7 @@
         <%= flash[:alert] %>
       </div>
     <% end %>
-    <%= f.select :status, options_for_select(['Assigned', 'Awaiting Build', 'Client Confirmation Pending', 'Closed', 'Declined', 'New', 'On-Hold', 'QA Testing', 'Reopened', 'Resolved', 'Under Development', 'Work in Progress']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
+    <%= f.select :status, options_for_select(['TO DO','In Progress', 'On-Hold', 'Failed-QA', 'QA-testing', 'Blocked', 'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing', 'Awaiting Client API', 'Resolved', 'Closed']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
     <%= f.submit class: 'mt-4 w-[250px] h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
   </div>
 <% end %>
