@@ -25,7 +25,7 @@ class ProductController < ApplicationController
                          'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing',
                          'Awaiting Client API', 'Resolved', 'Closed']
       @boards = preferred_order.flat_map do |status|
-        @product.boards.includes(:tasks).where(status: status)
+        @product.boards.includes(:tasks).where(status:)
       end
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
