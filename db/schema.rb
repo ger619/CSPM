@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_30_124636) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_03_060200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -150,6 +150,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_124636) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
+  create_table "states", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "task_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_states_on_task_id"
+    t.index ["user_id"], name: "index_states_on_user_id"
+  end
+
   create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "ticket_id", null: false
     t.uuid "user_id", null: false
@@ -251,6 +260,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_124636) do
   add_foreign_key "issues", "users"
   add_foreign_key "products", "users"
   add_foreign_key "projects", "users"
+  add_foreign_key "states", "tasks"
+  add_foreign_key "states", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
   add_foreign_key "tasks", "boards"
