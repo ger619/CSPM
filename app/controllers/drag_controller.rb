@@ -1,5 +1,4 @@
 class DragController < ApplicationController
-
   def board; end
 
   private

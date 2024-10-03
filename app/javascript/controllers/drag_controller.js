@@ -6,11 +6,9 @@ const dataResourceID = 'data-resource-id';
 
 const dataParent = 'data-parent';
 
-
 let url;
 
 let resourceID;
-
 
 let newPosition;
 
@@ -26,10 +24,11 @@ export default class extends Controller {
   }
 
   drop(event) {
-    let parentID = event.target.getAttribute(dataParent);
+    const parentID = event.target.getAttribute(dataParent);
     const dropTarget = this.findDropTarget(event.target, parentID);
     const draggedItem = document.querySelector(`[data-resource-id="${resourceID}"]`);
   }
+
   dragEnd(event) {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
