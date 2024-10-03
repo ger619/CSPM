@@ -21,7 +21,12 @@ class ProductController < ApplicationController
   def show
     # Display boards of the project
     if current_user.has_role?(:admin) || @product.users.include?(current_user)
-      @boards = @product.boards.includes(:tasks) # order('tasks.created_at ASC').references(:tasks)
+      preferred_order = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing', 'Blocked',
+                         'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing',
+                         'Awaiting Client API', 'Resolved', 'Closed']
+      @boards = preferred_order.flat_map do |status|
+        @product.boards.includes(:tasks).where(status: status)
+      end
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
