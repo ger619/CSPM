@@ -5,7 +5,7 @@
                       dragenter->drag#dragEnter
                       drop->drag#drop
                       dragend->drag#dragEnd" %>
-  <%= content_tag(:div, class: 'bi bi-grip-horizontal draggable', draggable: true, data: {
+  <%= content_tag(:div, class: 'bi bi-grip-vertical draggable', draggable: true, data: {
     controller: 'drag',
     action: dragAction,
     resource_id: board.id,
