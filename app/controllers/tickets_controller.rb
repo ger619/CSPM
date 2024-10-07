@@ -102,7 +102,9 @@ class TicketsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }), status: :unprocessable_entity }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }), status: :unprocessable_entity
+        end
         format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
       end
     end

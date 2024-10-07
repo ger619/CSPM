@@ -18,6 +18,21 @@
     <div class="w-full col-span-1 col-span-1 h-full">
       <div class="mb-4 font-bold uppercase">Type of Issue: <span class="font-medium"><%= @ticket.issue %></span></div>
       <div class="mb-2.5 font-bold uppercase">Priority: <span class="font-medium"><%= @ticket.priority %></span></div>
+      <div class="mb-2.5 font-bold uppercase flex gap-1">
+        Status:
+        <span class="font-medium">
+          <% if @ticket.status == 'Resolved' || 'Closed' %>
+        <p class="text-green ">
+          <%= @ticket.status %>
+        </p>
+      <% else %>
+        <p class="text-red">
+          <%= @ticket.status %>
+        </p>
+      <% end %>
+        </span>
+      </div>
+
       <div class="mb-2.5 font-bold capitalize">Content: <span class="font-extralight"><%= @ticket.body.to_plain_text.truncate(800) %></span></div>
     </div>
     <div class="w-full col-span-1 col-span-1 h-full p-2">
