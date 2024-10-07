@@ -14,7 +14,7 @@
 
 ## ERD
 
-![ERD](https://user-images.githubusercontent.com/37341054/139593013-3b3b3b7b-1b7b-4b7b-8b7b-3b7b3b7b3b7b.png)
+![drawSQL-image-export-2024-10-07 (1)](https://github.com/user-attachments/assets/0c91fae3-92b1-4a54-884e-0861b5bbbbda)
 
 ### Cloning the project
 
