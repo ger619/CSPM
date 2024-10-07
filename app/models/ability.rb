@@ -8,7 +8,7 @@ class Ability
     elsif user.has_role?('project manager')
       can %i[create read unassign_user unassign_user], Project
       can %i[edit delete], Project, user_id: user.id
-      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[create read assign_tag unassign_tag update_status], Ticket
       can %i[edit delete], Ticket, user_id: user.id
       can %i[create read], Issue
       can %i[edit delete], Issue, user_id: user.id
@@ -20,7 +20,7 @@ class Ability
       can :manage, Task
     elsif user.has_role? :client
       can :read, Project
-      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[create read], Ticket
       can %i[edit delete], Ticket, user_id: user.id
       can :read, Issue
       cannot %i[create delete edit], Product
@@ -30,7 +30,7 @@ class Ability
 
     elsif user.has_role? :agent
       can :read, Project
-      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[create read assign_tag unassign_tag update_status], Ticket
       can %i[edit delete], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product

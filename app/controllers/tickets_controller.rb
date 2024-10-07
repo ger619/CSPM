@@ -90,17 +90,20 @@ class TicketsController < ApplicationController
 
   def update_status
     @ticket = @project.tickets.find(params[:id])
-    @ticket.user = current_user # O
+    @ticket.user = current_user
+
     if @ticket.update(ticket_params)
       @ticket.users.each do |ticket_user|
         UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
       respond_to do |format|
-        format.html { redirect_to project_tickets_path(@project, @ticket), notice: 'Status updated successfully' }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }) }
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
       end
     else
       respond_to do |format|
-        format.html { redirect_to project_tickets_path(@project, @ticket), alert: 'Failed to update status' }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }), status: :unprocessable_entity }
+        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
       end
     end
   end
