@@ -1,19 +1,23 @@
 <div class="grid grid-cols-2 ">
-  <div class="grid col-span-1">
-    <%= button_to 'Add New Issue +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'mb-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 rounded font-semibold rounded'  %>
-
+  <div class="col-span-1">
+    <div class="flex flex-wrap gap-1">
+    <%= button_to  project_path(@project), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  do %>
+        &#8656; Back
+      <% end %>
+    <%= button_to 'Add New Issue +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
+    </div>
   </div>
   <!-- Search on the right -->
   <div class="grid col-span-1 justify-end">
 
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: "h-12 border border-b-4 border-r-2 p-2 rounded" %>
-        <%= f.submit "Search", class: "mb-4 ml-4 h-12 border border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+        <%= f.text_field :query, placeholder: "Search ", class: "h-12 border border-b-4 border-r-2 rounded" %>
+        <%= f.submit "Search", class: "h-12 mb-4 ml-4 border border border-b-4 border-r-2 border-black dark:border-slate-100 rounded font-semibold rounded p-1 "  %>
       <% end %>
 
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: "ml-4 mb-4 h-12 border border-b-4 border-r-2 p-2 rounded font-semibold rounded"  %>
+        <%= f.submit "Clear", class: "h-12 ml-4 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded"  %>
       <% end %>
 
     </div>
