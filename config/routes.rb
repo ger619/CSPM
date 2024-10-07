@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       resources :issues
     end
   end
+  resources :client
 
   resources :product do
     member do

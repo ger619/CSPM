@@ -64,12 +64,33 @@
           <% end %>
         </td>
         <td class="px-4 py-4 ">
-          <% if ticket.status == 'Resolved' || ticket.status == 'Closed' %>
-            <p class='bg-green-500 p-2 text-center text-white font-bold rounded'>
+          <% case ticket.status %>
+          <% when 'Resolved', 'Closed' %>
+            <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
-          <% else %>
-            <p class="text-red font-bold">
+          <% when 'New', 'Reopened' %>
+            <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1">
+              <%= ticket.status %>
+            </p>
+          <% when 'Work in Progress', 'Under Development' %>
+            <p class='bg-yellow-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'Awaiting Build', 'QA Testing' %>
+            <p class='bg-blue-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'Client Confirmation Pending' %>
+            <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'Assigned', 'On-Hold' %>
+            <p class='bg-orange-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'Declined'%>
+            <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
           <% end %>
