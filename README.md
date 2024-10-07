@@ -14,6 +14,7 @@
 
 ## ERD
 
+![ERD](https://user-images.githubusercontent.com/37341054/139593013-3b3b3b7b-1b7b-4b7b-8b7b-3b7b3b7b3b7b.png)
 
 ### Cloning the project
 
