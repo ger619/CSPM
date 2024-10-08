@@ -58,7 +58,6 @@
             <%= product.user.name %>
           </td>
           <td class="px-6 py-4 capitalize ">
-            <%= product.content.to_plain_text.truncate(50) %>
             <% if product.software.present? && product.software.name.present? %>
               <%= product.software.name %>
             <% end %>
