@@ -8,7 +8,7 @@ class ClientController < ApplicationController
     @client = if params[:query].present?
                 @client.where(
                   'name ILIKE ? OR email ILIKE ? OR phone ILIKE ? OR address ILIKE ? OR client_contact_person ILIKE ? OR
-                   client_contact_person_phone ILIKE ? OR client_contact_person_email ILIKE ?', "%#{params[:query]}%",
+                   client_contact_phone_number ILIKE ? OR client_contact_person_email ILIKE ?', "%#{params[:query]}%",
                   "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
                   "%#{params[:query]}%", "%#{params[:query]}%"
                 )
@@ -70,6 +70,6 @@ class ClientController < ApplicationController
 
   def client_params
     params.require(:client).permit(:name, :email, :phone, :address, :client_contact_person,
-                                   :client_contact_person_phone, :client_contact_person_email)
+                                   :client_contact_phone_number, :client_contact_person_email)
   end
 end
