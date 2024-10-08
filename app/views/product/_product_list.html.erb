@@ -20,6 +20,9 @@
       <th scope="col" class="px-6 py-3">
         Product Category
       </th>
+      <th scope="col" class="px-6 py-3">
+        Clients
+      </th>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
         <th scope="col" class="px-6 py-3">
           EDIT/REMOVE
@@ -60,6 +63,11 @@
           <td class="px-6 py-4 capitalize ">
             <% if product.software.present? && product.software.name.present? %>
               <%= product.software.name %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4 capitalize ">
+            <% if product.client.present? && product.client.name.present? %>
+              <%= product.client.name %>
             <% end %>
           </td>
           <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
