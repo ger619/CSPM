@@ -12,7 +12,7 @@ class Ability
       can %i[edit delete], Ticket, user_id: user.id
       can %i[create read], Issue
       can %i[edit delete], Issue, user_id: user.id
-      can %i[create read add_user remove_user edit], Product
+      can %i[create read add_user remove_user edit update], Product
       cannot %i[delete], Product
       can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
       cannot :manage, User, roles: { name: 'admin' }

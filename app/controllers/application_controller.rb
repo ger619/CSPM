@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:invite, keys: %i[email role])
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_path, alert: exception.message
+  end
+
   private
 
   def check_profile_completion
