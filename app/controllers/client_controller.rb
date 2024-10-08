@@ -5,19 +5,21 @@ class ClientController < ApplicationController
 
   def index
     @client = Client.all
-    # @client = if params[:query].present?
+    @client = if params[:query].present?
+                @client.where(
+                  'name ILIKE ? OR email ILIKE ? OR phone ILIKE ? OR address ILIKE ? OR client_contact_person ILIKE ? OR
+                   client_contact_person_phone ILIKE ? OR client_contact_person_email ILIKE ?', "%#{params[:query]}%",
+                  "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
+                  "%#{params[:query]}%", "%#{params[:query]}%"
+                )
+              else
+                @client.order('created_at DESC')
+              end
 
-    # @issue = if params[:query].present?
-    #           @ticket.issues.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
-    #                                                            "%#{params[:query]}%")
-    #
-    #         else
-    #           @ticket.issues.with_rich_text_body.order('created_at DESC')
-    #         end
-    # @per_page = 10
-    # @page = (params[:page] || 1).to_i
-    # @total_pages = (@issue.count / @per_page.to_f).ceil
-    # @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@client.count / @per_page.to_f).ceil
+    @client = @client.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def new
@@ -29,9 +31,8 @@ class ClientController < ApplicationController
     @client.user_id = current_user.id
 
     respond_to do |format|
-      if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
+      if current_user.has_role?(:admin)
         if @client.save
-          current_user.add_role :creator, @client
           format.html { redirect_to client_path(@client), notice: 'Client was successfully created.' }
         else
           format.html { render :new, status: :unprocessable_entity }

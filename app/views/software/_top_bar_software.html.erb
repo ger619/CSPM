@@ -3,7 +3,7 @@
   <div class="grid col-span-1">
     <% if can? :create, @software %>
       <% if current_user.has_role? :admin  %>
-        <%= button_to 'Add Project +', new_product_path, method: :get, class: 'mb-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+        <%= button_to 'Add Software +', new_software_path, method: :get, class: 'mb-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
       <% end %>
     <% end %>
   </div>
