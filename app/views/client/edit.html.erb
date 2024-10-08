@@ -1,4 +1,5 @@
-<%= form_with  model: @client, url: client_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
+
+  <%= form_with  model: @client, url: client_path(@client), method: :patch do |f| %>
   <div class="grid grid-cols-2 gap-2">
     <div class="relative z-0 w-full mb-6 group">
       <%= f.label :name, :Name, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />

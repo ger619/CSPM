@@ -50,16 +50,18 @@ class ClientController < ApplicationController
   def edit; end
 
   def update
-    if @client.update(client_params)
-      redirect_to @client, notice: 'Client was successfully updated.'
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @client.update(client_params)
+        format.html { redirect_to client_index_path, notice: 'Product was successfully updated.' }
+      else
+        format.html { render 'edit', status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @client.destroy
-    redirect_to clients_url, notice: 'Client was successfully destroyed.'
+    redirect_to client_url, notice: 'Client was successfully destroyed.'
   end
 
   private

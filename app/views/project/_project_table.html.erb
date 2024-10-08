@@ -21,9 +21,6 @@
         Users
       </th>
       <th scope="col" class="px-6 py-3">
-        Creator
-      </th>
-      <th scope="col" class="px-6 py-3">
         Details
       </th>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
