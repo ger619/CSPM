@@ -54,6 +54,7 @@ class User < ApplicationRecord
   has_many :tasks, through: :states
 
   has_many :softwares
+  has_many :clients
 
   def assign_default_role
     add_role(:client) if roles.blank?
