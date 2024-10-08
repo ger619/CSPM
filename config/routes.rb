@@ -49,8 +49,7 @@ Rails.application.routes.draw do
     end
   end
 
-
-
+  resources :software
   resources :client
 
 

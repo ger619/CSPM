@@ -20,31 +20,22 @@
       </div>
       <% new_board = Board.find_by(status: 'TO DO') %>
       <%= f.hidden_field :board_id, value: new_board.id %>
+    </div>
+    <% if flash[:alert] %>
+      <div class="alert alert-danger">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+    <div class="grid grid-cols-2 gap-2">
       <div class="relative z-0 w-full mb-6 group">
-        <%#= f.label :status, 'Board Status', class: "capitalize block mb-1 text-sm font-medium" %><br />
-        <%#= f.collection_select :board_id, Board.all, :id, :status, {promt: "Select Status"}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= f.label :start_date, 'Start Date', class: "capitalize block mb-1 text-sm font-medium"  %><br />
+        <%= f.date_field :start_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+      </div>
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :end_date, 'End Date', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+        <%= f.date_field :end_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
       </div>
     </div>
-
-
-      <% if flash[:alert] %>
-        <div class="alert alert-danger">
-          <%= flash[:alert] %>
-        </div>
-      <% end %>
-
-      <div class="grid grid-cols-2 gap-2">
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :start_date, 'Start Date', class: "capitalize block mb-1 text-sm font-medium"  %><br />
-          <%= f.date_field :start_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :end_date, 'End Date', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-          <%= f.date_field :end_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-        </div>
-      </div>
-
-
     <%= f.submit 'Add Task', class: 'mt-4 h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
   </div>
 <% end %>

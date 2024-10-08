@@ -1,41 +1,61 @@
 
 <%= link_to product_board_task_path(task.product, task.board, task) do %>
-
   <div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white max-w-sm">
-  <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
-    <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-      <h3 class="text-lg font-semibold "><%= task.name %></h3>
+    <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
+      <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+      <% due_date = task.end_date %>
+      <% days_left = (due_date - Date.today).to_i %>
+      <% due_date_class = case
+                          when days_left > 14
+                            'bg-green-500 text-white'
+                          when days_left <= 7 && days_left > 3
+                            'bg-yellow-500'
+                          when days_left <= 3 && days_left >= 0
+                            'bg-orange-500 text-white'
+                          else
+                            'bg-red-500 text-white'
+                          end %>
+      <h3 class="text-lg font-semibold rounded-t-lg <%= due_date_class %>">
+        Due Date: <%= task.end_date %>
+      </h3>
       <div class="flex justify-center">
         <% if task.image.present? %>
-          <%= image_tag(task.image, class: 'object-cover min-w-[300px] h-[100px] rounded') %>
+          <%= image_tag(task.image, class: 'object-cover min-w-[300px] h-[80px] rounded') %>
         <% end %>
       </div>
-      <h3 class="text-lg font-semibold "><%= task.name %></h3>
-      <p class="my-4"><%= task.description %></p>
-      <div class="text-sm text-gray-500 dark:text-gray-400 "><%= task.topic %></div>
-    </blockquote>
-    <figcaption class="flex items-center justify-center ">
-      <% task.users.each do |user| %>
-        <% if user.profile_picture.attached? %>
-          <%= image_tag user.profile_picture, class: 'w-12 h-12 rounded-full' %>
-        <% elsif user.name_initials.present? %>
-          <p class="rounded-full p-1 capitalize"><%= user.name_initials %></p>
-        <% else %>
-          <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
+        <h3 class="text-lg font-semibold ">
+          <%= task.name %>
+        </h3>
+        <p class="my-4">
+          <%= task.description %>
+        </p>
+        <div class="text-sm text-gray-500 dark:text-gray-400 ">
+          <%= task.topic %>
+        </div>
+      </blockquote>
+      <figcaption class="flex items-center justify-center ">
+        <% task.users.each do |user| %>
+          <% if user.profile_picture.attached? %>
+            <%= image_tag user.profile_picture, class: 'w-12 h-12 rounded-full' %>
+          <% elsif user.name_initials.present? %>
+            <p class="rounded-full p-1 capitalize">
+              <%= user.name_initials %>
+            </p>
+          <% else %>
+            <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
+          <% end %>
         <% end %>
-      <% end %>
-      <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
-        <div class="capitalize"><% task.users.each do |user| %>
-            <% if user.name.present? %>
-              <%= user.name %>
-            <% else %>
-              <%= truncate(user.email, length: 15, omission: '...') %>
+        <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
+          <div class="capitalize"><% task.users.each do |user| %>
+              <% if user.name.present? %>
+                <%= user.name %>
+              <% else %>
+                <%= truncate(user.email, length: 15, omission: '...') %>
+              <% end %>
             <% end %>
-          <% end %></div>
-      </div>
-    </figcaption>
-  </figure>
-
-</div>
-
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
 <% end %>
