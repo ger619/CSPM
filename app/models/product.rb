@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :user
+  belongs_to :software
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
 
