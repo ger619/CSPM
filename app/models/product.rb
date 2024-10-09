@@ -27,7 +27,16 @@ class Product < ApplicationRecord
     users.include?(user)
   end
 
+  validate :content_length_within_limit
+
+
   private
+
+  def content_length_within_limit
+    if content.to_plain_text.length > 800
+      errors.add(:content, "must be less than or equal to 800 characters")
+    end
+  end
 
   def end_date_after_start_date
     return unless end_date.present? && start_date.present? && end_date < start_date
