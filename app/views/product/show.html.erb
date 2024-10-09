@@ -5,11 +5,12 @@
     <h1 class="text-xl">
       Name of the Project: <%= @product.name %>
     </h1>
-    <p class="capitalize text-sm text-balance"><%= @product.description.truncate(100) %></p>
+    <p class="capitalize text-sm text-balance">
+      <%= @product.description.truncate(100) %>
+    </p>
     <div>
       <%= render 'product/add_users' %>
     </div>
-
   </div>
   <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2 ">
     <h1>Date Created: <span class="font-light p-1"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></span></h1>
@@ -27,8 +28,6 @@
             </p>
           <% end %>
         <% end %>
-        <span class="font-light">
-    </span>
       </span>
     </h1>
     <h1 class="pt-1">Plan:

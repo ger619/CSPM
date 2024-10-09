@@ -28,7 +28,6 @@
     </tr>
     </thead>
     <tbody>
-
     <% @project.each do |project|  %>
       <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
           <%= turbo_frame_tag dom_id(project) do %>
@@ -62,17 +61,13 @@
               <% end %>
             </td>
           <% end %>
-
-      </tr>
+        </tr>
+        <% end %>
+      <% end %>
     <% end %>
-    <% end %>
-
-    <% end %>
-
     </tbody>
   </table>
 </div>
-
 <div class="flex gap-10 mt-5">
   <% if @pagy.prev %>
     <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
@@ -80,5 +75,4 @@
   <% if @pagy.next %>
     <%= link_to "Next ", url_for(page: @pagy.next), class: 'mb-4  h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
   <% end %>
-
 </div>
