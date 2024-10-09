@@ -1,7 +1,7 @@
 // app/javascript/loading.js
 document.addEventListener('turbo:load', () => {
   const loadingLogo = document.createElement('img');
-  loadingLogo.src = '/assets/logo.png';
+  loadingLogo.src = '../assets/logo.png';
   loadingLogo.id = 'loading-logo';
 
   const loadingBackground = document.createElement('div');
