@@ -51,7 +51,7 @@
           <% end %>
         </td>
         <td class="px-6 py-4 truncate w-64 ">
-          <%= ticket.body.to_plain_text.truncate(50) %>
+          <%= ticket.content.to_plain_text.truncate(50) %>
         </td>
         <td class="px-6 py-4">
           <%= ticket.created_at.strftime("%I:%M %p at %d-%b-%Y") %>
