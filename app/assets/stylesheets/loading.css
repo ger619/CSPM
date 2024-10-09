@@ -1,0 +1,27 @@
+/* app/assets/stylesheets/loading.css */
+#loading-logo {
+  position: fixed;
+  top: 40%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  height: 200px;
+  animation: pulsate 1s infinite;
+  z-index: 1000;
+}
+
+@keyframes pulsate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+#loading-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
