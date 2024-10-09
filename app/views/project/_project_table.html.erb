@@ -12,16 +12,13 @@
         Start Date
       </th>
       <th scope="col" class="px-6 py-3">
-        End Date
-      </th>
-      <th scope="col" class="px-6 py-3">
         Assignee
       </th>
       <th scope="col" class="px-6 py-3">
-        Users
+        Client
       </th>
       <th scope="col" class="px-6 py-3">
-        Details
+        Product Category
       </th>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
         <th scope="col" class="px-6 py-3">
@@ -34,34 +31,26 @@
 
     <% @project.each do |project|  %>
       <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
-
           <%= turbo_frame_tag dom_id(project) do %>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
           <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
           <%= link_to project.title, project_path(project.id) %>
           </th>
-          <td class="px-6 py-4">
-            <%= project.description %>
+          <td class="px-6 py-4 text-left">
+            <%= project.description.truncate(50) %>
           </td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 text-left">
             <%= project.start_date.strftime("%d-%b-%y") %>
           </td>
-          <td class="px-6 py-4">
-            <% if project.end_date.present? %>
-              <%= project.end_date.strftime("%d-%b-%y") %>
-            <% end %>
-          </td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 text-left">
             <%= project.user.name %>
           </td>
-          <td class="px-6 py-4">
-            <%= project.users.distinct.limit(2).pluck(:email).join(', ')%>
+          <td class="px-6 py-4 text-left">
+            <%= project.client.name %>
           </td>
-          <td class="px-6 py-4 gap-2">
-            <%= project.creators.distinct.pluck(:first_name , :last_name).join('  ') %>
-          </td>
-          <td class="px-6 py-4 ">
-            <%= project.content.to_plain_text.truncate(50) %>
+
+          <td class="px-6 py-4 text-left ">
+            <%= project.software.name %>
           </td>
           <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
             <td class="px-6 py-4 flex  gap-2">

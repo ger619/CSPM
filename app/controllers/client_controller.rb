@@ -1,6 +1,6 @@
 class ClientController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_client, only: %i[show edit update destroy]
+  before_action :set_client, only: %i[show edit update]
   load_and_authorize_resource
 
   def index
@@ -57,11 +57,6 @@ class ClientController < ApplicationController
         format.html { render 'edit', status: :unprocessable_entity }
       end
     end
-  end
-
-  def destroy
-    @client.destroy
-    redirect_to client_url, notice: 'Client was successfully destroyed.'
   end
 
   private
