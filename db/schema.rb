@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_08_124127) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_09_052822) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -140,6 +140,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_124127) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "client_id", null: false
+    t.uuid "software_id", null: false
+    t.index ["client_id"], name: "index_projects_on_client_id"
+    t.index ["software_id"], name: "index_projects_on_software_id"
     t.index ["title"], name: "index_projects_on_title", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
@@ -274,6 +278,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_124127) do
   add_foreign_key "products", "clients"
   add_foreign_key "products", "softwares"
   add_foreign_key "products", "users"
+  add_foreign_key "projects", "clients"
+  add_foreign_key "projects", "softwares"
   add_foreign_key "projects", "users"
   add_foreign_key "softwares", "users"
   add_foreign_key "states", "tasks"

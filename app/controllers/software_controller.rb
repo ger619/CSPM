@@ -1,6 +1,6 @@
 class SoftwareController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_software, only: %i[show edit update destroy]
+  before_action :set_software, only: %i[show edit update]
   load_and_authorize_resource
 
   def index
@@ -32,7 +32,6 @@ class SoftwareController < ApplicationController
     respond_to do |format|
       if current_user.has_role?(:admin)
         if @software.save
-          # current_user.add_role :creator, @software
           format.html { redirect_to software_path(@software), notice: 'Software was successfully created.' }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -48,17 +47,10 @@ class SoftwareController < ApplicationController
   def update
     respond_to do |format|
       if @software.update(software_params)
-        format.html { redirect_to software_path(@software), notice: 'Software was successfully updated.' }
+        format.html { redirect_to software_index_path, notice: 'Software was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end
-    end
-  end
-
-  def destroy
-    @software.destroy
-    respond_to do |format|
-      format.html { redirect_to software_index_path, notice: 'Software was successfully destroyed.' }
     end
   end
 
