@@ -39,7 +39,7 @@
             <%= link_to product.name, product_path(product.id) %>
           </th>
           <td class="px-6 py-4">
-            <%= product.description %>
+            <%= product.description.truncate(50) %>
           </td>
           <td class="px-6 py-4">
             <%= product.start_date.strftime("%d-%b-%y") %>
