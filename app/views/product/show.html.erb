@@ -5,7 +5,7 @@
     <h1 class="text-xl">
       Name of the Project: <%= @product.name %>
     </h1>
-    <p class="capitalize text-sm"><%= @product.description %></p>
+    <p class="capitalize text-sm text-balance"><%= @product.description.truncate(100) %></p>
     <div>
       <%= render 'product/add_users' %>
     </div>

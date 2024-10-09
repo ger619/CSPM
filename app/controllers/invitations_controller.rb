@@ -9,17 +9,12 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def create
-    Rails.logger.debug "Invite Params: #{invite_params.inspect}"
-    Rails.logger.debug "Current User: #{current_user.inspect}"
-
     if invite_params[:email].blank?
       flash.now[:alert] = 'Email cannot be blank.'
       render :new
       return
     end
-
     invited_user = User.find_by(email: invite_params[:email])
-    Rails.logger.debug "Invited User: #{invited_user.inspect}"
 
     if invited_user
       invited_user.invite!(current_user)
@@ -33,7 +28,6 @@ class InvitationsController < Devise::InvitationsController
       invited_user.add_role(params[:role]) if params[:role].present?
       redirect_to users_path, notice: notice_message
     else
-      Rails.logger.debug invited_user.errors.full_messages.to_sentence
       flash.now[:alert] = 'There was an error inviting the user.'
       render :new
     end
@@ -54,7 +48,6 @@ class InvitationsController < Devise::InvitationsController
       invited_user.add_role(params[:role]) unless params[:role] == 'admin'
     else
       invited_user.add_role(params[:role]) unless params[:role] == 'admin' || params[:role] == 'project_manager'
-
     end
   end
 end
