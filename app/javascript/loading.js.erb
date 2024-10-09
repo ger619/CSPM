@@ -1,4 +1,4 @@
-// app/javascript/loading.js
+// app/javascript/loading.js.erb
 document.addEventListener('turbo:load', () => {
   const excludedPaths = ['/users/sign_in', '/users/sign_up', '/users/password/new', '/users/password/edit', '/users/confirmation/new', '/users/confirmation', '/users/invitation/accept', '/users/invitation/new', '/users/invitation/edit', '/users/invitation/remove', '/users/invitation/resend', '/users/invitation/confirmation', '/users/unlock/new', '/users/unlock', '/users/sign_out'];
   // eslint-disable-next-line max-len
@@ -7,7 +7,7 @@ document.addEventListener('turbo:load', () => {
   }
 
   const loadingLogo = document.createElement('img');
-  loadingLogo.src = '/assets/logo.png';
+  loadingLogo.src = '<%= asset_path("logo.png") %>';
   loadingLogo.id = 'loading-logo';
 
   const loadingBackground = document.createElement('div');
@@ -19,5 +19,5 @@ document.addEventListener('turbo:load', () => {
   setTimeout(() => {
     loadingLogo.remove();
     loadingBackground.remove();
-  }, 5000);
+  }, 1500);
 });
