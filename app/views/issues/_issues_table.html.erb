@@ -22,7 +22,7 @@
           <% end %>
       </h3>
       <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Posted on <%= issue.created_at.strftime("%I:%M %p at %d %B %Y") %></time>
-      <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400"><%= issue.body.to_plain_text.truncate(100) %></p>
+      <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400"><%= issue.content.to_plain_text.truncate(100) %></p>
     </li>
   </ol>
 <% end %>

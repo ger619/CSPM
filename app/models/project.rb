@@ -23,6 +23,8 @@ class Project < ApplicationRecord
 
   validate :end_date_after_start_date
 
+  validate :content_length_within_limit
+
   def assigned_to?(user)
     users.include?(user)
   end
@@ -30,6 +32,12 @@ class Project < ApplicationRecord
   # To have pick a list of users who have role agent only on a dropdown list at the view to assign a project
 
   private
+
+  def content_length_within_limit
+    return unless content.to_plain_text.length > 800
+
+    errors.add(:content, 'must be less than or equal to 800 characters')
+  end
 
   def end_date_after_start_date
     return unless end_date.present? && start_date.present? && end_date < start_date

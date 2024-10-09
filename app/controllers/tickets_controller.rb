@@ -10,11 +10,11 @@ class TicketsController < ApplicationController
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
-               @ticket.issues.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
-                                                                "%#{params[:query]}%")
+               @ticket.issues.left_joins(:rich_text_content).where('action_text_rich_texts.content ILIKE ?',
+                                                                   "%#{params[:query]}%")
 
              else
-               @ticket.issues.with_rich_text_body.order('created_at DESC')
+               @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
     @per_page = 10
     @page = (params[:page] || 1).to_i
@@ -121,7 +121,7 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:issue, :priority, :start_date, :body, :project_id, :user_id, :ticket_image,
+    params.require(:ticket).permit(:issue, :priority, :start_date, :content, :project_id, :user_id, :ticket_image,
                                    :status, user_ids: [])
   end
 end

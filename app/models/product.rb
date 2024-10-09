@@ -29,6 +29,12 @@ class Product < ApplicationRecord
 
   private
 
+  def content_length_within_limit
+    return unless content.to_plain_text.length > 800
+
+    errors.add(:content, 'must be less than or equal to 800 characters')
+  end
+
   def end_date_after_start_date
     return unless end_date.present? && start_date.present? && end_date < start_date
 
