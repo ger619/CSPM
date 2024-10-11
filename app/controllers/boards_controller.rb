@@ -33,7 +33,7 @@ class BoardsController < ApplicationController
     respond_to do |format|
       if @board.update(board_params)
         current_user.add_role :editor, @board
-        format.html { redirect_to product_path(@product.id), notice: 'Board was successfully updated.' }
+        format.html { redirect_to product_path(@product), notice: 'Board was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity, alert: 'Board was not updated.' }
       end

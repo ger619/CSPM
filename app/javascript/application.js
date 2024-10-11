@@ -9,3 +9,16 @@ import '@rails/actiontext';
 //= require_tree .
 
 
+document.addEventListener('turbo:load', () => {
+  let addDocumentButton = document.querySelector('#add-document');
+  let documentsContainer = document.querySelector('#documents-container');
+
+  if (addDocumentButton) {
+    addDocumentButton.addEventListener('click', function (e) {
+      e.preventDefault();
+      let newDocumentField = document.querySelector('.document-field').cloneNode(true);
+      newDocumentField.querySelector('input').value = ''; // Clear the input fields
+      documentsContainer.appendChild(newDocumentField);
+    });
+  }
+});

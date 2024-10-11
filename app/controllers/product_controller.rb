@@ -45,6 +45,7 @@ class ProductController < ApplicationController
 
   def new
     @product = Product.new
+    @product.documents.build
   end
 
   def create
@@ -66,7 +67,9 @@ class ProductController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @product.documents.build
+  end
 
   def update
     respond_to do |format|
@@ -122,6 +125,7 @@ class ProductController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :description, :start_date, :end_date, :image, :content, :scope, :fod, :brd,
-                                    :plan, :user_id, :client_id, :software_id, :client_id, images: [])
+                                    :plan, :user_id, :client_id, :software_id, :client_id, images: [],
+                                                                                           documents_attributes: %i[id title file _destroy])
   end
 end

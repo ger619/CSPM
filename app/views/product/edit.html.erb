@@ -48,8 +48,28 @@
           <%= f.label :brd, ('Business Requirement Document'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
           <%= f.file_field :brd,  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
         </div>
-
       </div>
+
+
+        <div id="documents-container">
+          <%= f.fields_for :documents do |doc_form| %>
+            <div class="document-field">
+              <%= doc_form.label :title, 'Name of Document' %>
+              <%= doc_form.text_field :title %>
+
+              <%= doc_form.label :file, 'Upload File' %>
+              <%= doc_form.file_field :file %>
+
+              <%= doc_form.check_box :_destroy %>
+              <%= doc_form.label :_destroy, 'Remove document' %>
+            </div>
+          <% end %>
+        </div>
+      <button id="add-document">Add Another Document</button>
+
+
+
+
       <div>
         <% if @product.errors.any? %>
           <div id="error_explanation " class="flex flex-row justify-center gap-10">

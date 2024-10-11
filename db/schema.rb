@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_052822) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_11_091808) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -104,6 +104,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_052822) do
     t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
+  create_table "documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title"
+    t.uuid "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_documents_on_product_id"
+  end
+
   create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "subject"
     t.uuid "ticket_id", null: false
@@ -140,8 +148,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_052822) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "client_id", null: false
-    t.uuid "software_id", null: false
+    t.uuid "client_id"
+    t.uuid "software_id"
     t.index ["client_id"], name: "index_projects_on_client_id"
     t.index ["software_id"], name: "index_projects_on_software_id"
     t.index ["title"], name: "index_projects_on_title", unique: true
@@ -272,6 +280,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_052822) do
   add_foreign_key "boards", "products"
   add_foreign_key "boards", "users"
   add_foreign_key "clients", "users"
+  add_foreign_key "documents", "products"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"
   add_foreign_key "issues", "users"

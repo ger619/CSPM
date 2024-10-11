@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   end
 
   resources :product do
+    resources :documents, only: [:create, :destroy]
+
     member do
       post :add_user
       delete :remove_user

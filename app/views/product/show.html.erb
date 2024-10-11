@@ -59,6 +59,14 @@
         </span>
       <% end %>
     </h1>
+    <% @product.documents.each do |document| %>
+      <li>
+        <strong><%= document.title %>:</strong>
+        <% if @product.file.attached? %>
+          <%= link_to 'Download', rails_blob_path(document.file, disposition: 'attachment') %>
+        <% end %>
+      </li>
+    <% end %>
   </div>
   <div class="col-span-1">
     <%= render 'product/added_users' %>

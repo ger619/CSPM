@@ -11,8 +11,12 @@ class Product < ApplicationRecord
   has_one_attached :fod
   has_one_attached :brd
   has_one_attached :plan
+  has_one_attached :file
+  has_many :documents, dependent: :destroy
+  accepts_nested_attributes_for :documents, allow_destroy: true
+  # Tagging users to a
+  validates :documents, content_type: ['application/pdf'], size: { less_than: 10.megabytes }
 
-  # Tagging users to a projec
 
   resourcify
   has_many :users, through: :roles, class_name: 'User', source: :users
