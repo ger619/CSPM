@@ -32,7 +32,7 @@ class SoftwareController < ApplicationController
     respond_to do |format|
       if current_user.has_role?(:admin)
         if @software.save
-          format.html { redirect_to software_path(@software), notice: 'Software was successfully created.' }
+          format.html { redirect_to software_index_path, notice: 'Software was successfully created.' }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
