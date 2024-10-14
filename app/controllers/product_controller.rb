@@ -20,6 +20,7 @@ class ProductController < ApplicationController
 
   def show
     # Display boards of the project
+    # sleep 3
     if current_user.has_role?(:admin) || @product.users.include?(current_user)
       preferred_order = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing', 'Blocked',
                          'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing',

@@ -1,8 +1,7 @@
 // app/javascript/loading.js.erb
 document.addEventListener('turbo:load', () => {
-  const excludedPaths = ['/users/sign_in', '/users/sign_up', '/users/password/new', '/users/password/edit', '/users/confirmation/new', '/users/confirmation', '/users/invitation/accept', '/users/invitation/new', '/users/invitation/edit', '/users/invitation/remove', '/users/invitation/resend', '/users/invitation/confirmation', '/users/unlock/new', '/users/unlock', '/users/sign_out'];
-  // eslint-disable-next-line max-len
-  if (excludedPaths.includes(window.location.pathname) || performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+  const includedPaths = [ '/', '/product', '/project', '/client', '/software' ];
+  if (!includedPaths.includes(window.location.pathname) || performance.navigation.type === performance.navigation.TYPE_RELOAD) {
     return;
   }
 
