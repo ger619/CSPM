@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_14_053057) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_15_111656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -138,7 +138,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_053057) do
     t.string "title"
     t.string "description"
     t.date "start_date"
-    t.date "end_date"
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -212,6 +211,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_053057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status", default: "new"
+    t.datetime "initial_response_deadline"
+    t.datetime "target_repair_deadline"
+    t.datetime "resolution_deadline"
     t.index ["project_id"], name: "index_tickets_on_project_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
