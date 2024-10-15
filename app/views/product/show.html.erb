@@ -66,7 +66,7 @@
 
 </div>
 
-<div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
+<div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800">
   <% if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
     <%= render 'boards/board_display' %>
   <% end %>

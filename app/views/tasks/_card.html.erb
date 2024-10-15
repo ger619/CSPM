@@ -1,19 +1,19 @@
 
 <%= link_to product_board_task_path(task.product, task.board, task) do %>
   <div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white max-w-sm">
-    <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
-      <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+    <figure class="flex flex-col items-center  justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
+      <blockquote class="min-w-[300px] mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400 ">
       <% due_date = task.end_date %>
       <% days_left = (due_date - Date.today).to_i %>
       <% due_date_class = case
                           when days_left > 14
                             'bg-green-500 text-white'
                           when days_left <= 7 && days_left > 3
-                            'bg-yellow-500'
+                            'bg-yellow-500 text-white'
                           when days_left <= 3 && days_left >= 0
                             'bg-orange-500 text-white'
                           else
-                            'bg-red-500 text-white'
+                            'bg-red-500 text-white w-full'
                           end %>
       <h3 class="text-lg font-semibold rounded-t-lg <%= due_date_class %>">
         Due Date: <%= task.end_date %>
