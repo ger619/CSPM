@@ -16,12 +16,12 @@
     <div class="col-span-1 text-xs">
       <% if @project.users.present? %>
         <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
-          <%= label_tag :user_id, "UNASSING" %>
+          <%= label_tag :user_id, "Remove User" %>
           <div class="flex flex-wrap gap-2">
             <div>
                <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: "max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
             </div>
-              <%= submit_tag "UNASSING", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded cursor-pointer' %>
+              <%= submit_tag "REMOVE", class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold rounded cursor-pointer' %>
           </div>
         <% end %>
       <% end %>
