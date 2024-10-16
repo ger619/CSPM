@@ -1,6 +1,6 @@
 <p>Hello <%= @user.first_name %> <%= @user.last_name %>,</p>
 
-<p>The Task: <%= @task.name %> of topic: <%= @task.topic %>by <%= @current_user.name %> has change state to <%= @task.board.status %></p>
+<p>The Task: <%= @task.name %> of topic: <%= @task.topic %> by <%= @current_user.name %> has change state to <b><%= @task.board.status %></b></p>
 
 <p>Click <a href="<%= @url %>">here</a> to view the ticket.</p>
 
