@@ -80,11 +80,12 @@ class TasksController < ApplicationController
     @task.board_id = params[:status]
     @task.save
 
-    UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
+    assigned_user = @task.users.first # Assuming the first user is the assigned user
+    UserMailer.add_state_email(@task.user, @task, current_user, assigned_user).deliver_later
     @product.users.each do |user|
       next if user == current_user
 
-      UserMailer.add_state_email(user, @task, current_user).deliver_later
+      UserMailer.add_state_email(user, @task, current_user, assigned_user).deliver_later
     end
     redirect_to product_path(@product)
   end
