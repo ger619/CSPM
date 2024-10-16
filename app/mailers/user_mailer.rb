@@ -31,10 +31,11 @@ class UserMailer < ApplicationMailer
 
   # From Product Controller
 
-  def assign_product_email(user, product, current_user)
+  def assign_product_email(user, product, current_user, assigned_user)
     @user = user
     @product = product
     @current_user = current_user
+    @assigned_user = assigned_user
     @url = product_url(@product)
     mail(to: @user.email, subject: 'You have been assigned to a new product')
   end

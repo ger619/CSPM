@@ -31,17 +31,6 @@ class ProductController < ApplicationController
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
-
-    # @ticket = if params[:query].present?
-    #            @project.tickets.left_joins(:rich_text_body).where('action_text_rich_texts.body ILIKE ?',
-    #                                                               "%#{params[:query]}%")
-    #          else
-    #            @project.tickets.with_rich_text_body.order('created_at DESC')
-    #          end
-    # @per_page = 10
-    # @page = (params[:page] || 1).to_i
-    # @total_pages = (@ticket.count / @per_page.to_f).ceil
-    # @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def new
@@ -88,14 +77,17 @@ class ProductController < ApplicationController
       user = User.find(params[:user_id])
       @product.user = current_user
       @product.users << user
-      # Send email to the newly assigned user
-      # UserMailer.assign_product_email(user, @product, current_user).deliver_later
 
-      # Send email to all users assigned to the project, except the current user
+      # assigned_user = @task.users.first # Assuming the first user is the assigned user
+      # UserMailer.task_assignment_email(@task.user, @task, current_user, assigned_user).deliver_later
+      # Send email to the newly assigned user
+      #
+      assigned_user = @product.users.first # Assuming the first user is the assigned user
+      UserMailer.assign_product_email(@product.user, @product, current_user, assigned_user).deliver_later
       @product.users.each do |product_user|
         next if product_user == current_user
 
-        UserMailer.assign_product_email(product_user, @product, current_user).deliver_later
+        UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
       end
 
       redirect_to @product, notice: 'User was successfully assigned.'
