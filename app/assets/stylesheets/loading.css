@@ -1,10 +1,10 @@
 /* app/assets/stylesheets/loading.css */
 #loading-logo {
   position: fixed;
-  top: 40%;
-  left: 35%;
+  top: 35%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  height: 200px;
+  height: 250px;
   animation: pulsate 1s infinite;
   z-index: 1000;
 }

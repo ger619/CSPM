@@ -1,7 +1,9 @@
 // app/javascript/loading.js.erb
 document.addEventListener('turbo:load', () => {
-  const includedPaths = [ '/', '/product', '/project', '/client', '/software' ];
-  if (!includedPaths.includes(window.location.pathname) || performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+  const includedPaths = [ '/' ];
+  const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+
+  if (!includedPaths.includes(window.location.pathname) && loadTime <= 2000) {
     return;
   }
 
