@@ -53,6 +53,6 @@ class UserMailer < ApplicationMailer
     @task = task
     @current_user = current_user
     @url = product_board_task_url(@task.board.product, @task.board, @task)
-    mail(to: @user.email, subject: 'Task state updated')
+    mail(to: @user.email, subject: 'Task State Updated')
   end
 end
