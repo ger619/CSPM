@@ -71,8 +71,21 @@ class TasksController < ApplicationController
 
   def add_state
     @task = @board.tasks.find(params[:id])
+
+    if @task.board_id == params[:status].to_i
+      redirect_to product_path(@product), alert: 'The task is already in the selected state.'
+      return
+    end
+
     @task.board_id = params[:status]
     @task.save
+
+    UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
+    @product.users.each do |user|
+      next if user == current_user
+
+      UserMailer.add_state_email(user, @task, current_user).deliver_later
+    end
     redirect_to product_path(@product)
   end
 

@@ -88,7 +88,6 @@ class ProductController < ApplicationController
       user = User.find(params[:user_id])
       @product.user = current_user
       @product.users << user
-
       # Send email to the newly assigned user
       UserMailer.assign_product_email(user, @product, current_user).deliver_later
 
