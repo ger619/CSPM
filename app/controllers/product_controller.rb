@@ -89,7 +89,7 @@ class ProductController < ApplicationController
       @product.user = current_user
       @product.users << user
       # Send email to the newly assigned user
-      UserMailer.assign_product_email(user, @product, current_user).deliver_later
+      # UserMailer.assign_product_email(user, @product, current_user).deliver_later
 
       # Send email to all users assigned to the project, except the current user
       @product.users.each do |product_user|
