@@ -40,7 +40,7 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'You have been assigned to a new product')
   end
 
-  # From Task Controller
+  # From Task Controllerd
   def task_assignment_email(user, task, current_user, assigned_user)
     @user = user
     @task = task
