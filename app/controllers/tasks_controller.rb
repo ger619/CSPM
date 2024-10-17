@@ -52,7 +52,7 @@ class TasksController < ApplicationController
 
   def add_task
     if @task.users.include?(User.find(params[:user_id]))
-      redirect_to product_board_task_path(@product, @board, @task), notice: 'User has already been assigned .'
+      redirect_to product_board_task_path(@product, @board, @task), notice: 'User has already been assigned.'
     else
       @task = @board.tasks.find(params[:id])
       @task.user = current_user
@@ -60,12 +60,17 @@ class TasksController < ApplicationController
       @task.users.clear
       @task.users << user
       assigned_user = @task.users.first # Assuming the first user is the assigned user
-      UserMailer.task_assignment_email(@task.user, @task, current_user, assigned_user).deliver_later
-      @product.users.each do |user|
-        next if user == current_user
 
-        UserMailer.task_assignment_email(user, @task, current_user, assigned_user).deliver_later
+      # Send email to the newly assigned user
+      UserMailer.task_assignment_email(user, @task, current_user, assigned_user).deliver_later
+
+      # Send email to all users tagged on the product, except the current user
+      @product.users.each do |product_user|
+        next if product_user == current_user
+
+        UserMailer.task_assignment_email(product_user, @task, current_user, assigned_user).deliver_later
       end
+
       redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully assigned.'
     end
   end
@@ -86,12 +91,11 @@ class TasksController < ApplicationController
     @task.board_id = params[:status]
     @task.save
 
-    assigned_user = @task.users.first # Assuming the first user is the assigned user
-    UserMailer.add_state_email(@task.user, @task, current_user, assigned_user).deliver_later
+    UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
     @product.users.each do |user|
       next if user == current_user
 
-      UserMailer.add_state_email(user, @task, current_user, assigned_user).deliver_later
+      UserMailer.add_state_email(user, @task, current_user).deliver_later
     end
     redirect_to product_path(@product)
   end
