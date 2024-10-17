@@ -1,6 +1,5 @@
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
 <div class="gap-2">
-
   <% if can? :read, @ticket %>
     <%= form_with model: @ticket, url: update_status_project_ticket_path(@project, @ticket), method: :post, data: { turbo: false } do |f| %>
       <%= f.select :status, options_for_select(['Assigned', 'Awaiting Build', 'Client Confirmation Pending', 'Closed', 'Declined', 'New', 'On-Hold', 'QA Testing', 'Reopened', 'Resolved', 'Under Development', 'Work in Progress'], @ticket.status), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
@@ -8,5 +7,15 @@
     <% end %>
   <% end %>
 </div>
-
 <% end %>
+<% unless current_user.has_role? :admin || current_user.has_role?
+     :client %>
+  <% if @ticket.status == 'Client Confirmation Pending' %>
+    <div class="gap-2">
+      <%=  form_with model: @ticket, url: update_status_project_ticket_path(@project, @ticket), method: :post, data: { turbo: false } do |f|  %>
+      <%= f.select :status, options_for_select(%w[Reopened Resolved], @ticket.status), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
+      <%=  f.submit 'Update', class: 'w-full border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+      <%  end  %>
+    </div>
+  <% end %>
+<%  end %>
