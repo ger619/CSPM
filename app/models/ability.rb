@@ -22,7 +22,7 @@ class Ability
       can :read, Project
       can %i[create read], Ticket
       can %i[edit delete], Ticket, user_id: user.id
-      cannot :update_status, Ticket
+      can :update_status, Ticket
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product
       can :read, Product

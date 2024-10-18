@@ -20,6 +20,11 @@ class Ticket < ApplicationRecord
 
   # after_create :set_default_status, if: :new_record?
 
+  # Calculate the number of days left that should be calculated as per the end date
+  def number_of_days_left
+    end_date - Date.today if end_date.present?
+  end
+
   private
 
   # To ensure that the ticket content is within the limit i.e. 800 characters
