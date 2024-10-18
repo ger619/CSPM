@@ -78,7 +78,7 @@ class ProductController < ApplicationController
       @product.user = current_user
       @product.users << user
 
-      assigned_user = @product.users.first # Assuming the first user is the assigned user
+      assigned_user = user # send an email to all users assigned to the product
       UserMailer.assign_product_email(@product.user, @product, current_user, assigned_user).deliver_later
       @product.users.each do |product_user|
         next if product_user == current_user

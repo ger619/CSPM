@@ -1,7 +1,6 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project # This line ensures that the project is set before any action is taken
-  # This line ensures that the ticket is set before any action is taken
   before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag update_status]
   load_and_authorize_resource
 
@@ -76,6 +75,12 @@ class TicketsController < ApplicationController
       @ticket.users.clear
       @ticket.users << user
       UserMailer.ticket_assignment_email(user, @ticket, current_user).deliver_later
+
+      @project.users.each do |project_user|
+        next if project_user == current_user
+
+        UserMailer.ticket_assignment_email(project_user, @ticket, current_user).deliver_later
+      end
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end
