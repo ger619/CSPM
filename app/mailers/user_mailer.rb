@@ -52,11 +52,10 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'You have been assigned to a new task')
   end
 
-  def add_state_email(user, task, current_user, assigned_user)
+  def add_state_email(user, task, current_user)
     @user = user
     @task = task
     @current_user = current_user
-    @assigned_user = assigned_user
     @url = product_board_task_url(@task.board.product, @task.board, @task)
     mail(to: @user.email, subject: 'Task State Updated')
   end
