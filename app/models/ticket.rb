@@ -22,7 +22,9 @@ class Ticket < ApplicationRecord
 
   # Calculate the number of days left that should be calculated as per the end date
   def number_of_days_left
-    end_date - Date.today if end_date.present?
+    return 0 unless end_date.present?
+
+    (end_date - Date.today).to_i
   end
 
   private
