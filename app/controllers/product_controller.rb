@@ -78,10 +78,6 @@ class ProductController < ApplicationController
       @product.user = current_user
       @product.users << user
 
-      # assigned_user = @task.users.first # Assuming the first user is the assigned user
-      # UserMailer.task_assignment_email(@task.user, @task, current_user, assigned_user).deliver_later
-      # Send email to the newly assigned user
-      #
       assigned_user = @product.users.first # Assuming the first user is the assigned user
       UserMailer.assign_product_email(@product.user, @product, current_user, assigned_user).deliver_later
       @product.users.each do |product_user|

@@ -10,7 +10,7 @@
 <% end %>
 <% unless current_user.has_role? :admin || current_user.has_role?
      :client %>
-  <% if @ticket.status == 'Client Confirmation Pending' %>
+  <% if @ticket.status == 'Client Confirmation Pending' or @ticket.status == 'Resolved' or @ticket.status == 'Reopened' %>
     <div class="gap-2">
       <%=  form_with model: @ticket, url: update_status_project_ticket_path(@project, @ticket), method: :post, data: { turbo: false } do |f|  %>
       <%= f.select :status, options_for_select(%w[Reopened Resolved], @ticket.status), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>

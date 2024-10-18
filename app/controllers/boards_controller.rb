@@ -20,7 +20,7 @@ class BoardsController < ApplicationController
         format.html { redirect_to product_path(@product), notice: 'Board was successfully created.' }
       else
         # flash.now[:alert] = @board.errors.full_messages.join(', ').to_s
-        format.html { redirect_to product_path(@product), notice: 'Status already exist created.' }
+        format.html { redirect_to product_path(@product), notice: 'Board already exist created.' }
       end
     end
   end
