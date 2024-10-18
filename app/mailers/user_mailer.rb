@@ -2,19 +2,21 @@
 class UserMailer < ApplicationMailer
   default from: 'cspm@craftsilicon.com'
   # From Project Controller
-  def assignment_email(user, project, current_user)
+  def assignment_email(user, project, current_user, assigned_user)
     @user = user
     @project = project
     @current_user = current_user
+    @assigned_user = assigned_user
     @url = project_url(@project)
     mail(to: @user.email, subject: 'You have been assigned to a new project')
   end
 
   # From Ticket Controller
-  def ticket_assignment_email(user, ticket, current_user)
+  def ticket_assignment_email(user, ticket, current_user, assigned_user)
     @user = user
     @ticket = ticket
     @current_user = current_user
+    @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @user.email, subject: 'You have been assigned to a new ticket')
   end
@@ -50,10 +52,11 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'You have been assigned to a new task')
   end
 
-  def add_state_email(user, task, current_user)
+  def add_state_email(user, task, current_user, assigned_user)
     @user = user
     @task = task
     @current_user = current_user
+    @assigned_user = assigned_user
     @url = product_board_task_url(@task.board.product, @task.board, @task)
     mail(to: @user.email, subject: 'Task State Updated')
   end
