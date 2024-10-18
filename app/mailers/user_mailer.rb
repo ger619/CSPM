@@ -12,10 +12,11 @@ class UserMailer < ApplicationMailer
   end
 
   # From Ticket Controller
-  def ticket_assignment_email(user, ticket, current_user)
+  def ticket_assignment_email(user, ticket, current_user, assigned_user)
     @user = user
     @ticket = ticket
     @current_user = current_user
+    @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @user.email, subject: 'You have been assigned to a new ticket')
   end

@@ -59,7 +59,7 @@ class TasksController < ApplicationController
       user = User.find(params[:user_id])
       @task.users.clear
       @task.users << user
-      assigned_user = user # Assuming the first user is the assigned user
+      assigned_user = user # Sending to all users added to the product
 
       # Send email to the newly assigned user
       UserMailer.task_assignment_email(user, @task, current_user, assigned_user).deliver_later

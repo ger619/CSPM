@@ -74,12 +74,14 @@ class TicketsController < ApplicationController
       user = User.find(params[:user_id])
       @ticket.users.clear
       @ticket.users << user
-      UserMailer.ticket_assignment_email(user, @ticket, current_user).deliver_later
+
+      assigned_user = user # send an email to all users assigned to the ticket
+      UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
       @project.users.each do |project_user|
         next if project_user == current_user
 
-        UserMailer.ticket_assignment_email(project_user, @ticket, current_user).deliver_later
+        UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
       end
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
