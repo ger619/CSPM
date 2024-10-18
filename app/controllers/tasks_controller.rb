@@ -91,7 +91,6 @@ class TasksController < ApplicationController
     @task.board_id = params[:status]
     @task.save
 
-
     UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
     @product.users.each do |product_user|
       next if product_user == current_user
