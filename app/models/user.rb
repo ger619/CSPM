@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
   has_many :comments, through: :roles, source: :resource, source_type: :Comment
+
   # Products to Projects
   has_many :products, through: :roles, source: :resource, source_type: :Product
   has_many :boards, through: :roles, source: :resource, source_type: :Board
@@ -31,7 +32,6 @@ class User < ApplicationRecord
 
   after_initialize :set_default_profile_completed, if: :new_record?
   validate :email_domain_must_be_certified, on: %i[create invitation_create]
-  has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
 
   # To show which user invited a user
 

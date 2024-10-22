@@ -1,0 +1,11 @@
+<% @comment.each do |comments| %>
+  <div class="comment">
+    <p><%= comments.what %></p>
+    <p><%= comments.why %></p>
+    <p><%= comments.what %></p>
+    <p><%= comments.content.to_plain_text.truncate(100)  %>
+    <p><%= comments.user.name %></p>
+    <p><%= comments.user.email %></p>
+    <p><%= comments.created_at.strftime("%d %b. %Y") %></p>
+  </div>
+<% end %>

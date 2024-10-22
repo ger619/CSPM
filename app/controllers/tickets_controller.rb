@@ -19,6 +19,8 @@ class TicketsController < ApplicationController
     @page = (params[:page] || 1).to_i
     @total_pages = (@issue.count / @per_page.to_f).ceil
     @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
+
+    @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
   end
 
   def new

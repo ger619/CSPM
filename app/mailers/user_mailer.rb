@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = project_url(@project)
-    mail(to: @user.email, subject: 'You have been assigned to a new project')
+    mail(to: @user.email, subject: 'Support Desk Assignment')
   end
 
   # From Ticket Controller
@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @user.email, subject: 'You have been assigned to a new ticket')
+    mail(to: @user.email, subject: 'Ticket Assignment')
   end
 
   # From Ticket Controller
@@ -39,7 +39,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = product_url(@product)
-    mail(to: @user.email, subject: 'You have been assigned to a new product')
+    mail(to: @user.email, subject: 'Project Assignment')
   end
 
   # From Task Controller

@@ -1,4 +1,4 @@
-  <div>
+<div>
   <h3>Assigned Agents</h3>
     <div class="flex flex-wrap gap-2 mt-2">
       <% @ticket.users.each do |user| %>
@@ -20,7 +20,6 @@
             <% available_users = User.with_agent_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)).distinct %>
             <% if available_users.any? %>
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-
               <div class="">
                 <%= submit_tag "ASSIGN USER", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
               </div>
@@ -29,20 +28,18 @@
         <% end %>
       </div>
       <% if @ticket.users.any? %>
-          <div class="text-xs flex flex-wrap gap-2">
-            <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
-                <%= label_tag :user_id, "REMOVE USER" %>
-              <div class="flex flex-wrap">
-                <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-                <%= submit_tag "REMOVE", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
-              </div>
-            <% end %>
-
-          </div>
-
+        <div class="text-xs flex flex-wrap gap-2">
+          <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
+            <%= label_tag :user_id, "REMOVE USER" %>
+            <div class="flex flex-wrap">
+              <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+              <%= submit_tag "REMOVE", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
+            </div>
+          <% end %>
+        </div>
       <% end %>
     </div>
-      <% end %>
-    </div>
+    <% end %>
+</div>
 
 
