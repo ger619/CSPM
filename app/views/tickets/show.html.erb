@@ -74,7 +74,9 @@
   </div>
   <div class="w-full col-span-1 h-full  place-content-center w-full">
     <%= render 'tickets/ticket_action' %>
-    <%= render partial: 'comments/comments' %>
+    <% if @ticket.status == "Work in Progress" %>
+      <%= render partial: 'comments/comments' %>
+    <% end %>
   </div>
 </div>
 
