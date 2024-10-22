@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         post :update_status
       end
       resources :issues
+      resources :comments
     end
   end
 

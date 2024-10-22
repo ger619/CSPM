@@ -5,6 +5,7 @@ class Project < ApplicationRecord
 
   has_many :tickets, dependent: :destroy
   has_many :issues, foreign_key: :project_id, class_name: 'Issue', dependent: :destroy
+  has_many :comments, foreign_key: :project_id, class_name: 'Comment', dependent: :destroy
 
   has_rich_text :content
 
