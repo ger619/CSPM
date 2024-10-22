@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :nullify
   has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :nullify
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :nullify
+  has_many :comments, foreign_key: :user_id, class_name: 'Comment', dependent: :nullify
   # Products to Projects
   has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
   has_many :boards, foreign_key: :user_id, class_name: 'Board', dependent: :nullify
@@ -19,6 +20,8 @@ class User < ApplicationRecord
   has_many :projects, through: :roles, source: :resource, source_type: :Project
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
+  has_many :comments, through: :roles, source: :resource, source_type: :Comment
+
   # Products to Projects
   has_many :products, through: :roles, source: :resource, source_type: :Product
   has_many :boards, through: :roles, source: :resource, source_type: :Board
@@ -29,7 +32,6 @@ class User < ApplicationRecord
 
   after_initialize :set_default_profile_completed, if: :new_record?
   validate :email_domain_must_be_certified, on: %i[create invitation_create]
-  has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
 
   # To show which user invited a user
 

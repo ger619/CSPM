@@ -9,7 +9,7 @@ class Ability
       can %i[create read unassign_user unassign_user], Project
       can %i[edit delete], Project, user_id: user.id
       can %i[create read assign_tag unassign_tag update_status], Ticket
-      can %i[edit delete], Ticket, user_id: user.id
+      can %i[edit destroy], Ticket, user_id: user.id
       can %i[create read], Issue
       can %i[edit delete], Issue, user_id: user.id
       can %i[create read add_user remove_user edit update], Product
