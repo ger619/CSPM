@@ -74,8 +74,15 @@
   </div>
   <div class="w-full col-span-1 h-full  place-content-center w-full">
     <%= render 'tickets/ticket_action' %>
-    <% if @ticket.status == 'Awaiting Build' or @ticket.status == 'On-Hold' or @ticket.status == 'Closed' or @ticket.status == 'Declined' or @ticket.status == 'Reopened' or @ticket.status == 'QA Testing' or @ticket.status == 'Under Development' or @ticket.status == 'Work in Progress' %>
-      <%= render partial: 'comments/comment' %>
+    <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
+      <% if @ticket.status == 'Awaiting Build' or @ticket.status == 'On-Hold' or @ticket.status == 'Closed' or @ticket.status == 'Declined' or @ticket.status == 'Reopened' or @ticket.status == 'QA Testing' or @ticket.status == 'Under Development' or @ticket.status == 'Work in Progress' or @ticket.status == 'Client Confirmation Pending' %>
+        <%= render partial: 'comments/comment' %>
+      <% end %>
+      <% else %>
+      <% if @ticket.status == 'Closed' or @ticket.status == 'Declined' or @ticket.status == 'Reopened' or @ticket.status == 'QA Testing' or @ticket.status == 'Under Development' or @ticket.status == 'Work in Progress' %>
+        <%= render partial: 'comments/comment' %>
+      <% end %>
+
     <% end %>
   </div>
 </div>

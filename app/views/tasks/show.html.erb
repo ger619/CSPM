@@ -1,48 +1,56 @@
-<div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 bg-white w-full h-full">
-  <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
-    <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-      <div class="flex justify-center p-1">
-        <% if @task.image.present? %>
-          <%= image_tag(@task.image, class: 'object-cover w-[300px] h-[200px]') %>
-        <% end %>
-      </div>
-      <h3 class="text-lg font-semibold "><%= @task.name %></h3>
-      <p class="my-4"><%= @task.description %></p>
-      <div class="text-sm text-gray-500 dark:text-gray-400 ">
-        <%= @task.topic %>
-      </div>
-    </blockquote>
-    <figcaption class="flex items-center justify-center ">
-      <% @task.users.each do |user| %>
-        <% if user.profile_picture.attached? %>
-          <%= image_tag user.profile_picture, class: 'w-12 h-12 rounded-full' %>
-        <% elsif user.name_initials.present? %>
-          <p class="rounded-full p-1 capitalize font-bold"><%= user.name_initials %></p>
-        <% else %>
-          <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
-        <% end %>
-      <% end %>
-      <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
-        <div>
+
+<div class="flex flex-col h-screen sm:flex-row max-w-7xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 p-2">
+  <div class="p-2 w-1/2">
+    <% if @task.image.present? %>
+      <%= image_tag(@task.image, class: 'rounded object-cover w-full') %>
+    <% end %>
+    <%= render 'tasks/add_task' %>
+    <%= render 'tasks/add_state' %>
+  </div>
+  <div class="sm:p-4 p-2 sm:w-1/2 flex flex-col justify-between">
+    <div>
+      <a href="#"
+         class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 hover:underline"><%= @task.name %></a>
+      <p class="mt-2 text-sm"><%= @task.description %>
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <div class="flex items-center">
+        <div class="flex items-center">
           <% @task.users.each do |user| %>
+            <% if user.profile_picture.attached? %>
+              <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
+            <% elsif user.name_initials.present? %>
+              <p class="rounded-full p-1 capitalize font-bold"><%= user.name_initials %></p>
+            <% else %>
+              <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
+            <% end %>
+          <% end %>
+          <div class="mx-2 font-semibold">
+            <% @task.users.each do |user| %>
               <% if user.name.present? %>
                 <%= user.name %>
               <% else %>
                 <%= truncate(user.email, length: 15, omission: '...') %>
               <% end %>
-          <% end %>
+            <% end %>
+          </div>
         </div>
+        <span class="mx-1 text-xs capitalize">
+          <%= @task.end_date.strftime(" %d %b %Y") %>
+        </span>
+        <span class="hover:cursor-pointer relative sm:left-12 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f2f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg
+            >
+        </span>
       </div>
-    </figcaption>
-  </figure>
-  <%= render 'tasks/add_task' %>
-  <%= render 'tasks/add_state' %>
-
-  <div class="flex justify-end p-2">
-    <%= link_to 'Edit Task', edit_product_board_task_path(@product, @board, @task), class: 'border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold cursor-pointer' %>
+    </div>
   </div>
-
-
-  <%#= render 'tasks/add_comment' %>
-
 </div>
