@@ -1,0 +1,15 @@
+<%= button_to 'Add New Comment +', new_project_ticket_comment_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
+
+<% @comment.each do |comment| %>
+    <% if comment.ticket.status == comment.status %>
+      <div class="comment">
+        <p><%= comment.status %></p>
+        <p><%= comment.what %></p>
+        <p><%= comment.why %></p>
+        <p><%= comment.content.to_plain_text.truncate(100) %></p>
+        <p><%= comment.user.name %></p>
+        <p><%= comment.created_at.strftime("%d %b. %Y") %></p>
+      </div>
+    <% end %>
+<% end %>
+

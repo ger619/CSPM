@@ -12,6 +12,7 @@ class CommentsController < ApplicationController
     @comment = @ticket.comments.new(comment_params)
     @comment.project = @project
     @comment.user = current_user
+    @comment.status = @ticket.status
 
     respond_to do |format|
       if @comment.save
