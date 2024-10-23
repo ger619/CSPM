@@ -74,7 +74,9 @@
   </div>
   <div class="w-full col-span-1 h-full  place-content-center w-full">
     <%= render 'tickets/ticket_action' %>
-    <%= render partial: 'comments/comment' %>
+    <% if @ticket.status == 'Awaiting Build' or @ticket.status == 'On-Hold' or @ticket.status == 'Closed' or @ticket.status == 'Declined' or @ticket.status == 'Reopened' or @ticket.status == 'QA Testing' or @ticket.status == 'Under Development' or @ticket.status == 'Work in Progress' %>
+      <%= render partial: 'comments/comment' %>
+    <% end %>
   </div>
 </div>
 
