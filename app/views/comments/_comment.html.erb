@@ -1,15 +1,45 @@
-<%= button_to 'Add New Comment +', new_project_ticket_comment_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
+<%= button_to 'Add New Comment +', new_project_ticket_comment_path(@project, @ticket), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
 
-<% @comment.each do |comment| %>
+<div id="alert-additional-content-1" class="p-4 mb-4 border border-gray-900 rounded-lg dark:border-blue-800" role="alert">
+  <% @comment.limit(4).each do |comment| %>
     <% if comment.ticket.status == comment.status %>
-      <div class="comment">
-        <p><%= comment.status %></p>
-        <p><%= comment.what %></p>
-        <p><%= comment.why %></p>
-        <p><%= comment.content.to_plain_text.truncate(100) %></p>
-        <p><%= comment.user.name %></p>
-        <p><%= comment.created_at.strftime("%d %b. %Y") %></p>
+      <div class="flex items-center gap-1 pt-2">
+        <svg class="flex-shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Info</span>
+        <h3 class="text-lg font-medium"><%= comment.status %></h3>
+      </div>
+      <div class="mt-2 mb-4 text-md font-semibold">
+        What?:
+        <span class="text-sm font-light">
+          <%= comment.what %>
+        </span>
+      </div>
+      <div class="mt-2 mb-4 text-md font-semibold">
+        Why?:
+        <span class="text-sm font-light">
+          <%= comment.why %>
+        </span>
+      </div>
+      <div class="mt-2 mb-4 text-md font-semibold">
+        Comments:
+        <span class="text-sm font-light">
+          <%= comment.content.to_plain_text.truncate(200) %>
+        </span>
+      </div>
+      <div class="flex">
+        <button type="button" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="me-2 h-3 w-3">
+            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+          </svg>
+          <%= comment.user.name %>
+        </button>
+        <div class="bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 text-center  dark:focus:ring-blue-800 pb-3" data-dismiss-target="#alert-additional-content-1" aria-label="Close">
+          <%= comment.created_at.strftime("%d %b %Y at %I:%M %p") %>
+        </div>
+
       </div>
     <% end %>
-<% end %>
-
+  <% end %>
+</div>

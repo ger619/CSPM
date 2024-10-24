@@ -1,4 +1,6 @@
 <%= form_with(model: [project, ticket, ticket.comments.build]) do |f|%>
+
+  <%= link_to "Back", project_ticket_path(@project.id, @ticket.id) %>
   <div class="relative z-0 w-full mb-6 group">
     <%= @ticket.status %>
     <%= f.hidden_field :status, value: ticket.status %>
@@ -12,7 +14,7 @@
   <h3 class="pb-2 font-bold"> Solution</h3>
   <div class="relative z-0 w-full mb-6 group">
     <div data-controller="text-limit" data-text-limit-limit-value="800">
-      <p id="char-count">0/800</p>
+      <p id="char-count">0/200</p>
       <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]'%>
     </div>
   </div>

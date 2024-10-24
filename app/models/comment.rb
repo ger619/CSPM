@@ -7,8 +7,8 @@ class Comment < ApplicationRecord
   private
 
   def content_length_within_limit
-    return unless content.to_plain_text.length > 800
+    return unless content.to_plain_text.length > 200
 
-    errors.add(:content, 'must be less than or equal to 800 characters')
+    errors.add(:content, 'must be less than or equal to 200 characters')
   end
 end
