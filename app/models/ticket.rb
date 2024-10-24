@@ -22,11 +22,6 @@ class Ticket < ApplicationRecord
   # after_create :set_default_status, if: :new_record?
 
   # Calculate the number of days left that should be calculated as per the end date
-  def number_of_days_left
-    return 0 unless end_date.present?
-
-    (end_date - Date.today).to_i
-  end
 
   private
 

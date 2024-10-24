@@ -68,13 +68,10 @@
           <%= ticket.content.to_plain_text.truncate(50) %>
         </td>
         <td class="px-6 py-4">
-          <% if ticket.end_date.present? %>
-          <%= ticket.end_date.strftime(" %d-%b-%Y") %>
-          <% end %>
+
         </td>
 
         <td class="px-6 py-4">
-          <%= ticket.number_of_days_left %> days left
         </td>
 
         <td class="px-6 py-4 font-bold">
