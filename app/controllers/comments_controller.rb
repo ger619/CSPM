@@ -17,6 +17,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.save
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Comment was successfully created.' }
+        format.turbo_stream { redirect_to project_ticket_path(@project, @ticket), notice: 'Comment was successfully created.' }
       else
         format.html { render 'new', status: :unprocessable_entity }
       end
