@@ -77,7 +77,7 @@ class TicketsController < ApplicationController
       creator = @ticket.user
 
       # Clear users except the creator
-      @ticket.users = @ticket.users.select { |u| u == creator }
+      @ticket.users = [creator]
 
       # Add the new user
       @ticket.users << user unless @ticket.users.include?(user)
