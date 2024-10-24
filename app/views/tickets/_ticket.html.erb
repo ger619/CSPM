@@ -28,6 +28,10 @@
       <th scope="col" class="px-6 py-3">
         STATUS
       </th>
+      <th scope="col" class="px-6 py-3">
+        EDIT
+      </th>
+
       <% if can? :edit, @ticket %>
       <th scope="col" class="px-6 py-3">
         EDIT
@@ -44,7 +48,7 @@
     <% @ticket.each do |ticket| %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          <%= link_to ticket.created_at.strftime("%d-%b-%Y"), project_ticket_path(ticket.project, ticket)   %>
+          <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket)   %>
         </th>
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
@@ -112,8 +116,13 @@
               <%= ticket.status %>
             </p>
           <% end %>
+
         </td>
-        <% if can?(:read, ticket) && ticket.user_id == current_user.id %>
+
+        <td class="px-4 py-4">
+          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
+        </td>
+        <% if can?(:read, ticket) && ticket.user_id == current_user.id or current_user.has_role? :admin %>
           <td class="px-4 py-4">
             <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
           </td>
