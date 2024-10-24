@@ -20,9 +20,10 @@ class Ability
       can :manage, Task
     elsif user.has_role? :client
       can :read, Project
-      can %i[create read], Ticket
-      can %i[edit delete], Ticket, user_id: user.id
-      can :update_status, Ticket
+      can :edit, Ticket do |ticket|
+        user.has_role?(:creator, ticket) && ticket.user_id == user.id
+      end
+      can %i[update_status read create], Ticket
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product
       can :read, Product
