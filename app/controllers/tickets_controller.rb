@@ -74,8 +74,13 @@ class TicketsController < ApplicationController
       @ticket = @project.tickets.find(params[:id])
       @ticket.user = current_user
       user = User.find(params[:user_id])
-      @ticket.users.clear
-      @ticket.users << user
+      creator = @ticket.user
+
+      # Clear users except the creator
+      @ticket.users = [creator]
+
+      # Add the new user
+      @ticket.users << user unless @ticket.users.include?(user)
 
       assigned_user = user # send an email to all users assigned to the ticket
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
@@ -130,7 +135,7 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:issue, :priority, :start_date, :content, :project_id, :user_id, :ticket_image,
-                                   :status, :end_date, user_ids: [])
+    params.require(:ticket).permit(:issue, :priority, :content, :project_id, :user_id, :ticket_image,
+                                   :status, user_ids: [])
   end
 end
