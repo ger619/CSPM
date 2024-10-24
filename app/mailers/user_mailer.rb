@@ -59,4 +59,12 @@ class UserMailer < ApplicationMailer
     @url = product_board_task_url(@task.board.product, @task.board, @task)
     mail(to: @user.email, subject: 'Task State Updated')
   end
+
+  def new_comment_email
+    @comment = params[:comment]
+    @user = User.where(id: params[:user_ids])
+    @user.each do |user|
+      mail(to: user.email, subject: 'New Comment')
+    end
+  end
 end
