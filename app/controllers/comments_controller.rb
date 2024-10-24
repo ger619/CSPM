@@ -9,13 +9,15 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @comment = @ticket.comments.new(comment_params)
+    @comment = @ticket.comments.new(comment_params.except(:user_ids))
     @comment.project = @project
     @comment.user = current_user
     @comment.status = @ticket.status
 
     respond_to do |format|
       if @comment.save
+        # Send email to selected users
+        UserMailer.with(comment: @comment, user_ids: comment_params[:user_ids]).new_comment_email.deliver_later
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Comment was successfully created.' }
       else
         format.html { render 'new', status: :unprocessable_entity }
@@ -60,6 +62,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:ticket_id, :what, :why, :content, :user_id, :project_id)
+    params.require(:comment).permit(:ticket_id, :what, :why, :content, :user_id, :project_id, user_ids: [])
   end
 end
