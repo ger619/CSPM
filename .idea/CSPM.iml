@@ -101,6 +101,7 @@
     <orderEntry type="library" scope="PROVIDED" name="orm_adapter (v0.5.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ostruct (v0.6.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pagy (v6.5.0, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="paper_trail (v15.2.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="parallel (v1.26.3, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="parser (v3.3.5.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="passenger (v6.0.23, rbenv: 3.3.5) [gem]" level="application" />
@@ -125,6 +126,7 @@
     <orderEntry type="library" scope="PROVIDED" name="redis-client (v0.22.2, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="regexp_parser (v2.9.2, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="reline (v0.5.10, rbenv: 3.3.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="request_store (v1.7.0, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="responders (v3.1.1, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rexml (v3.3.7, rbenv: 3.3.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rolify (v6.0.1, rbenv: 3.3.5) [gem]" level="application" />
@@ -209,6 +211,9 @@
         <option value="model" />
         <option value="mongoid:devise" />
         <option value="mongoid:devise_invitable" />
+        <option value="paper_trail:install" />
+        <option value="paper_trail:migration" />
+        <option value="paper_trail:update_item_subtype" />
         <option value="pundit:install" />
         <option value="pundit:policy" />
         <option value="resource" />
@@ -292,6 +297,9 @@
         <option value="model" />
         <option value="mongoid:devise" />
         <option value="mongoid:devise_invitable" />
+        <option value="paper_trail:install" />
+        <option value="paper_trail:migration" />
+        <option value="paper_trail:update_item_subtype" />
         <option value="pundit:install" />
         <option value="pundit:policy" />
         <option value="resource" />
