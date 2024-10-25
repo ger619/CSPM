@@ -7,6 +7,8 @@ class Ticket < ApplicationRecord
   has_rich_text :content
   has_one_attached :image
 
+  has_paper_trail
+
   resourcify
   # To ensure that the ticket are connected to the user and their roles well defined
   has_many :users, through: :roles, class_name: 'User', source: :users
