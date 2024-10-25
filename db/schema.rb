@@ -111,18 +111,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_075600) do
     t.string "why"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "user_id", null: false
+    t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
-  create_table "holidays", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.date "date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
