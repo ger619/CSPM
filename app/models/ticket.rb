@@ -30,13 +30,11 @@ class Ticket < ApplicationRecord
     return unless status == 'assigned' && initial_response_deadline.nil?
 
     update(initial_response_deadline: DateTime.now)
-
   end
 
   def calculate_initial_response_time
-    #(initial_response_deadline - created_at).to_i
+    # (initial_response_deadline - created_at).to_i
   end
-
 
   private
 
