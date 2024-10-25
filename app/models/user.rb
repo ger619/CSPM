@@ -59,6 +59,8 @@ class User < ApplicationRecord
   has_many :clients
 
   def assign_default_role
+    return if invited_by_id.present?
+
     add_role(:client) if roles.blank?
   end
 

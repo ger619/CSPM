@@ -76,8 +76,11 @@ class TicketsController < ApplicationController
       user = User.find(params[:user_id])
       creator = @ticket.user
 
-      # Clear users except the creator
-      @ticket.users = [creator]
+      # Filter out users who have the role of creator
+      creators = @ticket.users.select { |u| u.has_role?(:creator, @ticket) }
+
+      # Clear users except the creators
+      @ticket.users = creators
 
       # Add the new user
       @ticket.users << user unless @ticket.users.include?(user)
@@ -111,6 +114,7 @@ class TicketsController < ApplicationController
         UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
       respond_to do |format|
+        current_user.add_role :editor, @ticket
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }) }
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
       end

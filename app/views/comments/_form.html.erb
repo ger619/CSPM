@@ -1,4 +1,4 @@
-<% if current_user.has_role? :admin || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
+<% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
 <%= form_with(model: [project, ticket, ticket.comments.build]) do |f| %>
   <%= link_to "Back", project_ticket_path(@project.id, @ticket.id) %>
   <div class="relative z-0 w-full mb-6 group">
