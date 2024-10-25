@@ -42,7 +42,9 @@ class UsersController < ApplicationController
       user_params
     else
       user_params.tap do |params|
-        params[:role_ids] -= [Role.find_by(name: 'admin').id.to_s]
+        if params[:role_ids].present? && (admin_role = Role.find_by(name: 'admin'))
+          params[:role_ids] -= [admin_role.id.to_s]
+        end
       end
     end
   end

@@ -1,12 +1,12 @@
-// app/javascript/controllers/text_limit_controller.js
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
   static targets = ['content']
 
-  static values = { limit: Number }
+  static values = { limit: { type: Number, default: 800 } }
 
   connect() {
+    this.limitValue = Math.min(this.limitValue, 800); // Ensure limit does not exceed 800
     this.updateCounter();
     this.contentTarget.addEventListener('input', (event) => this.enforceLimit(event));
   }

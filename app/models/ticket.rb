@@ -23,6 +23,19 @@ class Ticket < ApplicationRecord
 
   # Calculate the number of days left that should be calculated as per the end date
 
+  # Initial Response Time SLA update
+  # The field should be update with the current datetime when user is assigned and status is changed to assigned
+
+  def update_initial_response_time
+    return unless status == 'assigned' && initial_response_deadline.nil?
+
+    update(initial_response_deadline: DateTime.now)
+  end
+
+  def calculate_initial_response_time
+    # (initial_response_deadline - created_at).to_i
+  end
+
   private
 
   # To ensure that the ticket content is within the limit i.e. 800 characters

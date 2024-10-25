@@ -1,3 +1,5 @@
+<%= @ticket.initial_response_deadline %>
+
 <%= render 'issues/issue_topbar' %>
 <%= render 'layouts/alert', class: "" %>
 <div class="grid md:grid-cols-3 md:items-center ">
@@ -59,11 +61,22 @@
         <% end %>
       </span>
     </div>
+    <div>
+      <p>SLA Initial Response Deadline</p>
+      <p class="font-bold">
+        <%= @ticket.initial_response_deadline %>
+
+      </p>
+
+    </div>
+
     <div class="mb-2.5 font-bold capitalize">Content:
       <span class="font-extralight">
         <%= @ticket.content.to_plain_text.truncate(800) %>
-      </span></div>
+      </span>
     </div>
+    </div>
+
     <div class="w-full col-span-1 col-span-1 h-full p-2">
       <%= render 'tickets/assign_people_tickets' %>
     </div>

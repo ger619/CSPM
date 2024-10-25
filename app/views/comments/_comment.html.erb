@@ -2,7 +2,7 @@
   <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || (current_user.has_role?('client') && (@ticket.status == 'Reopened' || @ticket.status == 'Closed')) %>
     <%= button_to 'Add New Comment +', new_project_ticket_comment_path(@project, @ticket), method: :get, data: { turbo_frame: 'modal' }, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded' %>
   <% end %>
-
+<% if @comment.present? %>
 
 <div id="alert-additional-content-1" class="p-4 mb-4 border border-gray-900 rounded-lg dark:border-blue-800" role="alert">
   <% @comment.limit(4).each do |comment| %>
@@ -65,3 +65,4 @@
     <% end %>
   <% end %>
 </div>
+  <% end %>
