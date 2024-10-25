@@ -9,9 +9,7 @@ class TicketsController < ApplicationController
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
-               @ticket.issues.left_joins(:rich_text_content).where('action_text_rich_texts.content ILIKE ?',
-                                                                   "%#{params[:query]}%")
-
+               @ticket.issues.left_joins(:rich_text_content).where('action_text_rich_texts.content ILIKE ?', "%#{params[:query]}%")
              else
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
