@@ -19,13 +19,11 @@
       <%= render 'layouts/sidebar' %>
       <div class="p-8 sm:ml-64">
         <%= yield %>
+        <%#= turbo_frame_tag 'modal' %>
 
-        <%= turbo_frame_tag 'modal' %>
-        <%= javascript_include_tag "loading" %>
       </div>
-
-
     </main>
+    <%= javascript_include_tag "loading" %>
 
   </body>
 </html>
