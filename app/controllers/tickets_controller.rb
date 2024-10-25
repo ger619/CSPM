@@ -74,13 +74,13 @@ class TicketsController < ApplicationController
       @ticket = @project.tickets.find(params[:id])
       @ticket.user = current_user
       user = User.find(params[:user_id])
-      creator = @ticket.user
+      @ticket.user
 
       # Filter out users who have the role of creator
-      creators = @ticket.users.select { |u| u.has_role?(:creator, @ticket) }
+      creator = @ticket.users.select { |u| u.has_role?(:creator, @ticket) }
 
       # Clear users except the creators
-      @ticket.users = creators
+      @ticket.users = creator
 
       # Add the new user
       @ticket.users << user unless @ticket.users.include?(user)
