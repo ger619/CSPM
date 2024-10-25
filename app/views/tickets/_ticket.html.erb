@@ -116,8 +116,6 @@
 
         <td class="px-4 py-4 text-center">
           <%= ticket.versions.where(event: 'update').size %>
-
-
         </td>
         <td class="px-4 py-4 text-center">
           <%= ticket.versions.last&.created_at ? ticket.versions.last.created_at.strftime("%T") : 'Never' %>
