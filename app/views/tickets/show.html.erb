@@ -30,35 +30,56 @@
     <div class="mb-2.5 font-bold uppercase flex">Status:
       <span class="font-medium ml-1">
         <% case @ticket.status %>
-        <% when 'Resolved', 'Closed' %>
-          <p class='bg-green-500 text-center text-white font-bold rounded p-1'>
-            <%= @ticket.status %>
-          </p>
-        <% when 'New', 'Reopened' %>
-          <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1">
-            <%= @ticket.status %>
-          </p>
-        <% when 'Work in Progress', 'Under Development' %>
-          <p class='bg-yellow-500 text-center text-slate-100 font-bold rounded p-1'>
-            <%= @ticket.status %>
-          </p>
-        <% when 'Awaiting Build', 'QA Testing' %>
-          <p class='bg-blue-500 text-center text-slate-100 font-bold rounded p-1'>
-            <%= @ticket.status %>
-          </p>
-        <% when 'Client Confirmation Pending' %>
-          <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1'>
-            <%= @ticket.status %>
-          </p>
-        <% when 'Assigned', 'On-Hold' %>
-          <p class='bg-orange-500 text-center text-slate-100 font-bold rounded p-1'>
-            <%= @ticket.status %>
-          </p>
-        <% when 'Declined'%>
-          <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1'>
-            <%= @ticket.status %>
-          </p>
-        <% end %>
+          <% when 'Resolved' %>
+            <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+            <% when 'Closed' %>
+            <p class='bg-black text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'Reopened' %>
+            <p class="bg-red-900 text-center text-slate-100 font-bold rounded p-1">
+              <%= @ticket.status %>
+            </p>
+            <% when 'New'  %>
+            <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1">
+              <%= @ticket.status %>
+            </p>
+          <% when  'Under Development' %>
+            <p class='bg-blue-300 text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'Work in Progress' %>
+            <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'QA Testing' %>
+            <p class='bg-pink-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'Awaiting Build' %>
+            <p class='text-center text-gray-900 font-bold rounded p-1 border border-black '>
+              <%= @ticket.status %>
+            </p>
+          <% when 'Client Confirmation Pending' %>
+            <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'On-Hold' %>
+            <p class='bg-yellow-300 text-center text-black font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'Assigned', 'On-Hold' %>
+            <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% when 'Declined'%>
+            <p class='bg-black text-center text-slate-100 font-bold rounded p-1'>
+              <%= @ticket.status %>
+            </p>
+          <% end %>
+
       </span>
     </div>
     <div>

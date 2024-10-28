@@ -55,13 +55,13 @@
         </th>
         <td class="px-6 py-4 ">
           <% if ticket.priority == 'CRITICAL' %>
-               <p class='bg-red-900 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% elsif ticket.priority == 'HIGH' %>
-               <p class='bg-orange-600 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-red-600 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% elsif ticket.priority == 'MEDIUM' %>
-               <p class='bg-yellow-500 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-yellow-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% else %>
-               <p class='bg-green-500 p-2 text-center text-white font-bold rounded'><%= ticket.priority %></p>
+               <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
           <% end %>
         </td>
         <td class="px-6 py-4 truncate w-64 ">
@@ -78,32 +78,52 @@
 
         <td class="px-4 py-4 ">
           <% case ticket.status %>
-          <% when 'Resolved', 'Closed' %>
+          <% when 'Resolved' %>
             <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
-          <% when 'New', 'Reopened' %>
+            <% when 'Closed' %>
+            <p class='bg-black text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'Reopened' %>
+            <p class="bg-red-900 text-center text-slate-100 font-bold rounded p-1">
+              <%= ticket.status %>
+            </p>
+            <% when 'New'  %>
             <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1">
               <%= ticket.status %>
             </p>
-          <% when 'Work in Progress', 'Under Development' %>
-            <p class='bg-yellow-500 text-center text-slate-100 font-bold rounded p-1'>
+          <% when  'Under Development' %>
+            <p class='bg-blue-300 text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
-          <% when 'Awaiting Build', 'QA Testing' %>
-            <p class='bg-blue-500 text-center text-slate-100 font-bold rounded p-1'>
+          <% when 'Work in Progress' %>
+            <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'QA Testing' %>
+            <p class='bg-pink-500 text-center text-slate-100 font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
+          <% when 'Awaiting Build' %>
+            <p class='text-center text-gray-900 font-bold rounded p-1 border-black border border-b-4 border-r-2'>
               <%= ticket.status %>
             </p>
           <% when 'Client Confirmation Pending' %>
             <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
+          <% when 'On-Hold' %>
+            <p class='bg-yellow-300 text-center text-black font-bold rounded p-1'>
+              <%= ticket.status %>
+            </p>
           <% when 'Assigned', 'On-Hold' %>
-            <p class='bg-orange-500 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
           <% when 'Declined'%>
-            <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-black text-center text-slate-100 font-bold rounded p-1'>
               <%= ticket.status %>
             </p>
           <% end %>
