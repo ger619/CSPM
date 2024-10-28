@@ -21,8 +21,7 @@ class ProjectController < ApplicationController
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user)
       @ticket = if params[:query].present?
-                  @project.tickets.left_joins(:rich_text_content).where('action_text_rich_texts.content ILIKE ?',
-                                                                        "%#{params[:query]}%")
+                  @project.tickets.left_joins(:rich_text_content).where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
                 else
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end

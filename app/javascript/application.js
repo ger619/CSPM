@@ -9,3 +9,6 @@ import '@rails/actiontext';
 //= require_tree .
 
 
+
+import "trix"
+import "@rails/actiontext"
