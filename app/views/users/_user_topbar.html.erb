@@ -7,10 +7,10 @@
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: users_path(@users), method: :get, class: 'flex' do |f| %>
         <%= f.text_field :query, placeholder: "Search ", class: "border border-b-4 border-r-2 h-12 rounded" %>
-        <%= f.submit "Search", class: "mb-4 ml-4 h-12 border border-b-4 border-r-2 p-2 font-semibold rounded"  %>
+        <%= f.submit "Search", class: "mb-4 ml-4 h-12 border border-b-4 border-r-2 p-2 border-black dark:border-slate-100 font-semibold rounded "  %>
       <% end %>
       <%= form_with url: users_path(@users), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: "ml-4 mb-4 h-12 border  border-b-4 border-r-2 p-2 font-semibold rounded"  %>
+        <%= f.submit "Clear", class: "ml-4 mb-4 h-12 border border-b-4 border-r-2 p-2 border-black dark:border-slate-100 font-semibold rounded"  %>
       <% end %>
     </div>
   </div>
