@@ -79,31 +79,31 @@
         <td class="px-4 py-4 ">
           <% case ticket.status %>
           <% when 'Resolved' %>
-            <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-600'>
               <%= ticket.status %>
             </p>
             <% when 'Closed' %>
-            <p class='bg-black text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900' >
               <%= ticket.status %>
             </p>
           <% when 'Reopened' %>
-            <p class="bg-red-900 text-center text-slate-100 font-bold rounded p-1">
+            <p class="bg-red-900 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-red-800">
               <%= ticket.status %>
             </p>
             <% when 'New'  %>
-            <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1">
+            <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-red-600">
               <%= ticket.status %>
             </p>
           <% when  'Under Development' %>
-            <p class='bg-blue-300 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-blue-300 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-400'>
               <%= ticket.status %>
             </p>
           <% when 'Work in Progress' %>
-            <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-600'>
               <%= ticket.status %>
             </p>
           <% when 'QA Testing' %>
-            <p class='bg-pink-500 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-pink-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-pink-600'>
               <%= ticket.status %>
             </p>
           <% when 'Awaiting Build' %>
@@ -111,43 +111,37 @@
               <%= ticket.status %>
             </p>
           <% when 'Client Confirmation Pending' %>
-            <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-purple-600'>
               <%= ticket.status %>
             </p>
           <% when 'On-Hold' %>
-            <p class='bg-yellow-300 text-center text-black font-bold rounded p-1'>
+            <p class='bg-yellow-300 text-center text-black font-bold rounded p-1 border-r-2 border-b-4 border-yellow-400'>
               <%= ticket.status %>
             </p>
-          <% when 'Assigned', 'On-Hold' %>
-            <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1'>
+          <% when 'Assigned' %>
+            <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-900'>
               <%= ticket.status %>
             </p>
           <% when 'Declined'%>
-            <p class='bg-black text-center text-slate-100 font-bold rounded p-1'>
+            <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
               <%= ticket.status %>
             </p>
           <% end %>
-
         </td>
-
         <td class="px-4 py-4">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
         </td>
-
         <td class="px-4 py-4 text-center">
           <%= ticket.versions.where(event: 'update').size %>
         </td>
         <td class="px-4 py-4 text-center">
           <%= ticket.versions.last&.created_at ? ticket.versions.last.created_at.strftime("%T") : 'Never' %>
         </td>
-
-
         <% if can? :edit, ticket%>
           <td class="px-4 py-4">
             <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
           </td>
         <% end %>
-
         <td class="px-4 py-4">
           <% if can? :destroy, ticket %>
              <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold"  %>
