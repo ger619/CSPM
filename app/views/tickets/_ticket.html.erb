@@ -7,13 +7,13 @@
         Date of Issue
       </th>
       <th scope="col" class="px-6 py-3">
-        Ticket Number
-      </th>
-      <th scope="col" class="px-6 py-3">
         Issue
       </th>
       <th scope="col" class="px-6 py-3">
         Priority
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Details
       </th>
 
       <th scope="col" class="px-6 py-3">
@@ -24,12 +24,6 @@
       </th>
       <th scope="col" class="px-6 py-3">
         VIEW
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Number of Edits
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Last Edit
       </th>
 
       <% if can? :read, @ticket %>
@@ -42,6 +36,13 @@
           DELETE
         </th>
       <% end %>
+
+      <th scope="col" class="px-6 py-3">
+        Number of Edits
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Last Edit
+      </th>
     </tr>
     </thead>
     <tbody>
@@ -107,7 +108,7 @@
               <%= ticket.status %>
             </p>
           <% when 'Awaiting Build' %>
-            <p class='text-center text-gray-900 font-bold rounded p-1 border-black border border-b-4 border-r-2'>
+            <p class='text-center text-gray-900 dark:text-slate-100 font-bold rounded p-1 border-black dark:border-slate-100 border border-b-4 border-r-2'>
               <%= ticket.status %>
             </p>
           <% when 'Client Confirmation Pending' %>
@@ -131,12 +132,6 @@
         <td class="px-4 py-4">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
         </td>
-        <td class="px-4 py-4 text-center">
-          <%= ticket.versions.where(event: 'update').size %>
-        </td>
-        <td class="px-4 py-4 text-center">
-          <%= ticket.versions.last&.created_at ? ticket.versions.last.created_at.strftime("%T") : 'Never' %>
-        </td>
         <% if can? :edit, ticket%>
           <td class="px-4 py-4">
             <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
@@ -146,6 +141,12 @@
           <% if can? :destroy, ticket %>
              <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold"  %>
           <% end %>
+        </td>
+        <td class="px-4 py-4 text-center">
+          <%= ticket.versions.where(event: 'update').size %>
+        </td>
+        <td class="px-4 py-4 text-center">
+          <%= ticket.versions.last&.created_at ? ticket.versions.last.created_at.strftime("%T") : 'Never' %>
         </td>
       </tr>
     <% end %>
