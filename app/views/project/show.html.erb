@@ -17,8 +17,8 @@
 
       </div>
       <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2">
-        <h1>Date Created: <span class="font-light"><%= @project.created_at.strftime("%I:%M %p at %d %B %Y") %></span></h1>
-        <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %B %Y") %></span></h1>
+        <h1>Date Created: <span class="font-light"><%= @project.created_at.strftime("%d %b %Y") %></span></h1>
+        <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
         <h1>Number of Tickets: <span class="font-semibold"><%= @project.tickets.count %> / <%= @project.tickets.count %></span></h1>
         <h1>Resolved/Closed Tickets: <span class="font-semibold"><%= @project.tickets.where(status: %w[Closed Resolved]).count %> / <%= @project.tickets.count %> </span></h1>
       </div>
