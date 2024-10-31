@@ -1,6 +1,6 @@
 class StatusController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_status, only: %i[show edit update]
+  before_action :set_status, only: %i[show edit update destroy]
   load_and_authorize_resource
 
   def index
@@ -52,6 +52,11 @@ class StatusController < ApplicationController
         format.html { render 'edit', status: :unprocessable_entity }
       end
     end
+  end
+
+  def destroy
+    @status.destroy
+    redirect_to status_index_path
   end
 
   private

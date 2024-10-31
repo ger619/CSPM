@@ -19,3 +19,29 @@
     </div>
   <% end %>
 <%  end %>
+
+
+<% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
+  <div class="gap-2">
+    <% if can? :read, @ticket %>
+      <%= form_with model: @ticket, url: add_status_project_ticket_path(@project, @ticket, Status), method: :post, data: { turbo: false, validate: true } do |f| %>
+        <%= f.collection_select(:status_id, Status.all, :id, :name, {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500") %>
+        <%= f.submit 'Update', class: 'w-full border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('form[data-validate="true"]');
+    forms.forEach(form => {
+      form.addEventListener('submit', function(event) {
+        const statusId = form.querySelector('select[name="ticket[status_id]"]').value;
+        if (!statusId) {
+          alert('Status ID is missing');
+          event.preventDefault(); // Prevent form submission
+        }
+      });
+    });
+  });
+</script>

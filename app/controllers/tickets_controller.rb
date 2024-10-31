@@ -1,7 +1,7 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project # This line ensures that the project is set before any action is taken
-  before_action :set_ticket, only: %i[show destroy edit update assign_tag unassign_tag update_status]
+  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag update_status] # This line ensures that
   load_and_authorize_resource
 
   def index; end
@@ -127,6 +127,31 @@ class TicketsController < ApplicationController
     end
   end
 
+  def add_status
+    @project = Project.find(params[:project_id])
+    @ticket = @project.tickets.find(params[:id])
+    Rails.logger.debug "Status ID: #{params[:status_id]}" # Debugging line
+
+    if params[:status].blank?
+      Rails.logger.debug 'Status ID is missing link'
+      return redirect_to project_ticket_path(@project, @ticket), alert: 'Status ID is missing'
+    end
+
+    status = Status.find(params[:status_id])
+
+    # Update the status of the ticket
+    @ticket.update(status:)
+
+    # Notify users about the status update
+    @ticket.users.each do |ticket_user|
+      UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+    end
+
+    respond_to do |format|
+      format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
+    end
+  end
+
   private
 
   def set_project
@@ -139,6 +164,6 @@ class TicketsController < ApplicationController
 
   def ticket_params
     params.require(:ticket).permit(:issue, :priority, :content, :project_id, :user_id, :ticket_image,
-                                   :status, user_ids: [])
+                                   :status, :status_id, user_ids: [])
   end
 end
