@@ -82,12 +82,18 @@
       </span>
     </div>
     <div>
-      <p>SLA Initial Response Deadline</p>
-      <p class="font-bold">
-        <%= @ticket.initial_response_deadline %>
-
-      </p>
-
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent)%>
+        <p class="font-bold">
+          SLA Breached:
+          <span class="font-extralight">
+            <% if @ticket.set_initial_response_time %>
+              Yes
+            <% else %>
+              No
+            <% end %>
+          </span>
+        </p>
+      <% end %>
     </div>
 
     <div class="mb-2.5 font-bold capitalize">Content:
@@ -115,7 +121,6 @@
       <% if @ticket.status == 'Awaiting Build' or @ticket.status == 'On-Hold' or @ticket.status == 'Closed' or @ticket.status == 'Declined' or @ticket.status == 'Reopened' or @ticket.status == 'QA Testing' or @ticket.status == 'Under Development' or @ticket.status == 'Work in Progress' or @ticket.status == 'Client Confirmation Pending' %>
         <%= render partial: 'comments/comment' %>
       <% end %>
-
     <% end %>
   </div>
 </div>
