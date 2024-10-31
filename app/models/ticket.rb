@@ -19,6 +19,9 @@ class Ticket < ApplicationRecord
 
   has_many :taggings
   has_many :users, through: :taggings, dependent: :destroy
+
+  has_many :add_statuses
+  has_many :statuses, through: :add_statuses, dependent: :destroy
   # Ticket Condition
 
   # after_create :set_default_status, if: :new_record?

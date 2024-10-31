@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_31_061800) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_31_074459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -51,6 +51,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_31_061800) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "add_statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "ticket_id", null: false
+    t.uuid "status_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status_id"], name: "index_add_statuses_on_status_id"
+    t.index ["ticket_id"], name: "index_add_statuses_on_ticket_id"
   end
 
   create_table "add_tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -235,9 +244,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_31_061800) do
     t.datetime "target_repair_deadline"
     t.datetime "resolution_deadline"
     t.string "remarks"
-    t.uuid "status_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"
-    t.index ["status_id"], name: "index_tickets_on_status_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
 
@@ -301,6 +308,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_31_061800) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "add_statuses", "statuses"
+  add_foreign_key "add_statuses", "tickets"
   add_foreign_key "add_tasks", "tasks"
   add_foreign_key "add_tasks", "users"
   add_foreign_key "addusers", "products"
@@ -331,6 +340,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_31_061800) do
   add_foreign_key "tasks", "products"
   add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "projects"
-  add_foreign_key "tickets", "statuses"
   add_foreign_key "tickets", "users"
 end
