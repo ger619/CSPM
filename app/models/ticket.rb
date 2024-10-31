@@ -28,14 +28,11 @@ class Ticket < ApplicationRecord
   # Initial Response Time SLA update
   # The field should be update with the current datetime when user is assigned and status is changed to assigned
 
-  def update_initial_response_time
-    return unless status == 'assigned' && initial_response_deadline.nil?
+  before_update :set_initial_response_time
+  def set_initial_response_time
+    return unless saved_change_to_status? && status == 'assigned'
 
-    update(initial_response_deadline: DateTime.now)
-  end
-
-  def calculate_initial_response_time
-    # (initial_response_deadline - created_at).to_i
+    update_column(:initial_response_deadline, DateTime.now)
   end
 
   private

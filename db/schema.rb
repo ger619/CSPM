@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_25_075600) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_31_061800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -192,6 +192,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_075600) do
     t.index ["user_id"], name: "index_states_on_user_id"
   end
 
+  create_table "statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "ticket_id", null: false
     t.uuid "user_id", null: false
@@ -224,12 +230,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_075600) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status", default: "new"
+    t.string "status"
     t.datetime "initial_response_deadline"
     t.datetime "target_repair_deadline"
     t.datetime "resolution_deadline"
     t.string "remarks"
+    t.uuid "status_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"
+    t.index ["status_id"], name: "index_tickets_on_status_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
 
@@ -323,5 +331,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_075600) do
   add_foreign_key "tasks", "products"
   add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "projects"
+  add_foreign_key "tickets", "statuses"
   add_foreign_key "tickets", "users"
 end
