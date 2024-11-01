@@ -130,10 +130,12 @@ class TicketsController < ApplicationController
   def add_status
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
+    @ticket.status = Status.find_by(params[:status_id])
+
     Rails.logger.debug "Status ID: #{params[:status_id]}" # Debugging line
 
-    if params[:status].blank?
-      Rails.logger.debug 'Status ID is missing link'
+    if params[:status_id].blank?
+      Rails.logger.debug "Status ID is missing link: #{params[:status_id]}"
       return redirect_to project_ticket_path(@project, @ticket), alert: 'Status ID is missing'
     end
 

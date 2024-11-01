@@ -30,14 +30,10 @@ class StatusController < ApplicationController
     @status = Status.new(status_params)
     @status.user_id = current_user.id
     respond_to do |format|
-      if current_user.has_role?(:admin)
-        if @status.save
-          format.html { redirect_to status_index_path, notice: 'Status was successfully created.' }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-        end
+      if @status.save
+        format.html { redirect_to status_index_path, notice: 'Status was successfully created.' }
       else
-        format.html { redirect_to root_path, alert: 'You are not authorized to create status.' }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
