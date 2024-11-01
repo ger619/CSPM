@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
     @comment = @ticket.comments.new
   end
 
+  # app/controllers/comments_controller.rb
   def create
     @comment = @ticket.comments.new(comment_params.except(:user_ids))
     @comment.project = @project
@@ -16,8 +17,14 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        # Send email to selected users
-        UserMailer.with(comment: @comment, user_ids: comment_params[:user_ids]).new_comment_email.deliver_later
+        # Send email to the current user
+        UserMailer.new_comment_email(current_user, @comment, current_user).deliver_later
+        @project.users.each do |comment_user|
+          next if comment_user == current_user
+
+          UserMailer.new_comment_email(comment_user, @comment, current_user).deliver_later
+        end
+
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Comment was successfully created.' }
       else
         format.html { render 'new', status: :unprocessable_entity }
