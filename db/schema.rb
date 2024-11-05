@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_31_091529) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_05_091607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -241,7 +241,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_31_091529) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status"
     t.datetime "initial_response_deadline"
     t.datetime "target_repair_deadline"
     t.datetime "resolution_deadline"

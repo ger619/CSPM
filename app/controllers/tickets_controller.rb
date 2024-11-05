@@ -130,27 +130,21 @@ class TicketsController < ApplicationController
   def add_status
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
-    @ticket.status = Status.find_by(params[:status_id])
 
-    Rails.logger.debug "Status ID: #{params[:status_id]}" # Debugging line
+    status = Status.find_by(params[:status_id])
+    @ticket.status_id = status
 
-    if params[:status_id].blank?
-      Rails.logger.debug "Status ID is missing link: #{params[:status_id]}"
-      return redirect_to project_ticket_path(@project, @ticket), alert: 'Status ID is missing'
-    end
-
-    status = Status.find(params[:status_id])
-
-    # Update the status of the ticket
-    @ticket.update(status:)
-
-    # Notify users about the status update
-    @ticket.users.each do |ticket_user|
-      UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
-    end
-
-    respond_to do |format|
-      format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
+    if @ticket.save
+      @ticket.users.each do |ticket_user|
+        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+      end
+      respond_to do |format|
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
+      end
     end
   end
 
@@ -166,6 +160,6 @@ class TicketsController < ApplicationController
 
   def ticket_params
     params.require(:ticket).permit(:issue, :priority, :content, :project_id, :user_id, :ticket_image,
-                                   :status, :status_id, user_ids: [])
+                                   :status_id, user_ids: [])
   end
 end
