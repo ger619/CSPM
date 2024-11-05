@@ -130,7 +130,7 @@ class TicketsController < ApplicationController
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
     @ticket.user = current_user
-    status = Status.find_by(id: params[:status_id])
+    status = Status.findfu(params[:status_id])
 
     if status.nil?
       respond_to do |format|
