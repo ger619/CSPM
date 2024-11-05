@@ -141,19 +141,21 @@ class TicketsController < ApplicationController
 
     @ticket.statuses.clear
     @ticket.statuses << status
+    redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
 
-    if @ticket.save
-      @ticket.users.each do |ticket_user|
-        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
-      end
-      respond_to do |format|
-        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
-      end
-    end
+
+    # if @ticket.save
+    #  @ticket.users.each do |ticket_user|
+    #    UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+    #  end
+    #  respond_to do |format|
+    #    format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
+    #  end
+    #else
+    #  respond_to do |format|
+    #    format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
+    #  end
+    #end
   end
 
   private
