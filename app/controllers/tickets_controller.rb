@@ -130,16 +130,16 @@ class TicketsController < ApplicationController
   def add_status
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
-
     status = Status.find_by(params[:status_id])
-    @ticket.status_id = status
+    @ticket.statuses.clear
+    @ticket.statuses << status
 
     if @ticket.save
       @ticket.users.each do |ticket_user|
         UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
       respond_to do |format|
-        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully fsffd' }
       end
     else
       respond_to do |format|
@@ -160,6 +160,6 @@ class TicketsController < ApplicationController
 
   def ticket_params
     params.require(:ticket).permit(:issue, :priority, :content, :project_id, :user_id, :ticket_image,
-                                   :status_id, user_ids: [])
+                                   :status, :status_id, user_ids: [])
   end
 end

@@ -12,11 +12,11 @@
       <% end %>
 
 
-      <%# if @ticket.status.present?  %>
+      <%  @ticket.statuses.each do |status| %>
         <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2S col-span-1 text-sm rounded">
-          <%#= @ticket.status %>
+          <%= status.name %>
         </p>
-      <%# end %>
+      <% end %>
 
     </div>
     <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
