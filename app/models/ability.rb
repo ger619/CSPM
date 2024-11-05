@@ -20,7 +20,7 @@ class Ability
       can :manage, Task
     elsif user.has_role? :client
       can :read, Project
-      can %i[create read assign_tag unassign_tag update_status], Ticket
+      can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
 
       can :manage, Issue, user_id: user.id
@@ -31,7 +31,7 @@ class Ability
 
     elsif user.has_role? :agent
       can :read, Project
-      can %i[create read assign_tag unassign_tag update_status], Ticket
+      can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit delete update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product
@@ -41,7 +41,7 @@ class Ability
       can :read, Task
     else
       can :read, Project
-      can %i[create read assign_tag unassign_tag], Ticket
+      can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit delete], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       can :read, User, user_id: user.id
