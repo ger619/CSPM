@@ -241,11 +241,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_05_100033) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status"
     t.datetime "initial_response_deadline"
     t.datetime "target_repair_deadline"
     t.datetime "resolution_deadline"
     t.string "remarks"
-    t.uuid "status"
     t.index ["project_id"], name: "index_tickets_on_project_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end

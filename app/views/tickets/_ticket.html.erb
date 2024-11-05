@@ -71,6 +71,8 @@
             <% end %>
           <% end %>
         </td>
+
+
         <td class="px-2 py-2 ">
           <% case ticket.status %>
           <% when 'Resolved' %>
@@ -122,6 +124,15 @@
               <%= ticket.status %>
             </p>
           <% end %>
+        </td>
+        <td>
+
+          <%  ticket.statuses.each do |status| %>
+            <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2S col-span-1 text-sm rounded">
+              <%= status.name %>
+            </p>
+          <% end %>
+
         </td>
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded uppercase font-bold "  %>

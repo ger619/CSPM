@@ -130,6 +130,7 @@ class TicketsController < ApplicationController
   def add_status
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
+    @ticket.user = current_user
     status = Status.find_by(params[:status_id])
     @ticket.statuses.clear
     @ticket.statuses << status
@@ -139,7 +140,7 @@ class TicketsController < ApplicationController
         UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
       respond_to do |format|
-        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully fsffd' }
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
       end
     else
       respond_to do |format|

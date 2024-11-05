@@ -8,7 +8,7 @@ class Ability
     elsif user.has_role?('project manager')
       can %i[create read unassign_user unassign_user], Project
       can %i[edit delete], Project, user_id: user.id
-      can %i[create read assign_tag unassign_tag update_status], Ticket
+      can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit destroy], Ticket, user_id: user.id
       can %i[create read], Issue
       can %i[edit delete], Issue, user_id: user.id
