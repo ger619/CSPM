@@ -21,7 +21,7 @@ Rails.application.routes.draw do
         post :assign_tag
         delete :unassign_tag
         patch :update_status
-        post :add_status
+        patch :add_status
       end
       resources :issues
       resources :comments
