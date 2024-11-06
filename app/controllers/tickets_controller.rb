@@ -65,7 +65,6 @@ class TicketsController < ApplicationController
 
   def assign_tag
     # if user is already assigned to the ticket do not assign again
-
     if @ticket.users.include?(User.find(params[:user_id]))
       redirect_to project_tickets_path(@ticket), notice: 'User has already been assigned .'
     else
@@ -131,22 +130,26 @@ class TicketsController < ApplicationController
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
     @ticket.user = current_user
-    status = Status.find_by(params[:status_id])
+    status = Status.find(params[:status_id])
+
+    if status.nil?
+      respond_to do |format|
+        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Invalid status ID' }
+      end
+      return
+    end
+
     @ticket.statuses.clear
     @ticket.statuses << status
-
-    if @ticket.save
-      @ticket.users.each do |ticket_user|
-        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
-      end
-      respond_to do |format|
-        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
-      end
+    @ticket.users.each do |ticket_user|
+      UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
+    redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
+
+    # if @ticket.save
+    #  @ticket.users.each do |ticket_user|
+    #    UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+    #  end
   end
 
   private

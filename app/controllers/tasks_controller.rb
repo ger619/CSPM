@@ -60,10 +60,8 @@ class TasksController < ApplicationController
       @task.users.clear
       @task.users << user
       assigned_user = user # Sending to all users added to the product
-
       # Send email to the newly assigned user
       UserMailer.task_assignment_email(user, @task, current_user, assigned_user).deliver_later
-
       # Send email to all users tagged on the product, except the current user
       @product.users.each do |product_user|
         next if product_user == current_user
