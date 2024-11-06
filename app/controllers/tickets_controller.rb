@@ -130,7 +130,7 @@ class TicketsController < ApplicationController
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
     @ticket.user = current_user
-    status = Status.findfu(params[:status_id])
+    status = Status.find(params[:status_id])
 
     if status.nil?
       respond_to do |format|
@@ -141,20 +141,15 @@ class TicketsController < ApplicationController
 
     @ticket.statuses.clear
     @ticket.statuses << status
+    @ticket.users.each do |ticket_user|
+      UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+    end
     redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
 
     # if @ticket.save
     #  @ticket.users.each do |ticket_user|
     #    UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     #  end
-    #  respond_to do |format|
-    #    format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
-    #  end
-    # else
-    #  respond_to do |format|
-    #    format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
-    #  end
-    # end
   end
 
   private
