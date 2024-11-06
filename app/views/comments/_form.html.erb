@@ -1,7 +1,10 @@
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
 <%= form_with(model: [project, ticket, ticket.comments.build]) do |f| %>
   <div class="relative z-0 w-full mb-6 group">
-    <%= f.hidden_field :status, value: ticket.status %>
+    <% @project.tickets.joins(:statuses).each do |ticket| %>
+      <%= ticket.statuses.name == 'Status' %>
+    <% end %>
+    <%= f.hidden_field :status, value: @project.tickets.joins(:statuses) %>
     <%= f.label :what, 'What?', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
     <%= f.text_field :what, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
   </div>

@@ -1,7 +1,7 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
   before_action :set_project # This line ensures that the project is set before any action is taken
-  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag update_status] # This line ensures that
+  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status] # This line ensures that
   load_and_authorize_resource
 
   def index; end
@@ -103,29 +103,6 @@ class TicketsController < ApplicationController
     redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
-  def update_status
-    @ticket = @project.tickets.find(params[:id])
-    @ticket.user = current_user
-
-    if @ticket.update(ticket_params)
-      @ticket.users.each do |ticket_user|
-        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
-      end
-      respond_to do |format|
-        current_user.add_role :editor, @ticket
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }) }
-        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Status updated successfully' }
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(@ticket, partial: 'tickets/ticket', locals: { ticket: @ticket }), status: :unprocessable_entity
-        end
-        format.html { redirect_to project_ticket_path(@project, @ticket), alert: 'Failed to update status' }
-      end
-    end
-  end
-
   def add_status
     @project = Project.find(params[:project_id])
     @ticket = @project.tickets.find(params[:id])
@@ -145,11 +122,6 @@ class TicketsController < ApplicationController
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
     redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
-
-    # if @ticket.save
-    #  @ticket.users.each do |ticket_user|
-    #    UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
-    #  end
   end
 
   private

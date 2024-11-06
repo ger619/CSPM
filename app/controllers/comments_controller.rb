@@ -13,7 +13,8 @@ class CommentsController < ApplicationController
     @comment = @ticket.comments.new(comment_params.except(:user_ids))
     @comment.project = @project
     @comment.user = current_user
-    @comment.status = @ticket.status
+
+    @comment.status = @project.tickets.joins(:statuses)
 
     respond_to do |format|
       if @comment.save
