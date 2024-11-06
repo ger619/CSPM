@@ -1,6 +1,6 @@
 <%= turbo_frame_tag 'modal' do %>
   <div class="modal">
-    <h2>New Comment</h2>
+    <h2>Edit Comment</h2>
     <%= render 'comments/edit_form', project: @project, ticket: @ticket %>
     <%= link_to 'Cancel', "#", data: {
       controller: 'modals',

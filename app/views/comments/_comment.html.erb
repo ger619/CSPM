@@ -1,5 +1,5 @@
 
-  <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || (current_user.has_role?('client') && (@ticket.status == 'Reopened' || @ticket.status == 'Closed')) %>
+  <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || (current_user.has_role?('client') && (@ticket.statuses.pluck('statuses.name').first == 'Reopened' || @ticket.statuses.pluck('statuses.name').first == 'Closed')) %>
     <%= button_to 'Add New Comment +', new_project_ticket_comment_path(@project, @ticket), method: :get, data: { turbo_frame: 'modal' }, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded' %>
   <% end %>
 <% if @comment.present? %>
@@ -44,7 +44,7 @@
           <%= comment.created_at.strftime("%d %b %Y at %I:%M %p") %>
         </div>
 
-        <% if comment.user == current_user %>
+        <% if comment.user == current_user or current_user.has_role?(:admin) %>
           <!-- Edit User -->
           <%= button_to edit_project_ticket_comment_path(@project, @ticket, comment), method: :get, data: { turbo_frame: 'modal' }, class: 'text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' do %>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="me-2 h-3 w-3">
