@@ -33,7 +33,7 @@
 
       <% @ticket.statuses.each do |status| %>
         <% case status.name %>
-      <% when 'Resolved' %>
+        <% when 'Resolved' %>
           <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-600'>
             <%= status.name %>
           </p>
