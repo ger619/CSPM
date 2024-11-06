@@ -31,14 +31,13 @@
         DELETE
       </th>
       <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-
-      <th scope="col" class="px-2 py-2">
-        Number of Edits
-      </th>
-      <th scope="col" class="px-2 py-2">
-        Last Edit
-      </th>
-        <% end %>
+        <th scope="col" class="px-2 py-2">
+          Number of Edits
+        </th>
+        <th scope="col" class="px-2 py-2">
+          Last Edit
+        </th>
+      <% end %>
     </tr>
     </thead>
     <tbody>
@@ -71,8 +70,6 @@
             <% end %>
           <% end %>
         </td>
-
-
         <td class="px-2 py-2 ">
           <% ticket.statuses.each do |status| %>
             <% case status.name %>

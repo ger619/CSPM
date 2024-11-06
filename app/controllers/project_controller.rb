@@ -31,6 +31,10 @@ class ProjectController < ApplicationController
       @page = (params[:page] || 1).to_i
       @total_pages = (@ticket.count / @per_page.to_f).ceil
       @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
+      # To pick the number of tickets that have status closed
+      @closed_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' }).count
+      # To pick the number of tickets that have status resolved
+      @resolved_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Resolved' }).count
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
