@@ -1,12 +1,9 @@
 
-
   <%= render 'tickets/ticket_topbar' %>
-
   <div class="p-2 border-2 border-gray-200 border rounded-lg dark:border-gray-700">
     <div class="grid grid-cols-3 gap-4 mb-4 h-full">
       <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
         <%= render 'layouts/alert' %>
-
         <h1 class="text-2xl">
           <%= @project.title %>
         </h1>
@@ -14,7 +11,6 @@
         <div>
           <%= render 'project/add_assign' %>
         </div>
-
       </div>
       <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2">
         <h1>Date Created: <span class="font-light"><%= @project.created_at.strftime("%d %b %Y") %></span></h1>
@@ -23,38 +19,27 @@
         <h1>Closed Tickets: <span class="font-semibold"><%= @closed_tickets %> / <%= @project.tickets.count %> </span></h1>
         <h1>Created Ticket: <span class="font-semibold"> <%= @created_tickets  %> </span></h1>
         <h1>Assigned Ticket: <span class="font-semibold"> <%= @assigned_tickets  %> </span></h1>
-
       </div>
       <div class="col-span-1">
         <%= render 'assign_people' %>
       </div>
-
     </div>
 
     <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
       <% if @project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
         <%= render 'tickets/ticket' %>
       <% end %>
-
     </div>
-
-
-
-
   </div>
   <div class="flex gap-10 mt-5">
-
     <!-- Pagination Controls -->
     <div class="pagination">
       <% if @page > 1 %>
         <%= link_to 'Previous', project_path(@project, page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold' %>
       <% end %>
-
         <span>Page <%= @page %> of <%= @total_pages %></span>
-
       <% if @page < @total_pages %>
         <%= link_to 'Next', project_path(@project, page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-2 border-black dark:border-slate-100 rounded font-semibold' %>
       <% end %>
     </div>
-
   </div>
