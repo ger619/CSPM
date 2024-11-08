@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :update_allowed_parameters, if: :devise_controller?
   before_action :check_profile_completion
 
-  # rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
+  rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
 
   def update_allowed_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password) }
@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, alert: 'Profile is Updated.'
   end
 
-  # def redirect_to_root
-  #  redirect_to root_path, alert: 'The page you were looking for does not exist.'
-  # end
+  def redirect_to_root
+    redirect_to root_path, alert: 'The page you were looking for does not exist.'
+  end
 end
