@@ -27,7 +27,6 @@ class UserMailer < ApplicationMailer
     @user = user
     @ticket = ticket
     @current_user = current_user
-    # @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @user.email, subject: 'Ticket status updated')
   end
