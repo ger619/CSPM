@@ -22,7 +22,6 @@ class Ability
       can :read, Project
       can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
-
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product
       can :read, Product
@@ -32,7 +31,7 @@ class Ability
     elsif user.has_role? :agent
       can :read, Project
       can %i[create read assign_tag unassign_tag update_status add_status], Ticket
-      can %i[edit delete update], Ticket, user_id: user.id
+      can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product
       cannot %i[create delete edit], Board
