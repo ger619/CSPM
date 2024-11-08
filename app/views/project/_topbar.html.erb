@@ -1,5 +1,4 @@
 <div class="grid grid-cols-2 ">
-
   <div class="grid col-span-1">
     <% if can? :create, @project %>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>

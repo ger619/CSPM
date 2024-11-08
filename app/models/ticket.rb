@@ -22,11 +22,11 @@ class Ticket < ApplicationRecord
   has_many :add_statuses
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
-  before_update :set_initial_response_time
+  after_create :set_initial_response_time
   def set_initial_response_time
-    return unless saved_change_to_status? && status == 'assigned'
+    # return unless saved_change_to_status? && Ticket.statuses == 'assigned'
 
-    update_column(:initial_response_deadline, DateTime.now)
+    update_column(:initial_response_deadline, DateTime.now + 30.minutes)
   end
 
   private
