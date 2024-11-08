@@ -24,12 +24,70 @@ class Ticket < ApplicationRecord
 
   after_create :set_initial_response_time
   def set_initial_response_time
-    # return unless saved_change_to_status? && Ticket.statuses == 'assigned'
+    start_time = DateTime.now
+    start_time = adjust_start_time(start_time)
+    update_column(:initial_response_deadline, next_business_time(start_time, 30.minutes))
+  end
 
-    update_column(:initial_response_deadline, DateTime.now + 30.minutes)
+  def sla_status
+    # For Sla to be met, the ticket must change status to from status.nil? to status.present within the first 30 minutes
+    # return unless statuses.exists?
+
+    # update_column(:status, 'true')
   end
 
   private
+
+  def adjust_start_time(start_time)
+    business_hours = [
+      { day: 1, start: 8, end: 13 }, { day: 1, start: 14, end: 17 },
+      { day: 2, start: 8, end: 13 }, { day: 2, start: 14, end: 17 },
+      { day: 3, start: 8, end: 13 }, { day: 3, start: 14, end: 17 },
+      { day: 4, start: 8, end: 13 }, { day: 4, start: 14, end: 17 },
+      { day: 5, start: 8, end: 13 }, { day: 5, start: 14, end: 17 },
+      { day: 6, start: 8, end: 13 }
+    ]
+
+    until within_business_hours?(start_time, business_hours)
+      start_time += 1.minute
+      # Skip time between 1pm and 2pm
+      start_time = start_time.change(hour: 14, min: 0) if start_time.hour == 13
+      # Skip time after 5pm
+      start_time = start_time.change(hour: 8, min: 0) + 1.day if start_time.hour >= 17
+      # Skip non-business days (Sunday)
+      start_time = start_time.change(hour: 8, min: 0) + 1.day if start_time.wday.zero?
+    end
+    start_time
+  end
+
+  def next_business_time(start_time, duration)
+    business_hours = [
+      { day: 1, start: 8, end: 13 }, { day: 1, start: 14, end: 17 },
+      { day: 2, start: 8, end: 13 }, { day: 2, start: 14, end: 17 },
+      { day: 3, start: 8, end: 13 }, { day: 3, start: 14, end: 17 },
+      { day: 4, start: 8, end: 13 }, { day: 4, start: 14, end: 17 },
+      { day: 5, start: 8, end: 13 }, { day: 5, start: 14, end: 17 },
+      { day: 6, start: 8, end: 13 }
+    ]
+
+    end_time = start_time + duration
+    until within_business_hours?(end_time, business_hours)
+      end_time += 1.minute
+      # Skip time between 1pm and 2pm
+      end_time = end_time.change(hour: 14, min: 0) if end_time.hour == 13
+      # Skip time after 5pm
+      end_time = end_time.change(hour: 8, min: 0) + 1.day if end_time.hour >= 17
+      # Skip non-business days (Sunday)
+      end_time = end_time.change(hour: 8, min: 0) + 1.day if end_time.wday.zero?
+    end
+    end_time
+  end
+
+  def within_business_hours?(time, business_hours)
+    business_hours.any? do |hours|
+      time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
+    end
+  end
 
   def content_length_within_limit
     return unless content.to_plain_text.length > 800

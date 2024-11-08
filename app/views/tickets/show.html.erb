@@ -106,6 +106,14 @@
               YES
             <% end %>
           </span>
+
+          <span class="font-extralight">
+            <% if @ticket.initial_response_deadline > DateTime.now %>
+              <%= distance_of_time_in_words(DateTime.now, @ticket.initial_response_deadline) %>
+            <% else %>
+              <%= distance_of_time_in_words(@ticket.initial_response_deadline, DateTime.now) %>
+            <% end %>
+          </span>
         </p>
       <% end %>
     </div>
