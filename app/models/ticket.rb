@@ -31,10 +31,9 @@ class Ticket < ApplicationRecord
 
   def sla_status
     # For Sla to be met, the ticket must change status to from status.nil? to status.present within the first 30 minutes
-    # Show the ticket status is not blank
-    return unless statuses.exists?
+    # return unless statuses.exists?
 
-    update_column(:status, 'true')
+    # update_column(:status, 'true')
   end
 
   private
@@ -52,17 +51,11 @@ class Ticket < ApplicationRecord
     until within_business_hours?(start_time, business_hours)
       start_time += 1.minute
       # Skip time between 1pm and 2pm
-      if start_time.hour == 13
-        start_time = start_time.change(hour: 14, min: 0)
-      end
+      start_time = start_time.change(hour: 14, min: 0) if start_time.hour == 13
       # Skip time after 5pm
-      if start_time.hour >= 17
-        start_time = start_time.change(hour: 8, min: 0) + 1.day
-      end
+      start_time = start_time.change(hour: 8, min: 0) + 1.day if start_time.hour >= 17
       # Skip non-business days (Sunday)
-      if start_time.wday == 0
-        start_time = start_time.change(hour: 8, min: 0) + 1.day
-      end
+      start_time = start_time.change(hour: 8, min: 0) + 1.day if start_time.wday.zero?
     end
     start_time
   end
@@ -81,17 +74,11 @@ class Ticket < ApplicationRecord
     until within_business_hours?(end_time, business_hours)
       end_time += 1.minute
       # Skip time between 1pm and 2pm
-      if end_time.hour == 13
-        end_time = end_time.change(hour: 14, min: 0)
-      end
+      end_time = end_time.change(hour: 14, min: 0) if end_time.hour == 13
       # Skip time after 5pm
-      if end_time.hour >= 17
-        end_time = end_time.change(hour: 8, min: 0) + 1.day
-      end
+      end_time = end_time.change(hour: 8, min: 0) + 1.day if end_time.hour >= 17
       # Skip non-business days (Sunday)
-      if end_time.wday == 0
-        end_time = end_time.change(hour: 8, min: 0) + 1.day
-      end
+      end_time = end_time.change(hour: 8, min: 0) + 1.day if end_time.wday.zero?
     end
     end_time
   end
