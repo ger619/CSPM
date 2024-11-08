@@ -3,7 +3,7 @@
     <div>
       <%= select_tag :status_id, options_for_select(Status.all.collect { |status| [status.name, status.id] }, @ticket.statuses.first&.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
       <div class="">
-        <%= submit_tag "UPDATE STATUS", class: 'w-full border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
       </div>
     </div>
   <% end %>
@@ -14,7 +14,7 @@
     <% if status.name == 'Client Confirmation Pending' or status.name == 'Resolved' or status.name == 'Reopened' or status.name == 'Closed' or status.name == 'Declined'%>
         <div>
           <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>          <div class="">
-            <%= submit_tag "UPDATE STATUS", class: 'w-full border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+            <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded ' %>
           </div>
         </div>
       <% end %>
