@@ -26,10 +26,32 @@ class Ticket < ApplicationRecord
   def set_initial_response_time
     # return unless saved_change_to_status? && Ticket.statuses == 'assigned'
 
-    update_column(:initial_response_deadline, DateTime.now + 30.minutes)
+    update_column(:initial_response_deadline, next_business_time(DateTime.now, 30.minutes))
+
   end
 
   private
+
+  def next_business_time(start_time, duration)
+    business_hours = [
+      { day: 1, start: 8, end: 13 }, { day: 1, start: 14, end: 17 },
+      { day: 2, start: 8, end: 13 }, { day: 2, start: 14, end: 17 },
+      { day: 3, start: 8, end: 13 }, { day: 3, start: 14, end: 17 },
+      { day: 4, start: 8, end: 13 }, { day: 4, start: 14, end: 17 },
+      { day: 5, start: 8, end: 13 }, { day: 5, start: 14, end: 17 },
+      { day: 6, start: 8, end: 13 }
+    ]
+
+    end_time = start_time + duration
+    end_time += 1.minute until within_business_hours?(end_time, business_hours)
+    end_time
+  end
+
+  def within_business_hours?(time, business_hours)
+    business_hours.any? do |hours|
+      time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
+    end
+  end
 
   def content_length_within_limit
     return unless content.to_plain_text.length > 800
