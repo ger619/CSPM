@@ -27,7 +27,6 @@ class Ticket < ApplicationRecord
     # return unless saved_change_to_status? && Ticket.statuses == 'assigned'
 
     update_column(:initial_response_deadline, next_business_time(DateTime.now, 30.minutes))
-
   end
 
   private
