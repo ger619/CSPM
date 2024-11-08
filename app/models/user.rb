@@ -73,6 +73,10 @@ class User < ApplicationRecord
     joins(:roles).where(roles: { name: ['agent', 'client', 'project manager', 'admin'] }, first_login: true)
   end
 
+  def self.with_assigned_role
+    joins(:roles).where(roles: { name: ['agent', 'project manager', 'admin'] }, first_login: true)
+  end
+
   def tagging_to(user)
     # if project has user added show the list of users
     # who have been added to the project

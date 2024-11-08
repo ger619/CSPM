@@ -1,4 +1,3 @@
-<%= @ticket.initial_response_deadline %>
 
 <%= render 'issues/issue_topbar' %>
 <%= render 'layouts/alert', class: "" %>
@@ -87,12 +86,24 @@
     <div>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent)%>
         <p class="font-bold">
+          Time Created:
+          <span class="font-extralight">
+            <%= @ticket.created_at.strftime("%I:%M %p at %d %b %Y") %>
+          </span>
+        </p>
+        <p class="font-bold">
+          Time for Breached SLA:
+          <span class="font-extralight">
+            <%= @ticket.initial_response_deadline.strftime("%I:%M %p at %d %b %Y") %>
+          </span>
+        </p>
+        <p class="font-bold">
           SLA Breached:
           <span class="font-extralight">
-            <% if @ticket.set_initial_response_time %>
-              Yes
+            <% if @ticket.initial_response_deadline > DateTime.now %>
+              NO
             <% else %>
-              No
+              YES
             <% end %>
           </span>
         </p>
