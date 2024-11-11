@@ -30,10 +30,15 @@ class Ticket < ApplicationRecord
   end
 
   def sla_status
-    # For Sla to be met, the ticket must change status to from status.nil? to status.present within the first 30 minutes
-    # return unless statuses.exists?
-
-    # update_column(:status, 'true')
+    if users.none? && initial_response_deadline < DateTime.now
+      'Still Pending'
+    elsif users.none? && initial_response_deadline > DateTime.now
+      'Still Pending to Assign'
+    elsif users.any? && initial_response_deadline >= DateTime.now
+      'on time'
+    elsif users.any? && initial_response_deadline < DateTime.now
+      'Not Breached'
+    end
   end
 
   private

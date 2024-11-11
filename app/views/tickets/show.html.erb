@@ -113,7 +113,20 @@
             <% else %>
               <%= distance_of_time_in_words(@ticket.initial_response_deadline, DateTime.now) %>
             <% end %>
+
+            <% if @ticket.initial_response_deadline > DateTime.now || @ticket.updated_at > DateTime.now %>
+              <%= distance_of_time_in_words(DateTime.now, [@ticket.initial_response_deadline, @ticket.updated_at].max) %>
+              <% else %>
+              <%= distance_of_time_in_words([@ticket.initial_response_deadline, @ticket.updated_at].max, DateTime.now) %>
+            <% end %>
           </span>
+        </p>
+        <p>
+          <span class="font-bold">SLA BREACHED: </span>
+          <span class="font-extralight">
+            <%= @ticket.sla_status %>
+          </span>
+
         </p>
       <% end %>
     </div>
