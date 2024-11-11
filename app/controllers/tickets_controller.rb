@@ -22,6 +22,7 @@ class TicketsController < ApplicationController
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
     # check if the user is assigned to anyone on the ticket
     @assigned_users = @ticket.users.any?
+    @sla_ticket = SlaTicket.find_by(ticket: @ticket)
   end
 
   def new

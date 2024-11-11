@@ -23,7 +23,8 @@ class Ticket < ApplicationRecord
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
   after_create :set_initial_response_time
-  after_update :update_sla_status
+  after_create :create_sla_status
+
 
   def set_initial_response_time
     start_time = DateTime.now
@@ -57,9 +58,9 @@ class Ticket < ApplicationRecord
     users.any? && initial_response_deadline < DateTime.now
   end
 
-  def update_sla_status
+  def create_sla_status
     SlaTicket.create!(
-      ticket: self,
+      ticket: id,
       sla_status: sla_status
     )
   end

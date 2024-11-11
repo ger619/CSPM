@@ -121,12 +121,14 @@
             <% end %>
           </span>
         </p>
-        <p>
-          <span class="font-bold">SLA BREACHED: </span>
-          <span class="font-extralight">
-            <%= @ticket.sla_status %>
-          </span>
 
+        <p>
+          <span class="font-bold">SLA STATUS: </span>
+          <span class="font-extralight">
+            <% if @sla_ticket.present? %>
+            <%= @sla_ticket.sla_status %>
+            <% end %>
+          </span>
         </p>
       <% end %>
     </div>
