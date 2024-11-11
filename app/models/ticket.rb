@@ -37,7 +37,7 @@ class Ticket < ApplicationRecord
     elsif users.any? && initial_response_deadline >= DateTime.now
       'on time'
     elsif users.any? && initial_response_deadline < DateTime.now
-      'Not Breached'
+      'Breached'
     end
   end
 
