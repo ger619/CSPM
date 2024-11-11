@@ -17,7 +17,9 @@
       <h1>Resolved Tickets: <span class="font-semibold"><%= @resolved_tickets %> / <%= @project.tickets.count %> </span></h1>
       <h1>Closed Tickets: <span class="font-semibold"><%= @closed_tickets %> / <%= @project.tickets.count %> </span></h1>
       <h1>Created Ticket: <span class="font-semibold"> <%= @created_tickets  %> </span></h1>
-      <h1>Assigned Ticket: <span class="font-semibold"> <%= @assigned_tickets  %> </span></h1>
+      <% if current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?('project manager') %>
+      <h1> Assigned Ticket: <span class="font-semibold"> <%=  @assigned_tickets   %> </span></h1>
+      <%  end %>
 
     </div>
     <div class="col-span-1">

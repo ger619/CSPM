@@ -32,21 +32,36 @@ class Ticket < ApplicationRecord
   end
 
   def sla_status
-    if users.none? && initial_response_deadline < DateTime.now
-      'Still Pending'
-    elsif users.none? && initial_response_deadline > DateTime.now
-      'Still Pending to Assign'
-    elsif users.any? && initial_response_deadline >= DateTime.now
-      'on time'
-    elsif users.any? && initial_response_deadline < DateTime.now
-      'Breached'
-    end
+    return 'Still Pending' if pending?
+    return 'Still Pending to Assign' if pending_to_assign?
+    return 'on time' if on_time?
+
+    'Breached' if breached?
   end
 
   private
 
+  def pending?
+    users.none? && initial_response_deadline < DateTime.now
+  end
+
+  def pending_to_assign?
+    users.none? && initial_response_deadline > DateTime.now
+  end
+
+  def on_time?
+    users.any? && initial_response_deadline >= DateTime.now
+  end
+
+  def breached?
+    users.any? && initial_response_deadline < DateTime.now
+  end
+
   def update_sla_status
-    create_sla_ticket(sla_status: sla_status)
+    SlaTicket.create!(
+      ticket: self,
+      sla_status: sla_status
+    )
   end
 
   def adjust_start_time(start_time)

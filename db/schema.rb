@@ -183,11 +183,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_094415) do
   end
 
   create_table "sla_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "ticket_id", null: false
+    t.string "ticket"
     t.string "sla_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["ticket_id"], name: "index_sla_tickets_on_ticket_id"
   end
 
   create_table "softwares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -341,7 +340,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_094415) do
   add_foreign_key "projects", "clients"
   add_foreign_key "projects", "softwares"
   add_foreign_key "projects", "users"
-  add_foreign_key "sla_tickets", "tickets"
   add_foreign_key "softwares", "users"
   add_foreign_key "states", "tasks"
   add_foreign_key "states", "users"
