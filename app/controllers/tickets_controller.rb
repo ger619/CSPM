@@ -4,8 +4,6 @@ class TicketsController < ApplicationController
   before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status] # This line ensures that
   load_and_authorize_resource
 
-  def index; end
-
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
@@ -139,6 +137,6 @@ class TicketsController < ApplicationController
 
   def ticket_params
     params.require(:ticket).permit(:issue, :priority, :content, :project_id, :user_id, :ticket_image,
-                                   :status, :status_id, :sla_ticket_id, user_ids: [])
+                                   :status, :status_id, user_ids: [])
   end
 end
