@@ -23,8 +23,6 @@ class Ticket < ApplicationRecord
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
   after_create :set_initial_response_time
-  # after_create :create_sla_status
-
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
