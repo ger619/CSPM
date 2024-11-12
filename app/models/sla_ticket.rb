@@ -1,0 +1,2 @@
+class SlaTicket < ApplicationRecord
+end

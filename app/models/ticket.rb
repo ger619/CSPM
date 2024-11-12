@@ -23,6 +23,8 @@ class Ticket < ApplicationRecord
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
   after_create :set_initial_response_time
+  after_create :create_sla_status
+
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
@@ -30,13 +32,37 @@ class Ticket < ApplicationRecord
   end
 
   def sla_status
-    # For Sla to be met, the ticket must change status to from status.nil? to status.present within the first 30 minutes
-    # return unless statuses.exists?
+    return 'Still Pending' if pending?
+    return 'Still Pending to Assign' if pending_to_assign?
+    return 'on time' if on_time?
 
-    # update_column(:status, 'true')
+    'Breached' if breached?
   end
 
   private
+
+  def pending?
+    users.none? && initial_response_deadline < DateTime.now
+  end
+
+  def pending_to_assign?
+    users.none? && initial_response_deadline > DateTime.now
+  end
+
+  def on_time?
+    users.any? && initial_response_deadline >= DateTime.now
+  end
+
+  def breached?
+    users.any? && initial_response_deadline < DateTime.now
+  end
+
+  def create_sla_status
+    SlaTicket.create!(
+      ticket: id,
+      sla_status: sla_status
+    )
+  end
 
   def adjust_start_time(start_time)
     business_hours = [

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_05_100033) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_11_094415) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -182,6 +182,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_05_100033) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
+  create_table "sla_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "ticket"
+    t.string "sla_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "softwares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -241,11 +248,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_05_100033) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status"
     t.datetime "initial_response_deadline"
     t.datetime "target_repair_deadline"
     t.datetime "resolution_deadline"
     t.string "remarks"
+    t.string "status"
     t.index ["project_id"], name: "index_tickets_on_project_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end

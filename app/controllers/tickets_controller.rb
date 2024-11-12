@@ -4,8 +4,6 @@ class TicketsController < ApplicationController
   before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status] # This line ensures that
   load_and_authorize_resource
 
-  def index; end
-
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
@@ -20,6 +18,9 @@ class TicketsController < ApplicationController
     @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
 
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
+    # check if the user is assigned to anyone on the ticket
+    @assigned_users = @ticket.users.any?
+    @sla_ticket = SlaTicket.find_by(ticket: @ticket)
   end
 
   def new
