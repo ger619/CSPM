@@ -55,13 +55,6 @@ class Ticket < ApplicationRecord
     users.any? && initial_response_deadline < DateTime.now
   end
 
-  def create_sla_status
-    SlaTicket.create!(
-      ticket: id,
-      sla_status: sla_status
-    )
-  end
-
   def adjust_start_time(start_time)
     business_hours = [
       { day: 1, start: 8, end: 13 }, { day: 1, start: 14, end: 17 },
