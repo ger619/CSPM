@@ -46,5 +46,7 @@ class HomeController < ApplicationController
       .joins(tickets: :issues) # Join the projects, tickets, and issues tables
       .group('projects.title') # Group the results by project title
       .count(' issues.id') # Count the total number of issues created for each project
+
+    @status_data = current_user.projects.joins(tickets: :statuses).group('statuses.name').count
   end
 end
