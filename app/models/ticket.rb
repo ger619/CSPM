@@ -123,7 +123,7 @@ class Ticket < ApplicationRecord
     remaining_duration = duration
     current_time = start_time
 
-    while remaining_duration > 0
+    while remaining_duration.positive?
       if within_business_hours?(current_time, business_hours)
         current_time += 1.minute
         remaining_duration -= 1.minute
