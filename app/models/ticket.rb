@@ -29,6 +29,12 @@ class Ticket < ApplicationRecord
     update_column(:initial_response_deadline, next_business_time(start_time, 30.minutes))
   end
 
+  def set_target_repair_deadline
+    start_time = DateTime.now
+    start_time = adjust_start_time(start_time)
+    update_column(:target_repair_deadline, next_business_time(start_time, 4.hours))
+  end
+
   def sla_status
     return 'Still Pending' if pending?
     return 'Still Pending to Assign' if pending_to_assign?
