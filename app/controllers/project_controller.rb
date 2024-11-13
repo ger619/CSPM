@@ -40,6 +40,11 @@ class ProjectController < ApplicationController
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       # Show the number of tickets assigned to the curent user
       @assigned_tickets = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
+      # assigned tickets that are closed or resolved
+      @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
+        .where(users: { id: current_user.id })
+        .where(statuses: { name: %w[Closed Resolved] })
+        .count
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end

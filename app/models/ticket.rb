@@ -23,12 +23,16 @@ class Ticket < ApplicationRecord
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
   after_create :set_initial_response_time
-  after_create :create_sla_status
-
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
     update_column(:initial_response_deadline, next_business_time(start_time, 30.minutes))
+  end
+
+  def set_target_repair_deadline
+    start_time = DateTime.now
+    start_time = adjust_start_time(start_time)
+    update_column(:target_repair_deadline, next_business_time(start_time, 4.hours))
   end
 
   def sla_status
@@ -55,13 +59,6 @@ class Ticket < ApplicationRecord
 
   def breached?
     users.any? && initial_response_deadline < DateTime.now
-  end
-
-  def create_sla_status
-    SlaTicket.create!(
-      ticket: id,
-      sla_status: sla_status
-    )
   end
 
   def adjust_start_time(start_time)

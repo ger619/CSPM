@@ -84,6 +84,11 @@ class TicketsController < ApplicationController
       # Add the new user
       @ticket.users << user unless @ticket.users.include?(user)
 
+      # Adding the SLA to the ticket
+      SlaTicket.find_or_create_by!(ticket: @ticket.id) do |sla_ticket|
+        sla_ticket.sla_status = @ticket.sla_status
+      end
+
       assigned_user = user # send an email to all users assigned to the ticket
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 

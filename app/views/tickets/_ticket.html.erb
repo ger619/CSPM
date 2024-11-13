@@ -24,12 +24,15 @@
         VIEW
       </th>
 
-      <th scope="col" class="px-2 py-2">
-        EDIT
-      </th>
+        <th scope="col" class="px-2 py-2">
+          EDIT
+        </th>
+
+
       <th scope="col" class="px-2 py-2">
         DELETE
       </th>
+
       <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
         <th scope="col" class="px-2 py-2">
           Number of Edits
@@ -127,14 +130,15 @@
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded uppercase font-bold "  %>
         </td>
-        <% if can?(:edit, ticket) %>
-          <td class="px-2 py-2">
+
+        <td class="px-2 py-2">
+          <% if can?(:edit, ticket) %>
             <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded uppercase font-bold " %>
-          </td>
-        <% end %>
+          <% end %>
+        </td>
         <td class="px-2 py-2">
           <% if can? :destroy, ticket %>
-             <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded uppercase text-red-900 font-bold"  %>
+            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded uppercase text-red-900 font-bold"  %>
           <% end %>
         </td>
         <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
