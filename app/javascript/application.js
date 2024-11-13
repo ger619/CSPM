@@ -7,7 +7,8 @@ import '@rails/actiontext';
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-
+//= require 'chartkick'
+//= require 'chart.js'
 
 
 import "trix"
