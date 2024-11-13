@@ -1,0 +1,62 @@
+<div>
+  <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent)%>
+    <p class="font-bold">
+      Time Created:
+      <span class="font-extralight">
+        <%= @ticket.created_at.strftime("%I:%M %p at %d %b %Y") %>
+      </span>
+    </p>
+    <p class="font-bold">
+      Time for Breached SLA:
+      <span class="font-extralight">
+        <%= @ticket.initial_response_deadline.strftime("%I:%M %p at %d %b %Y") %>
+      </span>
+    </p>
+    <p class="font-bold">
+      SLA Initial Response Deadline:
+      <span class="font-extralight">
+        <%= @ticket.target_repair_deadline.strftime("%I:%M %p at %d %b %Y") %>
+      </span>
+    </p>
+    <p class="font-bold">
+      Resolution Deadline:
+      <span class="font-extralight">
+        <%= @ticket.resolution_deadline.strftime("%I:%M %p at %d %b %Y") %>
+      </span>
+    </p>
+    <p class="font-bold">
+      SLA Initial Response Deadline Breached:
+      <span class="font-extralight">
+        <% if @ticket.initial_response_deadline > DateTime.now %>
+          NO
+        <% else %>
+          YES
+        <% end %>
+      </span>
+
+      <span class="font-extralight">
+        <% if @ticket.initial_response_deadline > DateTime.now %>
+          <%= distance_of_time_in_words(DateTime.now, @ticket.initial_response_deadline) %>
+        <% else %>
+          <%= distance_of_time_in_words(@ticket.initial_response_deadline, DateTime.now) %>
+        <% end %>
+        <% if @ticket.initial_response_deadline > DateTime.now || @ticket.updated_at > DateTime.now %>
+          <%= distance_of_time_in_words(DateTime.now, [@ticket.initial_response_deadline, @ticket.updated_at].max) %>
+        <% else %>
+          <%= distance_of_time_in_words([@ticket.initial_response_deadline, @ticket.updated_at].max, DateTime.now) %>
+        <% end %>
+      </span>
+    </p>
+
+    <p>
+      <span class="font-bold">
+        SLA STATUS:
+      </span>
+      <span class="font-extralight">
+        <% if @sla_ticket.present? %>
+          <%= @sla_ticket.sla_status %>
+        <% end %>
+      </span>
+    </p>
+  <% end %>
+</div>
