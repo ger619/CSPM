@@ -23,6 +23,8 @@ class Ticket < ApplicationRecord
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
   after_create :set_initial_response_time
+  after_create :set_target_repair_deadline
+  after_create :set_resolution_deadline
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
@@ -30,9 +32,34 @@ class Ticket < ApplicationRecord
   end
 
   def set_target_repair_deadline
-    start_time = DateTime.now
+    start_time = initial_response_deadline
     start_time = adjust_start_time(start_time)
-    update_column(:target_repair_deadline, next_business_time(start_time, 4.hours))
+
+    case priority
+    when 'CRITICAL'
+      update_column(:target_repair_deadline, next_business_time(start_time, 3.hours))
+    when 'HIGH'
+      update_column(:target_repair_deadline, next_business_time(start_time, 5.hours))
+    when 'MEDIUM'
+      update_column(:target_repair_deadline, next_business_time(start_time, 12.hours))
+    when 'LOW'
+      update_column(:target_repair_deadline, next_business_time(start_time, 24.hours))
+    end
+  end
+
+  def set_resolution_deadline
+    start_time = target_repair_deadline
+    start_time = adjust_start_time(start_time)
+    case priority
+    when 'CRITICAL'
+      update_column(:resolution_deadline, next_business_time(start_time, 4.hours))
+    when 'HIGH'
+      update_column(:resolution_deadline, next_business_time(start_time, 8.hours))
+    when 'MEDIUM'
+      update_column(:resolution_deadline, next_business_time(start_time, 16.hours))
+    when 'LOW'
+      update_column(:resolution_deadline, next_business_time(start_time, 24.hours))
+    end
   end
 
   def sla_status
@@ -93,17 +120,26 @@ class Ticket < ApplicationRecord
       { day: 6, start: 8, end: 13 }
     ]
 
-    end_time = start_time + duration
-    until within_business_hours?(end_time, business_hours)
-      end_time += 1.minute
+    remaining_duration = duration
+    current_time = start_time
+
+    while remaining_duration.positive?
+      if within_business_hours?(current_time, business_hours)
+        current_time += 1.minute
+        remaining_duration -= 1.minute
+      else
+        current_time += 1.minute
+      end
+
       # Skip time between 1pm and 2pm
-      end_time = end_time.change(hour: 14, min: 0) if end_time.hour == 13
+      current_time = current_time.change(hour: 14, min: 0) if current_time.hour == 13
       # Skip time after 5pm
-      end_time = end_time.change(hour: 8, min: 0) + 1.day if end_time.hour >= 17
+      current_time = current_time.change(hour: 8, min: 0) + 1.day if current_time.hour >= 17
       # Skip non-business days (Sunday)
-      end_time = end_time.change(hour: 8, min: 0) + 1.day if end_time.wday.zero?
+      current_time = current_time.change(hour: 8, min: 0) + 1.day if current_time.wday.zero?
     end
-    end_time
+
+    current_time
   end
 
   def within_business_hours?(time, business_hours)
