@@ -47,4 +47,4 @@ set :repo_url, 'git@github.com:ger619/CSPM.git'
 # Increase timeout settings
 set :git_shallow_clone, 1
 set :git_max_concurrent_clones, 10
-set :ssh_options, { forward_agent: true, user: fetch(:user), auth_methods: %w(publickey password), timeout: 300 }
+set :ssh_options, { forward_agent: true, user: fetch(:user), auth_methods: %w[publickey password], timeout: 300 }
