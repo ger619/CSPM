@@ -188,7 +188,6 @@
         <option value="cancan:ability" />
         <option value="channel" />
         <option value="controller" />
-        <option value="devcontainer" />
         <option value="devise" />
         <option value="devise:controllers" />
         <option value="devise:install" />
@@ -274,7 +273,6 @@
         <option value="cancan:ability" />
         <option value="channel" />
         <option value="controller" />
-        <option value="devcontainer" />
         <option value="devise" />
         <option value="devise:controllers" />
         <option value="devise:install" />

@@ -47,7 +47,25 @@ class HomeController < ApplicationController
       .group('projects.title') # Group the results by project title
       .count(' issues.id') # Count the total number of issues created for each project
 
+    # @status_data = current_user.projects.joins(tickets: :statuses).group('statuses.name').count
+
     @status_data = current_user.projects.joins(tickets: :statuses).group('statuses.name').count
+    @total_tickets = @status_data.values.sum
+    # @status_data['Total'] = @total_tickets # to make it appear at the far right
+    @status_data = { 'Total' => @total_tickets }.merge(@status_data)
+
     @status_per_project = current_user.projects.joins(tickets: :statuses).group('projects.title', 'statuses.name').count
+
+    # Total tickets per project
+    @total_tickets_per_project = current_user.projects
+      .joins(:tickets)
+      .group('projects.title')
+      .count('tickets.id')
+
+    # Calculate the total number of tickets for all projects
+    total_tickets = @total_tickets_per_project.values.sum
+
+    # Create a new hash with "All Projects" as the first entry
+    @total_tickets_per_project = { 'All Projects' => total_tickets }.merge(@total_tickets_per_project)
   end
 end
