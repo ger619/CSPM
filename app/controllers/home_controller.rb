@@ -67,5 +67,12 @@ class HomeController < ApplicationController
 
     # Create a new hash with "All Projects" as the first entry
     @total_tickets_per_project = { 'All Projects' => total_tickets }.merge(@total_tickets_per_project)
+
+    # Filter and group tickets by "closed" and "reopened" statuses
+    @closed_and_reopened_tickets = current_user.projects.joins(tickets: :statuses).group('statuses.name').count
+    @closed_and_reopened_tickets = { 'Closed' => @closed_and_reopened_tickets['Closed'] || 0,
+                                     'Reopened' => @closed_and_reopened_tickets['Reopened'] || 0 }
+    # Total ticket counts
+    @closed_and_reopened_tickets = { 'All Tickets' => total_tickets }.merge(@closed_and_reopened_tickets)
   end
 end
