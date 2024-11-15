@@ -130,10 +130,11 @@ class TicketsController < ApplicationController
 
     @ticket.statuses.clear
     @ticket.statuses << status
-    # if status is closed, send an email to all users assigned to the ticket
-    # SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
-    #         sla_ticket.sla_target_response_deadline = @ticket.sla_target_response_deadline:
-    #      end
+
+    if status.name == 'Client Confirmation Pending'
+      sla_ticket = SlaTicket.find_or_initialize_by(ticket_id: @ticket.id)
+      sla_ticket.update(sla_target_response_deadline: @ticket.sla_target_response_deadline)
+    end
 
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
