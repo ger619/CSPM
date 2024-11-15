@@ -1,67 +1,55 @@
-
-
-  <div class="p-4 border-2 border-white   rounded-lg">
-    <div class="grid md:grid-cols-3 gap-4 mb-4">
-
-      <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
-        <p class="text-sm">
-          Number of Project Assigned
-        </p>
-        <span class="text-xl font-bold">
-            <%= current_user.projects.distinct.pluck(:id).count %>
-        </span>
-      </div>
-
-      <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
-        <p class="text-sm ">
-          Number of Tickets Assigned
-        </p>
-        <span class="text-xl font-bold">
-            <%= current_user.tickets.distinct.pluck(:id).count %>
-        </span>
-      </div>
-      <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
+<div class="p-4 border-2 border-white   rounded-lg">
+  <div class="grid md:grid-cols-3 gap-4 mb-4">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
       <p class="text-sm">
-          Number of Issues Assigned
-        </p>
-        <span class="text-xl font-bold">
-            <%= current_user.issues.distinct.pluck(:id).count %>
-        </span>
-      </div>
-
-
-
-    </div>
-
-
-    <div class="flex items-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
-      <p class="text-2xl text-gray-400 dark:text-gray-500">
-        <%= render 'home/table_ticket_per_project' %>
+        Number of Project Assigned
       </p>
+      <span class="text-xl font-bold">
+          <%= current_user.projects.distinct.pluck(:id).count %>
+      </span>
     </div>
-
-    <div class="grid grid-cols-2 gap-4 mb-4">
-      <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
-        <%= render 'home/closed_reopened' %>
-
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-        <%= render 'home/total_number_tickets' %>
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-        <%= render 'home/pie_charts' %>
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-        <%= render 'home/list_project' %>
-      </div>
-    </div>
-    <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-      <p class="text-2xl text-gray-400 dark:text-gray-500">
-        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-        </svg>
+    <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
+      <p class="text-sm ">
+        Number of Tickets Assigned
       </p>
+      <span class="text-xl font-bold">
+          <%= current_user.tickets.distinct.pluck(:id).count %>
+      </span>
     </div>
-
-
+    <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
+      <p class="text-sm">
+        Number of Issues Assigned
+      </p>
+      <span class="text-xl font-bold">
+        <%= current_user.issues.distinct.pluck(:id).count %>
+      </span>
+    </div>
   </div>
+  <div class="flex items-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
+    <p class="text-2xl text-gray-400 dark:text-gray-500">
+      <%= render 'home/table_ticket_per_project' %>
+    </p>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
+      <%= render 'home/closed_reopened' %>
+
+    </div>
+    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+      <%= render 'home/total_number_tickets' %>
+    </div>
+    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+      <%= render 'home/pie_charts' %>
+    </div>
+    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+      <%= render 'home/list_project' %>
+    </div>
+  </div>
+  <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+    <p class="text-2xl text-gray-400 dark:text-gray-500">
+      <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+      </svg>
+    </p>
+  </div>
+</div>

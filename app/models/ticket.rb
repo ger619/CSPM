@@ -22,6 +22,8 @@ class Ticket < ApplicationRecord
   has_many :add_statuses
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
+  has_many :sla_tickets, dependent: :destroy
+
   after_create :set_initial_response_time
   after_create :set_target_repair_deadline
   after_create :set_resolution_deadline
@@ -65,12 +67,26 @@ class Ticket < ApplicationRecord
   def sla_status
     return 'Still Pending' if pending?
     return 'Still Pending to Assign' if pending_to_assign?
-    return 'on time' if on_time?
+    return 'Not Breached' if on_time?
 
     'Breached' if breached?
   end
 
+  def sla_target_response_deadline
+    return 'Not Breached' if sla_on_time?
+
+    'Breached' if sla_breached?
+  end
+
   private
+
+  def sla_on_time?
+    statuses.any? { |status| status.name == 'Client Confirmation Pending' && status.created_at <= initial_response_deadline }
+  end
+
+  def sla_breached?
+    statuses.any? { |status| status.name == 'Client Confirmation Pending' && status.created_at > initial_response_deadline }
+  end
 
   def pending?
     users.none? && initial_response_deadline < DateTime.now
