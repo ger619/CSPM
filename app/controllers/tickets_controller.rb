@@ -20,7 +20,7 @@ class TicketsController < ApplicationController
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
     # check if the user is assigned to anyone on the ticket
     @assigned_users = @ticket.users.any?
-    @sla_ticket = SlaTicket.find_by(ticket: @ticket)
+    @sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
   end
 
   def new
@@ -92,7 +92,7 @@ class TicketsController < ApplicationController
       assigned_user = user # send an email to all users assigned to the ticket
 
       # Adding the SLA to the ticket
-      SlaTicket.find_or_create_by!(ticket: @ticket.id) do |sla_ticket|
+      SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
         sla_ticket.sla_status = @ticket.sla_status
       end
 
