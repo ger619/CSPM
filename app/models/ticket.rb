@@ -65,7 +65,7 @@ class Ticket < ApplicationRecord
   def sla_status
     return 'Still Pending' if pending?
     return 'Still Pending to Assign' if pending_to_assign?
-    return 'on time' if on_time?
+    return 'Not Breached' if on_time?
 
     'Breached' if breached?
   end
