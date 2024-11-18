@@ -73,9 +73,11 @@ class Ticket < ApplicationRecord
   end
 
   def sla_target_response_deadline
-    return 'Not Breached' if sla_on_time?
-
-    'Breached' if sla_breached?
+    if sla_on_time?
+      'Not Breached'
+    elsif sla_breached?
+      'Breached'
+    end
   end
 
   def progress_percentage
@@ -96,11 +98,11 @@ class Ticket < ApplicationRecord
 
   # SLA TWO
   def sla_on_time?
-    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at >= target_repair_deadline }
+    statuses.any? { |status| status.name == 'Client Confirmation Pending' && status.created_at < target_repair_deadline }
   end
 
   def sla_breached?
-    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at < target_repair_deadline }
+    statuses.any? { |status| status.name == 'Client Confirmation Pending' && status.created_at > target_repair_deadline }
   end
 
   # SLA ONE
