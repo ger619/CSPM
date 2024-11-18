@@ -96,11 +96,11 @@ class Ticket < ApplicationRecord
 
   # SLA TWO
   def sla_on_time?
-    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at <= target_repair_deadline }
+    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at >= target_repair_deadline }
   end
 
   def sla_breached?
-    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at > target_repair_deadline }
+    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at < target_repair_deadline }
   end
 
   # SLA ONE
