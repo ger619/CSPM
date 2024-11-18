@@ -1,0 +1,24 @@
+
+
+<!-- app/views/home/index.html.erb -->
+<div class="p-2 w-full">
+  <h1>Tickets Chart</h1>
+  <%= form_with url: home_index_path, method: :get, local: true do %>
+    <div class="flex justify-between">
+      <div>
+        <%= label_tag :start_date, 'Start Date' %>
+        <%= date_field_tag :start_date, params[:start_date] %>
+      </div>
+      <div>
+        <%= label_tag :end_date, 'End Date' %>
+        <%= date_field_tag :end_date, params[:end_date] %>
+      </div>
+      <div>
+        <%= submit_tag 'Filter' %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= column_chart @chart_data, colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], library: { legend: { position: 'bottom' }, plugins: { datalabels: { align: 'end', anchor: 'end' } } } %>
+
+</div>

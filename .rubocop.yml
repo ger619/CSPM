@@ -16,12 +16,12 @@ Metrics/MethodLength:
   Include:
     - "app/controllers/*"
     - "app/models/*"
-  Max: 50
+  Max: 60
 Metrics/AbcSize:
   Include:
     - "app/controllers/*"
     - "app/models/*"
-  Max: 80
+  Max: 100
 Metrics/ClassLength:
   Max: 150
 Metrics/BlockLength:

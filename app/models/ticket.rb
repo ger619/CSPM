@@ -78,15 +78,29 @@ class Ticket < ApplicationRecord
     'Breached' if sla_breached?
   end
 
+  def progress_percentage
+    # Example logic to calculate progress percentage
+    case statuses.name
+    when 'New'
+      10
+    when 'Client Confirmation Pending'
+      50
+    when 'Resolved'
+      100
+    else
+      5
+    end
+  end
+
   private
 
   # SLA TWO
   def sla_on_time?
-    statuses.any? { |status| status.name == 'Client Confirmation Pending' && status.created_at <= target_repair_deadline }
+    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at <= target_repair_deadline }
   end
 
   def sla_breached?
-    statuses.any? { |status| status.name == 'Client Confirmation Pending' && status.created_at > target_repair_deadline }
+    statuses.present? { |status| status.name == 'Client Confirmation Pending' && status.created_at > target_repair_deadline }
   end
 
   # SLA ONE
