@@ -75,8 +75,6 @@ class HomeController < ApplicationController
     # Total ticket counts
     @closed_and_reopened_tickets = { 'All Tickets' => total_tickets }.merge(@closed_and_reopened_tickets)
 
-
-
     # Count the number of tickets created per day
     @tickets = Ticket.all
 
@@ -85,10 +83,8 @@ class HomeController < ApplicationController
     end
 
     @chart_data = @tickets.group_by_day(:created_at).count
-    total_tickets = @total_tickets_per_project.values.sum
+    @total_tickets_per_project.values.sum
 
     # Count the number of tickets created per day
-
   end
-
 end
