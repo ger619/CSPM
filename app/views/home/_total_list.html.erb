@@ -1,18 +1,18 @@
-
-
-<!-- app/views/home/index.html.erb -->
 <div class="p-2 w-full">
-  <h1 class=" flex justify-center mb-2">Tickets Chart</h1>
+  <h1 class="flex justify-center mb-2">Tickets Chart</h1>
   <%= form_with url: home_index_path, method: :get, local: true do %>
     <div class="flex justify-center gap-2">
       <div class="flex gap-2">
         <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-medium w-full align-middle pt-3" %>
-        <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-
+        <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
       <div class="flex gap-2">
         <%= label_tag :end_date, 'End Date', class: "capitalize text-sm font-medium w-full pt-3" %>
-        <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      </div>
+      <div class="flex gap-2">
+        <%= label_tag :grouping_period, 'Time Period', class: "capitalize text-sm font-medium w-1/2 pt-3" %>
+        <%= select_tag :grouping_period, options_for_select([%w[Day day], %w[Month month], %w[Year year]], params[:grouping_period]), class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
       <div>
         <%= submit_tag 'Search', class: 'border border-black dark:border-white border-b-4 border-r-2 p-1 rounded font-semibold rounded' %>
@@ -21,5 +21,4 @@
   <% end %>
 
   <%= column_chart @chart_data, colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], library: { legend: { position: 'bottom' }, plugins: { datalabels: { align: 'end', anchor: 'end' } } } %>
-
 </div>
