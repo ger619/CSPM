@@ -82,9 +82,17 @@ class HomeController < ApplicationController
       @tickets = @tickets.where('created_at >= ? AND created_at <= ?', params[:start_date], params[:end_date])
     end
 
-    @chart_data = @tickets.group_by_day(:created_at).count
-    @total_tickets_per_project.values.sum
+    grouping_period = params[:grouping_period] || 'day'
 
-    # Count the number of tickets created per day
+    @chart_data = case grouping_period
+                  when 'day'
+                    @tickets.group_by_day(:created_at).count
+                  when 'month'
+                    @tickets.group_by_month(:created_at).count
+                  when 'year'
+                    @tickets.group_by_year(:created_at).count
+                  end
+
+    @total_tickets_per_project.values.sum
   end
 end

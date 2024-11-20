@@ -3,7 +3,6 @@ class TicketsController < ApplicationController
   before_action :set_project # This line ensures that the project is set before any action is taken
   before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status] # This line ensures that
   load_and_authorize_resource
-
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
@@ -16,7 +15,6 @@ class TicketsController < ApplicationController
     @page = (params[:page] || 1).to_i
     @total_pages = (@issue.count / @per_page.to_f).ceil
     @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
-
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
     # check if the user is assigned to anyone on the ticket
     @assigned_users = @ticket.users.any?
@@ -34,11 +32,10 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @tickets.save
         current_user.add_role :creator, @tickets
-
         # Update the status to "new"
         status = Status.find_by(name: 'New')
         @tickets.statuses << status if status
-
+        # Assign the user with the role of project manager to the ticket
         format.html { redirect_to project_path(@project), notice: 'ticket was successfully created.' }
       else
         # redirect_to new_project_path(@project), alert: 'ticket was not created.'
@@ -58,7 +55,6 @@ class TicketsController < ApplicationController
   def update
     @ticket = @project.tickets.find(params[:id])
     @ticket.user = current_user # Optional: If you want to ensure the user is always the current user
-
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
