@@ -24,9 +24,7 @@ class Ticket < ApplicationRecord
 
   has_many :sla_tickets, dependent: :destroy
 
-  after_create :set_initial_response_time
-  after_create :set_target_repair_deadline
-  after_create :set_resolution_deadline
+  after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
