@@ -1,11 +1,13 @@
-
-  <%= form_with(model: [project, ticket, ticket.issues.build]) do |f|%>
-    <h3 class="pb-2 font-bold"> Subject</h3>
-    <div class="relative z-0 w-full mb-6 group">
-      <div data-controller="text-limit" data-text-limit-limit-value="800">
-        <p id="char-count">0/800</p>
-        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]'%>
-      </div>
-    </div>    <%= f.submit "Submit",  class: 'mt-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
-  <% end %>
+<%= form_with(model: [project, ticket, ticket.issues.build]) do |f|%>
+  <h3 class="pb-2 font-bold"> Subject</h3>
+  <div class="relative z-0 w-full mb-6 group">
+    <div data-controller="text-limit" data-text-limit-limit-value="800">
+      <p id="char-count">
+        0/800
+      </p>
+      <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]'%>
+    </div>
+  </div>
+  <%= f.submit "Submit",  class: 'mt-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
+<% end %>
 

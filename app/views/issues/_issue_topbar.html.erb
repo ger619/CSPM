@@ -9,13 +9,11 @@
   </div>
   <!-- Search on the right -->
   <div class="grid col-span-1 justify-end">
-
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
         <%= f.text_field :query, placeholder: "Search ", class: "h-12 border border-b-4 border-r-2 rounded" %>
         <%= f.submit "Search", class: "h-12 mb-4 ml-4 border border border-b-4 border-r-2 border-black dark:border-slate-100 rounded font-semibold rounded p-1 "  %>
       <% end %>
-
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
         <%= f.submit "Clear", class: "h-12 ml-4 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded"  %>
       <% end %>

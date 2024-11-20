@@ -1,5 +1,4 @@
 <%= form_with(model: [@project, @ticket, @comment], method: :patch) do |f|%>
-
   <%= link_to "Back", project_ticket_path(@project.id, @ticket.id) %>
   <div class="relative z-0 w-full mb-6 group">
     <%= f.hidden_field :status, value: @ticket.statuses.pluck('statuses.name').first %>
@@ -10,7 +9,9 @@
     <%= f.label :why, :Why?, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
     <%= f.text_field :why, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
   </div>
-  <h3 class="pb-2 font-bold"> Solution</h3>
+  <h3 class="pb-2 font-bold">
+    Solution
+  </h3>
   <div class="relative z-0 w-full mb-6 group">
     <div data-controller="text-limit" data-text-limit-limit-value="800">
       <p id="char-count">0/200</p>

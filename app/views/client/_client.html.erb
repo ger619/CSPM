@@ -56,7 +56,6 @@
         <td class="px-6 py-4 truncate w-64">
           <%= client.client_contact_person_email %>
         </td>
-
         <% if can? :edit, client %>
           <td class="px-4 py-4">
             <%= link_to 'EDIT', edit_client_path(client), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
