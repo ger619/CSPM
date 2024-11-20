@@ -24,31 +24,34 @@
         <%= @ticket.resolution_deadline.strftime("%I:%M %p at %d %b %Y") %>
       </span>
     </p>
-    <!--
+
     <p class="font-bold">
       SLA Initial Response Deadline Breached:
       <span class="font-extralight">
-        <%# if @ticket.initial_response_deadline > DateTime.now %>
+        <% if @ticket.initial_response_deadline > DateTime.now %>
           NO
-        <%# else %>
+        <% else %>
           YES
-        <%# end %>
+        <% end %>
       </span>
 
+
       <span class="font-extralight">
-        <%# if @ticket.initial_response_deadline > DateTime.now %>
-          <%#= distance_of_time_in_words(DateTime.now, @ticket.initial_response_deadline) %>
-        <%# else %>
-          <%#= distance_of_time_in_words(@ticket.initial_response_deadline, DateTime.now) %>
-        <%# end %>
-        <%# if @ticket.initial_response_deadline > DateTime.now || @ticket.updated_at > DateTime.now %>
-          <%#= distance_of_time_in_words(DateTime.now, [@ticket.initial_response_deadline, @ticket.updated_at].max) %>
-        <%# else %>
-          <%#= distance_of_time_in_words([@ticket.initial_response_deadline, @ticket.updated_at].max, DateTime.now) %>
-        <%# end %>
+        <% if @ticket.initial_response_deadline > DateTime.now %>
+          <%= distance_of_time_in_words(DateTime.now, @ticket.initial_response_deadline) %>
+        <% else %>
+          <%= distance_of_time_in_words(@ticket.initial_response_deadline, DateTime.now) %>
+        <% end %>
+        <% if @ticket.initial_response_deadline > DateTime.now || @ticket.updated_at > DateTime.now %>
+          <%= distance_of_time_in_words(DateTime.now, [@ticket.initial_response_deadline, @ticket.updated_at].max) %>
+        <% else %>
+          <%= distance_of_time_in_words([@ticket.initial_response_deadline, @ticket.updated_at].max, DateTime.now) %>
+        <% end %>
       </span>
+
+
     </p>
-    -->
+
 
     <p>
       <span class="font-bold">
