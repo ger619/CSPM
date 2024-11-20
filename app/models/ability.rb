@@ -27,7 +27,6 @@ class Ability
       can :read, Product
       cannot %i[create delete edit], Board
       cannot :manage, Task
-
     elsif user.has_role? :agent
       can :read, Project
       can %i[create read assign_tag unassign_tag update_status add_status], Ticket

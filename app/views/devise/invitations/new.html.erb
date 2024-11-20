@@ -1,18 +1,13 @@
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
 <h2><%= t "devise.invitations.new.header" %></h2>
-
 <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
-
-  <% resource.class.invite_key_fields.each do |field| -%>
+    <% resource.class.invite_key_fields.each do |field| -%>
     <div class="field flex gap-2 m-2">
       <%= f.label field, class: 'pt-3' %>
       <%= f.text_field field, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true  %>
-
     </div>
   <% end %>
-
-
   <% if current_user.has_role? :admin %>
     <div class="field flex gap-2 m-2">
       <%= f.label :role, class: 'pt-3 pr-2'%>
@@ -24,10 +19,8 @@
       <%= select_tag :role, options_for_select(Role.where.not(name: %w[creator editor admin]).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300 w-[250px] shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
     </div>
   <% end %>
-
-
-  <div class="actions">
-    <%= f.submit t("devise.invitations.new.submit_button"), class: 'mt-4 w-[250px] h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
-  </div>
-<% end %>
+    <div class="actions">
+      <%= f.submit t("devise.invitations.new.submit_button"), class: 'mt-4 w-[250px] h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+    </div>
+  <% end %>
 <% end %>
