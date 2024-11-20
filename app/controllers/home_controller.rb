@@ -91,8 +91,6 @@ class HomeController < ApplicationController
                     @tickets.group_by_month(:created_at).count
                   when 'year'
                     @tickets.group_by_year(:created_at).count
-                  else
-                    @tickets.group_by_day(:created_at).count
                   end
 
     @total_tickets_per_project.values.sum
