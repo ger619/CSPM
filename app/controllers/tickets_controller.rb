@@ -36,6 +36,7 @@ class TicketsController < ApplicationController
         status = Status.find_by(name: 'New')
         @tickets.statuses << status if status
         # Assign the user with the role of project manager to the ticket
+
         format.html { redirect_to project_path(@project), notice: 'ticket was successfully created.' }
       else
         # redirect_to new_project_path(@project), alert: 'ticket was not created.'
