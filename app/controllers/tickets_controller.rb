@@ -133,6 +133,11 @@ class TicketsController < ApplicationController
       sla_ticket.update(sla_target_response_deadline: @ticket.sla_target_response_deadline)
     end
 
+    if status.name == 'Resolved'
+      sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
+      sla_ticket.update(sla_resolution_deadline: @ticket.sla_resolution_deadline)
+    end
+
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end

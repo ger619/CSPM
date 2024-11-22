@@ -63,8 +63,6 @@ class Ticket < ApplicationRecord
   end
 
   def sla_status
-    return 'Still Pending' if pending?
-    return 'Still Pending to Assign' if pending_to_assign?
     return 'Not Breached' if on_time?
 
     'Breached' if breached?
@@ -74,6 +72,12 @@ class Ticket < ApplicationRecord
     return 'Not Breached' if sla_on_time?
 
     'Breached' if sla_breached?
+  end
+
+  def sla_resolution_deadline
+    return 'Not Breached' if res_sla_on_time?
+
+    'Breached' if res_sla_breached?
   end
 
   def progress_percentage
@@ -92,6 +96,16 @@ class Ticket < ApplicationRecord
 
   private
 
+  # SLA THREE
+
+  def res_sla_breached?
+    statuses.any? { |status| status.name == 'Resolved' && resolution_deadline < DateTime.now }
+  end
+
+  def res_sla_on_time?
+    statuses.any? { |status| status.name == 'Resolved' && resolution_deadline > DateTime.now }
+  end
+
   # SLA TWO
   def sla_breached?
     statuses.any? { |status| status.name == 'Client Confirmation Pending' && target_repair_deadline < DateTime.now }
@@ -102,14 +116,6 @@ class Ticket < ApplicationRecord
   end
 
   # SLA ONE
-  def pending?
-    users.none? && initial_response_deadline < DateTime.now
-  end
-
-  def pending_to_assign?
-    users.none? && initial_response_deadline > DateTime.now
-  end
-
   def on_time?
     users.any? && initial_response_deadline >= DateTime.now
   end

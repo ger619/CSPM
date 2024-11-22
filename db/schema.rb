@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_15_094048) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_113725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -188,6 +188,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_15_094048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sla_target_response_deadline"
+    t.string "sla_resolution_deadline"
     t.index ["ticket_id"], name: "index_sla_tickets_on_ticket_id"
   end
 

@@ -78,5 +78,16 @@
       </span>
 
     </p>
+    <p>
+      <span class="font-bold">
+        RESOLUTION DEADLINE:
+      </span>
+      <span class="font-extralight">
+        <% if @sla_ticket.present? %>
+          <%= @sla_ticket.sla_resolution_deadline %>
+        <% end %>
+      </span>
+
+    </p>
   <% end %>
 </div>
