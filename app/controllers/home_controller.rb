@@ -86,7 +86,7 @@ class HomeController < ApplicationController
 
     @chart_data = case grouping_period
                   when 'day'
-                    @tickets.group_by_day(:created_at).count
+                    @tickets.group_by_day(:created_at, time_zone: 'UTC', format: '%Y-%m-%d').count
                   when 'month'
                     @tickets.group_by_month(:created_at).count
                   when 'year'
