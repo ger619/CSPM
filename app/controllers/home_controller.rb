@@ -86,13 +86,46 @@ class HomeController < ApplicationController
 
     @chart_data = case grouping_period
                   when 'day'
-                    @tickets.group_by_day(:created_at).count
+                    @tickets.group_by_day(:created_at, time_zone: 'UTC', format: '%Y-%m-%d').count
                   when 'month'
                     @tickets.group_by_month(:created_at).count
                   when 'year'
                     @tickets.group_by_year(:created_at).count
                   end
 
+    @total_tickets_per_project.values.sum
+
+    # Add a column graph with a search and filter feature that include users
+    # @chart_data_display
+
+    @tickets_user = Ticket.all
+
+    if params[:start_date].present? && params[:end_date].present?
+      @tickets_user = @tickets_user.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date], params[:end_date])
+    end
+
+    @tickets_user = if current_user.has_role?(:admin) && params[:user_id].present?
+                      @tickets_user.joins(:users).where(users: { id: params[:user_id] })
+                    else
+                      @tickets_user.joins(:users).where(users: { id: current_user.id })
+                    end
+
+    @tickets_user = @tickets_user.joins(:project) # Ensure projects table is joined
+
+    grouping_period = params[:grouping_period] || 'day'
+
+    @chart_data_per_user = case grouping_period
+                           when 'day'
+                             @tickets_user.group("CONCAT(users.first_name, ' ', users.last_name)").group_by_day(
+                               'tickets.created_at', time_zone: 'UTC', format: '%Y-%m-%d'
+                             ).count
+                           when 'month'
+                             @tickets_user.group("CONCAT(users.first_name, ' ', users.last_name)").group_by_month('tickets.created_at').count
+                           when 'year'
+                             @tickets_user.group("CONCAT(users.first_name, ' ', users.last_name)").group_by_year('tickets.created_at').count
+                           end
+
+    @total_tickets_per_project = @tickets_user.group('projects.title').count('tickets.id')
     @total_tickets_per_project.values.sum
   end
 end
