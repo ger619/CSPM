@@ -1,10 +1,10 @@
-class GroupwareController < ApplicationController
+class GroupwaresController < ApplicationController
   before_action :authenticate_user!
-  before_action :software
-  before_action :set_groupware, only: %i[show edit update destroy]
+  before_action :software, only: %i[new create]
+  # before_action :set_groupware, only: %i[show edit update destroy]
 
   def index
-    @groupwares = Groupware.all
+    @groupware = Groupware.all
   end
 
   def new
@@ -16,7 +16,7 @@ class GroupwareController < ApplicationController
 
     respond_to do |format|
       if @groupware.save
-        format.html { redirect_to software_groupwares_path(@software), notice: 'Groupware was successfully created.' }
+        format.html { redirect_to software_path(@software), notice: 'Groupware was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -29,5 +29,9 @@ class GroupwareController < ApplicationController
 
   def set_groupware
     @groupware = @software.groupwares.find(params[:id])
+  end
+
+  def groupware_params
+    params.require(:groupware).permit(:name, :software_id)
   end
 end

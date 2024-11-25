@@ -1,6 +1,6 @@
 class SoftwareController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_software, only: %i[show edit update]
+  before_action :set_software, only: %i[show edit update destroy]
   load_and_authorize_resource
 
   def index
@@ -43,6 +43,13 @@ class SoftwareController < ApplicationController
   end
 
   def edit; end
+
+  def destroy
+    @software.destroy
+    respond_to do |format|
+      format.html { redirect_to software_index_path, notice: 'Software was successfully destroyed.' }
+    end
+  end
 
   def update
     respond_to do |format|

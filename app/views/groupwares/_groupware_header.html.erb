@@ -1,0 +1,21 @@
+<div class="grid grid-cols-2 ">
+  <div class="grid col-span-1">
+    <% if can? :create, @software %>
+      <% if current_user.has_role? :admin  %>
+        <%= button_to 'Add Product +', new_software_groupware_path(@software), method: :get, class: 'mb-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+      <% end %>
+    <% end %>
+  </div>
+  <!-- Search on the right -->
+  <div class="grid col-span-1 justify-end">
+    <div class="flex flex-col md:flex-row items-start md:items-center w-full">
+      <%= form_with url: software_index_path, method: :get, class: 'flex' do |f| %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border-b-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 rounded" %>
+        <%= f.submit "Search", class: "mb-4 ml-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 p-2 font-semibold rounded"  %>
+      <% end %>
+      <%= form_with url: software_index_path, method: :get, class: 'flex' do |f| %>
+        <%= f.submit "Clear", class: "ml-4 mb-4 h-12 border border-black dark:border-slate-100 border border-b-4 border-r-2 p-2 font-semibold rounded"  %>
+      <% end %>
+    </div>
+  </div>
+</div>
