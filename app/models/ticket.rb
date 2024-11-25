@@ -24,7 +24,7 @@ class Ticket < ApplicationRecord
 
   has_many :sla_tickets, dependent: :destroy
 
-  after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline
+  after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline, :ticket_unique_id
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
@@ -182,6 +182,14 @@ class Ticket < ApplicationRecord
     business_hours.any? do |hours|
       time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
     end
+  end
+
+  # Take the initials for the #{project.title} and append a random hex string to it
+
+  def ticket_unique_id
+    initials = project.title.split.map { |word| word[0] }.join.upcase
+    self.unique_id = "#{initials}-#{SecureRandom.hex(2)}"
+    save
   end
 
   def content_length_within_limit
