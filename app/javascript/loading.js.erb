@@ -3,7 +3,7 @@ document.addEventListener('turbo:load', () => {
   const includedPaths = [ '/' ];
   const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
 
-  if (!includedPaths.includes(window.location.pathname) && loadTime <= 2000) {
+  if (!includedPaths.includes(window.location.pathname) && loadTime <= 5000) {
     return;
   }
 
