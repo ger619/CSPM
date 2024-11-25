@@ -3,6 +3,9 @@
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
     <tr>
       <th scope="col" class="px-2 py-2">
+        Ticket ID
+      </th>
+      <th scope="col" class="px-2 py-2">
         Date of Issue
       </th>
       <th scope="col" class="px-2 py-2">
@@ -52,8 +55,14 @@
     <tbody>
     <% @ticket.each do |ticket| %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
+
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket)   %>
+        </th>
+        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
+          <% if ticket.unique_id.present? %>
+          <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket)  %>
+          <% end %>
         </th>
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>

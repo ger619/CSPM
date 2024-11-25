@@ -3,6 +3,7 @@ class TicketsController < ApplicationController
   before_action :set_project # This line ensures that the project is set before any action is taken
   before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status] # This line ensures that
   load_and_authorize_resource
+
   def show
     # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
