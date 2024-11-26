@@ -32,6 +32,6 @@ class GroupwaresController < ApplicationController
   end
 
   def groupware_params
-    params.require(:groupware).permit(:name, :software_id)
+    params.require(:groupware).permit(:name, :software_id, :description)
   end
 end

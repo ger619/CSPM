@@ -20,6 +20,8 @@ class SoftwareController < ApplicationController
 
   def show
     @software = Software.find(params[:id])
+    # Create the show view for all the groupware in the software
+    @groupware = @software.groupwares
   end
 
   def new

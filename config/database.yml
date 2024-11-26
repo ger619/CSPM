@@ -89,4 +89,4 @@ production:
   <<: *default
   database: cspm_production
   username: cspm
-  password: <%= ENV["CSPM_DATABASE_PASSWORD"] %>••••••••••••
+  password: <%= ENV["CSPM_DATABASE_PASSWORD"] %>
