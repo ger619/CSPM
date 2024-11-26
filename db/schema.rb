@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_25_084441) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_26_082906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -126,6 +126,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_25_084441) do
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "groupwares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "software_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "description"
+    t.index ["software_id"], name: "index_groupwares_on_software_id"
   end
 
   create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -335,6 +344,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_25_084441) do
   add_foreign_key "comments", "projects"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
+  add_foreign_key "groupwares", "softwares"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"
   add_foreign_key "issues", "users"

@@ -1,0 +1,2 @@
+module GroupwaresHelper
+end
