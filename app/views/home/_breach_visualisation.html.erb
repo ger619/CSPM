@@ -1,0 +1,7 @@
+
+<h1 class="text-center">SLA ONE</h1>
+<div class="col-span-1 flex items-center justify-between p-4 rounded shadow hover:shadow-lg ">
+  <%= column_chart @sla_breaches_per_project, xtitle: "Projects", ytitle: "SLA Breaches", title: "SLA Breaches Per Project" %>
+
+  <%= column_chart @non_breached_tickets_per_project, xtitle: "Projects", ytitle: "Non-SLA Breaches", title: "Non-SLA Breached Tickets Per Project" %>
+</div>

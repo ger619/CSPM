@@ -127,5 +127,27 @@ class HomeController < ApplicationController
 
     @total_tickets_per_project = @tickets_user.group('projects.title').count('tickets.id')
     @total_tickets_per_project.values.sum
+
+    # Visualise SLA breaches and ticket statuses through graphs per project
+
+    # Visualise SLA breaches and ticket statuses through graphs per project
+    @sla_breaches_per_project = current_user.projects
+      .joins(:tickets)
+      .joins('INNER JOIN sla_tickets ON sla_tickets.ticket_id = tickets.id')
+      .where("sla_tickets.sla_status = 'Breached'") # Assuming you have a way to define SLA breach
+      .group('projects.title')
+      .count
+
+    @non_breached_tickets_per_project = current_user.projects
+      .joins(:tickets)
+      .joins('LEFT JOIN sla_tickets ON sla_tickets.ticket_id = tickets.id')
+      .where("sla_tickets.sla_status = 'Not Breached' OR sla_tickets.ticket_id IS NULL") # Assuming you have a way to define SLA breach
+      .group('projects.title')
+      .count
+
+    @ticket_statuses_per_project = current_user.projects
+      .joins(:tickets)
+      .group('projects.title', 'tickets.status')
+      .count
   end
 end
