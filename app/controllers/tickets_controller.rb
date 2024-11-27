@@ -33,14 +33,16 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @tickets.save
         current_user.add_role :creator, @tickets
+
         # Update the status to "new"
         status = Status.find_by(name: 'New')
         @tickets.statuses << status if status
-        # Assign the user with the role of project manager to the ticket
 
-        format.html { redirect_to project_path(@project), notice: 'ticket was successfully created.' }
+        # Assign the user with the role of project manager to the ticket (if necessary logic applies here)
+
+        # Redirect to the ticket's show page
+        format.html { redirect_to project_ticket_path(@project, @tickets), notice: 'Ticket was successfully created.' }
       else
-        # redirect_to new_project_path(@project), alert: 'ticket was not created.'
         format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -142,7 +144,14 @@ class TicketsController < ApplicationController
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
-    redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
+    if status.name == 'Awaiting Build' or status.name == 'On-Hold' or status.name == 'Closed' or
+       status.name == 'Declined' or status.name == 'Reopened' or status.name == 'QA Testing' or
+       status.name == 'Under Development' or status.name == 'Work in Progress' or
+       status.name == 'Client Confirmation Pending'
+      redirect_to new_project_ticket_comment_path(@project, @ticket)
+    else
+      redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
+    end
   end
 
   private
