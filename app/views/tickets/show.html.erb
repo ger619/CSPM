@@ -157,18 +157,20 @@
 
   <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('turbo:load', function() {
       const modal = document.getElementById('imageModal');
       const modalImg = document.getElementById('fullImage');
-      const zoomableImage = document.querySelector('.zoomable-image');
       const closeBtn = document.querySelector('.close');
 
-      if (zoomableImage) {
-        zoomableImage.onclick = function() {
+      // Use event delegation for dynamically added images
+      document.addEventListener('click', function(event) {
+        const target = event.target;
+
+        if (target.classList.contains('zoomable-image')) {
           modal.style.display = 'block';
-          modalImg.src = this.src;
+          modalImg.src = target.src;
         }
-      }
+      });
 
       if (closeBtn) {
         closeBtn.onclick = function() {
@@ -182,6 +184,7 @@
         }
       }
     });
+
 
 
   </script>
