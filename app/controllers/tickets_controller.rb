@@ -142,7 +142,14 @@ class TicketsController < ApplicationController
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
-    redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
+    if status.name == 'Awaiting Build' or status.name == 'On-Hold' or status.name == 'Closed' or
+       status.name == 'Declined' or status.name == 'Reopened' or status.name == 'QA Testing' or
+       status.name == 'Under Development' or status.name == 'Work in Progress' or
+       status.name == 'Client Confirmation Pending'
+      redirect_to new_project_ticket_comment_path(@project, @ticket)
+    else
+      redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
+    end
   end
 
   private

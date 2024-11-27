@@ -1,20 +1,22 @@
-<% if current_user.has_role? :admin or current_user.has_role? :agent or current_user.has_role?('project manager') %>
+<% if current_user.has_role? :admin or current_user.has_role? :agent or  current_user.has_role?('project manager') %>
   <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
-    <div>
-      <%= select_tag :status_id, options_for_select(Status.where.not(name: 'Closed').pluck(:name, :id), @ticket.statuses.first&.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-    </div>
-    <div class="mt-2">
-      <%= hidden_field_tag :status_id, @ticket.statuses.first&.id %>
-    </div>
-  <% end %>
-
-  <!-- Modal Trigger -->
-  <%= button_to 'UPDATE STATUS', new_project_ticket_comment_path(@project, @ticket, status_id: @ticket.statuses.first&.id), method: :get, data: { turbo_frame: 'modal' }, class: 'w-full font-semibold border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+  <div>
+    <%= select_tag :status_id, options_for_select(Status.where.not(name: 'Closed').collect { |status| [status.name, status.id] }, @ticket.statuses.first&.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>      <div class="">
+    <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+  </div>
+  </div>
+<% end %>
 <% end %>
 <% unless current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
-  <% @ticket.statuses.each do |status| %>
-    <% if status.name.in?(%w[Client Confirmation Pending Resolved Reopened Closed Declined]) %>
-      <%= button_to 'UPDATE STATUS', new_project_ticket_comment_path(@project, @ticket, status_id: status.id), method: :get, data: { turbo_frame: 'modal' }, class: 'w-full font-semibold border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded' %>
+  <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+    <% @ticket.statuses.each do |status| %>
+      <% if status.name == 'Client Confirmation Pending' or status.name == 'Resolved' or status.name == 'Reopened' or status.name == 'Closed' or status.name == 'Declined'%>
+        <div>
+          <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened Resolved]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>          <div class="">
+          <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold border border-b-4 border-r-2 border-black dark:border-slate-100 mt-1 p-2.5 rounded ' %>
+        </div>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
