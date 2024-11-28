@@ -1,10 +1,7 @@
 <%= turbo_frame_tag 'modal' do %>
   <div class="modal h-[90%]">
-    <h2>Edit Comment</h2>
+
     <%= render 'comments/edit_form', project: @project, ticket: @ticket %>
-    <%= link_to 'Cancel', "#", data: {
-      controller: 'modals',
-      action: 'modals#close'
-    }, class: "cancel-button"%>
+    <%= link_to 'Cancel', cancel_redirect_path, data: { turbo: false }, class: "cancel-button px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100" %>
   </div>
 <% end %>
