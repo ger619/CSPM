@@ -60,14 +60,6 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Task State Updated')
   end
 
-  def new_comment_emails
-    @comment = params[:comment]
-    @user = User.where(id: params[:user_ids])
-    @user.each do |user|
-      mail(to: user.email, subject: 'New Comment')
-    end
-  end
-
   def new_comment_email(user, comment, current_user)
     @user = user
     @comment = comment
