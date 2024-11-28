@@ -1,8 +1,9 @@
 <div class="p-4 border border-dashed rounded">
+  <%= render 'project/new_back' %>
   <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
-    <div class="md:gap-6">
+    <div class="md:gap-4">
       <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :title, :Title, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+        <%= f.label :title, :Title, class: "capitalize block text-sm font-medium text-gray-900 dark:text-white"  %><br />
         <%= f.text_field :title, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
       </div>
       <div class="grid grid-cols-2 gap-2">
