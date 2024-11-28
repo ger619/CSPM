@@ -15,14 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`/groupwares?software_id=${softwareId}`, { headers: { Accept: 'application/json' } })
           .then((response) => response.json())
           .then((data) => {
-            data.forEach(groupware => {
+            data.forEach((groupware) => {
               const option = document.createElement('option');
               option.value = groupware.id;
               option.textContent = groupware.name;
               groupwareSelect.appendChild(option);
             });
           })
-          .catch(error => console.error('Error fetching groupwares:', error));
+          .catch((error) => {
+            throw new Error(`Failed to fetch groupwares: ${error.message}`);
+          });
       }
     });
   }
