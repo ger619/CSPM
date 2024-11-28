@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (softwareId) {
         fetch(`/groupwares?software_id=${softwareId}`, { headers: { Accept: 'application/json' } })
-          .then(response => response.json())
-          .then(data => {
+          .then((response) => response.json())
+          .then((data) => {
             data.forEach(groupware => {
               const option = document.createElement('option');
               option.value = groupware.id;
