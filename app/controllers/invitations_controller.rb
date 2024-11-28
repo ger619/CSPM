@@ -14,7 +14,7 @@ class InvitationsController < Devise::InvitationsController
       render :new
       return
     end
-    invited_user = User.find_by(email: invite_params[:email])
+    invited_user = User.find_by(email: invite_params[:email], first_name: invite_params[:first_name], last_name: invite_params[:last_name])
 
     if invited_user
       invited_user.invite!(current_user)
@@ -36,7 +36,7 @@ class InvitationsController < Devise::InvitationsController
   private
 
   def invite_params
-    params.require(:user).permit(:email, roles: [])
+    params.require(:user).permit(:email, :first_name, :last_name, roles: [])
   end
 
   def assign_role(invited_user)
