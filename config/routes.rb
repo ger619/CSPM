@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { invitations: 'invitations' }
-  resources :users
+  resources :users do
+    collection do
+      get :search
+    end
+  end
 
   require 'sidekiq/web'
   authenticate :user, ->(user) { user.has_role?(:admin) } do

@@ -11,21 +11,12 @@
       </svg>
     <% end %>
   </div>
-  <div id="imageModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="fullImage">
+  <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
+    <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+    <img class="modal-content" id="fullImage" data-image-modal-target="modalImage">
   </div>
   <div class="w-full col-span-1 col-span-1 h-full">
-    <div class="mb-4 font-bold uppercase">Type of Issue:
-      <span class="font-medium">
-        <%= @ticket.issue %>
-      </span>
-    </div>
-    <div class="mb-2.5 font-bold uppercase">Priority:
-      <span class="font-medium">
-        <%= @ticket.priority %>
-      </span>
-    </div>
+    <%#= render 'ticket_middle' %>
     <div class="mb-2.5 font-bold uppercase flex">Status:
       <span class="font-medium ml-1">
       </span>
@@ -188,3 +179,4 @@
 
 
 </script>
+
