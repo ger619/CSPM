@@ -47,3 +47,24 @@
 .cancel-button:hover {
   background-color: #2640fe;
 }
+
+.tribute-container {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.tribute-container .tribute-item {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.tribute-container .tribute-item:hover {
+  background-color: #f0f0f0;
+}
