@@ -59,6 +59,13 @@ class ClientController < ApplicationController
     end
   end
 
+  def destroy
+    @client.destroy
+    respond_to do |format|
+      format.html { redirect_to client_index_path, notice: 'Client was successfully destroyed.' }
+    end
+  end
+
   private
 
   def set_client

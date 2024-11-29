@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :user
   belongs_to :software
-  belongs_to :client
+  belongs_to :client, optional: true
 
   has_many :tickets, dependent: :destroy
   has_many :issues, foreign_key: :project_id, class_name: 'Issue', dependent: :destroy
