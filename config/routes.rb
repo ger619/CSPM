@@ -50,10 +50,10 @@ Rails.application.routes.draw do
   end
 
   resources :software do
-    resources :groupwares # Nested groupwares if needed in the context of software
+    resources :groupwares, only: [:index] # Nested groupwares if needed in the context of software
   end
 
-  resources :groupwares # Independent route for AJAX requests
+  resources :groupwares, only: [:index] # Independent route for AJAX requests
 
   resources :client
   resources :status
