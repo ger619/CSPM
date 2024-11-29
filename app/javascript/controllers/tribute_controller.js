@@ -10,11 +10,11 @@ document.addEventListener('turbo:load', () => {
 
       // Use a Set to filter out duplicate names
       const uniqueUsers = Array.from(new Set(
-        users.map(user => `${user.first_name} ${user.last_name}`)
+        users.map((user) => `${user.first_name} ${user.last_name}`),
       ));
 
       // Create the array of objects with unique full names
-      cb(uniqueUsers.map(fullName => ({
+      cb(uniqueUsers.map((fullName) => ({
         key: fullName, // Display both first and last names
         value: fullName, // Insert full name
       })));
