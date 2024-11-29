@@ -12,6 +12,8 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <%= Sentry.get_trace_propagation_meta.html_safe %>
+  <script src="https://cdn.jsdelivr.net/npm/tributejs/dist/tribute.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tributejs/dist/tribute.css"/>
 </head>
 
 <body class="bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
