@@ -6,22 +6,33 @@ document.addEventListener('turbo:load', () => {
     softwareSelect.addEventListener('change', () => {
       const softwareId = softwareSelect.value;
 
-      // Clear existing options
       groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
 
       if (softwareId) {
         fetch(`/groupwares?software_id=${softwareId}`, { headers: { Accept: 'application/json' } })
-          .then((response) => response.json())
+          .then((response) => {
+            console.log(`Response status: ${response.status}`);
+            console.log(`Content-Type: ${response.headers.get('content-type')}`);
+            if (!response.ok) {
+              throw new Error('Network response was not ok.');
+            }
+            if (response.headers.get('content-type').includes('application/json')) {
+              return response.json();
+            }
+            throw new Error('Unexpected content type');
+          })
           .then((data) => {
-            data.forEach((groupware) => {
-              const option = document.createElement('option');
-              option.value = groupware.id;
-              option.textContent = groupware.name;
-              groupwareSelect.appendChild(option);
-            });
+            if (Array.isArray(data)) {
+              data.forEach((groupware) => {
+                const option = document.createElement('option');
+                option.value = groupware.id;
+                option.textContent = groupware.name;
+                groupwareSelect.appendChild(option);
+              });
+            }
           })
           .catch((error) => {
-            throw new Error(`Failed to fetch groupwares: ${error.message}`);
+            console.error(`Failed to fetch groupwares: ${error.message}`);
           });
       }
     });
