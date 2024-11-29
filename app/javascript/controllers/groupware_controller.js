@@ -1,5 +1,3 @@
-// app/javascript/controllers/groupware_controller.js
-
 document.addEventListener('turbo:load', () => {
   const softwareSelect = document.querySelector('[data-action="change->form#updateGroupwareOptions"]');
   const groupwareSelect = document.getElementById('groupware-select');
