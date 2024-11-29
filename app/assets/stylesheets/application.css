@@ -48,7 +48,6 @@
   background-color: #2640fe;
 }
 
-/* Add some custom styles to ensure the dropdown is visually clear and within a container */
 .tribute-container {
   position: absolute;
   z-index: 10;
