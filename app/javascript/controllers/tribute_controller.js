@@ -1,5 +1,5 @@
 document.addEventListener('turbo:load', () => {
-// eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   const tribute = new Tribute({
     trigger: '@', // Triggers the dropdown when '@' is typed
     allowSpaces: false,
@@ -8,10 +8,15 @@ document.addEventListener('turbo:load', () => {
       const response = await fetch(`/users/search?q=${text}`);
       const users = await response.json();
 
-      // Combine first_name and last_name for display
-      cb(users.map((user) => ({
-        key: `${user.first_name} ${user.last_name}`, // Display both first and last names
-        value: `${user.first_name} ${user.last_name}`, // Insert full name
+      // Use a Set to filter out duplicate names
+      const uniqueUsers = Array.from(new Set(
+        users.map(user => `${user.first_name} ${user.last_name}`)
+      ));
+
+      // Create the array of objects with unique full names
+      cb(uniqueUsers.map(fullName => ({
+        key: fullName, // Display both first and last names
+        value: fullName, // Insert full name
       })));
     },
     menuItemTemplate(item) {
