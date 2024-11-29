@@ -11,9 +11,9 @@
       </svg>
     <% end %>
   </div>
-  <div id="imageModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="fullImage">
+  <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
+    <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+    <img class="modal-content" id="fullImage" data-image-modal-target="modalImage">
   </div>
   <div class="w-full col-span-1 col-span-1 h-full">
     <div class="mb-4 font-bold uppercase">Type of Issue:
@@ -154,38 +154,3 @@
           cursor: pointer;
       }
   </style>
-
-  <script>
-
-    document.addEventListener('turbo:load', function() {
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('fullImage');
-      const closeBtn = document.querySelector('.close');
-
-      // Use event delegation for dynamically added images
-      document.addEventListener('click', function(event) {
-        const target = event.target;
-
-        if (target.classList.contains('zoomable-image')) {
-          modal.style.display = 'block';
-          modalImg.src = target.src;
-        }
-      });
-
-      if (closeBtn) {
-        closeBtn.onclick = function() {
-          modal.style.display = 'none';
-        }
-      }
-
-      if (modal) {
-        modal.onclick = function() {
-          modal.style.display = 'none';
-        }
-      }
-    });
-
-
-
-  </script>
-

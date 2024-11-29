@@ -4,7 +4,8 @@ class GroupwaresController < ApplicationController
   # before_action :set_groupware, only: %i[show edit update destroy]
 
   def index
-    @groupware = Groupware.all
+    @groupwares = Groupware.where(software_id: params[:software_id])
+    render json: @groupwares
   end
 
   def new
