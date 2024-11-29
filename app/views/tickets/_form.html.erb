@@ -10,11 +10,23 @@
        <%= f.label :priority, :Severity, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
        <%= f.select :priority, options_for_select(['SEVERITY ONE','SEVERITY TWO','SEVERITY THREE','SEVERITY FOUR']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
      </div>
+
+        <div class="relative z-0 w-full mb-6 group">
+          <%= f.label :software, ('Product Categories'), class: "capitalize block mb-1 text-sm font-medium" %>
+          <% previously_selected_software = Software.where(id: @project.software_id) %>
+          <%= f.collection_select :software_id, previously_selected_software, :id, :name, { prompt: "Select Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", data: { action: "change->form#updateGroupwareOptions" } %>
+        </div>
+        <div class="relative z-0 w-full mb-6 group">
+          <%= f.label :software, ('Sub Product'), class: "capitalize block mb-1 text-sm font-medium" %>
+          <%= f.collection_select :groupware_id, [], :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select" %>
+        </div>
+
      <div class="relative z-0 w-full mb-6 group">
        <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
        <%= f.file_field :ticket_image, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
      </div>
     </div>
+
     <div class="relative z-0 w-full mb-6 group">
       <%= f.label :title, :Subject, class: "capitalize block mb-1 text-sm font-medium"  %>
       <br />

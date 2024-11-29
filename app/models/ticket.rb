@@ -6,6 +6,7 @@ class Ticket < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_rich_text :content
   has_one_attached :image
+  belongs_to :software, optional: true
 
   has_paper_trail
 

@@ -1,3 +1,3 @@
 class Groupware < ApplicationRecord
-  belongs_to :software
+  belongs_to :software, dependent: :destroy
 end
