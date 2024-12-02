@@ -28,7 +28,6 @@ class GroupwaresController < ApplicationController
 
   def update
     respond_to do |format|
-      #@groupware = @software.groupwares.find(params[:id])
       if @groupware.update(groupware_params)
         format.html { redirect_to software_path(@software), notice: 'Groupware was successfully updated.' }
       else
