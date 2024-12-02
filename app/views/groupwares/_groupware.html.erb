@@ -10,11 +10,6 @@
       <th scope="col" class="px-2 py-2">
         EDIT
       </th>
-
-
-      <th scope="col" class="px-2 py-2">
-        DELETE
-      </th>
     </tr>
     </thead>
     <tbody>
@@ -27,8 +22,20 @@
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
           <%= group.description %>
         </th>
+        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
+          <%= link_to 'Edit', edit_software_groupware_path(group.software, group), class: 'text-blue-500' %>
+        </th>
+        <!--
+        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
+          <%#= link_to 'Delete', [group.software, group], data: { turbo_confirm: 'Are you sure?' }, class: 'text-blue-500' %>
+        </th>
+        -->
+
+
       </tr>
+
     <% end %>
     </tbody>
   </table>
 </div>
+

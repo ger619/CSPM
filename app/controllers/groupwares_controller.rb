@@ -1,6 +1,7 @@
 class GroupwaresController < ApplicationController
   before_action :authenticate_user!
-  before_action :software, only: %i[new create]
+  before_action :set_software
+  before_action :set_groupware, only: %i[edit update destroy]
 
   def index
     @groupwares = Groupware.where(software_id: params[:software_id])
@@ -23,7 +24,29 @@ class GroupwaresController < ApplicationController
     end
   end
 
-  def software
+  def edit; end
+
+  def update
+    respond_to do |format|
+      #@groupware = @software.groupwares.find(params[:id])
+      if @groupware.update(groupware_params)
+        format.html { redirect_to software_path(@software), notice: 'Groupware was successfully updated.' }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @groupware.destroy
+    respond_to do |format|
+      format.html { redirect_to software_path(@software), notice: 'Groupware was successfully destroyed.' }
+    end
+  end
+
+  private
+
+  def set_software
     @software = Software.find(params[:software_id])
   end
 
