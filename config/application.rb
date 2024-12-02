@@ -16,7 +16,7 @@ module Cspm
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
     config.time_zone = 'Africa/Nairobi'
-    config.active_record.default_timezone = :local
+    # config.active_record.default_timezone = :local
 
     # Configuration for the application, engines, and railties goes here.
     #
