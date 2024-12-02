@@ -2,35 +2,35 @@
   <%= form_with  model: @project, url: project_path(@project), method: :patch do |f| %>
     <div class="md:gap-6">
       <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :title, :Title, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+        <%= f.label :title, ('Title *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
         <%= f.text_field :title, class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :title, :Subject, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+          <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
           <%= f.text_field :description, class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
         </div>
         <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :Assignee, :Assignee, class: "capitalize block mb-1 text-sm font-medium"  %><br />
+          <%= f.label :Assignee, ('Assignee *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
           <%= f.select :user_id, User.with_agent_project_manager_role.order(:first_name, :last_name).map { |user| [user.name, user.id] }, {},class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Assign User', required: true %>
         </div>
         <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :software, ('Product Categories'), class: "capitalize block mb-1 text-sm font-medium" %>
+          <%= f.label :software, ('Product Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
           <%= f.collection_select :software_id, Software.all, :id, :name, { prompt: "Select Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         </div>
         <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :software, ('Client Available'), class: "capitalize block mb-1 text-sm font-medium" %>
+          <%= f.label :software, ('Client Available *'), class: "capitalize block mb-1 text-sm font-medium" %>
           <%= f.collection_select :client_id, Client.all, :id, :name, { prompt: "Select Client" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :start_date, 'Start Date', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+          <%= f.label :start_date, 'Start Date *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
           <%= f.date_field :start_date, class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
         </div>
       </div>
       <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :title, :Subject, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+        <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
         <%= f.rich_text_area :content, class: "w-[100%] min-h-[300px] border dark:border-slate-100 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
       </div>
     </div>
