@@ -23,12 +23,9 @@
       <th scope="col" class="px-2 py-2">
         STATUS
       </th>
-      <!--
       <th scope="col" class="px-2 py-2">
         PROGRESS BAR
       </th>
-      -->
-
       <th scope="col" class="px-2 py-2">
         VIEW
       </th>
@@ -142,11 +139,11 @@
             <% end %>
           <% end %>
         </td>
-        <!-- Progress Bar
+        <!-- Progress Bar -->
         <td class="px-2 py-2">
-          <%#= ticket.progress_percentage %>%
+          <%= ticket.progress_percentage %>%
         </td>
-        -->
+
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded uppercase font-bold "  %>
         </td>
