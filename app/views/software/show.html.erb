@@ -2,3 +2,15 @@
 <%= @software.name %>
 <!-- Display groupware name -->
 <%= render 'groupwares/groupware' %>
+<div class="flex gap-10 mt-5">
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <% if @page > 1 %>
+      <%= link_to 'Previous', software_path(@software, page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold' %>
+    <% end %>
+    <span>Page <%= @page %> of <%= @total_pages %></span>
+    <% if @page < @total_pages %>
+      <%= link_to 'Next',software_path(@software, page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-2 border-black dark:border-slate-100 rounded font-semibold' %>
+    <% end %>
+  </div>
+</div>
