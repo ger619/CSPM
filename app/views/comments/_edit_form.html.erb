@@ -7,7 +7,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     <% end %>
-</div>
+  </div>
   <div class="relative z-0 w-full mb-6 group">
     <%= f.hidden_field :status, value: @ticket.statuses.pluck('statuses.name').first %>
     <%= f.label :what, :What?, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
