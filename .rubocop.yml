@@ -23,7 +23,7 @@ Metrics/AbcSize:
     - "app/models/*"
   Max: 180
 Metrics/ClassLength:
-  Max: 160
+  Max: 180
 Metrics/BlockLength:
   AllowedMethods: ['describe']
   Max: 30
