@@ -21,7 +21,16 @@ class SoftwareController < ApplicationController
   def show
     @software = Software.find(params[:id])
     # Create the show view for all the groupware in the software
-    @groupware = @software.groupwares
+
+    @groupware = if params[:query].present?
+                   @software.groupwares.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+                 else
+                   @software.groupwares.order('created_at DESC')
+                 end
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@groupware.count / @per_page.to_f).ceil
+    @groupware = @groupware.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def new
