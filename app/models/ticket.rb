@@ -83,7 +83,10 @@ class Ticket < ApplicationRecord
 
   def progress_percentage
     # Example logic to calculate progress percentage
-    case statuses.first.name
+    status = statuses.first
+    return 0 unless status # Return 0 if there is no status
+
+    case status.name
     when 'Reopened'
       5
     when 'New'
@@ -98,10 +101,12 @@ class Ticket < ApplicationRecord
       60
     when 'Client Confirmation Pending'
       70
+    when 'Awaiting Build'
+      80
     when 'Resolved' || 'Closed'
       100
     else
-      null
+      101
     end
   end
 
