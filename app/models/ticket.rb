@@ -101,10 +101,12 @@ class Ticket < ApplicationRecord
       60
     when 'Client Confirmation Pending'
       70
+    when 'Awaiting Build'
+      80
     when 'Resolved' || 'Closed'
       100
     else
-      null
+      101
     end
   end
 

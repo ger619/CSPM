@@ -143,15 +143,15 @@
         <td class="px-2 py-2">
           <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div class="<%= if ticket.progress_percentage < 30
+              <div class="<%= if ticket.progress_percentage.nil?
+                                'bg-gray-400'
+                              elsif ticket.progress_percentage < 30
                                 'bg-red-600'
+                              elsif ticket.progress_percentage < 60
+                                'bg-blue-600'
                               else
-                                if ticket.progress_percentage < 60
-                                  'bg-blue-600'
-                                else
-                                  ticket.progress_percentage == 100 ? 'bg-black' : 'bg-green-600'
-                                end
-                              end %> h-2.5 rounded-full" style="width: <%= ticket.progress_percentage %>%">
+                                ticket.progress_percentage >= 100 ? 'bg-black' : 'bg-green-600'
+                              end %> h-2.5 rounded-full" style="width: <%= ticket.progress_percentage || 0 %>%">
               </div>
             </div>
           </div>
