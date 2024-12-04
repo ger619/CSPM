@@ -6,9 +6,9 @@ class RatingsController < ApplicationController
     @rating.value = rating_params[:value]
 
     if @rating.save
-      redirect_to project_ticket_path(@ticket), notice: 'Rating submitted successfully.'
+      redirect_to project_tickets_path(@ticket), notice: 'Rating submitted successfully.'
     else
-      redirect_to project_ticket_path(@ticket), alert: 'Failed to submit rating.'
+      redirect_to project_tickets_path(@ticket), alert: 'Failed to submit rating.'
     end
   end
 
