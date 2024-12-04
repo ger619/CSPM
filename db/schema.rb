@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_29_080413) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_04_120626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -181,6 +181,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_080413) do
     t.index ["software_id"], name: "index_projects_on_software_id"
     t.index ["title"], name: "index_projects_on_title", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "ratings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "value"
+    t.uuid "ticket_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["ticket_id"], name: "index_ratings_on_ticket_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -361,6 +371,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_080413) do
   add_foreign_key "projects", "groupwares"
   add_foreign_key "projects", "softwares"
   add_foreign_key "projects", "users"
+  add_foreign_key "ratings", "tickets"
+  add_foreign_key "ratings", "users"
   add_foreign_key "sla_tickets", "tickets"
   add_foreign_key "softwares", "users"
   add_foreign_key "states", "tasks"

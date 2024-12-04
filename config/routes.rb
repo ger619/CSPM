@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       end
       resources :issues
       resources :comments
+      resources :ratings, only: :create
     end
   end
 

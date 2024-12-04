@@ -13,7 +13,7 @@
   </div>
   <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
     <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
-    <img class="modal-content" id="fullImage" data-image-modal-target="modalImage">
+    <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
   </div>
   <div class="w-full col-span-1 col-span-1 h-full">
     <%= render 'ticket_middle' %>
@@ -109,6 +109,14 @@
     <% end %>
   </div>
 </div>
+<h3>Ratings</h3>
+<p>Average Rating: <%= @ticket.ratings.average(:value).to_f.round(1) %> / 5</p>
+
+<%= form_with model: [@project, @ticket, Rating.new], local: true do |form| %>
+  <%= form.number_field :value, in: 1..5, step: 1 %>
+  <%= form.submit 'Rate' %>
+<% end %>
+
 
 
 
