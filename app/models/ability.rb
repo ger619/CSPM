@@ -3,8 +3,18 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
-    if user.has_role? :admin
+    if user.has_role?('super admin')
       can :manage, :all # allow super admins to do anything
+      can :manage, Organisation
+    elsif user.has_role? :admin # allow admins to manage users per organisation
+      can :manage, User, roles: { name: %w[agent client project_manager admin]}
+      can :manage, Project
+      can :manage, Ticket
+      can :manage, Issue
+      can :manage, Product
+      can :manage, Board
+      can :manage, Task
+      can :manage, Software
     elsif user.has_role?('project manager')
       can %i[create read unassign_user unassign_user], Project
       can %i[edit delete], Project, user_id: user.id

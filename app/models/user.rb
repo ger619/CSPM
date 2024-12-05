@@ -58,6 +58,8 @@ class User < ApplicationRecord
   has_many :softwares
   has_many :clients
 
+  belongs_to :organisation, optional: true
+
   def assign_default_role
     return if invited_by_id.present?
 
