@@ -1,0 +1,74 @@
+<h3>Ratings</h3>
+<p>Average Rating: <%= @ticket.ratings.average(:value).to_f.round(1) %> / 5</p>
+<p>Content</p>
+<% if @ticket.ratings.any? %>
+  <% @ticket.ratings.each do |rating| %>
+    <p><%= rating.content %></p>
+  <% end %>
+<% end %>
+
+
+<div class="rating-form">
+  <button id="open-modal" class="review_btn">Submit A Review</button>
+
+  <div id="rating-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-lg">
+      <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+        <h5 class="text-lg font-semibold">Submit Review</h5>
+        <button id="close-modal" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <div class="px-4 py-5">
+        <%= form_with model: [@project, @ticket, Rating.new], local: true do |form| %>
+          <ul class="flex space-x-2 mb-4 stars">
+            <% (1..5).each do |star| %>
+              <li
+                class="star"
+                data-value="<%= star %>"
+                style="cursor: pointer;"
+              >
+                <i class="fa fa-star"></i>
+              </li>
+            <% end %>
+          </ul>
+          <%= form.hidden_field :value, id: 'rating-value' %>
+          <%= form.rich_text_area :content, rows: 4, class: 'form-control mt-3 w-full border border-gray-300 rounded-md p-2', placeholder: 'Leave a comment...' %>
+          <%= form.submit 'Submit', class: 'review_btn' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('turbo:load', function () {
+    const modal = document.getElementById('rating-modal');
+    const openModalBtn = document.getElementById('open-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const stars = document.querySelectorAll('.star');
+    const ratingValueInput = document.getElementById('rating-value');
+
+    openModalBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+    closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+
+    stars.forEach(star => {
+      star.addEventListener('mouseover', () => highlightStars(star.dataset.value));
+      star.addEventListener('mouseout', resetStars);
+      star.addEventListener('click', () => setRating(star.dataset.value));
+    });
+
+    function highlightStars(starValue) {
+      stars.forEach(star => {
+        star.classList.toggle('orange', star.dataset.value <= starValue);
+      });
+    }
+
+    function resetStars() {
+      highlightStars(ratingValueInput.value);
+    }
+
+    function setRating(value) {
+      ratingValueInput.value = value;
+      highlightStars(value);
+    }
+  });
+</script>
