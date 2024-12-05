@@ -27,16 +27,16 @@ class TicketsController < ApplicationController
     # Count tickets created by the current user with 'Client Confirmation Pending' status
     @tickets_count = if confirmation_pending_status
                        @project.tickets
-                               .where(user: current_user)
-                               .joins(:statuses)
-                               .where(statuses: { id: confirmation_pending_status.id })
-                               .count
+                         .where(user: current_user)
+                         .joins(:statuses)
+                         .where(statuses: { id: confirmation_pending_status.id })
+                         .count
                      else
                        0
                      end
 
     # Check if the current user is a client and has 2 or more tickets pending confirmation
-    if current_user.has_role?(:client) && @tickets_count >= 2
+    if current_user.has_role?(:client) && @tickets_count >= 10
       redirect_to project_path(@project), flash: { notice: 'Please confirm past tickets requiring confirmation before creating a new one.' }
       return
     end
@@ -109,6 +109,7 @@ class TicketsController < ApplicationController
 
       @project.users.each do |project_user|
         next if project_user == current_user
+
         UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
       end
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
@@ -146,7 +147,8 @@ class TicketsController < ApplicationController
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
-    if status.name.in?(['Awaiting Build', 'On-Hold', 'Closed', 'Declined', 'Reopened', 'QA Testing', 'Under Development', 'Work in Progress', 'Client Confirmation Pending'])
+    if status.name.in?(['Awaiting Build', 'On-Hold', 'Closed', 'Declined', 'Reopened', 'QA Testing', 'Under Development', 'Work in Progress',
+                        'Client Confirmation Pending'])
       redirect_to new_project_ticket_comment_path(@project, @ticket)
     else
       redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
