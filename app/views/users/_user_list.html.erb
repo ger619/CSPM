@@ -4,7 +4,7 @@
     <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
     <tr>
       <th scope="col" class="px-6 py-3">
-        Name of the user
+        Name
       </th>
       <th scope="col" class="px-6 py-3">
         email
@@ -13,25 +13,19 @@
         Roles
       </th>
       <th scope="col" class="px-6 py-3">
-        No of Projects Raised
+        Projects
       </th>
       <th scope="col" class="px-6 py-3">
-        No of Tickets Raised
+        Tickets
       </th>
       <th scope="col" class="px-6 py-3">
-        No of Issues Raised
+        Issues
       </th>
       <th scope="col" class="px-6 py-3">
         Date of Invitation
       </th>
       <th scope="col" class="px-6 py-3">
-        Created by invite
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Invitee Counts
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Organisation Role
+        Organisation
       </th>
       <th scope="col" class="px-6 py-3">
         Edit Role
@@ -61,13 +55,6 @@
         </td>
         <td class="px-6 py-4">
           <%= user.created_at.strftime("%d %b %Y") %>
-        </td>
-
-        <td class="px-6 py-4 ">
-          <%= user.created_by_invite? %>
-        </td>
-        <td class="px-6 py-4 ">
-          <%= user.invitees.count %>
         </td>
         <td class="px-6 py-4 ">
           <%= user.organisation&.name || "Nil Org" %>

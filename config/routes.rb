@@ -58,5 +58,5 @@ Rails.application.routes.draw do
 
   resources :client
   resources :status
-  resources :organisation
+  resources :organisations
 end

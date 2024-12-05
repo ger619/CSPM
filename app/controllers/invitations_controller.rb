@@ -14,8 +14,8 @@ class InvitationsController < Devise::InvitationsController
       render :new
       return
     end
-    invited_user = User.find_by(email: invite_params[:email], first_name: invite_params[:first_name], last_name: invite_params[:last_name],
-                                organisation_id: invite_params[:organisation_id])
+    invited_user = User.find_by(email: invite_params[:email], first_name: invite_params[:first_name],
+                                last_name: invite_params[:last_name], organisation_id: invite_params[:organisation_id])
 
     if invited_user
       invited_user.invite!(current_user)

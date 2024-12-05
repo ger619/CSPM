@@ -6,7 +6,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable, :lockable, :timeoutable, :trackable
   # To ensure that a user has at least one role
   has_one_attached :profile_picture
-  belongs_to :organisation
+  belongs_to :organisation, optional: true
 
   # To ensure that a user has at least one role
   has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :nullify

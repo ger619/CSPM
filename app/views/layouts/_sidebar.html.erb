@@ -40,7 +40,7 @@
         </li>
       <% end %>
       <% if current_user.has_role?('super admin') %>
-      <%= link_to organisation_index_path do %>
+      <%= link_to organisations_path do %>
         <li>
           <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">

@@ -1,4 +1,4 @@
-class OrganisationController < ApplicationController
+class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_organisation, only: %i[show edit update destroy]
   # before_action :set_user, only: %i[assign_user unassign_user]
@@ -21,8 +21,8 @@ class OrganisationController < ApplicationController
   end
 
   def show
-    # @users = @organisation.users
-    # @projects = @organisation.projects
+    # @users = @organisations.users
+    # @projects = @organisations.projects
   end
 
   def new
@@ -34,7 +34,7 @@ class OrganisationController < ApplicationController
 
     respond_to do |format|
       if @organisation.save
-        format.html { redirect_to organisation_index_path, notice: 'Organisation was successfully created.' }
+        format.html { redirect_to organisations_path, notice: 'Organisation was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -46,7 +46,7 @@ class OrganisationController < ApplicationController
   def update
     respond_to do |format|
       if @organisation.update(organisation_params)
-        format.html { redirect_to organisation_path(@organisation), notice: 'Organisation was successfully updated.' }
+        format.html { redirect_to organisations_path(@organisation), notice: 'Organisation was successfully updated.' }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -55,7 +55,7 @@ class OrganisationController < ApplicationController
 
   def destroy
     @organisation.destroy
-    redirect_to organisation_index_path
+    redirect_to organisations_path
   end
 
   def assign_user

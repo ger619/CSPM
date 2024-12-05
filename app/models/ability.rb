@@ -6,7 +6,7 @@ class Ability
     if user.has_role?('super admin')
       can :manage, :all # allow super admins to do anything
       can :manage, Organisation
-    elsif user.has_role? :admin # allow admins to manage users per organisation
+    elsif user.has_role? :admin # allow admins to manage users per organisations
       can :manage, User, roles: { name: %w[agent client project_manager admin] }
       can :manage, Project
       can :manage, Ticket
