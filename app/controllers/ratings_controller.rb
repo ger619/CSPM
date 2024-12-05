@@ -19,6 +19,6 @@ class RatingsController < ApplicationController
   end
 
   def rating_params
-    params.require(:rating).permit(:value, :user_id, :content)
+    params.require(:rating).permit(:value, :comment, :user_id)
   end
 end
