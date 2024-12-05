@@ -15,6 +15,7 @@ Role.find_or_create_by!(name: 'agent')
 Role.find_or_create_by!(name: 'admin')
 Role.find_or_create_by!(name: 'project manager')
 Role.find_or_create_by!(name: 'client')
+Role.find_or_create_by!(name: 'super admin')
 
 
 a = User.create!(email: 'admin@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
@@ -28,3 +29,6 @@ c.add_role(:agent)
 
 d = User.create!(email: 'client@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Client', last_name: 'Active')
 d.add_role(:client)
+
+a = User.create!(email: 'superadmin@craftsilicon.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'SuperJay', last_name: 'Admin')
+a.add_role('super admin')
