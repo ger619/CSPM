@@ -81,11 +81,9 @@
 }
 
 /* Ratings */
-
 .rating-outer {
   display: inline-block;
   position: relative;
-  font-family: FontAwesome;
   color: #fdcc0d;
 }
 
@@ -141,10 +139,6 @@
   font-size: 1.1rem;
   font-weight: bold;
   margin-left: 0.3rem;
-}
-
-.rating {
-  margin-top: 10rem;
 }
 
 .stars {
