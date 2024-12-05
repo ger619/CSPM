@@ -1,11 +1,10 @@
 class TicketsController < ApplicationController
-  before_action :authenticate_user! # This line ensures that the user is authenticated before any action is taken
-  before_action :set_project # This line ensures that the project is set before any action is taken
-  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status] # This line ensures that
+  before_action :authenticate_user!
+  before_action :set_project
+  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status]
   load_and_authorize_resource
 
   def show
-    # Issues search this code is used to search for issues in the ticket
     @issue = if params[:query].present?
                @ticket.issues.left_joins(:rich_text_content).where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
              else
@@ -17,12 +16,32 @@ class TicketsController < ApplicationController
     @total_pages = (@issue.count / @per_page.to_f).ceil
     @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
-    # check if the user is assigned to anyone on the ticket
     @assigned_users = @ticket.users.any?
     @sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
   end
 
   def new
+    # Find the 'Client Confirmation Pending' status ID
+    confirmation_pending_status = Status.find_by(name: 'Client Confirmation Pending')
+
+    # Count tickets created by the current user with 'Client Confirmation Pending' status
+    @tickets_count = if confirmation_pending_status
+                       @project.tickets
+                               .where(user: current_user)
+                               .joins(:statuses)
+                               .where(statuses: { id: confirmation_pending_status.id })
+                               .count
+                     else
+                       0
+                     end
+
+    # Check if the current user is a client and has 2 or more tickets pending confirmation
+    if current_user.has_role?(:client) && @tickets_count >= 2
+      redirect_to project_path(@project), flash: { notice: 'Please confirm past tickets requiring confirmation before creating a new one.' }
+      return
+    end
+
+    # Initialize a new ticket if the conditions above are not met
     @ticket = @project.tickets.new
   end
 
@@ -38,9 +57,6 @@ class TicketsController < ApplicationController
         status = Status.find_by(name: 'New')
         @tickets.statuses << status if status
 
-        # Assign the user with the role of project manager to the ticket (if necessary logic applies here)
-
-        # Redirect to the ticket's show page
         format.html { redirect_to project_ticket_path(@project, @tickets), notice: 'Ticket was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -49,7 +65,6 @@ class TicketsController < ApplicationController
   end
 
   def destroy
-    @ticket = @project.tickets.find(params[:id])
     @ticket.destroy
     redirect_to project_path(@project)
   end
@@ -57,8 +72,6 @@ class TicketsController < ApplicationController
   def edit; end
 
   def update
-    @ticket = @project.tickets.find(params[:id])
-    @ticket.user = current_user # Optional: If you want to ensure the user is always the current user
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
@@ -70,15 +83,11 @@ class TicketsController < ApplicationController
   end
 
   def assign_tag
-    # if user is already assigned to the ticket do not assign again
     if @ticket.users.include?(User.find(params[:user_id]))
-      redirect_to project_tickets_path(@ticket), notice: 'User has already been assigned .'
+      redirect_to project_tickets_path(@ticket), notice: 'User has already been assigned.'
     else
-      @project = Project.find(params[:project_id])
-      @ticket = @project.tickets.find(params[:id])
       @ticket.user = current_user
       user = User.find(params[:user_id])
-      @ticket.user
 
       # Filter out users who have the role of creator
       creator = @ticket.users.select { |u| u.has_role?(:creator, @ticket) }
@@ -89,7 +98,7 @@ class TicketsController < ApplicationController
       # Add the new user
       @ticket.users << user unless @ticket.users.include?(user)
 
-      assigned_user = user # send an email to all users assigned to the ticket
+      assigned_user = user
 
       # Adding the SLA to the ticket
       SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
@@ -100,7 +109,6 @@ class TicketsController < ApplicationController
 
       @project.users.each do |project_user|
         next if project_user == current_user
-
         UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
       end
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
@@ -108,17 +116,11 @@ class TicketsController < ApplicationController
   end
 
   def unassign_tag
-    @project = Project.find(params[:project_id])
-    @ticket = @project.tickets.find(params[:id])
-    user = User.find(params[:user_id])
-    @ticket.users.delete(user)
+    @ticket.users.delete(User.find(params[:user_id]))
     redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
   def add_status
-    @project = Project.find(params[:project_id])
-    @ticket = @project.tickets.find(params[:id])
-    @ticket.user = current_user
     status = Status.find(params[:status_id])
 
     if status.nil?
@@ -144,10 +146,7 @@ class TicketsController < ApplicationController
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
-    if status.name == 'Awaiting Build' or status.name == 'On-Hold' or status.name == 'Closed' or
-       status.name == 'Declined' or status.name == 'Reopened' or status.name == 'QA Testing' or
-       status.name == 'Under Development' or status.name == 'Work in Progress' or
-       status.name == 'Client Confirmation Pending'
+    if status.name.in?(['Awaiting Build', 'On-Hold', 'Closed', 'Declined', 'Reopened', 'QA Testing', 'Under Development', 'Work in Progress', 'Client Confirmation Pending'])
       redirect_to new_project_ticket_comment_path(@project, @ticket)
     else
       redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'
