@@ -6,6 +6,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable, :lockable, :timeoutable, :trackable
   # To ensure that a user has at least one role
   has_one_attached :profile_picture
+  belongs_to :organisation
+
   # To ensure that a user has at least one role
   has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :nullify
   has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :nullify
@@ -57,8 +59,6 @@ class User < ApplicationRecord
 
   has_many :softwares
   has_many :clients
-
-  belongs_to :organisation, optional: true
 
   def assign_default_role
     return if invited_by_id.present?

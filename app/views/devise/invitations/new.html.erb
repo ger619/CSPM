@@ -1,4 +1,4 @@
-<% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+<% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?('super admin') %>
   <h2><%= t "devise.invitations.new.header" %></h2>
   <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
@@ -20,15 +20,21 @@
         </div>
       </div>
     <% end %>
-    <% if current_user.has_role? :admin %>
+    <% if current_user.has_role?('super admin') %>
       <div class="field flex gap-2 m-2">
         <%= f.label :role, class: 'pt-3 pr-2' %>
         <%= select_tag :role, options_for_select(Role.where.not(name: %w[creator editor]).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300 w-[250px] shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
+        <%= select_tag :organisation_id, options_for_select(Organisation.all.map { |org| [org.name, org.name] }), class: "form-select mt-1 block rounded-md border-gray-300 w-[250px] shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
+      </div>
+    <% elsif current_user.has_role? :admin %>
+      <div class="field flex gap-2 m-2">
+        <%= f.label :role, class: 'pt-3 pr-2' %>
+        <%= select_tag :role, options_for_select(Role.where.not(name: ['creator',  'editor', 'super admin']).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300 w-[250px] shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
       </div>
     <% elsif current_user.has_role?('project manager') %>
       <div class="field flex gap-2 m-2">
         <%= f.label :role, class: 'pt-3 pr-2' %>
-        <%= select_tag :role, options_for_select(Role.where.not(name: %w[creator editor admin]).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300 w-[250px] shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
+        <%= select_tag :role, options_for_select(Role.where.not(name: ['creator',  'editor', 'admin', 'super admin']).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300 w-[250px] shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
       </div>
     <% end %>
     <div class="actions">

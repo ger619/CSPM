@@ -8,11 +8,11 @@ class OrganisationController < ApplicationController
 
     @organisation = if params[:query].present?
                       Organisation.where('name ILIKE ? OR description ILIKE ?',
-                               "%#{params[:query]}%", "%#{params[:query]}%")
+                                         "%#{params[:query]}%", "%#{params[:query]}%")
 
-              else
-                Organisation.all.order('created_at DESC')
-              end
+                    else
+                      Organisation.all.order('created_at DESC')
+                    end
 
     @per_page = 10
     @page = (params[:page] || 1).to_i
