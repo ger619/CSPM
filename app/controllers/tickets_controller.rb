@@ -51,6 +51,7 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       if @tickets.save
+        @ticket.users << @project.user
         current_user.add_role :creator, @tickets
 
         # Update the status to "new"

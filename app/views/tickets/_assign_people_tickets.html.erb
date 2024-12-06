@@ -1,8 +1,9 @@
 <div>
   <h3>Assigned Agents</h3>
-    <div class="flex flex-wrap gap-2 mt-2">
+  <div class="flex flex-wrap gap-2 mt-2">
+    <% if @ticket.users.any? %>
       <% @ticket.users.each do |user| %>
-        <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2S col-span-1 text-sm rounded" >
+        <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2 col-span-1 text-sm rounded">
           <% if user.name.present? %>
             <%= user.name %>
           <% else %>
@@ -10,8 +11,14 @@
           <% end %>
         </p>
       <% end %>
-    </div>
-    <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
+    <% else %>
+      <p class="text-red-500 text-sm">
+        No agents assigned. Please assign at least one agent to this ticket.
+      </p>
+    <% end %>
+  </div>
+
+  <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
     <div class="flex flex-wrap mt-2 gap-2">
       <div class="text-xs">
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket), local: true do %>
@@ -21,25 +28,26 @@
             <% if available_users.any? %>
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
               <div class="">
-                <%= submit_tag "ASSIGN USER", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
+                <%= submit_tag "ASSIGN USER", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold cursor-pointer' %>
               </div>
+            <% else %>
+              <p class="text-gray-500 text-sm">No available users to assign.</p>
             <% end %>
           </div>
         <% end %>
       </div>
+
       <% if @ticket.users.any? %>
         <div class="text-xs flex flex-wrap gap-2">
           <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
             <%= label_tag :user_id, "REMOVE USER" %>
             <div class="flex flex-wrap">
               <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name), class: "mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-              <%= submit_tag "REMOVE", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded cursor-pointer' %>
+              <%= submit_tag "REMOVE", class: 'border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold cursor-pointer' %>
             </div>
           <% end %>
         </div>
       <% end %>
     </div>
-    <% end %>
+  <% end %>
 </div>
-
-

@@ -20,6 +20,7 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user)
+
       @ticket = if params[:query].present?
                   @project.tickets.left_joins(:rich_text_content, :statuses)
                     .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?',
@@ -67,6 +68,7 @@ class ProjectController < ApplicationController
     respond_to do |format|
       if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
         if @project.save
+          @project.users << current_user
           current_user.add_role :creator, @project
           format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
         else
