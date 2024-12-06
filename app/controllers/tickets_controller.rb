@@ -51,18 +51,18 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       # Custom validations
-      @ticket.errors.add(:content, 'Subject cannot be blank.') if @ticket.content.blank?
-      @ticket.errors.add(:issue, 'Issue type cannot be blank.') if @ticket.issue.blank?
-      @ticket.errors.add(:priority, 'Priority cannot be blank.') if @ticket.priority.blank?
-      @ticket.errors.add(:software_id, 'Product category cannot be blank.') if @ticket.software_id.blank?
-      @ticket.errors.add(:groupware_id, 'Sub Product cannot be blank.') if @ticket.groupware_id.blank?
-
+      # Custom validations
+      %i[content issue priority software_id groupware_id].each do |attribute|
+        @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.") if @ticket.public_send(attribute).blank?
+      end
       # Handle validation errors or proceed with save
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
       else
         # Assign the project manager if no agents are assigned
         @ticket.users << @project.user if @ticket.users.empty?
+        status = Status.find_by(name: 'New')
+        @ticket.statuses << status if status
 
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
