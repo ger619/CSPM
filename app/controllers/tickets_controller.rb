@@ -46,21 +46,23 @@ class TicketsController < ApplicationController
   end
 
   def create
-    @tickets = @project.tickets.new(ticket_params)
-    @tickets.user = current_user
+    @ticket = @project.tickets.new(ticket_params)
+    @ticket.user = current_user
 
     respond_to do |format|
-      if @tickets.save
-        @ticket.users << @project.user
-        current_user.add_role :creator, @tickets
+      # Custom validations
+      @ticket.errors.add(:content, 'Subject cannot be blank.') if @ticket.content.blank?
+      @ticket.errors.add(:issue, 'Issue type cannot be blank.') if @ticket.issue.blank?
+      @ticket.errors.add(:priority, 'Priority cannot be blank.') if @ticket.priority.blank?
+      @ticket.errors.add(:software_id, 'Product category cannot be blank.') if @ticket.software_id.blank?
+      @ticket.errors.add(:groupware_id, 'Sub Product cannot be blank.') if @ticket.groupware_id.blank?
 
-        # Update the status to "new"
-        status = Status.find_by(name: 'New')
-        @tickets.statuses << status if status
-
-        format.html { redirect_to project_ticket_path(@project, @tickets), notice: 'Ticket was successfully created.' }
-      else
+      # Handle validation errors or proceed with save
+      if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
+      else
+        # Success logic here (save roles, status, etc.)
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
   end

@@ -20,7 +20,6 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user)
-
       @ticket = if params[:query].present?
                   @project.tickets.left_joins(:rich_text_content, :statuses)
                     .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?',
@@ -66,8 +65,15 @@ class ProjectController < ApplicationController
     @project.user_id = current_user.id
 
     respond_to do |format|
+      # Check if the user has the appropriate role
       if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
-        if @project.save
+        # Validate the presence of content
+        if @project.content.blank?
+          @project.errors.add(:content, 'Subject cannot be blank.') # Add validation error
+
+          # Render the form with validation errors
+          format.html { render :new, status: :unprocessable_entity }
+        elsif @project.save
           @project.users << current_user
           current_user.add_role :creator, @project
           format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
@@ -75,6 +81,7 @@ class ProjectController < ApplicationController
           format.html { render :new, status: :unprocessable_entity }
         end
       else
+        # Render an unauthorized error
         format.html do
           render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a project.'
         end
