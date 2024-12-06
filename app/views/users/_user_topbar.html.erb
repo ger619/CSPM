@@ -1,6 +1,9 @@
 <div class="grid grid-cols-2 ">
   <div class="grid col-span-1">
-    <%= button_to 'Add New User +', new_user_invitation_path , method: :get, class: 'mb-4  h-12 border border-b-4 border-r-2 border-black  px-2 py-2 font-semibold rounded'  %>
+    <div class="flex gap-1">
+      <%= button_to 'Back', root_path, method: :get, class: 'mb-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+      <%= button_to 'Add New User +', new_user_invitation_path , method: :get, class: 'mb-4  h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 px-2 py-2 font-semibold rounded'  %>
+    </div>
   </div>
   <!-- Search on the right -->
   <div class="grid col-span-1 justify-end">
