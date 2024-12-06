@@ -62,9 +62,7 @@ class TicketsController < ApplicationController
         format.html { render :new, status: :unprocessable_entity }
       else
         # Assign the project manager if no agents are assigned
-        if @ticket.users.empty?
-          @ticket.users << @project.user
-        end
+        @ticket.users << @project.user if @ticket.users.empty?
 
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
@@ -84,9 +82,7 @@ class TicketsController < ApplicationController
         current_user.add_role :editor, @ticket
 
         # Assign the project manager if no agents are assigned
-        if @ticket.users.empty?
-          @ticket.users << @project.user
-        end
+        @ticket.users << @project.user if @ticket.users.empty?
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
