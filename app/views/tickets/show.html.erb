@@ -109,7 +109,9 @@
     <% end %>
   </div>
 </div>
-<%= render 'tickets/ratings' %>
+<%if current_user.has_role?('client') %>
+  <%= render 'tickets/ratings' %>
+<%end %>
 
 <style>
     .zoomable-image {
