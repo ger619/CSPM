@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
-  before_action :set_project # This line ensures that the project is set before any action is taken
-  before_action :set_ticket # This line ensures that the ticket is set before any action is taken
+  before_action :set_project
+  before_action :set_ticket
   before_action :set_issue, only: %i[show destroy edit update]
   load_and_authorize_resource
 
@@ -19,18 +19,26 @@ class IssuesController < ApplicationController
     @issue.project = @project
     @issue.user = current_user
 
+    # Validate that content is not blank
+    if @issue.content.blank?
+      @issue.errors.add(:content, "Subject cannot be blank.") # Custom validation error
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+      end
+      return
+    end
+
     respond_to do |format|
       if @issue.save
         current_user.add_role :creator, @issue
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
       else
-        format.html { redirect_to new_project_ticket_issue_path(@project, @ticket), alert: 'Issue was not created.' }
+        format.html { render :new, alert: 'Issue was not created.' }
       end
     end
   end
 
   def destroy
-    @issue = @ticket.issues.find(params[:id])
     @issue.destroy
     redirect_to project_ticket_path(@project, @ticket)
   end
