@@ -61,7 +61,11 @@ class TicketsController < ApplicationController
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
       else
-        # Success logic here (save roles, status, etc.)
+        # Assign the project manager if no agents are assigned
+        if @ticket.users.empty?
+          @ticket.users << @project.user
+        end
+
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
@@ -78,6 +82,12 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
+
+        # Assign the project manager if no agents are assigned
+        if @ticket.users.empty?
+          @ticket.users << @project.user
+        end
+
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity, alert: 'Ticket was not updated.' }
