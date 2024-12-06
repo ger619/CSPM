@@ -69,7 +69,7 @@ class ProjectController < ApplicationController
       if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
         # Validate the presence of content
         if @project.content.blank?
-          @project.errors.add(:content, "Subject cannot be blank.") # Add validation error
+          @project.errors.add(:content, 'Subject cannot be blank.') # Add validation error
 
           # Render the form with validation errors
           format.html { render :new, status: :unprocessable_entity }

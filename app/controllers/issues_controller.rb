@@ -21,7 +21,7 @@ class IssuesController < ApplicationController
 
     # Validate that content is not blank
     if @issue.content.blank?
-      @issue.errors.add(:content, "Subject cannot be blank.") # Custom validation error
+      @issue.errors.add(:content, 'Subject cannot be blank.') # Custom validation error
       respond_to do |format|
         format.html { render :new, status: :unprocessable_entity }
       end

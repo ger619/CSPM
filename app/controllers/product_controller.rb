@@ -40,15 +40,9 @@ class ProductController < ApplicationController
     @product.user_id = current_user.id
 
     # Validate presence of name, description, and content (subject)
-    if @product.name.blank?
-      @product.errors.add(:name, "can't be blank")
-    end
-    if @product.description.blank?
-      @product.errors.add(:description, "can't be blank")
-    end
-    if @product.content.blank?
-      @product.errors.add(:content, "can't be blank")
-    end
+    @product.errors.add(:name, "can't be blank") if @product.name.blank?
+    @product.errors.add(:description, "can't be blank") if @product.description.blank?
+    @product.errors.add(:content, "can't be blank") if @product.content.blank?
 
     respond_to do |format|
       if (current_user.has_role?(:admin) || current_user.has_role?('project_manager')) && @product.errors.empty?
