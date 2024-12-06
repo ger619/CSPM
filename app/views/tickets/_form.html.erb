@@ -1,40 +1,70 @@
 <%= render 'tickets/new_back' %>
-<%= form_with(model: [project, project.tickets.build]) do |f|%>
+<%= form_with(model: [project, project.tickets.build]) do |f| %>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%] p-1">
     <div class="grid grid-cols-2 gap-2 h-[100%] w-[100%]">
-     <div class="relative z-0 w-[100%] mb-6 group">
-       <%= f.label :issue, ('issue *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-         <%= f.select :issue, options_for_select(['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
-     </div>
-     <div class="relative z-0 w-full mb-6 group">
-       <%= f.label :priority, ('Severity *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-       <%= f.select :priority, options_for_select(['SEVERITY ONE','SEVERITY TWO','SEVERITY THREE','SEVERITY FOUR']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
-     </div>
 
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :software, ('Product Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
-          <% previously_selected_software = Software.where(id: @project.software_id) %>
-          <%= f.collection_select :software_id, previously_selected_software, :id, :name, { prompt: "Select Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", data: { action: "change->form#updateGroupwareOptions" }, required: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :software, ('Sub Product *'), class: "capitalize block mb-1 text-sm font-medium" %>
-          <%= f.collection_select :groupware_id, [], :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select", required: true %>
-        </div>
+      <!-- Issue Field -->
+      <div class="relative z-0 w-[100%] mb-6 group">
+        <%= f.label :issue, ('issue *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
+        <%= f.select :issue, options_for_select(['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
+        <% if @ticket.errors[:issue].any? %>
+          <div class="text-red-500 text-sm"><%= @ticket.errors[:issue].join(", ") %></div>
+        <% end %>
+      </div>
 
-     <div class="relative z-0 w-full mb-6 group">
-       <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-       <%= f.file_field :ticket_image, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
-     </div>
+      <!-- Priority Field -->
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :priority, ('Severity *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+        <%= f.select :priority, options_for_select(['SEVERITY ONE','SEVERITY TWO','SEVERITY THREE','SEVERITY FOUR']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
+        <% if @ticket.errors[:priority].any? %>
+          <div class="text-red-500 text-sm"><%= @ticket.errors[:priority].join(", ") %></div>
+        <% end %>
+      </div>
+
+      <!-- Software Field -->
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :software, ('Product Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
+        <% previously_selected_software = Software.where(id: @project.software_id) %>
+        <%= f.collection_select :software_id, previously_selected_software, :id, :name, { prompt: "Select Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", data: { action: "change->form#updateGroupwareOptions" }, required: true %>
+        <% if @ticket.errors[:software_id].any? %>
+          <div class="text-red-500 text-sm"><%= @ticket.errors[:software_id].join(", ") %></div>
+        <% end %>
+      </div>
+
+      <!-- Groupware Field -->
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :software, ('Sub Product *'), class: "capitalize block mb-1 text-sm font-medium" %>
+        <%= f.collection_select :groupware_id, [], :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select", required: true %>
+        <% if @ticket.errors[:groupware_id].any? %>
+          <div class="text-red-500 text-sm"><%= @ticket.errors[:groupware_id].join(", ") %></div>
+        <% end %>
+      </div>
+
+      <!-- File Upload Field -->
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+        <%= f.file_field :ticket_image, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
+        <% if @ticket.errors[:ticket_image].any? %>
+          <div class="text-red-500 text-sm"><%= @ticket.errors[:ticket_image].join(", ") %></div>
+        <% end %>
+      </div>
+
     </div>
 
+    <!-- Content Field -->
     <div class="relative z-0 w-full mb-6 group">
       <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium"  %>
       <br />
       <div data-controller="text-limit" data-text-limit-limit-value="800">
-       <p id="char-count">0/800</p>
-       <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]'%>
-     </div>
-   </div>
+        <p id="char-count">0/800</p>
+        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: "min-h-[300px] #{'border-red-500' if @ticket.errors[:content].any?}"%>
+      </div>
+      <% if @ticket.errors[:content].any? %>
+        <div class="text-red-500 text-sm"><%= @ticket.errors[:content].join(", ") %></div>
+      <% end %>
+    </div>
+
   </div>
+
   <%= f.submit "Submit", class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
 <% end %>

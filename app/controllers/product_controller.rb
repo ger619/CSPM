@@ -19,8 +19,6 @@ class ProductController < ApplicationController
   end
 
   def show
-    # Display boards of the project
-    # sleep 3
     if current_user.has_role?(:admin) || @product.users.include?(current_user)
       preferred_order = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing', 'Blocked',
                          'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing',
@@ -40,8 +38,14 @@ class ProductController < ApplicationController
   def create
     @product = Product.new(product_params)
     @product.user_id = current_user.id
+
+    # Validate presence of name, description, and content (subject)
+    @product.errors.add(:name, "can't be blank") if @product.name.blank?
+    @product.errors.add(:description, "can't be blank") if @product.description.blank?
+    @product.errors.add(:content, "can't be blank") if @product.content.blank?
+
     respond_to do |format|
-      if current_user.has_role?(:admin) || current_user.has_role?('project_manager')
+      if (current_user.has_role?(:admin) || current_user.has_role?('project_manager')) && @product.errors.empty?
         if @product.save
           current_user.add_role :creator, @product
           format.html { redirect_to product_path(@product), notice: 'Product was successfully created.' }
@@ -78,7 +82,7 @@ class ProductController < ApplicationController
       @product.user = current_user
       @product.users << user
 
-      assigned_user = user # send an email to all users assigned to the product
+      assigned_user = user
       UserMailer.assign_product_email(@product.user, @product, current_user, assigned_user).deliver_later
       @product.users.each do |product_user|
         next if product_user == current_user

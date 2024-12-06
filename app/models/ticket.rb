@@ -18,6 +18,8 @@ class Ticket < ApplicationRecord
 
   validate :content_length_within_limit
 
+  validates :content, presence: true
+
   has_many :taggings
   has_many :users, through: :taggings, dependent: :destroy
 

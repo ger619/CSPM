@@ -46,20 +46,25 @@ class TicketsController < ApplicationController
   end
 
   def create
-    @tickets = @project.tickets.new(ticket_params)
-    @tickets.user = current_user
+    @ticket = @project.tickets.new(ticket_params)
+    @ticket.user = current_user
 
     respond_to do |format|
-      if @tickets.save
-        current_user.add_role :creator, @tickets
-
-        # Update the status to "new"
-        status = Status.find_by(name: 'New')
-        @tickets.statuses << status if status
-
-        format.html { redirect_to project_ticket_path(@project, @tickets), notice: 'Ticket was successfully created.' }
-      else
+      # Custom validations
+      # Custom validations
+      %i[content issue priority software_id groupware_id].each do |attribute|
+        @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.") if @ticket.public_send(attribute).blank?
+      end
+      # Handle validation errors or proceed with save
+      if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
+      else
+        # Assign the project manager if no agents are assigned
+        @ticket.users << @project.user if @ticket.users.empty?
+        status = Status.find_by(name: 'New')
+        @ticket.statuses << status if status
+
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
   end
@@ -75,6 +80,10 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
+
+        # Assign the project manager if no agents are assigned
+        @ticket.users << @project.user if @ticket.users.empty?
+
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity, alert: 'Ticket was not updated.' }

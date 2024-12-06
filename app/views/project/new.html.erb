@@ -31,8 +31,7 @@
 
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :software, ('Sub Product *'), class: "capitalize block mb-1 text-sm font-medium" %>
-          <%= f.collection_select :groupware_id, [], :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select" %>
-        </div>
+          <%= f.collection_select :groupware_id, Groupware.distinct, :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select" %>        </div>
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div class="relative z-0 w-full mb-6 group">
@@ -45,19 +44,45 @@
         </div>
       </div>
       <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
+        <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium" %><br />
         <div data-controller="text-limit" data-text-limit-limit-value="800">
           <p id="char-count">0/800</p>
-          <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]', required: true %>
+          <%= f.rich_text_area :content, id: "content",
+                               data: { text_limit_target: "content" },
+                               class: "min-h-[300px] #{'border-red-500' if @project.errors[:content].any?}",
+                               required: true %>
+          <% if @project.errors[:content].any? %>
+            <p class="text-red-500"><%= @project.errors[:content].join(', ') %></p>
+          <% end %>
         </div>
       </div>
+
     </div>
     <%= f.submit  class: 'mb-4 h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
   <% end %>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('turbo:load', () => {
+    const form = document.querySelector('form');
+    const contentField = document.querySelector('[data-trix-editor]'); // Select the rich text editor container
+    const errorMessage = document.getElementById('content-error');
+
+    form.addEventListener('submit', (event) => {
+      const editorContent = contentField.editor.getDocument().toString().trim(); // Use Trix editor API to get the text content
+
+      if (!editorContent) {
+        event.preventDefault(); // Stop form submission
+        errorMessage.classList.remove('hidden'); // Show the error message
+        contentField.classList.add('border-red-500'); // Add red border
+      } else {
+        errorMessage.classList.add('hidden'); // Hide error message
+        contentField.classList.remove('border-red-500'); // Remove red border
+      }
+    });
+  });
+
+  document.addEventListener('turbo:load', function() {
     const softwareSelect = document.querySelector('[data-action="change->form#updateGroupwareOptions"]');
     const groupwareSelect = document.getElementById('groupware-select');
 
