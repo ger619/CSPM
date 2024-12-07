@@ -6,7 +6,7 @@
     <% if @ticket.ticket_image.present? %>
       <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
     <% else %>
-       <%= image_tag 'logo.png', class: 'h6 me-3 sm:h7' %>
+       <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
     <% end %>
   </div>
   <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
