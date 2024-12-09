@@ -51,7 +51,6 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       # Custom validations
-      # Custom validations
       %i[content issue priority software_id groupware_id].each do |attribute|
         @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.") if @ticket.public_send(attribute).blank?
       end
