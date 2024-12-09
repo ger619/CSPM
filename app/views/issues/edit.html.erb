@@ -4,7 +4,9 @@
   <div class="relative z-0 w-full mb-6 group">
     <div data-controller="text-limit" data-text-limit-limit-value="800">
       <p id="char-count">0/800</p>
-      <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]'%>
+      <%= f.rich_text_area :content, id: "content",
+                           data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
+                           class: 'min-h-[300px]'%>
     </div>
   </div>
   <%= f.submit "Submit",  class: 'mt-4 w-2/5 h-12 text-gray-900 dark:text-gray-900 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
