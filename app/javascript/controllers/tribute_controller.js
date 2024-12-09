@@ -1,8 +1,10 @@
 document.addEventListener('turbo:load', () => {
   const editor = document.querySelector('#content');
   const currentUrl = window.location.pathname;
-  // Check if the current URL matches the ticket form URL
-  if (editor && (currentUrl.includes('/tickets/new') || currentUrl.match(/\/tickets\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/comments/new') || currentUrl.match(/\/comments\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/issues/new') || currentUrl.match(/\/issues\/[0-9a-fA-F-]+\/edit/))) {
+  const isAdmin = editor.dataset.isAdmin === 'true';
+
+  // Check if the current URL matches the ticket form URL and if the user is an admin
+  if (editor && isAdmin && (currentUrl.includes('/tickets/new') || currentUrl.match(/\/tickets\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/comments/new') || currentUrl.match(/\/comments\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/issues/new') || currentUrl.match(/\/issues\/[0-9a-fA-F-]+\/edit/))) {
     // eslint-disable-next-line no-undef
     const tribute = new Tribute({
       trigger: '@', // Triggers the dropdown when '@' is typed

@@ -57,8 +57,7 @@
       <br />
       <div data-controller="text-limit" data-text-limit-limit-value="800">
         <p id="char-count">0/800</p>
-        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: "min-h-[300px] #{'border-red-500' if @ticket.errors[:content].any?}"%>
-      </div>
+        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') }, class: "min-h-[300px] #{'border-red-500' if @ticket.errors[:content].any?}" %>      </div>
       <% if @ticket.errors[:content].any? %>
         <div class="text-red-500 text-sm"><%= @ticket.errors[:content].join(", ") %></div>
       <% end %>
