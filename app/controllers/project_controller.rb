@@ -73,7 +73,8 @@ class ProjectController < ApplicationController
           # Render the form with validation errors
           format.html { render :new, status: :unprocessable_entity }
         elsif @project.save
-          @project.users << current_user
+          @project.users << @project.user if @project.users.empty?
+
           current_user.add_role :creator, @project
           format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
         else
