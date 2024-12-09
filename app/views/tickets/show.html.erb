@@ -107,10 +107,9 @@
     <% end %>
   </div>
 </div>
-<%if current_user.has_role?('client') %>
+<% if current_user.has_role?(:client) %>
   <%= render 'tickets/ratings' %>
-<%end %>
-
+<% end %>
 <style>
     .zoomable-image {
         cursor: pointer;

@@ -62,7 +62,6 @@ class ProjectController < ApplicationController
   # POST /projects
   def create
     @project = Project.new(project_params)
-    @project.user_id = current_user.id
 
     respond_to do |format|
       # Check if the user has the appropriate role
