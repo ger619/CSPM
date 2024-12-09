@@ -156,7 +156,11 @@ class TicketsController < ApplicationController
 
     if status.name == 'Resolved'
       sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
-      sla_ticket.update(sla_resolution_deadline: @ticket.sla_resolution_deadline)
+      if sla_ticket
+        sla_ticket.update(sla_resolution_deadline: @ticket.sla_resolution_deadline)
+      else
+        Rails.logger.warn("SlaTicket not found for ticket_id: #{@ticket.id}")
+      end
     end
 
     @ticket.users.each do |ticket_user|

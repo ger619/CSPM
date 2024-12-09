@@ -22,7 +22,7 @@
     <div class="relative z-0 w-full mb-6 group">
       <div data-controller="text-limit" data-text-limit-limit-value="800">
         <p id="char-count">0/800</p>
-        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'h-[200px]' %>
+        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') }, class: 'h-[200px]' %>
       </div>
     </div>
     <div class="relative z-0 w-full mb-6 group">
