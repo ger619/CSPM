@@ -10,6 +10,7 @@
                            data: { text_limit_target: "content" },
                            class: "min-h-[300px] #{'border-red-500' if @issue&.errors[:content].any?}" %>
 
+
       <% if @issue&.errors[:content].any? %>
         <span id="content-error" class="text-red-500 text-sm"><%= @issue.errors[:content].join(', ') %></span>
       <% end %>
