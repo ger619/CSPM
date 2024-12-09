@@ -11,7 +11,17 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Support Desk Assignment')
   end
 
-  # From Ticket Controller
+  # From Ticket Controller create
+
+  def create_ticket_email(ticket, current_user, assigned_user)
+    @ticket = ticket
+    @current_user = current_user
+    @assigned_user = assigned_user
+    @url = project_ticket_url(@ticket.project, @ticket)
+    mail(to: @assigned_user.email, subject: 'New Ticket Created')
+  end
+
+  # From Ticket Controller create
   def ticket_assignment_email(user, ticket, current_user, assigned_user)
     @user = user
     @ticket = ticket
