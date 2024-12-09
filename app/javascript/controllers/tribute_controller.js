@@ -1,7 +1,6 @@
 document.addEventListener('turbo:load', () => {
   const editor = document.querySelector('#content');
   const currentUrl = window.location.pathname;
-
   // Check if the current URL matches the ticket form URL
   if (editor && (currentUrl.includes('/tickets/new') || currentUrl.match(/\/tickets\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/comments/new') || currentUrl.match(/\/comments\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/issues/new') || currentUrl.match(/\/issues\/[0-9a-fA-F-]+\/edit/))) {
     // eslint-disable-next-line no-undef
@@ -12,12 +11,10 @@ document.addEventListener('turbo:load', () => {
       values: async (text, cb) => {
         const response = await fetch(`/users/search?q=${text}`);
         const users = await response.json();
-
         // Use a Set to filter out duplicate names
         const uniqueUsers = Array.from(new Set(
           users.map((user) => `${user.first_name} ${user.last_name}`),
         ));
-
         // Create the array of objects with unique full names
         cb(uniqueUsers.map((fullName) => ({
           key: fullName, // Display both first and last names
@@ -40,7 +37,6 @@ document.addEventListener('turbo:load', () => {
         menu.style.width = `${rect.width}px`; // Ensure menu matches the width of the text area
       },
     });
-
     tribute.attach(editor);
   }
 });
