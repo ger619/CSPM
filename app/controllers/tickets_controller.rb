@@ -63,6 +63,13 @@ class TicketsController < ApplicationController
         status = Status.find_by(name: 'New')
         @ticket.statuses << status if status
 
+        assigned_user = @project.user
+        if assigned_user.present?
+          UserMailer.create_ticket_email(@ticket, current_user, assigned_user).deliver_later
+        else
+          Rails.logger.warn('Assigned user is nil, email not sent.')
+        end
+
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
