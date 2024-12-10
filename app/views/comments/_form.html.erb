@@ -11,14 +11,14 @@
         <% end %>
       </div>
       <%= f.hidden_field :status, value: @ticket.statuses.pluck('statuses.name').first %>
-      <%= f.label :what, 'What? *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+      <%= f.label :what, 'What are you doing? *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
       <%= f.text_field :what, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
     </div>
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :why, 'Why? *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+      <%= f.label :why, 'Why are you doing? *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
       <%= f.text_field :why, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
     </div>
-    <h3 class="pb-2 font-bold"> Solution</h3>
+    <h3 class="pb-2 font-bold"> Solution to Provide</h3>
     <div class="relative z-0 w-full mb-6 group">
       <div data-controller="text-limit" data-text-limit-limit-value="800">
         <p id="char-count">0/800</p>
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :notify_users, 'Notify Users', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+      <%= f.label :notify_users, 'Users to Email', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
       <%= f.collection_select :user_ids, @project.users, :id, :name, {}, multiple: true, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
     </div>
     <%= f.submit "Submit", class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded' %>
@@ -39,7 +39,7 @@
       <%= f.label :what, 'Reason *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
       <%= f.text_field :what,  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
     </div>
-    <h3 class="pb-2 font-bold"> Clarification *</h3>
+    <h3 class="pb-2 font-bold"> Clarification of the Issues*</h3>
     <div class="relative z-0 w-full mb-6 group">
       <div data-controller="text-limit" data-text-limit-limit-value="200">
         <p id="char-count">0/500</p>
