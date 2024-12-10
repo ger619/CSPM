@@ -95,6 +95,6 @@ gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'stackprof'
 
-gem "countries", "~> 7.0"
+gem 'countries', '~> 7.0'
 
-gem "country_select", "~> 10.0"
+gem 'country_select', '~> 10.0'
