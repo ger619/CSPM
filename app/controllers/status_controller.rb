@@ -19,7 +19,7 @@ class StatusController < ApplicationController
   end
 
   def show
-    @status = Statuse.find(params[:id])
+    @status = Status.find(params[:id])
   end
 
   def new
@@ -45,7 +45,7 @@ class StatusController < ApplicationController
       if @status.update(status_params)
         format.html { redirect_to status_index_path, notice: 'Status was successfully updated.' }
       else
-        format.html { render 'edit', status: :unprocessable_entity }
+        format.html { render 'edit', status: :unprocessable_entity, alert: 'Status was not updated.' }
       end
     end
   end
@@ -62,6 +62,6 @@ class StatusController < ApplicationController
   end
 
   def status_params
-    params.require(:status).permit(:name, :user_id)
+    params.require(:status).permit(:name)
   end
 end
