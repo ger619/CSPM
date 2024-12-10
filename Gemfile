@@ -82,7 +82,7 @@ gem 'chartkick'
 gem 'cloudinary'
 gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails', groups: %i[development test]
 gem 'groupdate'
 gem 'mini_magick', '~> 4.13'
 gem 'ostruct'
