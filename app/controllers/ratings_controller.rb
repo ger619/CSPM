@@ -1,5 +1,6 @@
 class RatingsController < ApplicationController
   before_action :set_ticket
+  before_action :authenticate_user!
 
   def create
     @rating = @ticket.ratings.find_or_initialize_by(user: current_user)

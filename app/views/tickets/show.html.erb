@@ -107,8 +107,10 @@
     <% end %>
   </div>
 </div>
-<% if current_user.has_role?(:client) %>
-  <%= render 'tickets/ratings' %>
+<% @ticket.statuses.each do |status| %>
+  <% if current_user.has_role?(:client) &&  status.name == 'Closed' %>
+    <%= render 'tickets/ratings' %>
+  <% end %>
 <% end %>
 <style>
     .zoomable-image {
