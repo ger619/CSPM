@@ -79,8 +79,10 @@ gem 'capistrano-passenger'
 gem 'capistrano-rails'
 gem 'capistrano-rbenv'
 gem 'chartkick'
+gem 'cloudinary'
 gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
+gem 'dotenv-rails', groups: [:development, :test]
 gem 'groupdate'
 gem 'mini_magick', '~> 4.13'
 gem 'ostruct'
@@ -94,6 +96,3 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'stackprof'
-
-gem 'dotenv-rails', groups: [:development, :test]
-gem 'cloudinary'
