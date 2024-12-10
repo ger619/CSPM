@@ -94,3 +94,6 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'stackprof'
+
+gem 'dotenv-rails', groups: [:development, :test]
+gem 'cloudinary'
