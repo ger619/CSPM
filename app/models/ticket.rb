@@ -98,7 +98,7 @@ class Ticket < ApplicationRecord
       30
     when 'On-Hold'
       40
-    when 'Work in Progress' || 'Under Development'
+    when 'Work in Progress', 'Under Development'
       50
     when 'QA Testing'
       60
@@ -106,7 +106,7 @@ class Ticket < ApplicationRecord
       70
     when 'Awaiting Build'
       80
-    when 'Resolved' || 'Closed'
+    when 'Resolved', 'Closed'
       100
     else
       101
