@@ -43,3 +43,8 @@ set :keep_releases, 5
 # set :ssh_options, verify_host_key: :secure
 
 
+set :default_env, {
+  'CLOUDINARY_CLOUD_NAME' => 'dvplan8dp',
+  'CLOUDINARY_API_KEY' => 'y623452783817565',
+  'CLOUDINARY_API_SECRET' => 'WeHl8NTZLQGyKx8psN8ZsmLbyxUs'
+}
