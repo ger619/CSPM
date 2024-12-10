@@ -416,9 +416,9 @@ DEPENDENCIES
   capistrano-rbenv
   capybara
   chartkick
+  cloudinary
   countries (~> 7.0)
   country_select (~> 10.0)
-  cloudinary
   debug
   devise (~> 4.9)
   devise_invitable (~> 2.0)
