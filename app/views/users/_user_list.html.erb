@@ -38,13 +38,13 @@
     <tbody>
     <% @users.each do |user| %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-left">
           <%= link_to user.name, users_path(user.id) %>
         </th>
-        <td class="px-6 py-4">
+        <td class="px-6 py-4 text-left">
           <%= user.email %>
         </td>
-        <td class="px-6 py-4">
+        <td class="px-6 py-4 text-left">
           <%= user.roles.distinct.pluck(:name).join(', ') %>
         </td>
         <td class="px-6 py-4">
@@ -66,7 +66,7 @@
         <td class="px-6 py-4 ">
           <%= user.invitees.count %>
         </td>
-        <td class="px-6 py-4 flex  gap-2">
+        <td class="px-6 py-4 flex gap-2">
           <% if (can?(:manage, user) || (can?(:read, user) && !user.has_role?(:admin))) && user != current_user %>
             <%= link_to 'Edit Roles', edit_user_path(user), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2.5 self-center text-center content-center rounded-lg uppercase font-bold text-sm flex flex-row w-[110px]" %>
           <% end %>
