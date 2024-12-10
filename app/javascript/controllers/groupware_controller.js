@@ -11,8 +11,6 @@ document.addEventListener('turbo:load', () => {
       if (softwareId) {
         fetch(`/groupwares?software_id=${softwareId}`, { headers: { Accept: 'application/json' } })
           .then((response) => {
-            console.log(`Response status: ${response.status}`);
-            console.log(`Content-Type: ${response.headers.get('content-type')}`);
             if (!response.ok) {
               throw new Error('Network response was not ok.');
             }
