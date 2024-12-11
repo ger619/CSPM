@@ -48,6 +48,15 @@
           <div class="text-red-500 text-sm"><%= @ticket.errors[:ticket_image].join(", ") %></div>
         <% end %>
       </div>
+
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :attachments, 'Upload Files (PDF/Excel)', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+        <%= f.file_field :attachments, multiple: true, accept: ".pdf, .xlsx, .xls", class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <% if @ticket.errors[:attachments].any? %>
+          <div class="text-red-500 text-sm"><%= @ticket.errors[:attachments].join(", ") %></div>
+        <% end %>
+      </div>
+
       <div class="relative z-0 w-[100%] mb-6 group">
         <%= f.label :subject, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
         <%= f.text_field :subject, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue', required: true %>
@@ -65,10 +74,31 @@
       <div data-controller="text-limit" data-text-limit-limit-value="1200">
         <p id="char-count">0/1200</p>
         <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') }, class: "min-h-[300px] #{'border-red-500' if @ticket.errors[:content].any?}" %>      </div>
+      <!-- Attachments -->
+      <% if @ticket.attachments.any? %>
+        <h3 class="text-lg font-bold mt-4">Attachments:</h3>
+        <% @ticket.attachments.each do |attachment| %>
+          <p>
+            <%= link_to attachment.filename.to_s, url_for(attachment), target: "_blank", class: "text-blue-500 underline" %>
+          </p>
+        <% end %>
+      <% end %>
+
+      <% @ticket.attachments.each do |attachment| %>
+        <div class="attachment-preview">
+          <% if attachment.previewable? %>
+            <%= image_tag attachment.preview(resize: "300x300") %>
+          <% else %>
+            <p><%= link_to attachment.filename.to_s, url_for(attachment), target: "_blank" %></p>
+          <% end %>
+        </div>
+      <% end %>
+
       <% if @ticket.errors[:content].any? %>
         <div class="text-red-500 text-sm"><%= @ticket.errors[:content].join(", ") %></div>
       <% end %>
     </div>
+
 
   </div>
 

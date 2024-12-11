@@ -19,6 +19,28 @@
         <%= f.label :image, 'Upload Image *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
         <%= f.file_field :ticket_image, accept: "image/jpeg,image/png", class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :attachments, 'Current Attachments', class: "capitalize block mb-1 text-sm font-medium" %><br />
+        <% if f.object.attachments.attached? %>
+          <ul>
+            <% f.object.attachments.each do |attachment| %>
+              <li class="mb-2">
+                <%= link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: "inline"), target: "_blank", class: "text-blue-500 underline" %>
+                <%= link_to "Download", rails_blob_path(attachment, disposition: "attachment"), class: "ml-2 text-green-500 underline" %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-gray-500 italic">No files uploaded.</p>
+        <% end %>
+      </div>
+
+      <div class="relative z-0 w-full mb-6 group">
+        <%= f.label :attachments, 'Upload Attachments', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+        <%= f.file_field :attachments, multiple: true, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      </div>
+
+
     </div>
     <div class="relative z-0 w-[100%] mb-6 group">
       <%= f.label :subject, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
