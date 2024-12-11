@@ -97,9 +97,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
 
-  config.action_mailer.default_url_options = { host: 'craftsilicon.com', protocol: 'http' }
+   config.action_mailer.default_url_options = { host: 'https://taskbridge.craftsilicon.com/', protocol: 'https' }
   config.action_controller.raise_on_missing_callback_actions = true
-  config.action_mailer.default_url_options = { host: 'https://taskbridge.craftsilicon.com/'}
+  # config.action_mailer.default_url_options = { host: 'https://taskbridge.craftsilicon.com/'}
 
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
@@ -107,7 +107,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'secure.emailsrvr.com',
     port: 465, # Use 587 for STARTTLS or 465 for SSL/TLS
-    domain: 'craftsilicon.com', # Replace with your domain
+    domain: 'https://taskbridge.craftsilicon.com/', # Replace with your domain
     user_name: 'cspm@craftsilicon.com', # Replace with your email
     password: '#cspm@123#', # Replace with your email password
     authentication: 'plain', # Can also be 'plain' or 'cram_md5'
