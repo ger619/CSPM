@@ -1,32 +1,63 @@
-<%= form_with(model: [@project, @ticket, @comment], method: :patch) do |f|%>
-  <div class="flex justify-between align-middle mt-2 mb-4">
-  <h2>Edit Comment</h2>
-  <!-- Close Icon -->
-    <%= link_to cancel_redirect_path, data: { turbo: false }, class: "absolute top-2 right-4 text-gray-500 hover:text-gray-700" do %>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    <% end %>
-  </div>
-  <div class="relative z-0 w-full mb-6 group">
-    <%= f.hidden_field :status, value: @ticket.statuses.pluck('statuses.name').first %>
-    <%= f.label :what, :What?, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-    <%= f.text_field :what, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-  </div>
-  <div class="relative z-0 w-full mb-6 group">
-    <%= f.label :why, :Why?, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-    <%= f.text_field :why, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-  </div>
-  <h3 class="pb-2 font-bold">
-    Solution
-  </h3>
-  <div class="relative z-0 w-full mb-6 group">
-    <div data-controller="text-limit" data-text-limit-limit-value="800">
-      <p id="char-count">0/200</p>
-      <%= f.rich_text_area :content, id: "content",
-                           data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
-                           class: 'min-h-[300px]'%>
+<% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
+  <div>
+  <%= form_with(model: [@project, @ticket, @comment], method: :patch) do |f|%>
+    <div class="relative z-0 w-full mb-6 group">
+      <div class="flex justify-between mb-4">
+        <%= @ticket.statuses.pluck('statuses.name').first %>
+        <!-- Close Icon -->
+        <%= link_to cancel_redirect_path, class: "absolute top-2 right-4 text-gray-500 hover:text-gray-700" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        <% end %>
+      </div>
+      <%= f.hidden_field :status, value: @ticket.statuses.pluck('statuses.name').first %>
+      <%= f.label :what, 'What are you doing? *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+      <%= f.text_field :what, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+
+    <div class="relative z-0 w-full mb-6 group">
+      <%= f.label :why, 'Why are you doing? *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+      <%= f.text_field :why, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
     </div>
+    <h3 class="pb-2 font-bold"> Solution to Provide</h3>
+    <div class="relative z-0 w-full mb-6 group">
+      <div data-controller="text-limit" data-text-limit-limit-value="1200">
+        <p id="char-count">0/1200</p>
+        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') }, class: 'h-[200px]' %>
+      </div>
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+      <%= f.label :notify_users, 'Users to Email', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+      <%= f.collection_select :user_ids, @project.users, :id, :name, {}, multiple: true, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+    </div>
+
+    <%= f.submit "Submit", class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded' %>
+    </div>
+
+  <% end %>
   </div>
-  <%= f.submit "Submit",  class: 'mt-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
+
+
+<% elsif  current_user.has_role? :client %>
+
+  <%= form_with(model: [project, ticket, ticket.comments.build], method: :patch) do |f| %>
+
+      <div class="relative z-0 w-full mb-6 group">
+        <%= @ticket.status %>
+        <%= f.hidden_field :status, value: ticket.status %>
+        <%= f.label :what, 'Reason *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+        <%= f.text_field :what,  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+      </div>
+    <h3 class="pb-2 font-bold"> Clarification of the Issues*</h3>
+    <div class="relative z-0 w-full mb-6 group">
+      <div data-controller="text-limit" data-text-limit-limit-value="200">
+        <p id="char-count">0/500</p>
+        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]', maxlength: 200 %>
+      </div>
+    </div>
+    <%= f.submit "Submit", class: 'mt-4 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded' %>
+
+  <% end %>
+
+
 <% end %>
