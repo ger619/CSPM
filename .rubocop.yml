@@ -33,7 +33,6 @@ Metrics/PerceivedComplexity:
   Max: 25
 
 
-
 Style/Documentation:
   Enabled: false
 Style/ClassAndModuleChildren:
