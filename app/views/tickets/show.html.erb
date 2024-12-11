@@ -89,6 +89,17 @@
 
   <div class="w-full col-span-1 col-span-1 h-full p-2">
     <%= render 'tickets/assign_people_tickets' %>
+    <% if @ticket.attachments.any? %>
+      <h3 class="text-lg font-bold mt-4">Attachments:</h3>
+      <% @ticket.attachments.each do |attachment| %>
+        <div class="mb-2">
+          <%= link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: "inline"), target: "_blank", class: "text-blue-500 underline" %>
+          <%= link_to "Download", rails_blob_path(attachment, disposition: "attachment"), class: "ml-2 text-green-500 underline" %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-gray-500 italic">No attachments available.</p>
+    <% end %>
   </div>
 </div>
 <div class="grid grid-cols-3">
