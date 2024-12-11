@@ -73,6 +73,7 @@ group :test do
 end
 
 # gems to be used
+gem 'active_storage_validations'
 gem 'cancancan', '~> 3.5'
 gem 'capistrano'
 gem 'capistrano-passenger'
@@ -80,6 +81,8 @@ gem 'capistrano-rails'
 gem 'capistrano-rbenv'
 gem 'chartkick'
 gem 'cloudinary'
+gem 'countries', '~> 7.0'
+gem 'country_select', '~> 10.0'
 gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
 gem 'dotenv-rails', groups: %i[development test]
@@ -96,7 +99,3 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'stackprof'
-
-gem 'countries', '~> 7.0'
-
-gem 'country_select', '~> 10.0'

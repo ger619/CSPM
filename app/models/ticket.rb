@@ -8,6 +8,7 @@ class Ticket < ApplicationRecord
   has_one_attached :image
   belongs_to :software, optional: true
   has_many :ratings, dependent: :destroy
+  validates :image, content_type: %w[image/png image/jpeg], size: { less_than: 5.megabytes }
 
   has_paper_trail
 
