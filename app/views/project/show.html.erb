@@ -11,31 +11,31 @@
         <%= render 'project/add_assign' %>
       </div>
     </div>
-    <div class="font-semibold p-2 justify-between rounded col-span-1 col-span-1 border-r-2">
+    <div class="font-semibold p-2 justify-between rounded col-span-1 border-r-2">
       <h1>Project Manager: <span class="font-light"><%= @project.user&.name || 'No Project Manager Assigned' %></span></h1>
-      <h1>Name of the Software: <span class="font-light"><%= @project.software&.name || 'No Software Assigned' %></span></h1>
-      <h1>Name of Software Category:
+      <h1>Name of the Software: 
         <span class="font-light">
-          <% selected_groupware = @project.software.groupwares.find_by(id: @project.groupware_id) %>
-          <% if selected_groupware %>
-            <%= selected_groupware.name %>
+          <% if @project.softwares.any? %>
+            <ul>
+              <% @project.softwares.each do |software| %>
+                <li><%= software.name %></li>
+              <% end %>
+            </ul>
           <% else %>
-            No Groupware Assigned
+            No Software Assigned
           <% end %>
         </span>
       </h1>
       <h1>Date Created: <span class="font-light"><%= @project.created_at.strftime("%d %b %Y") %></span></h1>
       <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
       <% if current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?('project manager') %>
-        <h1> Assigned Ticket: <span class="font-light"><%=  @assigned_tickets %></span></h1>
-        <h1>Assigned & Closed <span class="font-light"><%= @closed_assigned_tickets %> </span></h1>
+        <h1>Assigned Ticket: <span class="font-light"><%= @assigned_tickets %></span></h1>
+        <h1>Assigned & Closed: <span class="font-light"><%= @closed_assigned_tickets %></span></h1>
       <% end %>
-      <h1>Created Ticket: <span class="font-light"><%= @created_tickets %> </span></h1>
+      <h1>Created Ticket: <span class="font-light"><%= @created_tickets %></span></h1>
       <h1>Total Tickets: <span class="font-light"><%= @project.tickets.count %></span></h1>
       <h1>Resolved Tickets: <span class="font-light"><%= @resolved_tickets %></span></h1>
-      <h1>Closed Tickets: <span class="font-light"><%= @closed_tickets %> </span></h1>
-      </h1>
-
+      <h1>Closed Tickets: <span class="font-light"><%= @closed_tickets %></span></h1>
     </div>
     <div class="col-span-1">
       <%= render 'assign_people' %>
@@ -44,8 +44,7 @@
   <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
     <% if @project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
       <%= render 'tickets/ticket' %>
-
-  <% end %>
+    <% end %>
   </div>
 </div>
 <div class="flex gap-10 mt-5">
@@ -54,7 +53,7 @@
     <% if @page > 1 %>
       <%= link_to 'Previous', project_path(@project, page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold' %>
     <% end %>
-      <span>Page <%= @page %> of <%= @total_pages %></span>
+    <span>Page <%= @page %> of <%= @total_pages %></span>
     <% if @page < @total_pages %>
       <%= link_to 'Next', project_path(@project, page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-2 border-black dark:border-slate-100 rounded font-semibold' %>
     <% end %>
