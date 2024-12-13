@@ -1,89 +1,75 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
   <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
     <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-6 py-3">
-        Name of Project
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Project Description
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Start Date
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Assignee
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Client
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Product Category
-      </th>
-      <th scope="col" class="px-6 py-3">
-        VIEW
-      </th>
-      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-        <th scope="col" class="px-6 py-3">
-          EDIT
-        </th>
-        <th scope="col" class="px-6 py-3">
-          DELETE
-        </th>
-      <% end %>
-    </tr>
+      <tr>
+        <th scope="col" class="px-6 py-3">Name of Project</th>
+        <th scope="col" class="px-6 py-3">Project Description</th>
+        <th scope="col" class="px-6 py-3">Start Date</th>
+        <th scope="col" class="px-6 py-3">Assignee</th>
+        <th scope="col" class="px-6 py-3">Client</th>
+        <th scope="col" class="px-6 py-3">Product Category</th>
+        <th scope="col" class="px-6 py-3">VIEW</th>
+        <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+          <th scope="col" class="px-6 py-3">EDIT</th>
+          <th scope="col" class="px-6 py-3">DELETE</th>
+        <% end %>
+      </tr>
     </thead>
     <tbody>
-    <% @project.each do |project|  %>
-      <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
-        <%= turbo_frame_tag dom_id(project) do %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-            <td class="px-6 py-4 font-medium text-left">
-              <%= link_to project.title.truncate_words(3), project_path(project.id) %>
-            </td>
-            <td class="px-6 py-4 text-left">
-              <%= project.description.truncate(30) %>
-            </td>
-            <td class="px-6 py-4 text-left whitespace-nowrap ">
-              <%= project.start_date.strftime("%d %b %y") %>
-            </td>
-            <td class="px-6 py-4 text-left">
-              <%= project.user.name %>
-            </td>
-            <td class="px-6 py-4 text-left ">
-              <%= project.client.name %>
-            </td>
-            <td class="px-6 py-4 text-left">
-              <%= project.software.name %>
-            </td>
-            <td class="px-6 py-4 text-left">
-              <%= link_to "VIEW", project_path(project.id), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold " %>
-
-            </td>
-            <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-              <td class="px-6 py-4 text-left ">
-                <% if can? :edit, project %>
-                  <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
-                <% end %>
+      <% @project.each do |project| %>  <!-- Looping through each project -->
+        <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
+          <%= turbo_frame_tag dom_id(project) do %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+              <td class="px-6 py-4 font-medium text-left">
+                <%= link_to project.title.truncate_words(3), project_path(project.id) %>
               </td>
-              <td class="px-6 py-4 text-left ">
-                <% if can? :delete, project %>
-                  <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
-                <% end %>
+              <td class="px-6 py-4 text-left">
+                <%= project.description.truncate(30) %>
               </td>
-            <% end %>
-          </tr>
+              <td class="px-6 py-4 text-left whitespace-nowrap">
+                <%= project.start_date.strftime("%d %b %y") %>
+              </td>
+              <td class="px-6 py-4 text-left">
+                <%= project.user.name %>
+              </td>
+              <td class="px-6 py-4 text-left">
+                <%= project.client.name %>
+              </td>
+              <td class="px-6 py-4 text-left">
+                <ul>
+                  <% project.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
+                    <li><%= software.name %></li>
+                  <% end %>
+                </ul>
+              </td>
+              <td class="px-6 py-4 text-left">
+                <%= link_to "VIEW", project_path(project.id), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold" %>
+              </td>
+              <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+                <td class="px-6 py-4 text-left">
+                  <% if can? :edit, project %>
+                    <%= link_to 'Edit', edit_project_path(project), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold" %>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 text-left">
+                  <% if can? :delete, project %>
+                    <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
         <% end %>
       <% end %>
-    <% end %>
     </tbody>
   </table>
 </div>
+
 <div class="flex gap-10 mt-5">
   <% if @pagy.prev %>
-    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold' %>
   <% end %>
   <% if @pagy.next %>
-    <%= link_to "Next ", url_for(page: @pagy.next), class: 'mb-4  h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+    <%= link_to "Next", url_for(page: @pagy.next), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold' %>
   <% end %>
 </div>
