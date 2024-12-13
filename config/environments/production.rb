@@ -114,7 +114,8 @@ Rails.application.configure do
     ssl: true, # Use SSL encryption
     tls: true, # Enforce TLS
     enable_starttls_auto: true, # Automatically start TLS if available
-    openssl_verify_mode: 'none' # To avoid certificate verification issues (use cautiously)
+    openssl_verify_mode: 'none', # To avoid certificate verification issues (use cautiously)
+    open_timeout: 30, # Increase open timeout to 30 seconds
+    read_timeout: 30  # I
   }
-
 end
