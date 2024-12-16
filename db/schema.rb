@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_16_095730) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_16_114239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -290,7 +290,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_095730) do
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.string "subject"
-    t.integer "update_count", default: 0, null: false
+    t.integer "update_count", default: -1, null: false
     t.datetime "last_updated_at", precision: nil
     t.index ["groupware_id"], name: "index_tickets_on_groupware_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"
@@ -298,12 +298,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_095730) do
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
 
-  create_table "update_histories", force: :cascade do |t|
-    t.uuid "ticket_id", null: false
-    t.uuid "user_id", null: false
+  create_table "update_histories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "ticket_id"
+    t.uuid "user_id"
     t.json "change_details", default: {}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -407,6 +406,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_095730) do
   add_foreign_key "tickets", "projects"
   add_foreign_key "tickets", "softwares"
   add_foreign_key "tickets", "users"
-  add_foreign_key "update_histories", "tickets"
-  add_foreign_key "update_histories", "users"
 end
