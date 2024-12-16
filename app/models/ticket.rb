@@ -11,7 +11,7 @@ class Ticket < ApplicationRecord
   has_many :ratings, dependent: :destroy
   validates :image, content_type: %w[image/png image/jpeg], size: { less_than: 5.megabytes }
 
-  has_paper_trail
+  before_update :track_updates
 
   resourcify
   has_many :users, through: :roles, class_name: 'User', source: :users
@@ -117,7 +117,10 @@ class Ticket < ApplicationRecord
 
   private
 
-  # SLA THREE
+  def track_updates
+    self.update_count += 1
+    self.last_updated_at = Time.current
+  end
 
   def res_sla_breached?
     statuses.any? { |status| status.name == 'Resolved' && resolution_deadline < DateTime.now }
