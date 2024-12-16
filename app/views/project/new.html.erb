@@ -88,39 +88,4 @@
       }
     });
   });
-
-  document.addEventListener('turbo:load', function() {
-    const softwareSelect = document.querySelector('[data-action="change->form#updateGroupwareOptions"]');
-    const groupwareSelect = document.getElementById('groupware-select');
-
-    // Clear groupware options on page load
-    groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
-
-    if (softwareSelect && groupwareSelect) {
-      softwareSelect.addEventListener('change', function() {
-        const softwareId = this.value;
-
-        // Clear existing options
-        groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
-
-        if (softwareId) {
-          fetch(`/groupwares?software_id=${softwareId}`, { headers: { Accept: 'application/json' } })
-            .then(response => response.json())
-            .then(data => {
-              const addedNames = new Set();
-              data.forEach(groupware => {
-                if (!addedNames.has(groupware.name)) {
-                  const option = document.createElement('option');
-                  option.value = groupware.id;
-                  option.textContent = groupware.name;
-                  groupwareSelect.appendChild(option);
-                  addedNames.add(groupware.name);
-                }
-              });
-            })
-            .catch(error => console.error('Error fetching groupwares:', error));
-        }
-      });
-    }
-  });
 </script>
