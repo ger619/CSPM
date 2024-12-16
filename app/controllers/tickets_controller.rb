@@ -86,6 +86,8 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
+        change_details = @ticket.saved_changes.except(:updated_at)
+        UpdateHistory.record_update(@ticket, current_user, change_details)
 
         # Assign the project manager if no agents are assigned
         @ticket.users << @project.user if @ticket.users.empty?
