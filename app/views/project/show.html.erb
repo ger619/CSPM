@@ -13,7 +13,7 @@
     </div>
     <div class="font-semibold p-2 justify-between rounded col-span-1 border-r-2">
       <h1>Project Manager: <span class="font-light"><%= @project.user&.name || 'No Project Manager Assigned' %></span></h1>
-      <h1>Name of the Software: 
+      <h1>Name of the Software:
         <span class="font-light">
           <% if @project.softwares.any? %>
             <ul>
@@ -26,6 +26,19 @@
           <% end %>
         </span>
       </h1>
+      <h1> Name of the groupware software</h1>
+          <span class="font-light">
+           <% selected_groupwares = @project.groupwares.where(software_id: @project.software_ids) %>
+                  <% if selected_groupwares.any? %>
+        <ul>
+          <% selected_groupwares.each do |groupware| %>
+            <li><%= groupware.name %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        No Groupware Assigned
+      <% end %>
+    </span>
       <h1>Date Created: <span class="font-light"><%= @project.created_at.strftime("%d %b %Y") %></span></h1>
       <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
       <% if current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?('project manager') %>
