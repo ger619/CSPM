@@ -32,9 +32,9 @@
   </div>
 
   <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
-  <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800">
-    <%= render 'home/breach_visualisation' %>
-  </div>
+    <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800">
+      <%= render 'home/breach_visualisation' %>
+    </div>
   <% end %>
 
   <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
