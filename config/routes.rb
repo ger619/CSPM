@@ -50,6 +50,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :projects do
+    get 'groupwares', on: :member
+  end
+
   resources :software do
     resources :groupwares # Nested groupwares if needed in the context of software
   end

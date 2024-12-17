@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :softwares
-  has_many :groupwares, through: :softwares
+  has_and_belongs_to_many :groupwares
   belongs_to :client, optional: true
 
   has_many :tickets, dependent: :destroy
