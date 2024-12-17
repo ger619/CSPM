@@ -23,37 +23,42 @@ class TicketsController < ApplicationController
   def new
     # Find the 'Client Confirmation Pending' status ID
     confirmation_pending_status = Status.find_by(name: 'Client Confirmation Pending')
-  
+
     # Count tickets created by the current user with 'Client Confirmation Pending' status
     @tickets_count = if confirmation_pending_status
                        @project.tickets
-                              .where(user: current_user)
-                              .joins(:statuses)
-                              .where(statuses: { id: confirmation_pending_status.id })
-                              .count
+                         .where(user: current_user)
+                         .joins(:statuses)
+                         .where(statuses: { id: confirmation_pending_status.id })
+                         .count
                      else
                        0
                      end
-  
+
     # Check if the current user is a client and has 10 or more tickets pending confirmation
     if current_user.has_role?(:client) && @tickets_count >= 10
       redirect_to project_path(@project), flash: { prompt: 'Please confirm past tickets requiring confirmation before creating a new one.' }
       return
     end
-  
+
     @ticket = @project.tickets.new
-  
+
     # Fetch associated softwares for the project
     @softwares = @project.softwares
-    
-    # Fetch associated groupwares for the project
-    @groupwares = @project.groupwares
 
-    # Optionally, filter groupwares for a specific software_id if already selected
-    if @ticket.software_id.present?
-      @groupwares = @project.groupwares.where(software_id: @ticket.software_id)
-    end
-  end  
+    # Fetch groupwares associated with the project and the selected software
+    # If a software_id is already selected, filter groupwares accordingly
+    @groupwares = if @ticket.software_id.present?
+                    @project.groupwares
+                      .joins(:softwares)
+                      .where(softwares: { id: @ticket.software_id })
+                      .distinct
+                  else
+                    # If no software is selected, load all groupwares for the project
+                    @project.groupwares
+                      .distinct
+                  end
+  end
 
   def create
     @ticket = @project.tickets.new(ticket_params)

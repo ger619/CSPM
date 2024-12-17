@@ -137,7 +137,11 @@ class ProjectController < ApplicationController
 
   def groupwares
     software_id = params[:software_id]
-    groupwares = @project.groupwares.where(software_id: software_id)
+    # Fetch groupwares associated with the current project and the selected software_id
+    groupwares = @project.groupwares
+      .joins(:softwares)
+      .where(softwares: { id: software_id })
+      .distinct
     render json: groupwares
   end
 
