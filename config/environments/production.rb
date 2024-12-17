@@ -37,7 +37,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = :cloudinary
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -107,7 +107,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'secure.emailsrvr.com',
     port: 465, # Use 587 for STARTTLS or 465 for SSL/TLS
-    domain: 'https://taskbridge.craftsilicon.com/', # Replace with your domain
+    domain: 'https://taskbridge.craftsilicon.com', # Replace with your domain
     user_name: 'cspm@craftsilicon.com', # Replace with your email
     password: '#cspm@123#', # Replace with your email password
     authentication: 'plain', # Can also be 'plain' or 'cram_md5'
