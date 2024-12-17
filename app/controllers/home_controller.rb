@@ -76,7 +76,7 @@ class HomeController < ApplicationController
     @closed_and_reopened_tickets = { 'All Tickets' => total_tickets }.merge(@closed_and_reopened_tickets)
 
     # Count the number of tickets created per day
-    @tickets = Ticket.all
+    @tickets = current_user.projects.joins(:tickets)
 
     if params[:start_date].present? && params[:end_date].present?
       @tickets = @tickets.where('created_at >= ? AND created_at <= ?', params[:start_date], params[:end_date])
