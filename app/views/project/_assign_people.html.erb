@@ -1,3 +1,4 @@
+<% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
 <h3>Assigned Agents</h3>
 <div class="flex flex-wrap gap-2">
   <% @project.users.each do |user| %>
@@ -10,3 +11,4 @@
     </p>
   <% end %>
 </div>
+<% end %>
