@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_16_114239) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_17_091252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -138,6 +138,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_114239) do
     t.index ["software_id"], name: "index_groupwares_on_software_id"
   end
 
+  create_table "groupwares_projects", id: false, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "groupware_id", null: false
+    t.index ["groupware_id", "project_id"], name: "index_groupwares_projects_on_groupware_id_and_project_id", unique: true
+    t.index ["project_id", "groupware_id"], name: "index_groupwares_projects_on_project_id_and_groupware_id", unique: true
+  end
+
   create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "subject"
     t.uuid "ticket_id", null: false
@@ -187,6 +194,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_114239) do
   create_table "projects_softwares", id: false, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "software_id", null: false
+    t.uuid "groupware_id"
+    t.index ["groupware_id"], name: "index_projects_softwares_on_groupware_id"
     t.index ["project_id", "software_id"], name: "index_projects_softwares_on_project_id_and_software_id", unique: true
     t.index ["software_id", "project_id"], name: "index_projects_softwares_on_software_id_and_project_id", unique: true
   end
@@ -290,7 +299,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_114239) do
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.string "subject"
-    t.integer "update_count", default: 0, null: false
+    t.integer "update_count", default: -1, null: false
     t.datetime "last_updated_at", precision: nil
     t.index ["groupware_id"], name: "index_tickets_on_groupware_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"

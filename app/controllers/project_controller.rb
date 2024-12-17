@@ -135,6 +135,16 @@ class ProjectController < ApplicationController
     redirect_to @project, notice: 'User was successfully unassigned.'
   end
 
+  def groupwares
+    software_id = params[:software_id]
+    # Fetch groupwares associated with the current project and the selected software_id
+    groupwares = @project.groupwares
+      .joins(:softwares)
+      .where(softwares: { id: software_id })
+      .distinct
+    render json: groupwares
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -144,6 +154,6 @@ class ProjectController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def project_params
-    params.require(:project).permit(:title, :description, :start_date, :content, :client_id, :user_id, software_ids: [])
+    params.require(:project).permit(:title, :description, :start_date, :content, :client_id, :user_id, software_ids: [], groupware_ids: [])
   end
 end

@@ -21,36 +21,26 @@
         <% end %>
       </div>
 
+      <!-- Software Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :software_id, 'Product Categories *', class: "capitalize block mb-1 text-sm font-medium" %>
-
-        <% previously_selected_software = @project.softwares %> <!-- Assuming @project has the associated softwares -->
-
-        <%= f.collection_select :software_id, previously_selected_software, :id, :name,
-                                {
-                                  prompt: "Select Product",
-                                  selected: @ticket.software_id # This will make the previously selected software the default choice for the dropdown
-                                },
-                                class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                data: { action: "change->form#updateGroupwareOptions" },
-                                required: true
+        <%= f.collection_select :software_id, @project.softwares, :id, :name,
+                                { prompt: "Select Product" },
+                                { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5",
+                                  id: "software-select", required: true, data: { action: "change->form#updateGroupwareOptions" } }
         %>
-
-        <% if @ticket.errors[:software_id].any? %>
-          <div class="text-red-500 text-sm"><%= @ticket.errors[:software_id].join(", ") %></div>
-        <% end %>
       </div>
 
       <!-- Groupware Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :groupware_id, 'Sub Product *', class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :groupware_id, @project.groupwares.where(software_id: @ticket.software_id), :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select", required: true %>
-        <% if @ticket.errors[:groupware_id].any? %>
-          <div class="text-red-500 text-sm"><%= @ticket.errors[:groupware_id].join(", ") %></div>
-        <% end %>
+        <%= f.collection_select :groupware_id, [], :id, :name,
+                                { prompt: "Select The Product" },
+                                { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5",
+                                  id: "groupware-select", required: true }
+        %>
       </div>
 
-      <!-- Groupware Field -->
       <!-- File Upload Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
@@ -115,3 +105,45 @@
 
   <%= f.submit "Submit", class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded'  %>
 <% end %>
+
+<script>
+  
+
+  document.addEventListener('DOMContentLoaded', function () {
+  // Get the software select element and groupware select element
+  const softwareSelect = document.getElementById('software-select');
+  const groupwareSelect = document.getElementById('groupware-select');
+
+  // Add an event listener for when the software is selected
+  softwareSelect.addEventListener('change', function (event) {
+    const softwareId = event.target.value;
+
+    if (softwareId) {
+      // Send a request to fetch the groupwares associated with the selected software_id
+      fetch(`/projects/${projectId}/groupwares?software_id=${softwareId}`)
+        .then(response => response.json())
+        .then(groupwares => {
+          // Clear the current groupware options
+          groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
+
+          // Populate the groupware dropdown with the new options
+          groupwares.forEach(groupware => {
+            const option = document.createElement('option');
+            option.value = groupware.id;
+            option.textContent = groupware.name;
+            groupwareSelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching groupwares:', error);
+        });
+    } else {
+      // If no software is selected, clear the groupware options
+      groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
+    }
+  });
+});
+
+const projectId = <%= @project.id.to_json %>
+
+</script>

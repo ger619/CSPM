@@ -35,14 +35,29 @@ class TicketsController < ApplicationController
                        0
                      end
 
-    # Check if the current user is a client and has 2 or more tickets pending confirmation
+    # Check if the current user is a client and has 10 or more tickets pending confirmation
     if current_user.has_role?(:client) && @tickets_count >= 10
       redirect_to project_path(@project), flash: { prompt: 'Please confirm past tickets requiring confirmation before creating a new one.' }
       return
     end
 
-    # Initialize a new ticket if the conditions above are not met
     @ticket = @project.tickets.new
+
+    # Fetch associated softwares for the project
+    @softwares = @project.softwares
+
+    # Fetch groupwares associated with the project and the selected software
+    # If a software_id is already selected, filter groupwares accordingly
+    @groupwares = if @ticket.software_id.present?
+                    @project.groupwares
+                      .joins(:softwares)
+                      .where(softwares: { id: @ticket.software_id })
+                      .distinct
+                  else
+                    # If no software is selected, load all groupwares for the project
+                    @project.groupwares
+                      .distinct
+                  end
   end
 
   def create
