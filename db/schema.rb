@@ -290,7 +290,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_114239) do
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.string "subject"
-    t.integer "update_count", default: -1, null: false
+    t.integer "update_count", default: 0, null: false
     t.datetime "last_updated_at", precision: nil
     t.index ["groupware_id"], name: "index_tickets_on_groupware_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"

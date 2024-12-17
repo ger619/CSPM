@@ -21,20 +21,19 @@
         <% end %>
       </div>
 
-      <!-- Software Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :software_id, 'Product Categories *', class: "capitalize block mb-1 text-sm font-medium" %>
 
         <% previously_selected_software = @project.softwares %> <!-- Assuming @project has the associated softwares -->
 
-        <%= f.collection_select :software_id, previously_selected_software, :id, :name, 
-          { 
-            prompt: "Select Product", 
-            selected: @ticket.software_id # This will make the previously selected software the default choice for the dropdown
-          }, 
-          class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", 
-          data: { action: "change->form#updateGroupwareOptions" }, 
-          required: true 
+        <%= f.collection_select :software_id, previously_selected_software, :id, :name,
+                                {
+                                  prompt: "Select Product",
+                                  selected: @ticket.software_id # This will make the previously selected software the default choice for the dropdown
+                                },
+                                class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                                data: { action: "change->form#updateGroupwareOptions" },
+                                required: true
         %>
 
         <% if @ticket.errors[:software_id].any? %>
@@ -44,13 +43,14 @@
 
       <!-- Groupware Field -->
       <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :software, ('Sub Product *'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :groupware_id, [], :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select", required: true %>
+        <%= f.label :groupware_id, 'Sub Product *', class: "capitalize block mb-1 text-sm font-medium" %>
+        <%= f.collection_select :groupware_id, @project.groupwares.where(software_id: @ticket.software_id), :id, :name, { prompt: "Select The Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", id: "groupware-select", required: true %>
         <% if @ticket.errors[:groupware_id].any? %>
           <div class="text-red-500 text-sm"><%= @ticket.errors[:groupware_id].join(", ") %></div>
         <% end %>
       </div>
 
+      <!-- Groupware Field -->
       <!-- File Upload Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />

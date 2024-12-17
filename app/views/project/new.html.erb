@@ -34,7 +34,7 @@
         </div>
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :categories, ('Sub Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
-          <%= f.collection_select :groupware_id, Groupware.all, :id, :name,
+          <%= f.collection_select :groupware_id, @project.groupwares.where(software_id: @project.software_ids), :id, :name,
                                   { prompt: "Select Sub Product", include_hidden: false },
                                   class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
                                   id: "groupware-select",
