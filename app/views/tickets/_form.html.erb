@@ -32,7 +32,7 @@
       </div>
 
       <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :groupware_id, 'Sub Product *', class: "capitalize block mb-1 text-sm font-medium" %>
+      <%= f.label :groupware_id, 'Sub Category *', class: "capitalize block mb-1 text-sm font-medium" %>
       <%= f.collection_select :groupware_id, 
                               @project.groupwares, # Initially load all groupwares
                               :id, 
