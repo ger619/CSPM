@@ -75,6 +75,7 @@ class TicketsController < ApplicationController
       else
         # Assign the project manager if no agents are assigned
         @ticket.users << @project.user if @ticket.users.empty?
+        # assign status to new ticket
         status = Status.find_by(name: 'New')
         @ticket.statuses << status if status
 
