@@ -6,7 +6,7 @@ class Ability
     if user.has_role? :admin
       can :manage, :all # allow super admins to do anything
     elsif user.has_role?('project manager')
-      can %i[read unassign_user unassign_user], Project
+      can %i[read assign_user unassign_user], Project
       can %i[create read assign_tag unassign_tag add_status], Ticket
       can %i[edit destroy update], Ticket
       can %i[create read], Issue
