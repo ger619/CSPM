@@ -1,8 +1,23 @@
 
 <%= render 'issues/issue_topbar' %>
 <%= render 'layouts/alert', class: "" %>
-<div class="grid md:grid-cols-3 md:items-center ">
-  <div class="w-full col-span-1 h-full content-center">
+<div class="grid md:grid-cols-5 md:items-center ">
+  <div class="mb-4 font-bold capitalize">
+    <p>Ticket ID:
+      <span class="font-medium uppercase">
+        <%= @ticket.unique_id %>
+      </span>
+    </p>
+    <p>Created by:
+      <span class="font-medium">
+        <%= @ticket.user.name %>
+      </span>
+    </p>
+    <div class="mb-4 font-bold capitalize">Type of Issue:
+      <span class="font-medium">
+        <%= @ticket.issue %>
+      </span>
+    </div>
     <% if @ticket.ticket_image.present? %>
       <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
     <% else %>
@@ -13,81 +28,46 @@
     <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
     <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
   </div>
-  <div class="w-full col-span-1 col-span-1 h-full">
-    <%= render 'ticket_middle' %>
-    <div class="mb-2.5 font-bold uppercase flex">Status:
-      <span class="font-medium ml-1">
-      </span>
 
-      <% @ticket.statuses.each do |status| %>
-        <% case status.name %>
-      <% when 'Resolved' %>
-          <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-600'>
-            <%= status.name %>
-          </p>
-        <% when 'Closed' %>
-          <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
-            <%= status.name %>
-          </p>
-        <% when 'Reopened' %>
-          <p class="bg-red-900 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-red-800">
-            <%= status.name %>
-          </p>
-        <% when 'New' %>
-          <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-red-600">
-            <%= status.name %>
-          </p>
-        <% when 'Under Development' %>
-          <p class='bg-blue-300 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-400'>
-            <%= status.name %>
-          </p>
-        <% when 'Work in Progress' %>
-          <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-600'>
-            <%= status.name %>
-          </p>
-        <% when 'QA Testing' %>
-          <p class='bg-pink-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-pink-600'>
-            <%= status.name %>
-          </p>
-        <% when 'Awaiting Build' %>
-          <p class='text-center text-gray-900 dark:text-slate-100 font-bold rounded p-1 border-black dark:border-slate-100 border border-b-4 border-r-2'>
-            <%= status.name %>
-          </p>
-        <% when 'Client Confirmation Pending' %>
-          <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-purple-600'>
-            <%= status.name %>
-          </p>
-        <% when 'On-Hold' %>
-          <p class='bg-yellow-300 text-center text-black font-bold rounded p-1 border-r-2 border-b-4 border-yellow-400'>
-            <%= status.name %>
-          </p>
-        <% when 'Assigned' %>
-          <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-900'>
-            <%= status.name %>
-          </p>
-        <% when 'Declined' %>
-          <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
-            <%= status.name %>
-          </p>
-        <% end %>
-      <% end %>
-    </div>
-    <!-- SLA -->
-    <%= render 'sla' %>
-    <div class="mb-2.5 font-bold capitalize">Subject:
-      <span class="font-extralight">
-        <%= @ticket.subject %>
-      </span>
+
+
+
+
+  <div class="w-full col-span-3 h-full flex">
+    <div class="grid grid-cols-3">
+      <div class="col-span-1">
+        <div>
+          <%= render 'ticket_middle' %>
+        </div>
+        <div class="mb-2.5 font-bold capitalize flex">Status:
+          <span class="font-medium ml-1">
+            <%= render 'ticket_status' %>
+          </span>
+        </div>
+          <!-- SLA -->
+        <%= render 'sla' %>
+      </div>
+      <div class="col-span-2">
+        <div class="mb-2.5 font-bold capitalize">Subject:
+          <span class="font-extralight">
+          <%= @ticket.subject %>
+         </span>
+        </div>
+
+        <div class="mb-2.5 font-bold capitalize">Content:
+          <span class="font-extralight">
+            <%= @ticket.content.to_plain_text.truncate(800) %>
+          </span>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-2.5 font-bold capitalize">Content:
-      <span class="font-extralight">
-        <%= @ticket.content.to_plain_text.truncate(800) %>
-      </span>
-    </div>
   </div>
 
-  <div class="w-full col-span-1 col-span-1 h-full p-2">
+
+
+
+  <div class="w-full col-span-1 h-full p-2">
     <%= render 'tickets/assign_people_tickets' %>
     <% if @ticket.attachments.any? %>
       <h3 class="text-lg font-bold mt-4">Attachments:</h3>
@@ -103,7 +83,10 @@
   </div>
 </div>
 <div class="grid grid-cols-3">
+
   <div class="mt-2 col-span-2">
+
+
     <%= render partial: 'issues/issues_table' %>
   </div>
   <div class="w-full col-span-1 h-full  place-content-center w-full">

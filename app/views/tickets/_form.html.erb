@@ -43,15 +43,15 @@
       <!-- File Upload Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :image, 'Upload Image', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-        <%= f.file_field :ticket_image, accept: "image/jpeg,image/png", class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
+        <%= f.file_field :ticket_image, multiple: true, accept: "image/jpeg,image/png", class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
         <% if @ticket.errors[:ticket_image].any? %>
           <div class="text-red-500 text-sm"><%= @ticket.errors[:ticket_image].join(", ") %></div>
         <% end %>
       </div>
 
       <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :attachments, 'Upload Files (PDF/Excel)', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
-        <%= f.file_field :attachments, multiple: true, accept: ".pdf, .xlsx, .xls", class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= f.label :attachments, 'Upload Files (PDF/Excel/SQL/RPT)', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br />
+        <%= f.file_field :attachments, multiple: true, accept: ".pdf , .xlsx , .xls , .exe , .rpt , .sql ", class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         <% if @ticket.errors[:attachments].any? %>
           <div class="text-red-500 text-sm"><%= @ticket.errors[:attachments].join(", ") %></div>
         <% end %>

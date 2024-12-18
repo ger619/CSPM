@@ -22,7 +22,7 @@
               <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
             <% end %>
              <% if current_user.first_name.present? or current_user.last_name.present? %>
-              <span class="flex-1 ms-3 whitespace-nowrap"><%= current_user.first_name %> <%= current_user.last_name %> </span>
+              <span class="flex-1 ms-3 whitespace-nowrap"><%= current_user.first_name %> <%= current_user.last_name %> Dashboard</span>
             <% else %>
              <span class="flex-1 ms-3 whitespace-nowrap"></span>
             <% end %>

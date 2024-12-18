@@ -4,7 +4,6 @@
     <%= button_to  project_path(@project), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  do %>
         &#8656; Back
       <% end %>
-    <%= button_to 'Add New Issue +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
     </div>
   </div>
   <!-- Search on the right -->

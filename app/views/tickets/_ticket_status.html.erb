@@ -1,0 +1,52 @@
+<% @ticket.statuses.each do |status| %>
+  <% case status.name %>
+<% when 'Resolved' %>
+    <p class='bg-green-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-600'>
+      <%= status.name %>
+    </p>
+  <% when 'Closed' %>
+    <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
+      <%= status.name %>
+    </p>
+  <% when 'Reopened' %>
+    <p class="bg-red-900 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-red-800">
+      <%= status.name %>
+    </p>
+  <% when 'New' %>
+    <p class="bg-red-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-red-600">
+      <%= status.name %>
+    </p>
+  <% when 'Under Development' %>
+    <p class='bg-blue-300 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-400'>
+      <%= status.name %>
+    </p>
+  <% when 'Work in Progress' %>
+    <p class='bg-gray-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-600'>
+      <%= status.name %>
+    </p>
+  <% when 'QA Testing' %>
+    <p class='bg-pink-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-pink-600'>
+      <%= status.name %>
+    </p>
+  <% when 'Awaiting Build' %>
+    <p class='text-center text-gray-900 dark:text-slate-100 font-bold rounded p-1 border-black dark:border-slate-100 border border-b-4 border-r-2'>
+      <%= status.name %>
+    </p>
+  <% when 'Client Confirmation Pending' %>
+    <p class='bg-purple-500 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-purple-600'>
+      <%= status.name %>
+    </p>
+  <% when 'On-Hold' %>
+    <p class='bg-yellow-300 text-center text-black font-bold rounded p-1 border-r-2 border-b-4 border-yellow-400'>
+      <%= status.name %>
+    </p>
+  <% when 'Assigned' %>
+    <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-900'>
+      <%= status.name %>
+    </p>
+  <% when 'Declined' %>
+    <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
+      <%= status.name %>
+    </p>
+  <% end %>
+<% end %>
