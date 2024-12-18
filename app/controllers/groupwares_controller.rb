@@ -10,10 +10,10 @@ class GroupwaresController < ApplicationController
     else
       groupwares = Groupware.where(software_id: params[:software_id])
     end
-  
+
     render json: groupwares
   end
-  
+
   def new
     @groupware = @software.groupwares.new
   end
