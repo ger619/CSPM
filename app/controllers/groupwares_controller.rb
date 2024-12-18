@@ -4,8 +4,14 @@ class GroupwaresController < ApplicationController
   before_action :set_groupware, only: %i[edit update destroy]
 
   def index
-    @groupwares = Groupware.where(software_id: params[:software_id])
-    render json: @groupwares
+    if params[:project_id]
+      project = Project.find(params[:project_id])
+      groupwares = project.groupwares.where(software_id: params[:software_id])
+    else
+      groupwares = Groupware.where(software_id: params[:software_id])
+    end
+
+    render json: groupwares
   end
 
   def new
