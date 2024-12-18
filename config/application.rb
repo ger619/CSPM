@@ -31,5 +31,8 @@ module Cspm
 
     config.active_storage.queues.analysis = :active_storage_analysis
     config.active_storage.queues.purge = :active_storage_purge
+    config.active_storage.service_urls_expire_in = 5.minutes
+    config.active_storage.service = :local
+
   end
 end
