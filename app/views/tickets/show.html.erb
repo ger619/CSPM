@@ -29,10 +29,6 @@
     <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
   </div>
 
-
-
-
-
   <div class="w-full col-span-3 h-full flex">
     <div class="grid grid-cols-3">
       <div class="col-span-1">
@@ -111,6 +107,10 @@
     <%= render 'tickets/ratings' %>
   <% end %>
 <% end %>
+
+<div>
+  <%= render 'tickets/timeline' %>
+</div>
 <style>
     .zoomable-image {
         cursor: pointer;
@@ -178,4 +178,6 @@
 
 
 </script>
+
+
 

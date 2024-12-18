@@ -1,5 +1,7 @@
-<div>
-  <h3>Assigned Agents</h3>
+<% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
+
+  <div>
+  <h3>Assigned Users</h3>
   <div class="flex flex-wrap gap-2 mt-2">
     <% if @ticket.users.any? %>
       <% @ticket.users.each do |user| %>
@@ -18,7 +20,6 @@
     <% end %>
   </div>
 
-  <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
     <div class="flex flex-wrap mt-2 gap-2">
       <div class="text-xs">
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket), local: true do %>
@@ -49,5 +50,6 @@
         </div>
       <% end %>
     </div>
-  <% end %>
+
 </div>
+  <% end %>

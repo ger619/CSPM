@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_17_091252) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_18_133045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -129,6 +129,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_17_091252) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "ticket_id", null: false
+    t.uuid "user_id", null: false
+    t.string "event_type"
+    t.text "details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_events_on_ticket_id"
+    t.index ["user_id"], name: "index_events_on_user_id"
+  end
+
   create_table "groupwares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.uuid "software_id", null: false
@@ -194,8 +205,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_17_091252) do
   create_table "projects_softwares", id: false, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "software_id", null: false
-    t.uuid "groupware_id"
-    t.index ["groupware_id"], name: "index_projects_softwares_on_groupware_id"
     t.index ["project_id", "software_id"], name: "index_projects_softwares_on_project_id_and_software_id", unique: true
     t.index ["software_id", "project_id"], name: "index_projects_softwares_on_software_id_and_project_id", unique: true
   end
@@ -299,7 +308,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_17_091252) do
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.string "subject"
-    t.integer "update_count", default: -1, null: false
+    t.integer "update_count", default: 0, null: false
     t.datetime "last_updated_at", precision: nil
     t.index ["groupware_id"], name: "index_tickets_on_groupware_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"
@@ -388,6 +397,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_17_091252) do
   add_foreign_key "comments", "projects"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
+  add_foreign_key "events", "tickets"
+  add_foreign_key "events", "users"
   add_foreign_key "groupwares", "softwares"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"

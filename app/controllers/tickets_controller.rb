@@ -18,6 +18,7 @@ class TicketsController < ApplicationController
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
     @assigned_users = @ticket.users.any?
     @sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
+    @events = @ticket.events.order(created_at: :asc)
   end
 
   def new
@@ -86,12 +87,15 @@ class TicketsController < ApplicationController
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
 
+        log_event(@ticket, current_user, 'create', 'Ticket was created.')
+
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
   end
 
   def destroy
+    log_event(@ticket, current_user, 'destroy', 'Ticket was destroyed.')
     @ticket.destroy
     redirect_to project_path(@project)
   end
@@ -107,6 +111,8 @@ class TicketsController < ApplicationController
 
         # Assign the project manager if no agents are assigned
         @ticket.users << @project.user if @ticket.users.empty?
+
+        log_event(@ticket, current_user, 'update', 'Ticket was updated.')
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
@@ -145,12 +151,17 @@ class TicketsController < ApplicationController
 
         UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
       end
+
+      log_event(@ticket, current_user, 'assign', "User #{user.name} was assigned to the ticket.")
+
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end
 
   def unassign_tag
-    @ticket.users.delete(User.find(params[:user_id]))
+    user = User.find(params[:user_id])
+    @ticket.users.delete(user)
+    log_event(@ticket, current_user, 'unassign', "User #{user.name} was unassigned from the ticket.")
     redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
@@ -184,6 +195,9 @@ class TicketsController < ApplicationController
     @ticket.users.each do |ticket_user|
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
+
+    log_event(@ticket, current_user, 'status_change', "Status was changed to #{status.name}.")
+
     if status.name.in?(['Awaiting Build', 'On-Hold', 'Closed', 'Declined', 'Reopened', 'QA Testing', 'Under Development', 'Work in Progress',
                         'Client Confirmation Pending'])
       redirect_to new_project_ticket_comment_path(@project, @ticket)
@@ -206,5 +220,9 @@ class TicketsController < ApplicationController
     params.require(:ticket).permit(:issue, :priority, :content, :project_id, :user_id, :ticket_image,
                                    :status, :status_id, :software_id, :groupware_id,
                                    :subject, user_ids: [], attachments: [])
+  end
+
+  def log_event(ticket, user, event_type, details)
+    Event.create(ticket: ticket, user: user, event_type: event_type, details: details)
   end
 end
