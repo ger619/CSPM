@@ -1,14 +1,9 @@
-<div class="mb-4 font-bold uppercase">Type of Issue:
-  <span class="font-medium">
-        <%= @ticket.issue %>
-      </span>
-</div>
-<div class="mb-2.5 font-bold uppercase">Priority:
+<div class="mb-2.5 font-bold capitalize">Priority:
   <span class="font-medium">
     <%= @ticket.priority %>
   </span>
 </div>
-<div class="mb-2.5 font-bold uppercase">
+<div class="mb-2.5 font-bold capitalize">
   Name of the Software:
   <span class="font-light">
     <% if @ticket.software.present? %>
@@ -16,7 +11,7 @@
     <% end %>
   </span>
 </div>
-<div class="mb-2.5 font-bold uppercase">Software Category:
+<div class="mb-2.5 font-bold capitalize">Software Category:
   <span class="font-light">
     <% if @ticket.software.present? %>
     <% selected_groupware = @ticket.software.groupwares.find_by(id: @ticket.groupware_id) %>
