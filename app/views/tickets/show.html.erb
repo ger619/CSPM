@@ -3,6 +3,11 @@
 <%= render 'layouts/alert', class: "" %>
 <div class="grid md:grid-cols-5 md:items-center ">
   <div class="mb-4 font-bold capitalize">
+    <p>Ticket ID:
+      <span class="font-medium uppercase">
+        <%= @ticket.unique_id %>
+      </span>
+    </p>
     <p>Created by:
       <span class="font-medium">
         <%= @ticket.user.name %>
@@ -62,10 +67,6 @@
 
 
 
-
-
-
-
   <div class="w-full col-span-1 h-full p-2">
     <%= render 'tickets/assign_people_tickets' %>
     <% if @ticket.attachments.any? %>
@@ -82,7 +83,10 @@
   </div>
 </div>
 <div class="grid grid-cols-3">
+
   <div class="mt-2 col-span-2">
+
+
     <%= render partial: 'issues/issues_table' %>
   </div>
   <div class="w-full col-span-1 h-full  place-content-center w-full">
