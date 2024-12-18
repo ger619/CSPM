@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
-    get 'groupwares', on: :member
+    resources :groupwares, only: :index
   end
 
   resources :software do
