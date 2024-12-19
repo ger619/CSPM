@@ -12,4 +12,17 @@ module ApplicationHelper
     else 'gray'
     end
   end
+
+  def greeting_message
+    current_hour = Time.zone.now.hour
+
+    case current_hour
+    when 0..11
+      "Good morning"
+    when 12..17
+      "Good afternoon"
+    else
+      "Good evening"
+    end
+  end
 end
