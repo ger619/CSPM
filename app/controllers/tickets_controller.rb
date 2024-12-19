@@ -8,7 +8,7 @@ class TicketsController < ApplicationController
     # Handling issues with rich text content and search query
     @issue = if params[:query].present?
                @ticket.issues.left_joins(:rich_text_content)
-                      .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+                 .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
              else
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
@@ -34,7 +34,7 @@ class TicketsController < ApplicationController
     # Respond to HTML and JS requests
     respond_to do |format|
       format.html # Default behavior: render the full page
-      format.js   # AJAX request: render only the necessary partials
+      format.js # AJAX request: render only the necessary partials
     end
   end
 
