@@ -7,28 +7,12 @@
 </button>
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
   <div class="h-full px-3 py-4 overflow-y-auto ">
-    <div class="items-center ps-2.5 mb-5">
-      <%= image_tag 'logo.png', class: 'h6 me-3 sm:h7' %>
-    </div>
+    <%= link_to root_path do %>
+      <div class="items-center ps-2.5 mb-5">
+        <%= image_tag 'logo.png', class: 'h6 me-3 sm:h7' %>
+      </div>
+    <% end %>
     <ul class="space-y-2 font-medium">
-      <%= link_to root_path do %>
-        <li>
-          <div class="flex items-center p-2 t rounded-lg group">
-            <% if current_user.profile_picture.attached? %>
-              <%= image_tag current_user.profile_picture, class: 'w-12 h-12 rounded-full' %>
-            <% elsif current_user.name_initials.present? %>
-              <p class="rounded-full p-1"><%= current_user.name_initials %></p>
-            <% else %>
-              <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
-            <% end %>
-             <% if current_user.first_name.present? or current_user.last_name.present? %>
-              <span class="flex-1 ms-3 whitespace-nowrap"><%= current_user.first_name %> <%= current_user.last_name %> Dashboard</span>
-            <% else %>
-             <span class="flex-1 ms-3 whitespace-nowrap"></span>
-            <% end %>
-          </div>
-        </li>
-      <% end %>
       <%= link_to edit_user_registration_path  do %>
         <li>
           <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">

@@ -1,6 +1,6 @@
 <div class="flex justify-between items-center p-4 mb-6 bg-white shadow-md dark:bg-gray-800">
   <div class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-    <%= greeting_message %>, <%= current_user.first_name %>
+    <%= greeting_message %>, <%= current_user.first_name %> <%= current_user.last_name %>
   </div>
 
   <div class="flex items-center gap-4 text-gray-700 dark:text-gray-200 relative">
@@ -13,6 +13,7 @@
       3
     </div>
   </div>
+
   <ul class="flex items-center space-x-4">
     <%= link_to edit_user_registration_path do %>
       <li class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -24,9 +25,12 @@
           <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
         <% end %>
         <span class="ml-3 text-gray-700 dark:text-gray-200">
-          <%= current_user.first_name %> <%= current_user.last_name %>
-          <i class="fas fa-chevron-down ml-2"></i>
+          Role: <span class="capitalize"><%= current_user.roles.first.name %></span>
+
         </span>
+        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+        </svg>
       </li>
     <% end %>
   </ul>
