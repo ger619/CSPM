@@ -68,8 +68,8 @@
         </td>
         <td class="px-6 py-4 flex gap-2">
           <% if (can?(:manage, user) || (can?(:read, user) && !user.has_role?(:admin))) && user != current_user %>
-            <%= link_to 'Edit Roles', edit_user_path(user), class: "border border-b-4 border-r-4 border-black dark:border-slate-100 p-2.5 self-center text-center content-center rounded-lg uppercase font-bold text-sm flex flex-row w-[110px]" %>
-          <% end %>
+            <%= link_to 'Edit Roles', edit_user_path(user), class: "bg-[#3F8CFF] hover:bg-[#3A81EB] text-slate-100 p-2.5 self-center text-center content-center rounded-lg uppercase font-bold text-sm flex flex-row w-[110px]" %>
+        <% end %>
         </td>
       </tr>
     <% end %>
