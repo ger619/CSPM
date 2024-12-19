@@ -37,7 +37,7 @@
                 <%= project.user.name %>
               </td>
               <td class="px-6 py-4 text-left">
-                <% if project.blank? %>
+                <% if project.present? %>
                   <%= project.client.name %>
                 <% end %>
               </td>
