@@ -1,22 +1,16 @@
-<% sla_project_count = @sla_breaches_per_project.keys.size %>
-<% sla_colors = Array.new(sla_project_count) { "#" + "%06x" % (rand * 0xffffff) } %>
-
-<% non_sla_project_count = @non_breached_tickets_per_project.keys.size %>
-<% non_sla_colors = Array.new(non_sla_project_count) { "#" + "%06x" % (rand * 0xffffff) } %>
-
 <h1 class="text-center">SLA ONE</h1>
 <div class="col-span-1 flex items-center justify-between p-4 rounded shadow hover:shadow-lg">
   <%= column_chart @sla_breaches_per_project,
                    xtitle: "Projects",
                    ytitle: "SLA Breaches",
                    title: "SLA Breaches Per Project",
-                   colors: sla_colors %>
+                   colors: ["#e74c3c"] %> <!-- Fixed color for SLA breaches -->
 
   <%= column_chart @non_breached_tickets_per_project,
                    xtitle: "Projects",
                    ytitle: "Non-SLA Breaches",
                    title: "Non-SLA Breached Tickets Per Project",
-                   colors: non_sla_colors %>
+                   colors: ["#3498db"] %> <!-- Fixed color for Non-SLA breaches -->
 </div>
 
 <style>
