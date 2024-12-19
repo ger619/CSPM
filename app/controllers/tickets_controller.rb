@@ -146,11 +146,11 @@ class TicketsController < ApplicationController
 
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
-      @project.users.each do |project_user|
-        next if project_user == current_user
+      # @project.users.each do |project_user|
+      #   next if project_user == current_user
 
-        UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
-      end
+      #  UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
+      # end
 
       log_event(@ticket, current_user, 'assign', "User #{user.name} was assigned to the ticket.")
 
