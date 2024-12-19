@@ -78,13 +78,34 @@
     <% end %>
   </div>
 </div>
-<div class="grid grid-cols-3">
+<div class="grid grid-cols-4 mb-6">
 
-  <div class="mt-2 col-span-2">
+  <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 border border-gray-500 p-4 rounded-md">
+    <h1 class="text-3xl text-center mb-10">Communication Center</h1>
 
+    <!-- Tabs Section -->
+    <div class="flex justify-center mb-10">
+      <nav class="flex flex-wrap justify-center items-center space-x-4">
+        <button class="text-2xl tablinks font-bold hover:text-[#3F8CFF] hover:underline"
+                id="tab-history"
+                onclick="openCity(event, 'history')">Internal</button>
+        <!-- Divider -->
+        <span class="border-l-2 border-gray-400 h-6"></span>
+        <button class="text-2xl tablinks font-bold hover:text-[#3F8CFF] hover:underline"
+                id="tab-club-records"
+                onclick="openCity(event, 'club-records')">External</button>
+      </nav>
+    </div>
+    <!-- Video Section -->
+    <div id="history" class="tabcontent active">
+      <%= render partial: 'issues/issues_table' %>
+    </div>
 
-    <%= render partial: 'issues/issues_table' %>
+    <div id="club-records" class="tabcontent">
+      <%= render partial: 'comments/comment' %>
+    </div>
   </div>
+
   <div class="w-full col-span-1 h-full  place-content-center w-full">
     <%= render 'tickets/ticket_action' %>
     <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
@@ -175,6 +196,27 @@
     }
   });
 
+  function openCity(evt, cityName) {
+    const tabcontent = document.getElementsByClassName("tabcontent");
+    const tablinks = document.getElementsByClassName("tablinks");
+
+    // Hide all tab content
+    for (let i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Remove active class from all tab links
+    for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("text-[#3F8CFF]", "underline");
+    }
+
+    // Show current tab content and add active class to clicked tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.classList.add("text-[#3F8CFF]", "underline");
+  }
+
+  // Set default tab to open
+  document.getElementById("tab-history").click();
 
 
 </script>
