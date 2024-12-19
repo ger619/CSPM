@@ -74,10 +74,10 @@
 
 <div class="flex gap-10 mt-5">
   <% if @pagy.prev %>
-    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold' %>
+    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
   <% end %>
   <% if @pagy.next %>
-    <%= link_to "Next", url_for(page: @pagy.next), class: 'mb-4 h-12 w-24 border border-black dark:border-gray-900 border-b-4 border-r-2 p-3 rounded font-semibold' %>
+    <%= link_to "Next", url_for(page: @pagy.next), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
   <% end %>
 </div>
 

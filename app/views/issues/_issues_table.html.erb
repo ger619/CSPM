@@ -1,5 +1,5 @@
 <div class="flex-col ml-4">
-  <%= button_to 'New Message +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
+  <%= button_to 'New Message +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
   <% @issue.each do |issue| %>
     <ol class="relative border-s border-gray-200 dark:border-gray-700 mt-10">
       <li class="mb-10 ms-6">
@@ -32,12 +32,12 @@
     <!-- Pagination Controls -->
     <div class="pagination">
       <% if @page > 1 %>
-        <%= link_to 'Previous', project_ticket_path(@project, @ticket, issue_page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
+        <%= link_to 'Previous', project_ticket_path(@project, @ticket, issue_page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
       <% end %>
       <% if @total_pages > 1 %>
         <span>Page <%= @page %> of <%= @total_pages %></span>
         <% if @page < @total_pages %>
-          <%= link_to 'Next', project_ticket_path(@project, @ticket, issue_page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
+          <%= link_to 'Next', project_ticket_path(@project, @ticket, issue_page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
         <% end %>
       <% end %>
 
