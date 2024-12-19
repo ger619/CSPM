@@ -5,20 +5,37 @@ class TicketsController < ApplicationController
   load_and_authorize_resource
 
   def show
+    # Handling issues with rich text content and search query
     @issue = if params[:query].present?
-               @ticket.issues.left_joins(:rich_text_content).where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+               @ticket.issues.left_joins(:rich_text_content)
+                 .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
              else
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
 
-    @per_page = 10
-    @page = (params[:page] || 1).to_i
+    # Pagination for issues
+    @per_page = 5
+    @page = (params[:issue_page] || 1).to_i
     @total_pages = (@issue.count / @per_page.to_f).ceil
     @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
+
+    # Handling comments with pagination
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
+    @per_page2 = 5
+    @page2 = (params[:comment_page] || 1).to_i # Use `comment_page` for comments pagination to differentiate from issues
+    @total_pages2 = (@comment.count / @per_page2.to_f).ceil
+    @comment = @comment.offset((@page2 - 1) * @per_page2).limit(@per_page2)
+
+    # Other variables
     @assigned_users = @ticket.users.any?
     @sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
     @events = @ticket.events.order(created_at: :asc)
+
+    # Respond to HTML and JS requests
+    respond_to do |format|
+      format.html # Default behavior: render the full page
+      format.js # AJAX request: render only the necessary partials
+    end
   end
 
   def new
