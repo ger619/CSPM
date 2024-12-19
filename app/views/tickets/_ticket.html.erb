@@ -157,17 +157,17 @@
           </div>
         </td>
         <td class="px-2 py-2">
-          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded uppercase font-bold "  %>
+          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
         </td>
 
         <td class="px-2 py-2">
           <% if can?(:edit, ticket) %>
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded uppercase font-bold " %>
+            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
           <% end %>
         </td>
         <td class="px-2 py-2">
           <% if can? :destroy, ticket %>
-            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded uppercase text-red-900 font-bold"  %>
+            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' h-12 bg-[#F65160] hover:bg-[#F65160] p-3 rounded font-bold rounded-lg text-slate-100'  %>
           <% end %>
         </td>
         <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>

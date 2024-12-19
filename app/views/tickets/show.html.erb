@@ -85,7 +85,7 @@
 
     <!-- Tabs Section -->
 
-      <%# if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
         <div class="flex justify-center mb-10">
           <div class="relative">
             <!-- Navigation -->
@@ -97,7 +97,6 @@
                 <!-- Underline -->
                 <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
               </button>
-              <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
 
               <!-- Divider -->
               <span class="border-l-2 border-gray-400 h-6"></span>
@@ -109,13 +108,13 @@
                 <!-- Underline -->
                 <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
               </button>
-              <% end %>
+
             </nav>
             <!-- Bottom Border Line -->
             <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
           </div>
         </div>
-      <%# end %>
+      <% end %>
 
     <!-- Video Section -->
     <div id="history" class="tabcontent active">
