@@ -1,5 +1,5 @@
 <div class="flex-col ml-4">
-  <%= button_to 'External Communication +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
+  <%= button_to 'New Message +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'h-12 mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-1 rounded font-semibold rounded'  %>
   <% @issue.each do |issue| %>
     <ol class="relative border-s border-gray-200 dark:border-gray-700 mt-10">
       <li class="mb-10 ms-6">
