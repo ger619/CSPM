@@ -32,14 +32,15 @@
     <!-- Pagination Controls -->
     <div class="pagination">
       <% if @page > 1 %>
-        <%= link_to 'Previous', project_ticket_path(@project, @ticket, page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
+        <%= link_to 'Previous', project_ticket_path(@project, @ticket, issue_page: @page - 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
       <% end %>
       <% if @total_pages > 1 %>
         <span>Page <%= @page %> of <%= @total_pages %></span>
         <% if @page < @total_pages %>
-          <%= link_to 'Next', project_ticket_path(@project, @ticket, page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
+          <%= link_to 'Next', project_ticket_path(@project, @ticket, issue_page: @page + 1), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded' %>
         <% end %>
       <% end %>
+
     </div>
   </div>
 </div>

@@ -50,14 +50,14 @@
         <!-- Pagination Controls -->
         <div class="pagination">
           <% if @page2 > 1 %>
-            <%= link_to 'Previous', project_ticket_path(@project, @ticket, page: @page2 - 1),
+            <%= link_to 'Previous', project_ticket_path(@project, @ticket, comment_page: @page2 - 1, active_tab: 'club-records'),
                         class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded',
                         remote: true %>
           <% end %>
           <% if @total_pages2 > 1 %>
             <span>Page <%= @page2 %> of <%= @total_pages2 %></span>
             <% if @page2 < @total_pages2 %>
-              <%= link_to 'Next', project_ticket_path(@project, @ticket, page: @page2 + 1),
+              <%= link_to 'Next', project_ticket_path(@project, @ticket, comment_page: @page2 + 1, active_tab: 'club-records'),
                           class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 font-semibold rounded',
                           remote: true %>
             <% end %>
@@ -68,3 +68,15 @@
   <% end %>
 
 </div>
+<script>
+  document.addEventListener('turbo:load', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('active_tab');
+
+    if (activeTab) {
+      openCity(null, activeTab);
+    } else {
+      document.getElementById("tab-history").click();
+    }
+  });
+</script>

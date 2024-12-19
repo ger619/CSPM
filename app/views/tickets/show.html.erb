@@ -85,7 +85,7 @@
 
     <!-- Tabs Section -->
 
-      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+      <%# if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
         <div class="flex justify-center mb-10">
           <div class="relative">
             <!-- Navigation -->
@@ -97,8 +97,11 @@
                 <!-- Underline -->
                 <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
               </button>
+              <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+
               <!-- Divider -->
               <span class="border-l-2 border-gray-400 h-6"></span>
+
               <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
                       id="tab-club-records"
                       onclick="openCity(event, 'club-records')">
@@ -106,12 +109,13 @@
                 <!-- Underline -->
                 <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
               </button>
+              <% end %>
             </nav>
             <!-- Bottom Border Line -->
             <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
           </div>
         </div>
-      <% end %>
+      <%# end %>
 
     <!-- Video Section -->
     <div id="history" class="tabcontent active">
@@ -119,7 +123,9 @@
     </div>
 
     <div id="club-records" class="tabcontent">
-      <%= render partial: 'comments/comment' %>
+      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+        <%= render partial: 'comments/comment' %>
+      <% end %>
     </div>
   </div>
 
@@ -132,11 +138,12 @@
     <%= render 'tickets/ratings' %>
   <% end %>
 <% end %>
-<% if current_user.has_role?(:agent) or current_user.has_role?(:admin) or current_user.has_role?('project manager') %>
+<% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+
   <div class="w-full">
     <%= render 'tickets/timeline' %>
   </div>
-  <% end %>
+<% end %>
 <style>
     .zoomable-image {
         cursor: pointer;
