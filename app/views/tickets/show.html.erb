@@ -78,28 +78,59 @@
     <% end %>
   </div>
 </div>
-<div class="grid grid-cols-3">
+<div class="grid grid-cols-4 mb-6">
 
-  <div class="mt-2 col-span-2">
+  <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">
+    <h1 class="text-3xl text-center mb-10">Communication Center</h1>
 
+    <!-- Tabs Section -->
 
-    <%= render partial: 'issues/issues_table' %>
+      <%# if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+        <div class="flex justify-center mb-10">
+          <div class="relative">
+            <!-- Navigation -->
+            <nav class="flex flex-wrap justify-center items-center space-x-4 pb-4">
+              <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
+                      id="tab-history"
+                      onclick="openCity(event, 'history')">
+                External
+                <!-- Underline -->
+                <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
+              </button>
+              <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+
+              <!-- Divider -->
+              <span class="border-l-2 border-gray-400 h-6"></span>
+
+              <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
+                      id="tab-club-records"
+                      onclick="openCity(event, 'club-records')">
+                Internal
+                <!-- Underline -->
+                <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
+              </button>
+              <% end %>
+            </nav>
+            <!-- Bottom Border Line -->
+            <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
+          </div>
+        </div>
+      <%# end %>
+
+    <!-- Video Section -->
+    <div id="history" class="tabcontent active">
+      <%= render partial: 'issues/issues_table' %>
+    </div>
+
+    <div id="club-records" class="tabcontent">
+      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+        <%= render partial: 'comments/comment' %>
+      <% end %>
+    </div>
   </div>
+
   <div class="w-full col-span-1 h-full  place-content-center w-full">
     <%= render 'tickets/ticket_action' %>
-    <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
-      <% @ticket.statuses.each do |status| %>
-        <% if status.name == 'Awaiting Build' or status.name == 'On-Hold' or status.name == 'Closed' or status.name == 'Declined' or status.name == 'Reopened' or status.name == 'QA Testing' or status.name == 'Under Development' or status.name == 'Work in Progress' or status.name == 'Client Confirmation Pending' %>
-          <%= render partial: 'comments/comment' %>
-        <% end %>
-      <% end %>
-    <% else %>
-      <% @ticket.statuses.each do |status| %>
-        <% if  status.name == 'Closed' or status.name == 'Reopened'  %>
-          <%= render partial: 'comments/comment' %>
-        <% end %>
-      <% end %>
-    <% end %>
   </div>
 </div>
 <% @ticket.statuses.each do |status| %>
@@ -107,10 +138,12 @@
     <%= render 'tickets/ratings' %>
   <% end %>
 <% end %>
+<% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
 
-<div>
-  <%= render 'tickets/timeline' %>
-</div>
+  <div class="w-full">
+    <%= render 'tickets/timeline' %>
+  </div>
+<% end %>
 <style>
     .zoomable-image {
         cursor: pointer;
@@ -175,6 +208,27 @@
     }
   });
 
+  function openCity(evt, cityName) {
+    const tabcontent = document.getElementsByClassName("tabcontent");
+    const tablinks = document.getElementsByClassName("tablinks");
+
+    // Hide all tab content
+    for (let i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Remove active class from all tab links
+    for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("text-[#3F8CFF]", "underline");
+    }
+
+    // Show current tab content and add active class to clicked tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.classList.add("text-[#3F8CFF]", "underline");
+  }
+
+  // Set default tab to open
+  document.getElementById("tab-history").click();
 
 
 </script>
