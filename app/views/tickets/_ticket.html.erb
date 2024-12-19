@@ -76,7 +76,7 @@
           <% end %>
         </td>
         <td class="px-2 py-2 truncate w-64 ">
-          <%= ticket.content.to_plain_text.truncate(50) %>
+          <%= ticket.subject.truncate(50) %>
         </td>
         <td class="px-2 py-2 font-bold">
           <% ticket.users.each do |user| %>
