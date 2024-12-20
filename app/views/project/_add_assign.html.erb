@@ -5,17 +5,18 @@
         <%= label_tag :user_id, "SELECT USER" %>
         <div class="flex flex-wrap gap-2">
           <div>
-
             <%= select_tag :user_id, options_from_collection_for_select(
               User.with_agent_role
                   .where.not(id: @project.users.pluck(:id))
                   .distinct
-                  .where("email LIKE ? OR email LIKE ANY (array[?])", "%@craftsilicon.com", @project.title.split.map { |name| "%@#{name.downcase}.%" }),
+                  .where("email LIKE ? OR email ILIKE ANY (array[?]) OR name ILIKE ANY (array[?])",
+                         "%@craftsilicon.com",
+                         @project.title.split.map { |name| "%#{name.downcase}%" },
+                         @project.title.split.map { |name| "%#{name.downcase}%" }),
               :id, :name),
-                           class: "h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1",
-                           required: true
+                              class: "h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1",
+                              required: true
             %>
-
 
           </div>
           <div class=" col-span-1">
