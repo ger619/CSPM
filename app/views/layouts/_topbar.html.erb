@@ -65,7 +65,9 @@
           <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
         <% end %>
         <span class="ml-3 text-gray-700 dark:text-gray-200">
-          Role: <span class="capitalize"><%= current_user.roles.first.name %></span>
+          <% unless %w[editor creator].include?(current_user.roles.first.name.downcase) %>
+            Role: <span class="capitalize"><%= current_user.roles.first.name %></span>
+          <% end %>
         </span>
         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
