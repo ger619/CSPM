@@ -87,19 +87,28 @@ class TicketsController < ApplicationController
       %i[content issue priority software_id groupware_id].each do |attribute|
         @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.") if @ticket.public_send(attribute).blank?
       end
+
       # Handle validation errors or proceed with save
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
       else
         # Assign the project manager if no agents are assigned
         @ticket.users << @project.user if @ticket.users.empty?
-        # assign status to new ticket
+
+        # Assign status to new ticket
         status = Status.find_by(name: 'New')
         @ticket.statuses << status if status
 
         assigned_user = @project.user
         if assigned_user.present?
           UserMailer.create_ticket_email(@ticket, current_user, assigned_user).deliver_later
+
+          # Create a notification for the assigned user
+          Notification.create(
+            user: assigned_user,
+            ticket: @ticket,
+            message: "You have been assigned a new ticket: #{@ticket.issue}"
+          )
         else
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
