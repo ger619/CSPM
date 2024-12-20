@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_18_133045) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_19_144701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -166,6 +166,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_18_133045) do
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["ticket_id"], name: "index_issues_on_ticket_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
+  end
+
+  create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "ticket_id", null: false
+    t.string "message"
+    t.boolean "read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_notifications_on_ticket_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -403,6 +414,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_18_133045) do
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"
   add_foreign_key "issues", "users"
+  add_foreign_key "notifications", "tickets"
+  add_foreign_key "notifications", "users"
   add_foreign_key "products", "clients"
   add_foreign_key "products", "softwares"
   add_foreign_key "products", "users"
