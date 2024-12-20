@@ -140,8 +140,7 @@
           <% end %>
         </td>
         <!-- Progress Bar -->
-        <!-- Progress Bar -->
-        <td class="px-2 py-2">
+        <td class="pl-2 pr-5 py-2">
           <div class="relative w-full">
             <!-- Progress Percentage Tooltip -->
             <div class="absolute top-[-1.5rem] left-0 translate-x-0 text-sm font-bold"
@@ -153,7 +152,8 @@
                                                                                       '#2563EB' # blue-600
                                                                                     else
                                                                                       ticket.progress_percentage >= 100 ? '#000000' : '#16A34A' # black or green-600
-                                                                                    end %>;">
+                                                                                    end %>;"
+                 class="<%= 'mr-3' if ticket.progress_percentage == 100 %>">
               <%= ticket.progress_percentage || 0 %>%
             </div>
             <!-- Progress Bar Background -->
@@ -166,14 +166,13 @@
                               elsif ticket.progress_percentage < 60
                                 'bg-blue-600'
                               else
-                                ticket.progress_percentage >= 100 ? 'bg-black' : 'bg-green-600'
+                                ticket.progress_percentage >= 100 ? 'bg-black ' : 'bg-green-600'
                               end %> h-2.5 rounded-full"
                    style="width: <%= ticket.progress_percentage || 0 %>%">
               </div>
             </div>
           </div>
         </td>
-
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
         </td>
