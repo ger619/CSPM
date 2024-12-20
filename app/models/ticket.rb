@@ -181,11 +181,19 @@ class Ticket < ApplicationRecord
       { day: 6, start: 8, end: 13 }
     ]
 
+    holidays = [
+      Date.new(2024, 12, 25), # Christmas
+      Date.new(2024, 12, 26), # Boxing Day
+      Date.new(2025, 1, 1) # New Year's Day
+
+      # Add more holidays as needed
+    ]
+
     remaining_duration = duration
     current_time = start_time
 
     while remaining_duration.positive?
-      if within_business_hours?(current_time, business_hours)
+      if within_business_hours?(current_time, business_hours) && !holiday?(current_time, holidays)
         current_time += 1.minute
         remaining_duration -= 1.minute
       else
@@ -207,6 +215,10 @@ class Ticket < ApplicationRecord
     business_hours.any? do |hours|
       time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
     end
+  end
+
+  def holiday?(time, holidays)
+    holidays.include?(time.to_date)
   end
 
   # Take the initials for the #{project.title} and append a random hex string to it
