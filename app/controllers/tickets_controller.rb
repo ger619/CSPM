@@ -150,8 +150,8 @@ class TicketsController < ApplicationController
 
           # Assign the tagged user if present
           @ticket.users << tagged_user if tagged_user.present?
-        else
-          @ticket.users << @project.user if @ticket.users.empty?
+        elsif @ticket.users.empty?
+          @ticket.users << @project.user
         end
 
         # Assign the default user if no users are assigned
