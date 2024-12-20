@@ -11,13 +11,12 @@
                   .distinct
                   .where("email LIKE ? OR email ILIKE ANY (array[?]) OR name ILIKE ANY (array[?])",
                          "%@craftsilicon.com",
-                         @project.title.split.map { |name| "%#{name.downcase}%" },
-                         @project.title.split.map { |name| "%#{name.downcase}%" }),
+                         @project.title.split.reject { |name| ["bank"].include?(name.downcase) }.map { |name| "%#{name.downcase}%" },
+                         @project.title.split.reject { |name| ["bank"].include?(name.downcase) }.map { |name| "%#{name.downcase}%" }),
               :id, :name),
-                              class: "h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1",
-                              required: true
+                           class: "h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1",
+                           required: true
             %>
-
           </div>
           <div class=" col-span-1">
             <%= submit_tag "ADD USER", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
