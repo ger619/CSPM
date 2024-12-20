@@ -193,12 +193,8 @@ class Ticket < ApplicationRecord
     current_time = start_time
 
     while remaining_duration.positive?
-      if within_business_hours?(current_time, business_hours) && !holiday?(current_time, holidays)
-        current_time += 1.minute
-        remaining_duration -= 1.minute
-      else
-        current_time += 1.minute
-      end
+      current_time += 1.minute
+      remaining_duration -= 1.minute if within_business_hours?(current_time, business_hours) && !holiday?(current_time, holidays)
 
       # Skip time between 1pm and 2pm
       current_time = current_time.change(hour: 14, min: 0) if current_time.hour == 13
