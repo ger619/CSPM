@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_144701) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -146,7 +146,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_144701) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description"
+    t.uuid "user_id"
     t.index ["software_id"], name: "index_groupwares_on_software_id"
+    t.index ["user_id"], name: "index_groupwares_on_user_id"
   end
 
   create_table "groupwares_projects", id: false, force: :cascade do |t|
@@ -411,6 +413,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_144701) do
   add_foreign_key "events", "tickets"
   add_foreign_key "events", "users"
   add_foreign_key "groupwares", "softwares"
+  add_foreign_key "groupwares", "users"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tickets"
   add_foreign_key "issues", "users"
