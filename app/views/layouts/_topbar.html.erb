@@ -27,27 +27,29 @@
       </div>
     </div>
 
-    <ul class="flex items-center space-x-4">
-      <%= link_to edit_user_registration_path do %>
-        <li class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-          <% if current_user.profile_picture.attached? %>
-            <%= image_tag current_user.profile_picture, class: 'w-10 h-10 rounded-full' %>
-          <% elsif current_user.name_initials.present? %>
-            <p class="w-10 h-10 flex items-center justify-center bg-gray-300 dark:bg-gray-600 rounded-full text-white"><%= current_user.name_initials %></p>
-          <% else %>
-            <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
-          <% end %>
-          <span class="ml-3 text-gray-700 dark:text-gray-200">
+  <ul class="flex items-center space-x-4">
+    <%= link_to edit_user_registration_path do %>
+      <li class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+        <% if current_user.profile_picture.attached? %>
+          <%= image_tag current_user.profile_picture, class: 'w-10 h-10 rounded-full' %>
+        <% elsif current_user.name_initials.present? %>
+          <p class="w-10 h-10 flex items-center justify-center bg-gray-300 dark:bg-gray-600 rounded-full text-white"><%= current_user.name_initials %></p>
+        <% else %>
+          <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
+        <% end %>
+        <span class="ml-3 text-gray-700 dark:text-gray-200">
+          <% unless %w[editor creator].include?(current_user.roles.first.name.downcase) %>
             Role: <span class="capitalize"><%= current_user.roles.first.name %></span>
-          </span>
-          <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-          </svg>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+          <% end %>
+        </span>
+        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+        </svg>
+      </li>
+    <% end %>
+  </ul>
+</div>
+  <% end %>
 
 <!-- JavaScript to toggle the dropdown visibility -->
 <script>

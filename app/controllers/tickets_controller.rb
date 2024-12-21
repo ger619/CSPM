@@ -92,6 +92,13 @@ class TicketsController < ApplicationController
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
       else
+
+        if @ticket.groupware_id.present?
+          groupware = Groupware.find(@ticket.groupware_id)
+          tagged_user = groupware.user
+          # Assign the tagged user if present
+          @ticket.users << tagged_user if tagged_user.present?
+        end
         # Assign the project manager if no agents are assigned
         @ticket.users << @project.user if @ticket.users.empty?
 
@@ -129,7 +136,18 @@ class TicketsController < ApplicationController
         UpdateHistory.record_update(@ticket, current_user, change_details)
 
         # Assign the project manager if no agents are assigned
-        @ticket.users << @project.user if @ticket.users.empty?
+        # Check if groupware_id is present
+        if @ticket.groupware_id.present?
+          groupware = Groupware.find(@ticket.groupware_id)
+          tagged_user = groupware.user
+
+          # Assign the tagged user if present
+          @ticket.users << tagged_user if tagged_user.present?
+        elsif @ticket.users.empty?
+          @ticket.users << @project.user
+        end
+
+        # Assign the default user if no users are assigned
 
         log_event(@ticket, current_user, 'update', 'Ticket was updated.')
 

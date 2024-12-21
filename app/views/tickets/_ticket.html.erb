@@ -50,6 +50,7 @@
     </tr>
     </thead>
     <tbody>
+
     <% @ticket.each do |ticket| %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
 
@@ -140,9 +141,25 @@
           <% end %>
         </td>
         <!-- Progress Bar -->
-        <td class="px-2 py-2">
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+        <td class="pl-2 pr-5 py-2">
+          <div class="relative w-full">
+            <!-- Progress Percentage Tooltip -->
+            <div class="absolute top-[-1.5rem] left-0 translate-x-0 text-sm font-bold"
+                 style="left: calc(<%= ticket.progress_percentage || 0 %>% - 1rem); color: <%= if ticket.progress_percentage.nil?
+                                                                                      '#9CA3AF' # gray-400
+                                                                                    elsif ticket.progress_percentage < 30
+                                                                                      '#DC2626' # red-600
+                                                                                    elsif ticket.progress_percentage < 60
+                                                                                      '#2563EB' # blue-600
+                                                                                    else
+                                                                                      ticket.progress_percentage >= 100 ? '#000000' : '#16A34A' # black or green-600
+                                                                                    end %>;"
+                 class="<%= 'mr-3' if ticket.progress_percentage == 100 %>">
+              <%= ticket.progress_percentage || 0 %>%
+            </div>
+            <!-- Progress Bar Background -->
+            <div class="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <!-- Dynamic Progress Bar -->
               <div class="<%= if ticket.progress_percentage.nil?
                                 'bg-gray-400'
                               elsif ticket.progress_percentage < 30
@@ -150,8 +167,9 @@
                               elsif ticket.progress_percentage < 60
                                 'bg-blue-600'
                               else
-                                ticket.progress_percentage >= 100 ? 'bg-black' : 'bg-green-600'
-                              end %> h-2.5 rounded-full" style="width: <%= ticket.progress_percentage || 0 %>%">
+                                ticket.progress_percentage >= 100 ? 'bg-black ' : 'bg-green-600'
+                              end %> h-2.5 rounded-full"
+                   style="width: <%= ticket.progress_percentage || 0 %>%">
               </div>
             </div>
           </div>
