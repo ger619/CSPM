@@ -1,0 +1,60 @@
+<div class="container mx-auto p-6">
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <h1 class="text-2xl font-semibold text-gray-700 mb-4">All Notifications</h1>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto">
+        <thead class="bg-gray-100 dark:bg-gray-800">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">User</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Message</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800">
+          <% @notifications.each do |notification| %>
+            <tr class="border-b dark:border-gray-700">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                <p class="w-10 h-10 flex items-center justify-center bg-gray-300 dark:bg-gray-600 rounded-full text-white">
+                  <%= notification.user.name %>
+                </p>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                <%= notification.message %>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                <%= notification.created_at.strftime("%b %d, %Y %I:%M %p") %>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                <span class="px-3 py-1 text-xs font-medium rounded-full <%= notification.read ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                  <%= notification.read ? 'Read' : 'Unread' %>
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                <div class="flex space-x-2">
+                  <% unless notification.read %>
+                    <%= link_to "Mark as Read", mark_as_read_notification_path(notification), method: :patch, class: "text-green-600 hover:text-green-800 text-xs" %>
+                  <% else %>
+                    <%= link_to "Mark as Unread", mark_as_unread_notification_path(notification), method: :patch, class: "text-red-600 hover:text-red-800 text-xs" %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-6">
+      <%= pagy_nav(@pagy) %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('turbo:load', function() {
+    // You can add additional functionality or interactions here if necessary
+  });
+</script>
