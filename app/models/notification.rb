@@ -7,6 +7,11 @@ class Notification < ApplicationRecord
 
   after_create_commit :broadcast_notification
 
+  def user_initials
+    user_name = user&.name || 'NA'
+    user_name.split.map(&:first).join.upcase
+  end
+
   private
 
   # Broadcast the notification to the user via the NotificationsChannel
