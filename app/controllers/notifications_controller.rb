@@ -23,7 +23,7 @@ class NotificationsController < ApplicationController
     else
       render json: { notifications: [], unread_count: 0 }, status: :ok
     end
-  rescue => e
+  rescue StandardError => e
     render json: { error: e.message }, status: :internal_server_error
   end
 

@@ -12,13 +12,13 @@ class Notification < ApplicationRecord
   # Broadcast the notification to the user via the NotificationsChannel
   def broadcast_notification
     NotificationsChannel.broadcast_to(user, {
-      id: id,
-      message: message,
-      user_initials: user.name_initials || user.name[0..1].upcase,
-      time_ago: ActionController::Base.helpers.time_ago_in_words(created_at),
-      read: read
-    })
-  rescue => e
+                                        id: id,
+                                        message: message,
+                                        user_initials: user.name_initials || user.name[0..1].upcase,
+                                        time_ago: ActionController::Base.helpers.time_ago_in_words(created_at),
+                                        read: read
+                                      })
+  rescue StandardError => e
     Rails.logger.error("Failed to broadcast notification: #{e.message}")
   end
 end

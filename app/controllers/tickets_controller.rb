@@ -179,7 +179,7 @@ class TicketsController < ApplicationController
       Notification.create!(
         user: assigned_user, # Use assigned_user here to send the notification
         ticket: @ticket,
-        message: "A new ticket has been assigned to you.",
+        message: 'A new ticket has been assigned to you.',
         read: false
       )
 
