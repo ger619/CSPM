@@ -60,7 +60,7 @@ Rails.application.routes.draw do
   
   get 'notifications/load_notifications', to: 'notifications#load_notifications', as: 'load_notifications'
   
-  resources :notifications, only: [:index] do
+  resources :notifications do
     member do
       patch :mark_as_read
       patch :mark_as_unread
