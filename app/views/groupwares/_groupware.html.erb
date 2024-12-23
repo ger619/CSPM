@@ -17,22 +17,22 @@
     </thead>
     <tbody>
     <% @groupware.each do |group| %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 gap-2">
 
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap ">
           <%= group.name   %>
         </th>
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white capitalize">
+        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
           <%= group.description %>
         </th>
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white capitalize">
+        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
           <%= group.user.present? ? group.user.name : 'No User Assigned' %>
         </th>
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white capitalize">
-          <%= link_to 'Edit', edit_software_groupware_path(group.software, group), class: 'text-blue-500' %>
+        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
+          <%= link_to 'Edit', edit_software_groupware_path(group.software, group), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
         </th>
         <!--
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
+        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  uppercase">
           <%#= link_to 'Delete', [group.software, group], data: { turbo_confirm: 'Are you sure?' }, class: 'text-blue-500' %>
         </th>
         -->

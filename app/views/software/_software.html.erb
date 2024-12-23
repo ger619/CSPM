@@ -33,11 +33,11 @@
           <%= software.description %>
         </td>
         <td class="px-4 py-4">
-          <%= link_to 'VIEW', software_path(software.id), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
+          <%= link_to 'VIEW', software_path(software.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
         </td>
         <% if can? :edit, software %>
           <td class="px-4 py-4">
-            <%= link_to 'EDIT', edit_software_path(software), class: "border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded-lg uppercase font-bold "  %>
+            <%= link_to 'EDIT', edit_software_path(software), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
           </td>
         <% end %>
         <td class="px-4 py-4">
