@@ -5,12 +5,12 @@ class NotificationsController < ApplicationController
 
   def index
     @pagy, @notifications = pagy(
-    current_user.notifications.order(created_at: :desc), 
-      items: 10 
+      current_user.notifications.order(created_at: :desc),
+      items: 10
     )
-    
+
     respond_to do |format|
-      format.html 
+      format.html
       format.json do
         render json: {
           notifications: @notifications.map { |n| format_notification(n) },
@@ -18,7 +18,7 @@ class NotificationsController < ApplicationController
         }
       end
     end
-  end  
+  end
 
   def show
     @pagy, @notifications = pagy(current_user.notifications.order(created_at: :desc))
@@ -43,14 +43,14 @@ class NotificationsController < ApplicationController
     @notification = Notification.find(params[:id])
     @notification.update(read: true)
 
-    redirect_to notifications_path, notice: "Notification marked as read."
+    redirect_to notifications_path, notice: 'Notification marked as read.'
   end
 
   def mark_as_unread
     @notification = Notification.find(params[:id])
     @notification.update!(read: false)
 
-    redirect_to notifications_path, notice: "Notification marked as unread."
+    redirect_to notifications_path, notice: 'Notification marked as unread.'
   end
 
   private
