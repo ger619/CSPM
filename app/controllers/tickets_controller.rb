@@ -109,13 +109,6 @@ class TicketsController < ApplicationController
         assigned_user = @project.user
         if assigned_user.present?
           UserMailer.create_ticket_email(@ticket, current_user, assigned_user).deliver_later
-
-          # Create a notification for the assigned user
-          Notification.create(
-            user: assigned_user,
-            ticket: @ticket,
-            message: "You have been assigned a new ticket: #{@ticket.issue}"
-          )
         else
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
@@ -183,18 +176,19 @@ class TicketsController < ApplicationController
 
       assigned_user = user
 
+      Notification.create!(
+        user: assigned_user, # Use assigned_user here to send the notification
+        ticket: @ticket,
+        message: 'A new ticket has been assigned to you.',
+        read: false
+      )
+
       # Adding the SLA to the ticket
       SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
         sla_ticket.sla_status = @ticket.sla_status
       end
 
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
-
-      # @project.users.each do |project_user|
-      #   next if project_user == current_user
-
-      #  UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
-      # end
 
       log_event(@ticket, current_user, 'assign', "User #{user.name} was assigned to the ticket.")
 

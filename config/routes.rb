@@ -57,10 +57,13 @@ Rails.application.routes.draw do
   resources :software do
     resources :groupwares # Nested groupwares if needed in the context of software
   end
-
+  
+  get 'notifications/load_notifications', to: 'notifications#load_notifications', as: 'load_notifications'
+  
   resources :notifications, only: [:index] do
     member do
       patch :mark_as_read
+      patch :mark_as_unread
     end
   end
 
