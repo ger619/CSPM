@@ -1,4 +1,4 @@
-<div class="flex">
+<div class="flex justify-between">
   <div>
     <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
       <h3>Craft Silicon staff</h3>
