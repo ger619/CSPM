@@ -11,12 +11,16 @@
         <!-- Firstname field -->
         <div class="field flex gap-2 m-2">
           <%= f.label ('First Name*'), class: 'pt-3' %>
-          <%= f.text_field :first_name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'First Name' %>
+          <%= f.text_field :first_name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'First Name', required: true  %>
         </div>
         <!-- Lastname field -->
         <div class="field flex gap-2 m-2">
           <%= f.label ('Last Name*'), class: 'pt-3' %>
-          <%= f.text_field :last_name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Last Name'%>
+          <%= f.text_field :last_name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Last Name', required: true %>
+        </div>
+        <div class="field flex gap-2 m-2">
+          <%= f.label ('Client Name*'), class: 'pt-3' %>
+          <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name), { prompt: 'Select Client' }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         </div>
       </div>
     <% end %>

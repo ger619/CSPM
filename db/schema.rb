@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_23_075136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -218,8 +218,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
   create_table "projects_softwares", id: false, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "software_id", null: false
-    t.uuid "groupware_id"
-    t.index ["groupware_id"], name: "index_projects_softwares_on_groupware_id"
     t.index ["project_id", "software_id"], name: "index_projects_softwares_on_project_id_and_software_id", unique: true
     t.index ["software_id", "project_id"], name: "index_projects_softwares_on_software_id_and_project_id", unique: true
   end
@@ -323,7 +321,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.string "subject"
-    t.integer "update_count", default: -1, null: false
+    t.integer "update_count", default: 0, null: false
     t.datetime "last_updated_at", precision: nil
     t.index ["groupware_id"], name: "index_tickets_on_groupware_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"
@@ -369,6 +367,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
+    t.uuid "client_id"
+    t.index ["client_id"], name: "index_users_on_client_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
@@ -444,4 +444,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
   add_foreign_key "tickets", "projects"
   add_foreign_key "tickets", "softwares"
   add_foreign_key "tickets", "users"
+  add_foreign_key "users", "clients"
 end
