@@ -1,3 +1,4 @@
+<!-- app/views/project/_add_assign.html.erb -->
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
   <div class="grid grid-cols-2 mt-2 gap-2">
     <div class="col-span-1 text-xs">
@@ -6,13 +7,9 @@
         <div class="flex flex-wrap gap-2">
           <div>
             <%= select_tag :user_id, options_from_collection_for_select(
-              User.with_agent_role
-                  .where.not(id: @project.users.pluck(:id))
-                  .distinct
-                  .where("email LIKE ? OR email ILIKE ANY (array[?]) OR name ILIKE ANY (array[?])",
-                         "%@craftsilicon.com",
-                         @project.title.split.reject { |name| ["bank"].include?(name.downcase) }.map { |name| "%#{name.downcase}%" },
-                         @project.title.split.reject { |name| ["bank"].include?(name.downcase) }.map { |name| "%#{name.downcase}%" }),
+              @project.users_with_same_client
+                      .where.not(id: @project.users.pluck(:id))
+                      .distinct,
               :id, :name),
                            class: "h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1",
                            required: true
@@ -30,9 +27,9 @@
           <%= label_tag :user_id, "REMOVE USER" %>
           <div class="flex flex-wrap gap-2">
             <div>
-               <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: " h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1" %>
+              <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name), class: " h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1" %>
             </div>
-              <%= submit_tag "REMOVE USER", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+            <%= submit_tag "REMOVE USER", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
           </div>
         <% end %>
       <% end %>
