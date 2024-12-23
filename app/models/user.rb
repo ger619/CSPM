@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
   has_many :boards, foreign_key: :user_id, class_name: 'Board', dependent: :nullify
   has_many :tasks, foreign_key: :user_id, class_name: 'Task', dependent: :nullify
-
+  has_many :notifications
   # To ensure that a user has at least one role
   has_many :projects, through: :roles, source: :resource, source_type: :Project
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
