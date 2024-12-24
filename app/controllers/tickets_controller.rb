@@ -8,7 +8,7 @@ class TicketsController < ApplicationController
     # Handling issues with rich text content and search query
     @issue = if params[:query].present?
                @ticket.issues.left_joins(:rich_text_content)
-                 .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+                      .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
              else
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
@@ -45,10 +45,10 @@ class TicketsController < ApplicationController
     # Count tickets created by the current user with 'Client Confirmation Pending' status
     @tickets_count = if confirmation_pending_status
                        @project.tickets
-                         .where(user: current_user)
-                         .joins(:statuses)
-                         .where(statuses: { id: confirmation_pending_status.id })
-                         .count
+                               .where(user: current_user)
+                               .joins(:statuses)
+                               .where(statuses: { id: confirmation_pending_status.id })
+                               .count
                      else
                        0
                      end
@@ -68,13 +68,13 @@ class TicketsController < ApplicationController
     # If a software_id is already selected, filter groupwares accordingly
     @groupwares = if @ticket.software_id.present?
                     @project.groupwares
-                      .joins(:softwares)
-                      .where(softwares: { id: @ticket.software_id })
-                      .distinct
+                            .joins(:softwares)
+                            .where(softwares: { id: @ticket.software_id })
+                            .distinct
                   else
                     # If no software is selected, load all groupwares for the project
                     @project.groupwares
-                      .distinct
+                            .distinct
                   end
   end
 
@@ -109,13 +109,6 @@ class TicketsController < ApplicationController
         assigned_user = @project.user
         if assigned_user.present?
           UserMailer.create_ticket_email(@ticket, current_user, assigned_user).deliver_later
-
-          # Create a notification for the assigned user
-          Notification.create(
-            user: assigned_user,
-            ticket: @ticket,
-            message: "You have been assigned a new ticket: #{@ticket.issue}"
-          )
         else
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
@@ -183,18 +176,19 @@ class TicketsController < ApplicationController
 
       assigned_user = user
 
+      Notification.create!(
+        user: assigned_user, # Use assigned_user here to send the notification
+        ticket: @ticket,
+        message: 'A new ticket has been assigned to you.',
+        read: false
+      )
+
       # Adding the SLA to the ticket
       SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
         sla_ticket.sla_status = @ticket.sla_status
       end
 
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
-
-      # @project.users.each do |project_user|
-      #   next if project_user == current_user
-
-      #  UserMailer.ticket_assignment_email(project_user, @ticket, current_user, assigned_user).deliver_later
-      # end
 
       log_event(@ticket, current_user, 'assign', "User #{user.name} was assigned to the ticket.")
 
