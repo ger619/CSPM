@@ -56,7 +56,7 @@ class User < ApplicationRecord
   has_many :tasks, through: :states
 
   has_many :softwares
-  has_many :clients
+  belongs_to :client, optional: true
 
   def assign_default_role
     return if invited_by_id.present?
