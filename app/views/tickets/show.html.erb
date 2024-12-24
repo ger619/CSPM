@@ -21,7 +21,7 @@
     <% if @ticket.ticket_image.present? %>
       <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
     <% else %>
-       <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
+      <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
     <% end %>
   </div>
   <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
@@ -40,7 +40,7 @@
             <%= render 'ticket_status' %>
           </span>
         </div>
-          <!-- SLA -->
+        <!-- SLA -->
         <%= render 'sla' %>
       </div>
       <div class="col-span-2">
@@ -76,33 +76,33 @@
   <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">
     <h1 class="text-3xl text-center mb-10">Communication Center</h1>
     <!-- Tabs Section -->
-      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
-        <div class="flex justify-center mb-10">
-          <div class="relative">
-            <!-- Navigation -->
-            <nav class="flex flex-wrap justify-center items-center space-x-4 pb-4">
-              <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
-                      id="tab-history"
-                      onclick="openCity(event, 'history')">
-                External
-                <!-- Underline -->
-                <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
-              </button>
-              <!-- Divider -->
-              <span class="border-l-2 border-gray-400 h-6"></span>
-              <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
-                      id="tab-club-records"
-                      onclick="openCity(event, 'club-records')">
-                Internal
-                <!-- Underline -->
-                <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
-              </button>
-            </nav>
-            <!-- Bottom Border Line -->
-            <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
-          </div>
+    <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+      <div class="flex justify-center mb-10">
+        <div class="relative">
+          <!-- Navigation -->
+          <nav class="flex flex-wrap justify-center items-center space-x-4 pb-4">
+            <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
+                    id="tab-history"
+                    onclick="openCity(event, 'history')">
+              External
+              <!-- Underline -->
+              <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
+            </button>
+            <!-- Divider -->
+            <span class="border-l-2 border-gray-400 h-6"></span>
+            <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
+                    id="tab-club-records"
+                    onclick="openCity(event, 'club-records')">
+              Internal
+              <!-- Underline -->
+              <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
+            </button>
+          </nav>
+          <!-- Bottom Border Line -->
+          <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
         </div>
-      <% end %>
+      </div>
+    <% end %>
     <!-- Video Section -->
     <div id="history" class="tabcontent active">
       <%= render partial: 'issues/issues_table' %>
@@ -213,6 +213,5 @@
   // Set default tab to open
   document.getElementById("tab-history").click();
 </script>
-
 
 
