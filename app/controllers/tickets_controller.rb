@@ -8,7 +8,7 @@ class TicketsController < ApplicationController
     # Handling issues with rich text content and search query
     @issue = if params[:query].present?
                @ticket.issues.left_joins(:rich_text_content)
-                      .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+                 .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
              else
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
@@ -45,10 +45,10 @@ class TicketsController < ApplicationController
     # Count tickets created by the current user with 'Client Confirmation Pending' status
     @tickets_count = if confirmation_pending_status
                        @project.tickets
-                               .where(user: current_user)
-                               .joins(:statuses)
-                               .where(statuses: { id: confirmation_pending_status.id })
-                               .count
+                         .where(user: current_user)
+                         .joins(:statuses)
+                         .where(statuses: { id: confirmation_pending_status.id })
+                         .count
                      else
                        0
                      end
@@ -68,13 +68,13 @@ class TicketsController < ApplicationController
     # If a software_id is already selected, filter groupwares accordingly
     @groupwares = if @ticket.software_id.present?
                     @project.groupwares
-                            .joins(:softwares)
-                            .where(softwares: { id: @ticket.software_id })
-                            .distinct
+                      .joins(:softwares)
+                      .where(softwares: { id: @ticket.software_id })
+                      .distinct
                   else
                     # If no software is selected, load all groupwares for the project
                     @project.groupwares
-                            .distinct
+                      .distinct
                   end
   end
 
