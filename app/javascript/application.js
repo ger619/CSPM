@@ -11,7 +11,7 @@ import '@rails/actiontext';
 //= require 'chart.js'
 import "trix"
 import "@rails/actiontext"
-import "./channels/notifications_channel";
+/* import "./channels/notifications_channel"; */
 
 import TextLimitController from "./controllers/text_limit_controller";
 const application = Application.start();
