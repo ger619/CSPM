@@ -1,5 +1,5 @@
 class Client < ApplicationRecord
-  belongs_to :user
+  has_many :users, dependent: :destroy
   has_many :projects, dependent: :destroy
   has_many :products, dependent: :destroy
 
