@@ -1,9 +1,7 @@
 @import 'actiontext.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @import "slim-select";
 
 /*
@@ -17,11 +15,11 @@
 */
 
 @layer base {
-    input:checked + span {
-        background-color: #2196F3;
-    }
+  input:checked + span {
+    background-color: #2196f3;
+  }
 
-    input:checked + span + span {
-        transform: translateX(32px);
-    }
+  input:checked + span + span {
+    transform: translateX(32px);
+  }
 }
