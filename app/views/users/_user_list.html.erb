@@ -34,7 +34,7 @@
         Client Name
       </th>
       <th scope="col" class="px-6 py-3">
-        Status
+        Active
       </th>
       <th scope="col" class="px-6 py-3">
         Edit Role
@@ -76,6 +76,7 @@
           <%= user.client&.name || 'No Client Assigned' %>
         </td>
         <td class="px-6 py-4">
+          <% if (can?(:manage, user) || (can?(:read, user) && !user.has_role?(:admin))) && user != current_user %>
           <%= form_with url: status_user_path(user), method: :patch, local: true do |form| %>
             <div class="flex items-center">
               <label class="relative inline-block w-16 h-8">
@@ -84,6 +85,7 @@
                 <span class="absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition duration-300 transform"></span>
               </label>
             </div>
+          <% end %>
           <% end %>
         </td>
 
