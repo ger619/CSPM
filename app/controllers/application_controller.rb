@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, except: %i[new create]
   before_action :update_allowed_parameters, if: :devise_controller?
   before_action :check_profile_completion
+  before_action :check_active_status
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
 
@@ -30,6 +31,13 @@ class ApplicationController < ActionController::Base
     current_user.update(first_login: true, first_name: params[:user][:first_name],
                         last_name: params[:user][:last_name])
     redirect_to root_path, alert: 'Profile is Updated.'
+  end
+
+  def check_active_status
+    return unless user_signed_in? && !current_user.active
+
+    sign_out current_user
+    redirect_to new_user_session_path, alert: 'Your account is not active. Please contact the administrator.'
   end
 
   def redirect_to_root

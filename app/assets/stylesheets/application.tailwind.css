@@ -15,3 +15,13 @@
 }
 
 */
+
+@layer base {
+    input:checked + span {
+        background-color: #2196F3;
+    }
+
+    input:checked + span + span {
+        transform: translateX(32px);
+    }
+}

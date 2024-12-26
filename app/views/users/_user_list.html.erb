@@ -34,6 +34,9 @@
         Client Name
       </th>
       <th scope="col" class="px-6 py-3">
+        Status
+      </th>
+      <th scope="col" class="px-6 py-3">
         Edit Role
       </th>
     </tr>
@@ -71,6 +74,17 @@
         </td>
         <td class="px-6 py-4">
           <%= user.client&.name || 'No Client Assigned' %>
+        </td>
+        <td class="px-6 py-4">
+          <%= form_with url: status_user_path(user), method: :patch, local: true do |form| %>
+            <div class="flex items-center">
+              <label class="relative inline-block w-16 h-8">
+                <%= form.check_box :active, checked: user.active, class: "hidden", data: { confirm: 'Are you sure?' }, onchange: 'this.form.submit()' %>
+                <span class="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition duration-300"></span>
+                <span class="absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition duration-300 transform"></span>
+              </label>
+            </div>
+          <% end %>
         </td>
 
         <td class="px-6 py-4 flex gap-2">
