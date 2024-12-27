@@ -106,6 +106,10 @@ class TicketsController < ApplicationController
         status = Status.find_by(name: 'New')
         @ticket.statuses << status if status
 
+        SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
+          sla_ticket.sla_status = @ticket.sla_status
+        end
+
         assigned_user = @project.user
         if assigned_user.present?
           UserMailer.create_ticket_email(@ticket, current_user, assigned_user).deliver_later
