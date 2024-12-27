@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     return unless user_signed_in? && !current_user.active
 
     sign_out current_user
-    redirect_to new_user_session_path, alert: 'Your account is not active. Please contact the administrator.'
+    redirect_to new_user_session_path, alert: 'Your account is deactivated. Please contact the administrator.'
   end
 
   def redirect_to_root
