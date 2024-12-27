@@ -106,6 +106,10 @@ class User < ApplicationRecord
     self.first_login ||= false
   end
 
+  def toggle_boolean(attribute)
+    update(attribute => !self[attribute])
+  end
+
   private
 
   def email_domain_must_be_certified

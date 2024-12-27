@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_26_112458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -239,7 +239,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
     t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
+    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", unique: true
+    t.index ["name"], name: "index_roles_on_name", unique: true
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
@@ -367,6 +368,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
+    t.uuid "client_id"
+    t.boolean "active", default: true
+    t.index ["client_id"], name: "index_users_on_client_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
@@ -442,4 +446,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_20_114823) do
   add_foreign_key "tickets", "projects"
   add_foreign_key "tickets", "softwares"
   add_foreign_key "tickets", "users"
+  add_foreign_key "users", "clients"
 end

@@ -32,6 +32,14 @@ class UsersController < ApplicationController
     render json: users.select(:id, :first_name, :last_name)
   end
 
+  # Add status to active or inactive user
+
+  def status
+    @user = User.find(params[:id])
+    @user.toggle_boolean(:active)
+    redirect_to users_path, notice: 'User status was successfully updated.'
+  end
+
   private
 
   def set_user
