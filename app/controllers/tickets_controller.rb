@@ -117,7 +117,8 @@ class TicketsController < ApplicationController
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
 
-        log_event(@ticket, current_user, 'create', 'Ticket was created.')
+        log_event(@ticket, current_user, 'created and assign', "Ticket was created and assigned to #{assigned_user.name}")
+
 
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
@@ -194,7 +195,7 @@ class TicketsController < ApplicationController
 
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
-      log_event(@ticket, current_user, 'assign', "User #{user.name} was assigned to the ticket.")
+      log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket.")
 
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
@@ -203,7 +204,7 @@ class TicketsController < ApplicationController
   def unassign_tag
     user = User.find(params[:user_id])
     @ticket.users.delete(user)
-    log_event(@ticket, current_user, 'unassign', "User #{user.name} was unassigned from the ticket.")
+    log_event(@ticket, current_user, 'unassign', "#{user.name} was unassigned from the ticket.")
     redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
