@@ -119,7 +119,6 @@ class TicketsController < ApplicationController
 
         log_event(@ticket, current_user, 'created and assign', "Ticket was created and assigned to #{assigned_user.name}")
 
-
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
