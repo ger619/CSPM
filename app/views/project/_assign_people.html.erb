@@ -5,7 +5,7 @@
       <div class="flex flex-wrap gap-2">
         <%= form_with url: '#', local: true do %>
           <% craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') } %>
-          <%= select_tag 'assigned_agents', options_from_collection_for_select(craft_silicon_users, 'id', 'name'), class: 'border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs rounded' %>
+          <%= select_tag 'assigned_agents', options_from_collection_for_select(craft_silicon_users, 'id', 'name'), class: 'border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs rounded w-full' %>
         <% end %>
       </div>
     <% end %>
@@ -18,7 +18,7 @@
       <div class="flex flex-wrap gap-2">
         <%= form_with url: '#', local: true do %>
           <% non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') } %>
-          <%= select_tag 'assigned_agents', options_from_collection_for_select(non_craft_silicon_users, 'id', 'name'), class: 'border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs rounded' %>
+          <%= select_tag 'assigned_agents', options_from_collection_for_select(non_craft_silicon_users, 'id', 'name'), class: 'border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs rounded w-full' %>
         <% end %>
       </div>
     <% end %>
