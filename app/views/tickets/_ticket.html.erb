@@ -52,6 +52,7 @@
     <tbody>
 
     <% @ticket.each do |ticket| %>
+    <% if ticket.present? %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
 
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -197,6 +198,7 @@
         </td>
           <% end %>
       </tr>
+    <% end %>
     <% end %>
     </tbody>
   </table>
