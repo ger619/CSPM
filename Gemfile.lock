@@ -444,6 +444,7 @@ DEPENDENCIES
   puma (>= 5.0)
   pundit
   rails (~> 7.2.1)
+  rdoc
   redis
   rolify (~> 6.0)
   rspec-rails

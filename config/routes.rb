@@ -71,4 +71,5 @@ Rails.application.routes.draw do
 
   resources :client
   resources :status
+
 end

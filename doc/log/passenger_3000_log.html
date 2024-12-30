@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>passenger.3000.log - RDoc Documentation</title>
+
+  <meta name="keywords" content="ruby,documentation,passenger.3000.log">
+  <meta name="description" content="passenger.3000.log: WatchdogMain. Starting Passenger watchdog.">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/navigation.js" defer></script>
+<script src="../js/search.js" defer></script>
+<script src="../js/search_index.js" defer></script>
+<script src="../js/searcher.js" defer></script>
+<script src="../js/darkfish.js" defer></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="file">
+<div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
+  <span aria-hidden="true">&#9776;</span>
+</div>
+
+
+<nav id="navigation" role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+  
+<div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+    <li><a href="../2.html">2</a>
+    <li><a href="../Capfile.html">Capfile</a>
+    <li><a href="../Dockerfile.html">Dockerfile</a>
+    <li><a href="../Gemfile.html">Gemfile</a>
+    <li><a href="../Gemfile_lock.html">Gemfile.lock</a>
+    <li><a href="../Procfile_dev.html">Procfile.dev</a>
+    <li><a href="../README_md.html">README</a>
+    <li><a href="../Rakefile.html">Rakefile</a>
+    <li><details><summary>app</summary>
+    <ul class="link-list">
+      <li><a href="../app/assets/builds/tailwind_css.html">tailwind.css</a>
+      <li><a href="../app/assets/config/manifest_js.html">manifest.js</a>
+      <li><a href="../app/assets/stylesheets/actiontext_css.html">actiontext.css</a>
+      <li><a href="../app/assets/stylesheets/application_css.html">application.css</a>
+      <li><a href="../app/assets/stylesheets/application_tailwind_css.html">application.tailwind.css</a>
+      <li><a href="../app/assets/stylesheets/loading_css.html">loading.css</a>
+      <li><a href="../app/javascript/application_js.html">application.js</a>
+      <li><a href="../app/javascript/controllers/application_js.html">application.js</a>
+      <li><a href="../app/javascript/controllers/groupware_controller_js.html">groupware_controller.js</a>
+      <li><a href="../app/javascript/controllers/hello_controller_js.html">hello_controller.js</a>
+      <li><a href="../app/javascript/controllers/image_modal_controller_js.html">image_modal_controller.js</a>
+      <li><a href="../app/javascript/controllers/index_js.html">index.js</a>
+      <li><a href="../app/javascript/controllers/modals_controller_js.html">modals_controller.js</a>
+      <li><a href="../app/javascript/controllers/select_controller_js.html">select_controller.js</a>
+      <li><a href="../app/javascript/controllers/text_limit_controller_js.html">text_limit_controller.js</a>
+      <li><a href="../app/javascript/controllers/tribute_controller_js.html">tribute_controller.js</a>
+    </ul></details>
+    <li><details><summary>bin</summary>
+    <ul class="link-list">
+      <li><a href="../bin/dev.html">dev</a>
+      <li><a href="../bin/docker-entrypoint.html">docker-entrypoint</a>
+    </ul></details>
+    <li><a href="../config_ru.html">config.ru</a>
+    <li><details><summary>config</summary>
+    <ul class="link-list">
+      <li><a href="../config/credentials_yml_enc.html">credentials.yml.enc</a>
+      <li><a href="../config/tailwind_config_js.html">tailwind.config.js</a>
+    </ul></details>
+    <li><a href="../exception.html">exception</a>
+    <li><details open><summary>log</summary>
+    <ul class="link-list">
+      <li><a href="../log/capistrano_log.html">capistrano.log</a>
+      <li><a href="../log/development_log.html">development.log</a>
+      <li><a href="../log/passenger_3000_log.html">passenger.3000.log</a>
+    </ul></details>
+    <li><a href="../package-lock_json.html">package-lock.json</a>
+    <li><a href="../package_json.html">package.json</a>
+    <li><details><summary>public</summary>
+    <ul class="link-list">
+      <li><a href="../public/404_html.html">404.html</a>
+      <li><a href="../public/422_html.html">422.html</a>
+      <li><a href="../public/500_html.html">500.html</a>
+      <li><a href="../public/apple-touch-icon-precomposed_png.html">apple-touch-icon-precomposed.png</a>
+      <li><a href="../public/apple-touch-icon_png.html">apple-touch-icon.png</a>
+      <li><a href="../public/favicon_ico.html">favicon.ico</a>
+      <li><a href="../public/robots_txt.html">robots</a>
+    </ul></details>
+    <li><a href="../qodana_yaml.html">qodana.yaml</a>
+    <li><details><summary>tmp</summary>
+    <ul class="link-list">
+      <li><a href="../tmp/local_secret_txt.html">local_secret</a>
+      <li><a href="../tmp/pids/passenger_3000_pid.html">passenger.3000.pid</a>
+      <li><a href="../tmp/pids/passenger_3000_pid_lock.html">passenger.3000.pid.lock</a>
+      <li><a href="../tmp/pids/server_pid.html">server.pid</a>
+    </ul></details>
+    <li><a href="../vendor/javascript/sortablejs_js.html">sortablejs.js</a>
+    <li><a href="../yarn_lock.html">yarn.lock</a>
+  </ul>
+</div>
+
+
+  <footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.8.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
+</nav>
+
+<main role="main" aria-label="Page log/passenger.3000.log">
+
+<p>[ N 2024-12-24 10:03:22.5115 35843/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-24 10:03:22.5403 35847/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-24 10:03:22.5405 35847/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-24 10:03:22.5778 35847/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 35847 [ N 2024-12-24 10:03:25.5276 35847/T6 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours) [ N 2024-12-24 10:08:36.6422 35847/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 36075, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 10:08:36.9856 35847/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 36153, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+
+<p>[ N 2024-12-24 10:14:29.5979 35847/T9 age/Cor/CoreMain.cpp:671 ]: Signal received. Gracefully shutting down… (send signal 2 more time(s) to force shutdown) [ N 2024-12-24 10:14:29.5979 35847/T1 age/Cor/CoreMain.cpp:1246 ]: Received command to shutdown gracefully. Waiting until all clients have disconnected… [ N 2024-12-24 10:14:29.5980 35847/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 36013, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+<dl class="rdoc-list label-list"><dt> N 2024-12-24 10:14:29.5981 35847/Tb Ser/Server.h:901 ]: [ServerThr.2
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5981 35847/Tj Ser/Server.h:901 ]: [ServerThr.6
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Tb Ser/Server.h:558 ]: [ServerThr.2
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/T9 Ser/Server.h:901 ]: [ServerThr.1
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/T9 Ser/Server.h:558 ]: [ServerThr.1
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Td Ser/Server.h:901 ]: [ServerThr.3
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Tf Ser/Server.h:901 ]: [ServerThr.4
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Td Ser/Server.h:558 ]: [ServerThr.3
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Tf Ser/Server.h:558 ]: [ServerThr.4
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Th Ser/Server.h:901 ]: [ServerThr.5
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5983 35847/Tn Ser/Server.h:901 ]: [ServerThr.8
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5983 35847/Th Ser/Server.h:558 ]: [ServerThr.5
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5983 35847/Tn Ser/Server.h:558 ]: [ServerThr.8
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5982 35847/Tj Ser/Server.h:558 ]: [ServerThr.6
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.5983 35847/Tl Ser/Server.h:901 ]: [ServerThr.7
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.5983 35847/Tl Ser/Server.h:558 ]: [ServerThr.7
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 10:14:29.6008 35847/Tq Ser/Server.h:901 ]: [ApiServer
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 10:14:29.6008 35847/Tq Ser/Server.h:558 ]: [ApiServer
+<dd>
+<p>Shutdown finished</p>
+</dd></dl>
+
+<p>[ N 2024-12-24 10:14:29.6029 35847/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 36013, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 10:14:30.6539 35847/T1 age/Cor/CoreMain.cpp:1326 ]: Passenger core shutdown finished [ N 2024-12-24 10:14:48.3780 39734/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-24 10:14:48.3992 39738/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-24 10:14:48.3993 39738/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-24 10:14:48.4211 39738/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 39738 [ N 2024-12-24 10:14:51.2000 39738/T6 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours) App 39839 output: 2024-12-24T07:17:16.382Z pid=39839 tid=123n INFO: Sidekiq 7.3.5 connecting to Redis with options {:size=&gt;10, :pool_name=&gt;“internal”, :url=&gt;“redis://:REDACTED@localhost:6379/0”} [ N 2024-12-24 10:24:07.0138 39738/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 40895, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 10:24:25.9441 39738/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 39839, application /home/abol-ger/Desktop/Projects/CSPM (development) App 39875 output: 2024-12-24T07:42:08.313Z pid=39875 tid=122n INFO: Sidekiq 7.3.5 connecting to Redis with options {:size=&gt;10, :pool_name=&gt;“internal”, :url=&gt;“redis://:REDACTED@localhost:6379/0”} [ N 2024-12-24 10:51:24.5113 39738/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 49449, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 11:06:15.1599 39738/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 55788, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+
+<p>[ N 2024-12-24 12:02:51.4472 39738/Ta age/Cor/CoreMain.cpp:671 ]: Signal received. Gracefully shutting down… (send signal 2 more time(s) to force shutdown) [ N 2024-12-24 12:02:51.4494 39738/T1 age/Cor/CoreMain.cpp:1246 ]: Received command to shutdown gracefully. Waiting until all clients have disconnected… [ N 2024-12-24 12:02:51.4509 39738/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 39875, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+<dl class="rdoc-list label-list"><dt> N 2024-12-24 12:02:51.4528 39738/Tb Ser/Server.h:901 ]: [ServerThr.2
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4528 39738/Th Ser/Server.h:901 ]: [ServerThr.5
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4528 39738/Te Ser/Server.h:901 ]: [ServerThr.3
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4528 39738/Ta Ser/Server.h:901 ]: [ServerThr.1
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4534 39738/Tb Ser/Server.h:558 ]: [ServerThr.2
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4534 39738/Th Ser/Server.h:558 ]: [ServerThr.5
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4534 39738/Te Ser/Server.h:558 ]: [ServerThr.3
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4534 39738/Ta Ser/Server.h:558 ]: [ServerThr.1
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4528 39738/Tf Ser/Server.h:901 ]: [ServerThr.4
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4528 39738/Tl Ser/Server.h:901 ]: [ServerThr.7
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4535 39738/Tf Ser/Server.h:558 ]: [ServerThr.4
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4535 39738/Tl Ser/Server.h:558 ]: [ServerThr.7
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4528 39738/Tn Ser/Server.h:901 ]: [ServerThr.8
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4529 39738/Tj Ser/Server.h:901 ]: [ServerThr.6
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4536 39738/Tn Ser/Server.h:558 ]: [ServerThr.8
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4536 39738/Tj Ser/Server.h:558 ]: [ServerThr.6
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:02:51.4587 39738/Tp Ser/Server.h:901 ]: [ApiServer
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:02:51.4588 39738/Tp Ser/Server.h:558 ]: [ApiServer
+<dd>
+<p>Shutdown finished</p>
+</dd></dl>
+
+<p>[ N 2024-12-24 12:02:51.4613 39738/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 39875, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 12:02:52.8526 39738/T1 age/Cor/CoreMain.cpp:1326 ]: Passenger core shutdown finished [ N 2024-12-24 12:05:49.7089 74381/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-24 12:05:49.7573 74385/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-24 12:05:49.7575 74385/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-24 12:05:49.7929 74385/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 74385 [ N 2024-12-24 12:05:52.6854 74385/T6 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours)</p>
+
+<p>[ N 2024-12-24 12:06:11.7234 74385/T9 age/Cor/CoreMain.cpp:671 ]: Signal received. Gracefully shutting down… (send signal 2 more time(s) to force shutdown) [ N 2024-12-24 12:06:11.7234 74385/T1 age/Cor/CoreMain.cpp:1246 ]: Received command to shutdown gracefully. Waiting until all clients have disconnected… [ N 2024-12-24 12:06:11.7235 74385/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 74485, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 12:06:11.7236 74385/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 74772, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 12:06:11.7236 74385/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 74812, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+<dl class="rdoc-list label-list"><dt> N 2024-12-24 12:06:11.7237 74385/Td Ser/Server.h:901 ]: [ServerThr.3
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7237 74385/T9 Ser/Server.h:901 ]: [ServerThr.1
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7237 74385/Tj Ser/Server.h:901 ]: [ServerThr.6
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7237 74385/Tn Ser/Server.h:901 ]: [ServerThr.8
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/Td Ser/Server.h:558 ]: [ServerThr.3
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/T9 Ser/Server.h:558 ]: [ServerThr.1
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/Tj Ser/Server.h:558 ]: [ServerThr.6
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/Tn Ser/Server.h:558 ]: [ServerThr.8
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7237 74385/Tb Ser/Server.h:901 ]: [ServerThr.2
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/Tf Ser/Server.h:901 ]: [ServerThr.4
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/Tb Ser/Server.h:558 ]: [ServerThr.2
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7238 74385/Tf Ser/Server.h:558 ]: [ServerThr.4
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7239 74385/Th Ser/Server.h:901 ]: [ServerThr.5
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7239 74385/Tl Ser/Server.h:901 ]: [ServerThr.7
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7239 74385/Th Ser/Server.h:558 ]: [ServerThr.5
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7239 74385/Tl Ser/Server.h:558 ]: [ServerThr.7
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-24 12:06:11.7266 74385/Tp Ser/Server.h:901 ]: [ApiServer
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-24 12:06:11.7266 74385/Tp Ser/Server.h:558 ]: [ApiServer
+<dd>
+<p>Shutdown finished</p>
+</dd></dl>
+
+<p>[ N 2024-12-24 12:06:11.7302 74385/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 74485, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 12:06:11.7303 74385/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 74772, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 12:06:11.7303 74385/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 74812, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-24 12:06:12.9639 74385/T1 age/Cor/CoreMain.cpp:1326 ]: Passenger core shutdown finished [ N 2024-12-27 09:25:14.6798 14474/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-27 09:25:14.6964 14478/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-27 09:25:14.6966 14478/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-27 09:25:14.7225 14478/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 14478 [ N 2024-12-27 09:25:17.6871 14478/T6 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours) App 14640 output: == 20241226112458 AddActiveToUsers: migrating ================================= App 14640 output: – add_column(:users, :active, :boolean, {:default=&gt;true}) App 14640 output:    -&gt; 0.0246s App 14640 output: == 20241226112458 AddActiveToUsers: migrated (0.0248s) ======================== App 14640 output: [ N 2024-12-27 09:35:20.4351 14478/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 16523, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 09:35:20.5370 14478/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 14731, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 09:35:20.5371 14478/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 16369, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 09:35:20.5371 14478/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 16402, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 09:35:20.6987 14478/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 16604, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+
+<p>[ N 2024-12-27 09:39:45.3877 14478/T9 age/Cor/CoreMain.cpp:671 ]: Signal received. Gracefully shutting down… (send signal 2 more time(s) to force shutdown) [ N 2024-12-27 09:39:45.3878 14478/T1 age/Cor/CoreMain.cpp:1246 ]: Received command to shutdown gracefully. Waiting until all clients have disconnected… [ N 2024-12-27 09:39:45.3879 14478/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 14640, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+<dl class="rdoc-list label-list"><dt> N 2024-12-27 09:39:45.3880 14478/T9 Ser/Server.h:901 ]: [ServerThr.1
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3880 14478/Td Ser/Server.h:901 ]: [ServerThr.3
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3880 14478/Tb Ser/Server.h:901 ]: [ServerThr.2
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3880 14478/T9 Ser/Server.h:558 ]: [ServerThr.1
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3880 14478/Td Ser/Server.h:558 ]: [ServerThr.3
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3880 14478/Tb Ser/Server.h:558 ]: [ServerThr.2
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3881 14478/Tj Ser/Server.h:901 ]: [ServerThr.6
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3881 14478/Tl Ser/Server.h:901 ]: [ServerThr.7
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3882 14478/Tj Ser/Server.h:558 ]: [ServerThr.6
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3882 14478/Tl Ser/Server.h:558 ]: [ServerThr.7
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3881 14478/Th Ser/Server.h:901 ]: [ServerThr.5
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3881 14478/Tf Ser/Server.h:901 ]: [ServerThr.4
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3881 14478/Tn Ser/Server.h:901 ]: [ServerThr.8
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3883 14478/Th Ser/Server.h:558 ]: [ServerThr.5
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3883 14478/Tf Ser/Server.h:558 ]: [ServerThr.4
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3883 14478/Tn Ser/Server.h:558 ]: [ServerThr.8
+<dd>
+<p>Shutdown finished</p>
+</dd><dt> N 2024-12-27 09:39:45.3908 14478/Tp Ser/Server.h:901 ]: [ApiServer
+<dd>
+<p>Freed 0 spare client objects</p>
+</dd><dt> N 2024-12-27 09:39:45.3908 14478/Tp Ser/Server.h:558 ]: [ApiServer
+<dd>
+<p>Shutdown finished</p>
+</dd></dl>
+
+<p>[ N 2024-12-27 09:39:45.3937 14478/T1 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 14640, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 09:39:46.6759 14478/T1 age/Cor/CoreMain.cpp:1326 ]: Passenger core shutdown finished [ N 2024-12-27 12:35:19.4735 33646/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-27 12:35:19.4907 33650/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-27 12:35:19.4908 33650/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-27 12:35:19.5184 33650/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 33650 [ N 2024-12-27 12:35:22.4424 33650/T6 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours) App 33800 output: 2024-12-27T09:35:59.202Z pid=33800 tid=1850 INFO: Sidekiq 7.3.5 connecting to Redis with options {:size=&gt;10, :pool_name=&gt;“internal”, :url=&gt;“redis://:REDACTED@localhost:6379/0”} [ N 2024-12-27 12:40:26.8715 33650/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 33906, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 12:40:50.8838 33650/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 33822, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 12:50:39.0651 33650/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 36681, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 12:58:03.4214 33650/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 39286, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 12:58:03.8855 33650/T5 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 39987, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 14:46:30.7120 21264/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-27 14:46:30.7553 21269/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-27 14:46:30.7555 21269/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-27 14:46:30.8128 21269/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 21269 [ E 2024-12-27 14:46:32.8496 21269/T6 age/Cor/SecurityUpdateChecker.h:506 ]: Security update check failed: Couldn’t resolve host name while connecting to <a href="https://securitycheck.phusionpassenger.com/v1/check.json">securitycheck.phusionpassenger.com/v1/check.json</a> (check your DNS) (next check in 24 hours) [ N 2024-12-27 14:51:44.6985 21269/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 21509, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 14:51:45.0826 21269/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 21546, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-27 15:18:32.8022 21269/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 21440, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 08:18:12.7329 21269/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 33097, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 09:30:30.5442 17515/T1 age/Wat/WatchdogMain.cpp:1370 ]: Starting Passenger watchdog… [ N 2024-12-30 09:30:30.5768 17519/T1 age/Cor/CoreMain.cpp:1341 ]: Starting Passenger core… [ N 2024-12-30 09:30:30.5770 17519/T1 age/Cor/CoreMain.cpp:257 ]: Passenger core running in multi-application mode. [ N 2024-12-30 09:30:30.6230 17519/T1 age/Cor/CoreMain.cpp:1016 ]: Passenger core online, PID 17519 [ N 2024-12-30 09:30:33.5344 17519/T6 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours) [ N 2024-12-30 09:35:38.3021 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 17710, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 09:35:38.3687 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 17770, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 09:45:51.1893 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 20102, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 09:56:31.0051 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 24910, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 10:23:05.9716 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 33816, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 10:42:32.1717 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 38912, application /home/abol-ger/Desktop/Projects/CSPM (development) [ N 2024-12-30 11:26:37.3687 17519/T4 age/Cor/CoreMain.cpp:1147 ]: Checking whether to disconnect long-running connections for process 55271, application /home/abol-ger/Desktop/Projects/CSPM (development)</p>
+
+</main>
+

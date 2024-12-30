@@ -99,3 +99,5 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'stackprof'
+
+gem 'rdoc'
