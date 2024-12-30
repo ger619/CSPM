@@ -14,15 +14,15 @@
           <% if f.object.class.require_password_on_accepting %>
             <div class="field">
               <%= f.label ('Password*') %><br />
-              <%= f.password_field :password, placeholder: '••••••••', class: "bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", required: true %>
+              <%= f.password_field :password, placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
             </div>
             <div class="field">
               <%= f.label ('Password Confirm*') %><br />
-              <%= f.password_field :password_confirmation, placeholder: '••••••••', class: "bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", required: true %>
+              <%= f.password_field :password_confirmation, placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
             </div>
           <% end %>
           <div class="actions">
-            <%= f.submit t("devise.invitations.edit.submit_button"), class: 'mt-6 w-full border border-gray-900 border-b-4 p-2 rounded font-semibold rounded dark:border-white' %>
+            <%= f.submit t("devise.invitations.edit.submit_button"), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full' %>
           </div>
         </div>
       </div>
