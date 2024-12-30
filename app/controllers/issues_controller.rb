@@ -67,7 +67,8 @@ class IssuesController < ApplicationController
     @issue = @ticket.issues.find(params[:id])
   end
 
+  # Permit content and attachments to be handled in the params
   def issue_params
-    params.require(:issue).permit(:content, :ticket_id, :project_id, :user_id)
+    params.require(:issue).permit(:content, :ticket_id, :project_id, :user_id, attachments: [])
   end
 end

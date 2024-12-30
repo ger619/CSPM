@@ -31,15 +31,17 @@
                 <%= project.description.truncate(30) %>
               </td>
               <td class="px-6 py-4 text-left whitespace-nowrap">
-                <%= project.start_date.strftime("%d %b %y") %>
-              </td>
+  <%= project.start_date.present? ? project.start_date.strftime("%d %b %y") : "N/A" %>
+</td>
               <td class="px-6 py-4 text-left">
                 <%= project.user.name %>
               </td>
               <td class="px-6 py-4 text-left">
-                <% if project.present? %>
-                  <%= project.client.name %>
-                <% end %>
+              <% if project.present? && project.client.present? %>
+              <%= project.client.name %>
+            <% else %>
+              No Client Assigned
+            <% end %>
               </td>
               <td class="px-6 py-4 text-left">
                 <ul>
