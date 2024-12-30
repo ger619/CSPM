@@ -6,21 +6,21 @@
       <div class="flex">
         <div class="field flex gap-2 m-2">
           <%= f.label ('Email*'), class: 'pt-3' %>
-          <%= f.email_field field, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'ab@craftsilicon.com', required: true %>
+          <%= f.email_field field, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'ab@craftsilicon.com', required: true %>
         </div>
         <!-- Firstname field -->
         <div class="field flex gap-2 m-2">
           <%= f.label ('First Name*'), class: 'pt-3' %>
-          <%= f.text_field :first_name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'First Name', required: true  %>
+          <%= f.text_field :first_name, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'First Name', required: true  %>
         </div>
         <!-- Lastname field -->
         <div class="field flex gap-2 m-2">
           <%= f.label ('Last Name*'), class: 'pt-3' %>
-          <%= f.text_field :last_name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Last Name', required: true %>
+          <%= f.text_field :last_name, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Last Name', required: true %>
         </div>
         <div class="field flex gap-2 m-2">
           <%= f.label ('Client Name*'), class: 'pt-3' %>
-          <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name), { prompt: 'Select Client' }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[250px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+          <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name), { prompt: 'Select Client' }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full" %>
         </div>
       </div>
     <% end %>
@@ -36,7 +36,7 @@
       </div>
     <% end %>
     <div class="actions">
-      <%= f.submit t("devise.invitations.new.submit_button"), class: 'mt-4 w-[250px] h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded' %>
+      <%= f.submit t("devise.invitations.new.submit_button"), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-[250px]' %>
     </div>
   <% end %>
 <% end %>

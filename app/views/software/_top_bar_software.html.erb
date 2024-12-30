@@ -16,7 +16,7 @@
   <div class="grid col-span-1 justify-end">
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: software_index_path, method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: "border-b-4 h-12 border border-black dark:border-slate-100 border-b-4 border-r-2 rounded" %>
+        <%= f.text_field :query, placeholder: "Search ", class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full" %>
         <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
       <% end %>
       <%= form_with url: software_index_path, method: :get, class: 'flex' do |f| %>
@@ -25,3 +25,4 @@
     </div>
   </div>
 </div>
+
