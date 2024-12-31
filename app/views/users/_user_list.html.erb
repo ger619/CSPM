@@ -13,28 +13,13 @@
         Roles
       </th>
       <th scope="col" class="px-6 py-3">
-        No of Projects Raised
-      </th>
-      <th scope="col" class="px-6 py-3">
-        No of Tickets Raised
-      </th>
-      <th scope="col" class="px-6 py-3">
-        No of Issues Raised
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Locked/Unlocked
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Created by invite
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Invitee Counts
+        DATE CREATED
       </th>
       <th scope="col" class="px-6 py-3">
         Client Name
       </th>
       <th scope="col" class="px-6 py-3">
-        Active
+        LOCKED/UNLOCKED
       </th>
       <th scope="col" class="px-6 py-3">
         Edit Role
@@ -54,23 +39,7 @@
           <%= user.roles.distinct.pluck(:name).join(', ') %>
         </td>
         <td class="px-6 py-4">
-          <%= user.projects.distinct.pluck(:title).count %>
-        </td>
-        <td class="px-6 py-4">
-          <%= user.tickets.distinct.pluck(:issue).count %>
-        </td>
-        <td class="px-6 py-4">
-          <%= user.issues.distinct.pluck(:id).count %>
-        </td>
-        <td class="px-6 py-4">
           <%= user.created_at.strftime("%d %b %Y") %>
-        </td>
-
-        <td class="px-6 py-4 ">
-          <%= user.created_by_invite? %>
-        </td>
-        <td class="px-6 py-4 ">
-          <%= user.invitees.count %>
         </td>
         <td class="px-6 py-4">
           <%= user.client&.name || 'No Client Assigned' %>
