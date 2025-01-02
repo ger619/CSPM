@@ -31,15 +31,11 @@
     </p>
   </div>
 
-  <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
+  <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') or current_user.has_role?(:observer)%>
     <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800">
       <%= render 'home/breach_visualisation' %>
     </div>
   <% end %>
-
-  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
-    <%= render 'home/total_list' %>
-  </div>
 
   <div class="grid grid-cols-2 gap-4 mb-4">
     <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
