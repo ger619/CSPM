@@ -1,4 +1,5 @@
-<div class="p-4 border-2 border-white   rounded-lg">
+
+<div class="p-4 border-2 border-white rounded-lg">
   <div class="grid md:grid-cols-3 gap-4 mb-4">
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
       <p class="text-sm">
@@ -25,33 +26,86 @@
       </span>
     </div>
   </div>
-  <div class="flex items-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
-    <p class="text-2xl text-gray-400 dark:text-gray-500">
-      <%= render 'home/table_ticket_per_project' %>
-    </p>
-  </div>
 
-  <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') or current_user.has_role?(:observer)%>
-    <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800">
-      <%= render 'home/breach_visualisation' %>
-    </div>
-  <% end %>
 
-  <div class="grid grid-cols-2 gap-4 mb-4">
-    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
-      <%= render 'home/closed_reopened' %>
+    <div class="flex items-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
+      <p class="text-2xl text-gray-400 dark:text-gray-500">
+        <%= render 'home/table_ticket_per_project' %>
+      </p>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-      <%= render 'home/total_number_tickets' %>
+
+  <div class="grid grid-cols-6">
+    <div class="col-span-1">
+      <!-- app/views/home/index.html.erb -->
+      <% unless current_user.has_role?(:client) %>
+      <%=  form_with url: home_index_path, method: :get, local: true do |form|  %>
+      <div class="flex flex-col p-2">
+        <div class="col-span-1 w-full flex flex-col">
+          <%=  form.label :client_ids, "Select Clients"  %>
+          <% clients = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                         Client.all
+                       else
+                         Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct
+                       end %>
+          <%= form.collection_select :client_ids, clients, :id, :name, { multiple: true, class: 'w-full' }, class: 'rounded' %>
+        </div>
+        <div class="col-span-1 w-full flex flex-col mt-1">
+          <%=  form.label :project_ids, "Select Projects"  %>
+          <% projects = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                          Project.all
+                        else
+                          Project.joins(:users).where(users: { id: current_user.id }).distinct
+                        end %>
+
+          <%= form.collection_select :project_ids, projects, :id, :title, { multiple: true, class: 'w-full' }, class: 'rounded'%>
+        </div>
+        <div class="col-span-1 pt-2">
+          <%=  form.submit 'Select', class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full' %>
+        </div>
+      </div>
+      <%  end  %>
+      <%  end %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-      <%= render 'home/pie_charts' %>
+    <div class="col-span-5">
+      <% unless current_user.has_role?(:client) %>
+
+      <% if @tickets_by_project_status.present? %>
+          <%= column_chart @chart_data_two, stacked: true, height: "500px", library: {
+            title: { text: "Tickets by Project and Status" },
+            plotOptions: {
+              series: {
+                stacking: 'normal'
+              }
+            },
+            colors: ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'] # Add more colors as needed
+          } %>
+      <% end %>
+      <% end %>
+    <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') or current_user.has_role?(:observer)%>
+      <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800">
+        <%= render 'home/breach_visualisation' %>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
+        <%= render 'home/closed_reopened' %>
+      </div>
+      <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+        <%= render 'home/total_number_tickets' %>
+      </div>
+      <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+        <%= render 'home/pie_charts' %>
+      </div>
+      <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+        <%= render 'home/list_project' %>
+      </div>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-      <%= render 'home/list_project' %>
+    <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
+      <%= render 'home/chart_data_per_user' %>
     </div>
   </div>
-  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
-    <%= render 'home/chart_data_per_user' %>
   </div>
 </div>
+
+

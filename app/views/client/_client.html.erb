@@ -78,3 +78,14 @@
     </tbody>
   </table>
 </div>
+
+
+<div class="pagination mt-5">
+  <% if @page > 1 %>
+    <%= link_to 'Previous', client_index_path(page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+  <% end %>
+  <span>Page <%= @page %> of <%= @total_pages %></span>
+  <% if @page < @total_pages %>
+    <%= link_to 'Next', client_index_path(page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+  <% end %>
+</div>

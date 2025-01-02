@@ -149,5 +149,21 @@ class HomeController < ApplicationController
       .joins(:tickets)
       .group('projects.title', 'tickets.status')
       .count
+
+    @clients = Client.all
+    @projects = Project.all
+
+    @tickets = if params[:client_ids].present? && params[:project_ids].present?
+                 Ticket.joins(:project).where(projects: { client_id: params[:client_ids], id: params[:project_ids] })
+               else
+                 Ticket.none
+               end
+
+    @tickets_by_project_status = @tickets.group('projects.title', 'tickets.status').count
+
+    # Prepare data for the chart
+    @chart_data_two = @tickets_by_project_status.map do |(project, status), count|
+      { name: "#{project} - #{status}", data: { status => count } }
+    end
   end
 end

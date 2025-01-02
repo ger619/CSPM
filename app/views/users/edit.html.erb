@@ -11,7 +11,7 @@
           </div>
         <% elsif current_user.has_role?('project manager') %>
           <div class="capitalize pb-4">
-            <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator admin]), :id, :name, class: "gap-4" %>
+            <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator admin observer]), :id, :name, class: "gap-4" %>
           </div>
         <% end %>
         <%= f.submit  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
