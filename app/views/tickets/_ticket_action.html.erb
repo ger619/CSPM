@@ -1,3 +1,4 @@
+<% unless current_user.has_role?(:observer)%>
 <% if current_user.has_role? :admin or current_user.has_role? :agent or  current_user.has_role?('project manager') %>
   <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
   <div>
@@ -7,6 +8,7 @@
   </div>
 <% end %>
 <% end %>
+
 <% unless current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
   <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
     <% @ticket.statuses.each do |status| %>
@@ -19,4 +21,5 @@
       <% end %>
     <% end %>
   <% end %>
+<% end %>
 <% end %>
