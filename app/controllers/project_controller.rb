@@ -10,7 +10,7 @@ class ProjectController < ApplicationController
                  Project.all.with_rich_text_content.order('created_at DESC')
                end
 
-    @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_role?(:admin)
+    @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_role?(:admin) or current_user.has_role?(:observer)
 
     @per_page = 10
     @page = (params[:page] || 1).to_i
@@ -20,7 +20,7 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-    if current_user.has_role?(:admin) or @project.users.include?(current_user)
+    if current_user.has_role?(:admin) or @project.users.include?(current_user) or current_user.has_role?(:observer)
       @ticket = if params[:query].present?
                   @project.tickets.left_joins(:rich_text_content, :statuses)
                     .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?',
