@@ -5,13 +5,14 @@ class ProjectController < ApplicationController
   # GET /projects
   def index
     @project = if params[:query].present?
-                 Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%",
-                               "%#{params[:query]}%")
+                 Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
                else
                  Project.all.with_rich_text_content.order('created_at DESC')
                end
 
-    @per_page = 10
+    @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_role?(:admin)
+
+    @per_page = 1
     @page = (params[:page] || 1).to_i
     @total_pages = (@project.count / @per_page.to_f).ceil
     @project = @project.offset((@page - 1) * @per_page).limit(@per_page)

@@ -22,7 +22,7 @@
     <tbody>
       <% @project.each do |project| %>  <!-- Looping through each project -->
         <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) %>
-          <%= turbo_frame_tag dom_id(project) do %>
+
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
               <td class="px-6 py-4 font-medium text-left">
                 <%= link_to project.title.truncate_words(3), project_path(project.id) %>
@@ -67,26 +67,13 @@
                 <% end %>
               <% end %>
             </tr>
-          <% end %>
+
         <% end %>
       <% end %>
     </tbody>
   </table>
 </div>
 
-<div class="flex gap-10 mt-5">
-  <!-- Pagination Controls -->
-  <div class="pagination">
-    <% if @page > 1 %>
-      <%= link_to 'Previous', project_index_path(@project, page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-
-    <% end %>
-    <span>Page <%= @page %> of <%= @total_pages %></span>
-    <% if @page < @total_pages %>
-      <%= link_to 'Next', project_index_path(@project, page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-    <% end %>
-  </div>
-</div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const button = document.getElementById('button');
