@@ -10,9 +10,7 @@ class ProjectController < ApplicationController
                  Project.all.with_rich_text_content.order('created_at DESC')
                end
 
-    unless current_user.has_role?(:admin)
-      @project = @project.joins(:users).where(users: { id: current_user.id })
-    end
+    @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_role?(:admin)
 
     @per_page = 1
     @page = (params[:page] || 1).to_i
