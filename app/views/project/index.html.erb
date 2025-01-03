@@ -1,6 +1,19 @@
 <div class="p-2">
   <%= render 'project/topbar' %>
   <%= render 'project/project_table' %>
+  <div class="flex gap-10 mt-5">
+    <!-- Pagination Controls -->
+    <div class="pagination">
+      <% if @page > 1 %>
+        <%= link_to 'Previous', project_index_path(@project, page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+
+      <% end %>
+      <span>Page <%= @page %> of <%= @total_pages %></span>
+      <% if @page < @total_pages %>
+        <%= link_to 'Next', project_index_path(@project, page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 
