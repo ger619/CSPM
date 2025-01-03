@@ -31,8 +31,8 @@
                 <%= project.description.truncate(30) %>
               </td>
               <td class="px-6 py-4 text-left whitespace-nowrap">
-  <%= project.start_date.present? ? project.start_date.strftime("%d %b %y") : "N/A" %>
-</td>
+                <%= project.start_date.present? ? project.start_date.strftime("%d %b %y") : "N/A" %>
+              </td>
               <td class="px-6 py-4 text-left">
                 <%= project.user.name %>
               </td>
@@ -75,14 +75,18 @@
 </div>
 
 <div class="flex gap-10 mt-5">
-  <% if @pagy.prev %>
-    <%= link_to "Previous", url_for(page: @pagy.prev), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-  <% end %>
-  <% if @pagy.next %>
-    <%= link_to "Next", url_for(page: @pagy.next), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-  <% end %>
-</div>
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <% if @page > 1 %>
+      <%= link_to 'Previous', project_index_path(@project, page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
 
+    <% end %>
+    <span>Page <%= @page %> of <%= @total_pages %></span>
+    <% if @page < @total_pages %>
+      <%= link_to 'Next', project_index_path(@project, page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+    <% end %>
+  </div>
+</div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const button = document.getElementById('button');
