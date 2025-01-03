@@ -1,0 +1,54 @@
+<h1>Generate Cease Fire Report</h1>
+<%= form_with url: cease_fire_report_path, method: :get, local: true do |form| %>
+  <div>
+    <%= form.label :start_date, "Start Date" %>
+    <%= form.date_field :start_date %>
+  </div>
+  <div>
+    <%= form.label :end_date, "End Date" %>
+    <%= form.date_field :end_date %>
+  </div>
+  <div>
+    <%= form.submit "Generate Report" %>
+  </div>
+<% end %>
+
+<% if @tickets.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Summary</th>
+        <th>Issue Key</th>
+        <th>Issue Type</th>
+        <th>Status</th>
+        <th>Project Name</th>
+        <th>Priority</th>
+        <th>Assigned To</th>
+        <th>Reporter</th>
+        <th>Created</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tickets.each do |ticket| %>
+        <tr>
+          <td><%= ticket.subject %></td>
+          <td><%= ticket.unique_id %></td>
+          <td><%= ticket.issue %></td>
+          <td><%= ticket.statuses.first&.name || "N/A" %></td>
+          <td><%= ticket.project.title %></td>
+          <td><%= ticket.priority %></td>
+          <td><% ticket.users.each do |user| %>
+            <% if user.name.present? %>
+                <%= user.name %>
+            <% end %>
+          <% end %></td>
+          <td><%= ticket.user.name %></td>
+          <td><%= ticket.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+          <td><%= ticket.content.to_plain_text.truncate(800) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to "Download CSV", cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date]) %>
+<% end %>
