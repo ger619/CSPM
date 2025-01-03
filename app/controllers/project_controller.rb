@@ -4,17 +4,17 @@ class ProjectController < ApplicationController
   load_and_authorize_resource
   # GET /projects
   def index
-    @pagy, @project = if params[:query].present?
-                        pagy_countless(Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%",
-                                                     "%#{params[:query]}%"), items: 10)
+    @project = if params[:query].present?
+                        Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%",
+                                                     "%#{params[:query]}%")
                       else
-                        pagy_countless(Project.all.with_rich_text_content.order('created_at DESC'), items: 10)
+                        Project.all.with_rich_text_content.order('created_at DESC')
                       end
 
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@project.count / @per_page.to_f).ceil
+    @project = @project.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   # GET /projects/id
