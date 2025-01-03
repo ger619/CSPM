@@ -79,18 +79,18 @@ class HomeController < ApplicationController
     @tickets = current_user.projects.joins(:tickets)
 
     if params[:start_date].present? && params[:end_date].present?
-      @tickets = @tickets.where('created_at >= ? AND created_at <= ?', params[:start_date], params[:end_date])
+      @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date], params[:end_date])
     end
 
     grouping_period = params[:grouping_period] || 'day'
 
     @chart_data = case grouping_period
                   when 'day'
-                    @tickets.group_by_day(:created_at, time_zone: 'UTC', format: '%Y-%m-%d').count
+                    @tickets.group_by_day('tickets.created_at', time_zone: 'UTC', format: '%Y-%m-%d').count
                   when 'month'
-                    @tickets.group_by_month(:created_at).count
+                    @tickets.group_by_month('tickets.created_at').count
                   when 'year'
-                    @tickets.group_by_year(:created_at).count
+                    @tickets.group_by_year('tickets.created_at').count
                   end
 
     @total_tickets_per_project.values.sum
