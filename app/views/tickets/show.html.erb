@@ -76,7 +76,7 @@
   <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">
     <h1 class="text-3xl text-center mb-10">Communication Center</h1>
     <!-- Tabs Section -->
-    <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+    <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
       <div class="flex justify-center mb-10">
         <div class="relative">
           <!-- Navigation -->
@@ -103,12 +103,12 @@
         </div>
       </div>
     <% end %>
-    <!-- Video Section -->
+
     <div id="history" class="tabcontent active">
       <%= render partial: 'issues/issues_table' %>
     </div>
     <div id="club-records" class="tabcontent">
-      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+      <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
         <%= render partial: 'comments/comment' %>
       <% end %>
     </div>
@@ -122,7 +122,7 @@
     <%= render 'tickets/ratings' %>
   <% end %>
 <% end %>
-<% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+<% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer)%>
   <div class="w-full">
     <%= render 'tickets/timeline' %>
   </div>

@@ -42,8 +42,17 @@
               <% end %>
             </h3>
             <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Posted on <%= comment.created_at.strftime("%I:%M %p at %d %B %Y") %></time>
-            <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400"><%= comment.content.to_plain_text.truncate(100) %></p>
-          </li>
+            <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
+            <% comment.content.body.attachments.each do |attachment| %>
+              <% if attachment.filename.to_s.match(/\.(png|jpg|jpeg|gif|pdf|docx)$/) %>
+                <%= link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
+              <% end %>
+            <% end %>
+
+            <%= comment.content.to_plain_text.truncate(100) unless comment.content.body.attachments.any? %>
+          </p> 
+            
+            </li>
         </ol>
       <% end %>
       <div class="flex gap-10 mt-5">

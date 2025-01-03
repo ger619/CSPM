@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       <% @project.each do |project| %>  <!-- Looping through each project -->
-        <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) %>
+        <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
           <%= turbo_frame_tag dom_id(project) do %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
               <td class="px-6 py-4 font-medium text-left">
@@ -31,15 +31,17 @@
                 <%= project.description.truncate(30) %>
               </td>
               <td class="px-6 py-4 text-left whitespace-nowrap">
-                <%= project.start_date.strftime("%d %b %y") %>
-              </td>
+  <%= project.start_date.present? ? project.start_date.strftime("%d %b %y") : "N/A" %>
+</td>
               <td class="px-6 py-4 text-left">
                 <%= project.user.name %>
               </td>
               <td class="px-6 py-4 text-left">
-                <% if project.present? %>
-                  <%= project.client.name %>
-                <% end %>
+              <% if project.present? && project.client.present? %>
+              <%= project.client.name %>
+            <% else %>
+              No Client Assigned
+            <% end %>
               </td>
               <td class="px-6 py-4 text-left">
                 <ul>

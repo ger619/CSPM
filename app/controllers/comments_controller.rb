@@ -69,6 +69,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:ticket_id, :what, :why, :content, :user_id, :project_id, user_ids: [])
+    params.require(:comment).permit(:ticket_id, :what, :why, :content, :user_id, :project_id, user_ids: [], attachments: [])
   end
 end
