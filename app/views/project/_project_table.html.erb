@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       <% @project.each do |project| %>  <!-- Looping through each project -->
-        <% if project.assigned_to?(current_user) or current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
+        <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
           <%= turbo_frame_tag dom_id(project) do %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
               <td class="px-6 py-4 font-medium text-left">
