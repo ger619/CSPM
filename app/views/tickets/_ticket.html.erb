@@ -78,7 +78,7 @@
           <% end %>
         </td>
         <td class="px-2 py-2 truncate w-64 ">
-          <% if ticket.present? %>
+          <% if ticket.subject.present?%>
             <%= ticket.subject.truncate(50) %>
           <% end %>
         </td>
