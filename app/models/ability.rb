@@ -5,6 +5,7 @@ class Ability
     user ||= User.new # guest user (not logged in)
     if user.has_role? :admin
       can :manage, :all # allow super admins to do anything
+      can :generate, :report
     elsif user.has_role? :observer
       can :read, :all
     elsif user.has_role?('project manager')
