@@ -148,6 +148,7 @@
       <% end %>
 
       <!-- Add Data Center Menu Item -->
+      <% if current_user.has_role? :admin %>
       <li>
         <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
           <svg class="w-5 h-5 black transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -168,6 +169,7 @@
           <% end %>
         </ul>
       </li>
+      <% end %>
 
       <%= link_to  destroy_user_session_path, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } do  %>
         <li>

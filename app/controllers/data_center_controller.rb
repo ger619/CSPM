@@ -1,9 +1,10 @@
 require 'csv'
-
 class DataCenterController < ApplicationController
     before_action :authenticate_user!
   
     def cease_fire_report
+      authorize! :generate, :report # Check if the user can generate reports
+  
       if params[:start_date].present? && params[:end_date].present?
         start_date = Date.parse(params[:start_date])
         end_date = Date.parse(params[:end_date])

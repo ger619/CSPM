@@ -1,54 +1,77 @@
-<h1>Generate Cease Fire Report</h1>
-<%= form_with url: cease_fire_report_path, method: :get, local: true do |form| %>
-  <div>
-    <%= form.label :start_date, "Start Date" %>
-    <%= form.date_field :start_date %>
-  </div>
-  <div>
-    <%= form.label :end_date, "End Date" %>
-    <%= form.date_field :end_date %>
-  </div>
-  <div>
-    <%= form.submit "Generate Report" %>
-  </div>
-<% end %>
+<h1 class="flex justify-center text-2xl font-bold mb-4">Generate Cease Fire Report</h1>
+<div class="p-2 w-full">
+    <%= form_with url: cease_fire_report_path, method: :get, local: true do |form| %>
+    <div class="flex justify-center gap-2">
+    <div class="flex gap-2">
+            <%= form.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+            <%= form.date_field :start_date, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+        </div>
+        <div class="flex gap-2">
+            <%= form.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+            <%= form.date_field :end_date, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+        </div>
+        <div>
+            <%= form.submit "Generate Report",  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+        </div>
+    </div>
+    <% end %>
+</div>
 
 <% if @tickets.any? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Summary</th>
-        <th>Issue Key</th>
-        <th>Issue Type</th>
-        <th>Status</th>
-        <th>Project Name</th>
-        <th>Priority</th>
-        <th>Assigned To</th>
-        <th>Reporter</th>
-        <th>Created</th>
-        <th>Details</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @tickets.each do |ticket| %>
-        <tr>
-          <td><%= ticket.subject %></td>
-          <td><%= ticket.unique_id %></td>
-          <td><%= ticket.issue %></td>
-          <td><%= ticket.statuses.first&.name || "N/A" %></td>
-          <td><%= ticket.project.title %></td>
-          <td><%= ticket.priority %></td>
-          <td><% ticket.users.each do |user| %>
-            <% if user.name.present? %>
-                <%= user.name %>
-            <% end %>
-          <% end %></td>
-          <td><%= ticket.user.name %></td>
-          <td><%= ticket.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
-          <td><%= ticket.content.to_plain_text.truncate(800) %></td>
-        </tr>
-      <% end %>
-    </tbody>
+<div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+    <table id="ceasefire" class="table-auto w-full">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Summary</th>
+                <th class="px-4 py-2">Issue Key</th>
+                <th class="px-4 py-2">Issue Type</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Project Name</th>
+                <th class="px-4 py-2">Priority</th>
+                <th class="px-4 py-2">Assigned To</th>
+                <th class="px-4 py-2">Reporter</th>
+                <th class="px-4 py-2">Created</th>
+                <th class="px-4 py-2">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% @tickets.each do |ticket| %>
+            <tr>
+                <td class="border px-4 py-2"><%= ticket.subject %></td>
+                <td class="border px-4 py-2"><%= ticket.unique_id %></td>
+                <td class="border px-4 py-2"><%= ticket.issue %></td>
+                <td class="border px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
+                <td class="border px-4 py-2"><%= ticket.project.title %></td>
+                <td class="border px-4 py-2"><%= ticket.priority %></td>
+                <td class="border px-4 py-2"><% ticket.users.each do |user| %>
+                    <% if user.name.present? %>
+                        <%= user.name %>
+                    <% end %>
+                <% end %></td>
+                <td class="border px-4 py-2"><%= ticket.user.name %></td>
+                <td class="border px-4 py-2"><%= ticket.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+                <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(800) %></td>
+            </tr>
+        <% end %>
+        </tbody>
   </table>
-  <%= link_to "Download CSV", cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date]) %>
+</div>
+  <%= link_to "Download CSV", 
+            cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date]),
+            class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
 <% end %>
+
+<script>
+    $(document).ready(function() {
+        $('#ceasefire').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "searching": true,
+            "lengthChange": true,
+            "pageLength": 10,
+            "lengthMenu": [10, 25, 50, 75, 100],
+            "order": [[8, "desc"]]
+        });
+    });
+</script>
