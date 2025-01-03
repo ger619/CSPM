@@ -8,7 +8,7 @@ local:
 
 production:
   service: Disk
-  root: /var/www/uploads
+  root: /var/www/uploads/uploads
 
 
 
