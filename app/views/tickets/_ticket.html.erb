@@ -78,7 +78,9 @@
           <% end %>
         </td>
         <td class="px-2 py-2 truncate w-64 ">
-          <%= ticket.subject.truncate(50) %>
+          <% if ticket.present? %>
+            <%= ticket.subject.truncate(50) %>
+          <% end %>
         </td>
         <td class="px-2 py-2 font-bold">
           <% ticket.users.each do |user| %>
