@@ -74,6 +74,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @comment = comment
     @current_user = current_user
+    @url = project_ticket_url(@comment.ticket.project, @comment.ticket)
     mail(to: @user.email, subject: 'New Comment')
   end
 end
