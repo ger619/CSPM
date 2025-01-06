@@ -3,20 +3,23 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update]
 
   def index
-    @users = User.all
-    @users = if params[:query].present?
-               @users.left_joins(:client, :roles)
-                 .where('users.email ILIKE :query OR users.first_name ILIKE :query OR users.last_name ILIKE :query OR
-                  clients.name ILIKE :query OR roles.name ILIKE :query',
-                        query: "%#{params[:query]}%")
-             else
-               @users.order('created_at DESC')
-             end
-    # Pagination for users
-    @per_page = 10
+    @per_page = 3
     @page = (params[:page] || 1).to_i
-    @total_pages = (@users.count / @per_page.to_f).ceil
-    @users = @users.offset((@page - 1) * @per_page).limit(@per_page)
+
+    if params[:query].present?
+      @searched_users = User.left_joins(:client, :roles)
+                            .where('users.email ILIKE :query OR users.first_name ILIKE :query OR
+                            users.last_name ILIKE :query OR clients.name ILIKE :query OR roles.name ILIKE :query',
+                                   query: "%#{params[:query]}%")
+      @total_searched_pages = (@searched_users.count / @per_page.to_f).ceil
+      @searched_users = @searched_users.offset((@page - 1) * @per_page).limit(@per_page)
+      @users = @searched_users
+      @total_pages = @total_searched_pages
+    else
+      @users = User.order('created_at DESC')
+      @total_pages = (@users.count / @per_page.to_f).ceil
+      @users = @users.offset((@page - 1) * @per_page).limit(@per_page)
+    end
   end
 
   def edit; end
