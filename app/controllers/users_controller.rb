@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update]
 
   def index
-    @per_page = 3
+    @per_page = 10
     @page = (params[:page] || 1).to_i
 
     if params[:query].present?
