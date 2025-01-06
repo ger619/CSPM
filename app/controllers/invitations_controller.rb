@@ -6,6 +6,7 @@ class InvitationsController < Devise::InvitationsController
   def new
     @user = User.new
     self.resource = @user
+    @resource_name = :user
   end
 
   def create
@@ -14,23 +15,22 @@ class InvitationsController < Devise::InvitationsController
       render :new
       return
     end
+
     invited_user = User.find_by(email: invite_params[:email], first_name: invite_params[:first_name], last_name: invite_params[:last_name],
                                 client_id: invite_params[:client_id])
 
     if invited_user
-      invited_user.invite!(current_user)
-      notice_message = 'Invitation resent successfully.'
+      flash[:alert] = 'User already exists.'
+      redirect_to new_user_invitation_path
     else
       invited_user = User.invite!(invite_params, current_user)
-      notice_message = 'User has been invited successfully.' if invited_user.errors.blank?
-    end
-
-    if invited_user.errors.blank?
-      invited_user.add_role(params[:role]) if params[:role].present?
-      redirect_to users_path, notice: notice_message
-    else
-      flash.now[:alert] = 'There was an error inviting the user.'
-      render :new
+      if invited_user.errors.blank?
+        invited_user.add_role(params[:role]) if params[:role].present?
+        redirect_to users_path, notice: 'User has been invited successfully.'
+      else
+        flash.now[:alert] = 'There was an error inviting the user.'
+        render :new
+      end
     end
   end
 
