@@ -6,7 +6,6 @@ class Comment < ApplicationRecord
   has_many_attached :attachments
   attr_accessor :user_ids
 
-
   private
 
   def content_length_within_limit
