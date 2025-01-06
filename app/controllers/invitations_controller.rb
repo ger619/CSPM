@@ -29,7 +29,7 @@ class InvitationsController < Devise::InvitationsController
         redirect_to users_path, notice: 'User has been invited successfully.'
       else
         flash.now[:alert] = 'There was an error inviting the user.'
-        render :new
+        redirect_to new_user_invitation_path
       end
     end
   end
