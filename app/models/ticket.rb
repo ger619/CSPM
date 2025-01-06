@@ -109,10 +109,10 @@ class Ticket < ApplicationRecord
       70
     when 'Awaiting Build'
       80
-    when 'Resolved', 'Closed'
+    when 'Resolved', 'Closed', 'Declined'
       100
     else
-      101
+      0
     end
   end
 
