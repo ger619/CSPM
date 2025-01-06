@@ -13,8 +13,7 @@
 
           <div class="capitalize pb-4 flex ml-4 gap-2">
             <h1 class="font-bold">Edit Client</h1>
-            <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name), { prompt: 'Select Client' }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-1/2", required: true %>
-          </div>
+            <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name, selected: @user.client_id), { prompt: 'Select Client', include_blank: true }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-1/2" %>          </div>
           </div>
         <% elsif current_user.has_role?('project manager') %>
           <div class="capitalize pb-4">
@@ -22,7 +21,7 @@
           </div>
           <div class="capitalize pb-4 flex ml-4 gap-2">
             <h1 class="font-bold">Edit Client</h1>
-            <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name), { prompt: 'Select Client' }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-1/2", required: true %>
+            <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name, selected: @user.client_id), { prompt: 'Select Client', include_blank: true }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-1/2" %>          </div>
           </div>
         <% end %>
         <%= f.submit  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
