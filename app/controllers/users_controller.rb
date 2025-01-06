@@ -8,9 +8,9 @@ class UsersController < ApplicationController
 
     if params[:query].present?
       @searched_users = User.left_joins(:client, :roles)
-                            .where('users.email ILIKE :query OR users.first_name ILIKE :query OR
+        .where('users.email ILIKE :query OR users.first_name ILIKE :query OR
                             users.last_name ILIKE :query OR clients.name ILIKE :query OR roles.name ILIKE :query',
-                                   query: "%#{params[:query]}%")
+               query: "%#{params[:query]}%")
       @total_searched_pages = (@searched_users.count / @per_page.to_f).ceil
       @searched_users = @searched_users.offset((@page - 1) * @per_page).limit(@per_page)
       @users = @searched_users
