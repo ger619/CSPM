@@ -4,13 +4,14 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-    if params[:query].present?
-      @users = @users.left_joins(:client, :roles)
-                     .where('users.email ILIKE :query OR users.first_name ILIKE :query OR users.last_name ILIKE :query OR clients.name ILIKE :query OR roles.name ILIKE :query',
-                            query: "%#{params[:query]}%")
-    else
-      @users = @users.order('created_at DESC')
-    end
+    @users = if params[:query].present?
+               @users.left_joins(:client, :roles)
+                 .where('users.email ILIKE :query OR users.first_name ILIKE :query OR users.last_name ILIKE :query OR
+                  clients.name ILIKE :query OR roles.name ILIKE :query',
+                        query: "%#{params[:query]}%")
+             else
+               @users.order('created_at DESC')
+             end
     # Pagination for users
     @per_page = 10
     @page = (params[:page] || 1).to_i
