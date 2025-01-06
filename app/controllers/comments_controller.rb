@@ -17,11 +17,9 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        # Send email to the current user
-        UserMailer.new_comment_email(current_user, @comment, current_user).deliver_later
-        @project.users.each do |comment_user|
-          next if comment_user == current_user
-
+        # Send email to the selected users
+        selected_users = User.where(id: comment_params[:user_ids])
+        selected_users.each do |comment_user|
           UserMailer.new_comment_email(comment_user, @comment, current_user).deliver_later
         end
 
