@@ -6,8 +6,15 @@
           <%= @user.errors[:roles].join('') %>
         </p>
         <% if current_user.has_role? :admin %>
+          <div class="flex">
           <div class="capitalize pb-4">
             <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator]), :id, :name, class: "gap-4" %>
+          </div>
+
+          <div class="capitalize pb-4 flex ml-4 gap-2">
+            <h1 class="font-bold">Edit Client</h1>
+            <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name), { prompt: 'Select Client' }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-1/2", required: true %>
+          </div>
           </div>
         <% elsif current_user.has_role?('project manager') %>
           <div class="capitalize pb-4">
