@@ -30,7 +30,7 @@ class Project < ApplicationRecord
   end
 
   def users_with_same_client
-    User.where('client_id = ? OR email LIKE ?', client_id, '%@craftsilicon.com')
+    User.where('(client_id = ? OR email LIKE ?) AND active = ?', client_id, '%@craftsilicon.com', true)
   end
 
   # To have pick a list of users who have role agent only on a dropdown list at the view to assign a project
