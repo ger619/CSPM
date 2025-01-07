@@ -59,6 +59,12 @@
   background-color: #fff;
 }
 
+.scrollable-section {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px; /* Optional: Prevent content from being hidden under the scrollbar */
+}
+
 .tribute-container .tribute-item:hover {
   background-color: #f0f0f0;
 }
