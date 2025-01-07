@@ -184,7 +184,17 @@ class Ticket < ApplicationRecord
     holidays = [
       Date.new(2024, 12, 25), # Christmas
       Date.new(2024, 12, 26), # Boxing Day
-      Date.new(2025, 1, 1) # New Year's Day
+      Date.new(2025, 1, 1), # New Year's Day
+      Date.new(2025, 4, 18), # Good Friday
+      Date.new(2025, 4, 21), # Easter Monday
+      Date.new(2025, 5, 1), # Labour Day
+      Date.new(2025, 6, 2), # Madaraka day
+      Date.new(2025, 10, 10), # Moi Day
+      Date.new(2025, 10, 20), # Utamaduni Day
+      Date.new(2025, 10, 20), # Mashujaa Day
+      Date.new(2025, 12, 12), # Jamhuri Day
+      Date.new(2025, 12, 25), # Christmas
+      Date.new(2025, 12, 26) # Boxing Day
 
       # Add more holidays as needed
     ]
