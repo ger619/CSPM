@@ -1,5 +1,5 @@
 <%= render 'tickets/new_back' %>
-<%= form_with(model: [@project, @ticket], method: :put) do |f| %>
+<%= form_with(model: [@project, @ticket], method: :patch) do |f| %>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%] p-1">
     <h6>EDIT TICKET</h6>
     <div class="grid grid-cols-2 gap-2 h-[100%] w-[100%]">
@@ -36,7 +36,6 @@
         %>
       </div>
 
-
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :image, 'Current Image *', class: "capitalize block mb-1 text-sm font-medium"  %><br />
         <%= image_tag f.object.ticket_image if f.object.ticket_image.present? %>
@@ -66,7 +65,6 @@
         <%= f.file_field :attachments, multiple: true, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
 
-
     </div>
     <div class="relative z-0 w-[100%] mb-6 group">
       <%= f.label :subject, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
@@ -92,9 +90,7 @@
     const groupwareSelect = document.getElementById('groupware-select');
     const groupwareField = document.getElementById('groupware-field');
 
-    softwareSelect.addEventListener('change', function (event) {
-      const softwareId = event.target.value;
-
+    function updateGroupwareOptions(softwareId, selectedGroupwareId = null) {
       // Clear existing groupware options
       groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
 
@@ -112,6 +108,9 @@
               const option = document.createElement('option');
               option.value = groupware.id;
               option.textContent = groupware.name;
+              if (groupware.id == selectedGroupwareId) {
+                option.selected = true;
+              }
               groupwareSelect.appendChild(option);
             });
           })
@@ -123,11 +122,13 @@
         // Hide the groupware field if no software is selected
         groupwareField.style.display = 'none';
       }
+    }
+
+    softwareSelect.addEventListener('change', function (event) {
+      updateGroupwareOptions(event.target.value);
     });
 
-    // Initially hide the groupware field if no software is selected
-    if (!softwareSelect.value) {
-      groupwareField.style.display = 'none';
-    }
+    // Initially update the groupware options based on the current software selection
+    updateGroupwareOptions(softwareSelect.value, '<%= @ticket.groupware_id %>');
   });
 </script>
