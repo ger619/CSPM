@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_26_112458) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_08_114416) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -305,6 +305,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_26_112458) do
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
+  create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "teams_users", id: false, force: :cascade do |t|
+    t.uuid "team_id", null: false
+    t.uuid "user_id", null: false
+    t.index ["team_id", "user_id"], name: "index_teams_users_on_team_id_and_user_id"
+    t.index ["user_id", "team_id"], name: "index_teams_users_on_user_id_and_team_id"
+  end
+
   create_table "tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "issue"
     t.string "priority"
@@ -321,7 +335,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_26_112458) do
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.string "subject"
-    t.integer "update_count", default: 0, null: false
+    t.integer "update_count", default: -1, null: false
     t.datetime "last_updated_at", precision: nil
     t.index ["groupware_id"], name: "index_tickets_on_groupware_id"
     t.index ["project_id"], name: "index_tickets_on_project_id"
