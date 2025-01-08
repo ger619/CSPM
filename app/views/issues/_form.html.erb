@@ -1,6 +1,6 @@
 <%= render 'issues/new_back' %>
 <%= form_with(model: [project, ticket, ticket.issues.build], html: { multipart: true }) do |f| %>
-  <h3 class="pb-4 font-bold"> Subject *</h3>
+  <h3 class="pb-4 font-bold"> Message *</h3>
 
   <div class="relative z-0 w-full mb-6 group">
     <div data-controller="text-limit" data-text-limit-limit-value="1200">
