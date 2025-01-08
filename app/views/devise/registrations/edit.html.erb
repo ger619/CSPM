@@ -7,19 +7,31 @@
         <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           First Name
         </label>
-        <%= f.text_field :first_name, autofocus: true, autocomplete: 'name', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Jay', required: true  %>
+        <% if current_user.has_role?(:admin) %>
+          <%= f.text_field :first_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Jay', required: true %>
+        <% else %>
+          <%= f.text_field :first_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#B2B8C2] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Jay', readonly: true %>
+        <% end %>
       </div>
       <div class="mb-5">
         <label for="last name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Last Name
         </label>
-        <%= f.text_field :last_name, autofocus: true, autocomplete: 'name', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Strong', required: true %>
+        <% if current_user.has_role?(:admin) %>
+          <%= f.text_field :last_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Strong', required: true %>
+        <% else %>
+          <%= f.text_field :last_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#B2B8C2] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Strong', readonly: true %>
+        <% end %>
       </div>
       <div class="mb-5">
         <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Your email
         </label>
-        <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'name@craftsilicon.com', required: true  %>
+        <% if current_user.has_role?(:admin) %>
+          <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'name@craftsilicon.com', required: true %>
+        <% else %>
+          <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: "h-12 border border-[#B2B8C2] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'name@craftsilicon.com', readonly: true %>
+        <% end %>
       </div>
       <div class="mb-5">
         <label for="profile_picture" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
