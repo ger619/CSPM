@@ -10,10 +10,11 @@ class ProjectController < ApplicationController
                  Project.all.with_rich_text_content.order('created_at ASC')
                end
 
-    @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer, 'project manager',
-                                                                                                              :agent)
+    unless current_user.has_any_role?(:admin, :observer, 'project manager', :agent)
+      @project = @project.joins(:users).where(users: { id: current_user.id })
+    end
 
-    @per_page = 10
+    @per_page = 1
     @page = (params[:page] || 1).to_i
     @total_pages = (@project.count / @per_page.to_f).ceil
     @project = @project.offset((@page - 1) * @per_page).limit(@per_page)
