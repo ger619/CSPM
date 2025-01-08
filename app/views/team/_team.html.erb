@@ -1,0 +1,50 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
+    <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">Name of Team</th>
+      <th scope="col" class="px-6 py-3">Team Description</th>
+      <th scope="col" class="px-6 py-3">Members(Number of Users)</th>
+      <th scope="col" class="px-6 py-3">VIEW</th>
+      <th scope="col" class="px-6 py-3">EDIT</th>
+      <th scope="col" class="px-6 py-3">DELETE</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @team.each do |team|   %>
+      <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
+
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+          <td class="px-6 py-4 font-medium text-left">
+            <%= link_to team.name, team_path(team.id) %>
+          </td>
+          <td class="px-6 py-4 text-left">
+            <%= team.description.truncate(30) %>
+          </td>
+          <td class="px-6 py-4 text-left">
+            <%= team.users.count %>
+          </td>
+          <td class="px-6 py-4 text-left">
+            <%= link_to "VIEW", team_path(team.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+          </td>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+            <%# if can? :edit, project %>
+              <td class="px-6 py-4 text-left">
+                <%= link_to 'Edit', edit_team_path(team), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+              </td>
+            <%# end %>
+            <%# if can? :delete, project %>
+              <td class="px-6 py-4 text-left">
+                <%= button_to 'delete', team, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+
+              </td>
+            <%# end %>
+          <% end %>
+        </tr>
+
+      <% end %>
+    <% end %>
+
+    </tbody>
+  </table>
+</div>

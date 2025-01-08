@@ -18,7 +18,7 @@ class TeamController < ApplicationController
   end
 
   def show
-    @team_members = @team.users
+
   end
 
   def new
