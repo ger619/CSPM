@@ -18,7 +18,12 @@
     <div class="relative z-0 w-full mb-6 group">
       <div data-controller="text-limit" data-text-limit-limit-value="1200">
         <p id="char-count">0/1200</p>
-        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') }, class: 'h-[200px]' %>
+        <div class="rich-text-container h-[200px] overflow-y-auto border border-gray-300 rounded">
+          <%= f.rich_text_area :content, id: "content", data: { 
+            text_limit_target: "content", 
+            is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') 
+          }, class: 'w-full h-full' %>
+        </div>
       </div>
     </div>
     <div class="relative z-0 w-full mb-6 group">
@@ -31,7 +36,7 @@
       <% end %>
     </div>
     <div class="flex items-center justify-between">
-      <%= f.submit "Submission", class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded' %>
+      <%= f.submit "Submit", class: 'mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded' %>
       <%= link_to 'Cancel', cancel_redirect_path, data: { turbo: false }, class: "cancel-button mt-4 w-2/5 h-12 border border-b-4 border-r-2 border-black dark:border-slate-100 p-3 font-semibold rounded flex justify-center" %>
     </div>
   <% end %>
