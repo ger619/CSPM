@@ -17,9 +17,7 @@ class TeamController < ApplicationController
     @team = @team.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def show
-
-  end
+  def show; end
 
   def new
     @team = Team.new
@@ -52,7 +50,7 @@ class TeamController < ApplicationController
   def destroy
     @team.destroy
     respond_to do |format|
-      format.html { redirect_to teams_path, notice: 'Team was successfully deleted.' }
+      format.html { redirect_to team_path, notice: 'Team was successfully deleted.' }
     end
   end
 
