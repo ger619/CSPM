@@ -15,7 +15,7 @@
     <div class="font-semibold p-2 justify-between rounded col-span-3 border-r-2 flex gap-4">
       <div>
         <h1>Project Manager: <span class="font-light"><%= @project.user&.name || 'No Project Manager Assigned' %></span></h1>
-        <h1>Name of the Software:
+        <h1>Product:
           <span class="font-light">
           <% if @project.softwares.any? %>
             <ul>
@@ -24,11 +24,11 @@
               <% end %>
             </ul>
           <% else %>
-            No Software Assigned
+            No Product Assigned
           <% end %>
         </span>
         </h1>
-        <h1> Name of the groupware software</h1>
+        <h1>Sub-Product</h1>
         <span class="font-light">
            <% selected_groupwares = @project.groupwares.where(software_id: @project.software_ids) %>
           <% if selected_groupwares.any? %>
@@ -69,12 +69,12 @@
   <!-- Pagination Controls -->
   <div class="pagination">
     <% if @page > 1 %>
-      <%= link_to 'Previous', project_path(@project, page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <%= link_to 'Previous', project_path(page: @page - 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
 
     <% end %>
     <span>Page <%= @page %> of <%= @total_pages %></span>
     <% if @page < @total_pages %>
-      <%= link_to 'Next', project_path(@project, page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <%= link_to 'Next', project_path(page: @page + 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
     <% end %>
   </div>
 </div>

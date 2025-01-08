@@ -63,6 +63,7 @@ group :development do
   # gem "spring"
   gem 'bullet', group: :development # For detecting N+1 queries
   gem 'letter_opener', group: :development # For opening emails in browser during development
+  gem 'rails-erd', group: :development
   gem 'rubocop', '>= 1.0', '< 2.0'
 end
 
@@ -93,7 +94,6 @@ gem 'pagy', '~> 6.0'
 gem 'paper_trail'
 gem 'passenger', require: 'phusion_passenger/rack_handler'
 gem 'pundit'
-gem 'rails-erd'
 gem 'redis'
 gem 'rolify', '~> 6.0'
 gem 'sentry-rails'
