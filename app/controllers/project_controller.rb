@@ -134,12 +134,27 @@ class ProjectController < ApplicationController
   def add_team
     @project = Project.find(params[:id])
     team = Team.find(params[:team_id])
+    @project.user = current_user
 
     team.users.each do |user|
-      @project.users << user unless @project.users.include?(user)
+      unless @project.users.include?(user)
+        @project.users << user
+        UserMailer.assignment_email(user, @project, current_user, user).deliver_later
+      end
     end
 
     redirect_to @project, notice: 'Team and its users were successfully added to the project.'
+  end
+
+  def remove_team
+    @project = Project.find(params[:id])
+    team = Team.find(params[:team_id])
+
+    team.users.each do |user|
+      @project.users.delete(user)
+    end
+
+    redirect_to @project, notice: 'Team and its users were successfully removed from the project.'
   end
 
   def unassign_user

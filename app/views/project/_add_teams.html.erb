@@ -1,9 +1,11 @@
-<%= form_with url: add_team_project_path(@project), method: :post, local: true do |f| %>
-  <div class="mb-5">
-    <%= f.label :team_id, 'Select Team', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-    <%= f.collection_select :team_id, Team.all, :id, :name, {}, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Select team' %>
+<%= form_with url: add_team_project_path(@project), method: :post, local: true do %>
+  <%= label_tag :team_id, 'Select Team', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+  <div class="flex gap-2">
+    <div class="">
+    <%= select_tag :team_id, options_from_collection_for_select(Team.all, :id, :name), class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Select team' %>
   </div>
-  <div class="mb-5">
-    <%= f.submit 'Add Team', class: "h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold" %>
+  <div class="">
+    <%= submit_tag 'Add Team', class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+  </div>
   </div>
 <% end %>
