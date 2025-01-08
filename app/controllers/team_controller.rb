@@ -30,7 +30,7 @@ class TeamController < ApplicationController
 
     respond_to do |format|
       if @team.save
-        format.html { redirect_to team_path(@team), notice: 'Team was successfully created.' }
+        format.html { redirect_to team_index_path, notice: 'Team was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -63,7 +63,7 @@ class TeamController < ApplicationController
   end
 
   def team_params
-    params.require(:team).permit(:name, :description)
+    params.require(:team).permit(:name, :description, user_ids: [])
   end
 end
 #       end

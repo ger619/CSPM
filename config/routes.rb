@@ -25,6 +25,8 @@ Rails.application.routes.draw do
     member do
       post :assign_user
       delete :unassign_user
+      post :add_team
+      delete :remove_team
     end
     resources :tickets do
       member do
