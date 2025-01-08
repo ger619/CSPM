@@ -40,7 +40,7 @@ class TeamController < ApplicationController
   def update
     respond_to do |format|
       if @team.update(team_params)
-        format.html { redirect_to team_path(@team), notice: 'Team was successfully updated.' }
+        format.html { redirect_to team_index_path, notice: 'Team was successfully updated.' }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
