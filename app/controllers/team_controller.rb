@@ -64,20 +64,3 @@ class TeamController < ApplicationController
     params.require(:team).permit(:name, :description, user_ids: [])
   end
 end
-#       end
-#     end
-#   end
-# end
-#
-#   def destroy
-#     @team.destroy
-#     respond_to do |format|
-#       format.html { redirect_to teams_path, notice: 'Team was successfully deleted.' }
-#     end
-#   end
-#
-#   private
-#
-#   def set_team
-#     @team = Team.find(params[:id
-# end
