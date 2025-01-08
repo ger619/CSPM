@@ -182,7 +182,9 @@
           </div>
         </td>
         <td class="px-2 py-2 capitalize">
+          <% if ticket.user.name.present? %>
           <%= ticket.user.name %>
+          <% end %>
         </td>
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
