@@ -10,7 +10,7 @@
   </div>
   <div class="mb-5">
     <%= f.label :user_ids, 'Pick Users', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-    <%= f.collection_select :user_ids, User.all, :id, :name, {}, multiple: true, class: "h-24 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Select users', required: true %>
+    <%= f.collection_select :user_ids, User.with_agent_role.distinct, :id, :name, {}, multiple: true, class: "h-24 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Select users', required: true %>
   </div>
   <div class="mb-5">
     <%= f.submit 'Create Team', class: "h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold" %>
