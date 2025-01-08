@@ -14,7 +14,7 @@ class ProjectController < ApplicationController
       @project = @project.joins(:users).where(users: { id: current_user.id })
     end
 
-    @per_page = 1
+    @per_page = 10
     @page = (params[:page] || 1).to_i
     @total_pages = (@project.count / @per_page.to_f).ceil
     @project = @project.offset((@page - 1) * @per_page).limit(@per_page)
