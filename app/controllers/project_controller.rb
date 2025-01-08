@@ -131,6 +131,17 @@ class ProjectController < ApplicationController
     end
   end
 
+  def add_team
+    @project = Project.find(params[:id])
+    team = Team.find(params[:team_id])
+
+    team.users.each do |user|
+      @project.users << user unless @project.users.include?(user)
+    end
+
+    redirect_to @project, notice: 'Team and its users were successfully added to the project.'
+  end
+
   def unassign_user
     @project = Project.find(params[:id])
     user = User.find(params[:user_id])
