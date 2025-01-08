@@ -27,6 +27,9 @@
         PROGRESS BAR
       </th>
       <th scope="col" class="px-2 py-2">
+        Reported By
+      </th>
+      <th scope="col" class="px-2 py-2">
         VIEW
       </th>
 
@@ -77,6 +80,7 @@
                <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
           <% end %>
         </td>
+
         <td class="px-2 py-2 truncate w-64 ">
           <% if ticket.subject.present? %>
             <%= ticket.subject.truncate(50) %>
@@ -176,6 +180,9 @@
               </div>
             </div>
           </div>
+        </td>
+        <td class="px-2 py-2 capitalize">
+          <%= ticket.user.name %>
         </td>
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
