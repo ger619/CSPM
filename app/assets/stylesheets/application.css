@@ -166,3 +166,7 @@
   font-size: 0.8rem;
   color: grey;
 }
+
+.dataTables_wrapper {
+  position: initial !important; /* Overrides DataTables' position: relative */
+}

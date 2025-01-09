@@ -29,7 +29,7 @@
 <body class="bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
 <main class="mx-auto">
   <%= render 'layouts/sidebar' %>
-  <div class="p-8 sm:ml-64">
+  <div class="p-8">
     <%= render 'layouts/topbar' %>
     <%= yield %>
   </div>
@@ -37,8 +37,5 @@
 <%= javascript_include_tag "loading" %>
 <%= javascript_include_tag "chartkick" %>
 <%= javascript_include_tag "Chart.bundle" %>
-
-
-
 </body>
 </html>

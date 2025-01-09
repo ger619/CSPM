@@ -1,3 +1,4 @@
+<div class="absolute w-80 min-h-screen bg-gray-800 overflow-y-auto transition-transform transform -translate-x-full ease-in-out duration-300" id="sidebar">
 <% if current_user && user_signed_in?  %>
 <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
   <span class="sr-only">Open sidebar</span>
@@ -206,3 +207,25 @@
   </div>
 </aside>
 <% end %>
+</div>
+
+<script>
+  document.addEventListener('turbo:load', () => {
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarButton = document.getElementById('open-sidebar');
+
+    if (sidebar && openSidebarButton) {
+      openSidebarButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('-translate-x-full');
+      });
+
+      // Close the sidebar when clicking outside of it
+      document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
+          sidebar.classList.add('-translate-x-full');
+        }
+      });
+    }
+  });
+</script>
