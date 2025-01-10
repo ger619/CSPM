@@ -44,7 +44,7 @@
           </div>
         </li>
       <% end %>
-      <% if current_user.has_role?('project manager')%>
+     <% unless current_user.has_role?(:client) %>
       <%=  link_to product_index_path do  %>
       <li>
         <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
