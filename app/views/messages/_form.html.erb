@@ -13,10 +13,12 @@
         <% end %>
       </div>
     </div>
-    <div class="mb-4">
-      <%= form.label :visibility, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.select :message_type, [["Internal", "internal"], ["External", "external"]], {}, class: "mt-1 block w-full" %>
-    </div>
+    <% unless current_user.has_role?(:client) %>
+      <div class="mb-4">
+        <%= form.label :visibility, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
+        <%= form.select :message_type, [["External", "external"], ["Internal", "internal"]], {}, class: "mt-1 block w-full" %>
+      </div>
+    <% end %>
     <div class="mb-4">
       <%= form.label :attachments, "Attachments", class: "block text-sm font-medium text-gray-700" %>
       <%= form.file_field :attachments, multiple: true, class: "mt-1 block w-full" %>

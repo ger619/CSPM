@@ -22,6 +22,8 @@ class MessagesController < ApplicationController
   def create
     @message = @task.messages.build(message_params)
     @message.user = current_user
+    @message.message_type ||= 'external' # Set default value if message_type is not provided
+
     if @message.save
       render :index, notice: 'Task was successfully assigned.'
     else
