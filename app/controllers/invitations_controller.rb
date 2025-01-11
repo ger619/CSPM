@@ -48,7 +48,7 @@ class InvitationsController < Devise::InvitationsController
     elsif current_user.has_role?(:project_manager)
       invited_user.add_role(params[:role]) unless params[:role] == 'admin'
     else
-      invited_user.add_role(params[:role]) unless params[:role] == 'admin' || params[:role] == 'project_manager'
+      invited_user.add_role(params[:role]) unless %w[admin project_manager].include?(params[:role])
     end
   end
 end
