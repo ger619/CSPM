@@ -1,0 +1,12 @@
+
+  <div class="message <%= message.message_type %>">
+    <p><%= message.content.body %></p>
+    <% if message.attachments.attached? %>
+      <div class="attachments">
+        <% message.attachments.each do |attachment| %>
+          <%= link_to attachment.filename, url_for(attachment), target: "_blank" %><br>
+        <% end %>
+      </div>
+    <% end %>
+    <small>By <%= message.user.name %></small>
+</div>

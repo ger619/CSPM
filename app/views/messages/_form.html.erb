@@ -1,0 +1,26 @@
+<div class="mt-6">
+  <h2 class="text-lg font-semibold">Add Message</h2>
+  <%= form_with(model: [@task, @message || @task.messages.build], local: true) do |form| %>
+    <div class="relative z-0 w-full mb-6 group">
+      <div data-controller="text-limit" data-text-limit-limit-value="1200">
+        <p id="char-count">0/1200</p>
+
+        <%= form.rich_text_area :content, id: "content",
+                                data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
+                                class: "min-h-[300px] #{'border-red-500' if @message&.errors&.dig(:content)&.any?}" %>
+        <% if @message&.errors&.dig(:content)&.any? %>
+          <span id="content-error" class="text-red-500 text-sm"><%= @message.errors[:content].join(', ') %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="mb-4">
+      <%= form.label :visibility, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.select :message_type, [["Internal", "internal"], ["External", "external"]], {}, class: "mt-1 block w-full" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :attachments, "Attachments", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.file_field :attachments, multiple: true, class: "mt-1 block w-full" %>
+    </div>
+    <%= form.submit "Post Message", class: "px-4 py-2 bg-blue-500 text-white rounded" %>
+  <% end %>
+</div>

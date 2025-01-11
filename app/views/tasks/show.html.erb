@@ -5,6 +5,9 @@
     <% end %>
     <%= render 'tasks/add_task' %>
     <%= render 'tasks/add_state' %>
+    <div class="mt-4">
+        <%= render template: 'messages/index' %>
+    </div>
   </div>
   <div class="sm:p-4 p-2 sm:w-1/2 flex flex-col">
     <div>
@@ -56,5 +59,7 @@
         </span>
       </div>
     </div>
+     <%= render partial: 'messages/form' %>
+     
   </div>
 </div>

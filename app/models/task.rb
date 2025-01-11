@@ -3,6 +3,7 @@ class Task < ApplicationRecord
   belongs_to :product
   belongs_to :board
   has_one_attached :image
+  has_many :messages, dependent: :destroy
 
   resourcify
 
