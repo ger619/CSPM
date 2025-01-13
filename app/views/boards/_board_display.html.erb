@@ -9,6 +9,7 @@
                 <%= board.status %>
               </h2>
           </div>
+          <% unless current_user.has_role?(:client) %>
           <div class="flex flex-wrap gap-2">
             <%= link_to  new_product_board_task_path(@product.id, board.id) do %>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -23,6 +24,7 @@
               <% end %>
             <% end %>
           </div>
+          <% end %>
         </div>
         <%= render partial: 'boards/display_board', locals: { board: board } %>
       </div>

@@ -17,9 +17,7 @@ class TeamController < ApplicationController
     @team = @team.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def show
-    @team_members = @team.users
-  end
+  def show; end
 
   def new
     @team = Team.new
@@ -42,7 +40,7 @@ class TeamController < ApplicationController
   def update
     respond_to do |format|
       if @team.update(team_params)
-        format.html { redirect_to team_path(@team), notice: 'Team was successfully updated.' }
+        format.html { redirect_to team_index_path, notice: 'Team was successfully updated.' }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -52,7 +50,7 @@ class TeamController < ApplicationController
   def destroy
     @team.destroy
     respond_to do |format|
-      format.html { redirect_to teams_path, notice: 'Team was successfully deleted.' }
+      format.html { redirect_to team_path, notice: 'Team was successfully deleted.' }
     end
   end
 
@@ -66,20 +64,3 @@ class TeamController < ApplicationController
     params.require(:team).permit(:name, :description, user_ids: [])
   end
 end
-#       end
-#     end
-#   end
-# end
-#
-#   def destroy
-#     @team.destroy
-#     respond_to do |format|
-#       format.html { redirect_to teams_path, notice: 'Team was successfully deleted.' }
-#     end
-#   end
-#
-#   private
-#
-#   def set_team
-#     @team = Team.find(params[:id
-# end

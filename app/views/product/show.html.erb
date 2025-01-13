@@ -11,6 +11,7 @@
     <div>
       <%= render 'product/add_users' %>
     </div>
+    <% unless current_user.has_role?(:client) %>
     <div class="mt-2">
       <% new_board = Board.find_by(status: 'TO DO') %>
       <% if new_board %>
@@ -19,6 +20,7 @@
         <% end %>
       <% end %>
     </div>
+    <% end %>
   </div>
   <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2 ">
     <h1>Date Created: <span class="font-light p-1"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></span></h1>

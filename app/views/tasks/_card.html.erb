@@ -20,7 +20,7 @@
       </h3>
       <div class="flex justify-center">
         <% if task.image.present? %>
-          <%= image_tag(task.image, class: 'object-cover min-w-[300px] h-[80px] rounded') %>
+          <%= image_tag(task.image, class: 'object-cover max-w-[300px] h-[80px] rounded') %>
         <% end %>
       </div>
         <h3 class="text-lg font-semibold ">

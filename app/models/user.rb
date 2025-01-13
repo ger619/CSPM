@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :projects, foreign_key: :user_id, class_name: 'Project', dependent: :nullify
   has_many :tickets, foreign_key: :user_id, class_name: 'Ticket', dependent: :nullify
   has_many :issues, foreign_key: :user_id, class_name: 'Issue', dependent: :nullify
+  has_many :messages, foreign_key: :user_id, class_name: 'Message', dependent: :nullify
   has_many :comments, foreign_key: :user_id, class_name: 'Comment', dependent: :nullify
   # Products to Projects
   has_many :products, foreign_key: :user_id, class_name: 'Product', dependent: :nullify
@@ -21,6 +22,7 @@ class User < ApplicationRecord
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
   has_many :issues, through: :roles, source: :resource, source_type: :Issue
   has_many :comments, through: :roles, source: :resource, source_type: :Comment
+  has_many :messages, through: :roles, source: :resource, source_type: :Message
 
   # Products to Projects
   has_many :products, through: :roles, source: :resource, source_type: :Product
@@ -71,7 +73,7 @@ class User < ApplicationRecord
   end
 
   def self.with_agent_role
-    joins(:roles).where(roles: { name: ['agent', 'client', 'project manager', 'admin'] }, first_login: true)
+    joins(:roles).where(roles: { name: ['agent', 'client', 'project manager', 'admin'] }, first_login: true, active: true)
   end
 
   def self.with_assigned_role
@@ -84,6 +86,10 @@ class User < ApplicationRecord
     return false unless project.users.include?(user)
 
     users.include?(user)
+  end
+
+  def client?
+    has_role?(:client)
   end
 
   # To ensure either the first name or last name is present and they appear in the initials

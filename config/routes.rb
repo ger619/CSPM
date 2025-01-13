@@ -65,6 +65,10 @@ Rails.application.routes.draw do
     resources :groupwares # Nested groupwares if needed in the context of software
   end
 
+  resources :tasks do
+    resources :messages, only: [:index, :create]
+  end
+
   resources :notifications, only: [:index] do
     member do
       patch :mark_as_read

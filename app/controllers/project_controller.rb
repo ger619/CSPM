@@ -10,9 +10,7 @@ class ProjectController < ApplicationController
                  Project.all.with_rich_text_content.order('created_at ASC')
                end
 
-    unless current_user.has_any_role?(:admin, :observer, 'project manager', :agent)
-      @project = @project.joins(:users).where(users: { id: current_user.id })
-    end
+    @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @per_page = 10
     @page = (params[:page] || 1).to_i
@@ -134,12 +132,27 @@ class ProjectController < ApplicationController
   def add_team
     @project = Project.find(params[:id])
     team = Team.find(params[:team_id])
+    @project.user = current_user
 
     team.users.each do |user|
-      @project.users << user unless @project.users.include?(user)
+      unless @project.users.include?(user)
+        @project.users << user
+        UserMailer.assignment_email(user, @project, current_user, user).deliver_later
+      end
     end
 
     redirect_to @project, notice: 'Team and its users were successfully added to the project.'
+  end
+
+  def remove_team
+    @project = Project.find(params[:id])
+    team = Team.find(params[:team_id])
+
+    team.users.each do |user|
+      @project.users.delete(user)
+    end
+
+    redirect_to @project, notice: 'Team and its users were successfully removed from the project.'
   end
 
   def unassign_user

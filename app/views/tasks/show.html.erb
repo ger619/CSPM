@@ -1,45 +1,56 @@
-
 <div class="flex flex-col h-screen sm:flex-row max-w-7xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 p-2">
+
   <div class="p-2 w-1/2">
+    <div class="flex flex-wrap gap-1">
+      <%= button_to  product_path(@product), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  do %>
+        &#8656; Back
+      <% end %>
+    </div>
     <% if @task.image.present? %>
-      <%= image_tag(@task.image, class: 'rounded object-cover w-full') %>
+      <%= image_tag(@task.image, class: 'rounded object-cover w-full h-[400px]') %>
     <% end %>
     <%= render 'tasks/add_task' %>
     <%= render 'tasks/add_state' %>
-  </div>
-  <div class="sm:p-4 p-2 sm:w-1/2 flex flex-col justify-between">
-    <div>
-      <a href="#"
-         class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 hover:underline"><%= @task.name %></a>
-      <p class="mt-2 text-sm"><%= @task.description %>
-      </p>
+    <div class="mt-4 max-h-[400px] overflow-y-auto">
+        <%= render template: 'messages/index' %>
     </div>
-
-    <div class="mt-4">
+  </div>
+  <div class="sm:p-4 p-2 sm:w-1/2 flex flex-col">
+    <div>
       <div class="flex items-center">
-        <div class="flex items-center">
+        <h4 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 hover:underline mr-2">Task Name: </h4>
+        <a href="#" class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 hover:underline">
+          <%= @task.name %>
+        </a>
+      </div>
+      <div class="flex items-center">
+        <h4 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 mr-2">Description: </h4>
+        <p class="mt-2 text-sm"><%= @task.description %></p>
+      </div>
+      <div class="flex items-center">
+          <h5 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 mr-2">Assigned Users:</h5>
+          <div class="flex items-center">
           <% @task.users.each do |user| %>
             <% if user.profile_picture.attached? %>
               <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
             <% elsif user.name_initials.present? %>
-              <p class="rounded-full p-1 capitalize font-bold"><%= user.name_initials %></p>
+              <p class="rounded-full p-1 capitalize font-bold">
+                <%= user.name_initials %>
+              </p>
             <% else %>
               <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
             <% end %>
           <% end %>
-          <div class="mx-2 font-semibold">
-            <% @task.users.each do |user| %>
-              <% if user.name.present? %>
-                <%= user.name %>
-              <% else %>
-                <%= truncate(user.email, length: 15, omission: '...') %>
-              <% end %>
-            <% end %>
-          </div>
         </div>
-        <span class="mx-1 text-xs capitalize">
-          <%= @task.end_date.strftime(" %d %b %Y") %>
-        </span>
+        <div class="mx-2 font-semibold">
+          <% @task.users.each do |user| %>
+            <% if user.name.present? %>
+              <%= user.name %>
+            <% else %>
+              <%= truncate(user.email, length: 15, omission: '...') %>
+            <% end %>
+          <% end %>
+        </div>
         <span class="hover:cursor-pointer relative sm:left-12 text-xs">
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f2f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"></circle>
@@ -47,10 +58,20 @@
             <circle cx="18" cy="19" r="3"></circle>
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-            </svg
-            >
+          </svg>
         </span>
       </div>
     </div>
+
+    <div>
+      <div class="flex items-center">
+        <h5 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 mr-2">Task End Date:</h5>
+        <span class="mx-1 text-2xl font-bold capitalize">
+          <%= @task.end_date.strftime("%d %b %Y") %>
+        </span>
+      </div>
+    </div>
+     <%= render partial: 'messages/form' %>
+
   </div>
 </div>
