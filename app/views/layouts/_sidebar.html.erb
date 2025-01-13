@@ -1,5 +1,5 @@
 <% if current_user && user_signed_in?  %>
-  <div id="sidebar-wrapper" class="fixed top-0 left-0 z-40 min-h-screen overflow-y-auto transition-all duration-300 bg-white shadow-md">
+  <div id="sidebar-wrapper" class="fixed w-70 top-0 left-0 z-40 min-h-screen overflow-y-auto transition-all duration-300 bg-white shadow-md">
     <button id="toggleSidebar" class="p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
       <span class="sr-only">Toggle Sidebar</span>
       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -8,10 +8,10 @@
     </button>
 
     <!-- Set sidebar to initially be expanded (w-64) -->
-    <aside id="sidebar" class="w-70 h-screen transition-all duration-300 bg-white dark:bg-gray-800">
+    <aside id="sidebar" class="w-64 h-screen transition-all duration-300 bg-white dark:bg-gray-800">
       <%= link_to root_path do %>
         <div class="items-center ps-2.5 mb-5 mt-5">
-          <%= image_tag 'logo.png', class: 'h4 me-3 sm:h4' %>
+          <%= image_tag 'logo.png', id: 'logo-top', class: 'h4 w-40 me-3 sm:h4' %>
         </div>
       <% end %>
       <ul class="space-y-2 font-medium p-4">
@@ -200,16 +200,26 @@
   document.getElementById('toggleSidebar').addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
     const sidebarItems = document.querySelectorAll('#sidebar span');
+    const sidebarMain = document.getElementById('sidebar-wrapper')
+    const logoImg = document.getElementById('logo-top')
 
     // Toggle between collapsed and expanded states
-    if (sidebar.classList.contains('w-20')) {
+    if (sidebarMain.classList.contains('w-20')) {
+      sidebarMain.classList.remove('w-20')
+      sidebarMain.classList.add('w-70')
+      logoImg.classList.remove('w-10')
+      logoImg.classList.add('w-40')
       sidebar.classList.remove('w-20');
-      sidebar.classList.add('w-70'); // Expand to larger width
+      sidebar.classList.add('w-64'); // Expand to larger width
       sidebarItems.forEach(item => {
         item.classList.remove('hidden'); // Show text
       });
     } else {
-      sidebar.classList.remove('w-70');
+      sidebarMain.classList.remove('w-70')
+      sidebarMain.classList.add('w-20')
+      logoImg.classList.remove('w-40')
+      logoImg.classList.add('w-10')
+      sidebar.classList.remove('w-64');
       sidebar.classList.add('w-20'); // Collapse to smaller width
       sidebarItems.forEach(item => {
         item.classList.add('hidden'); // Hide text
