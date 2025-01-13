@@ -1,0 +1,38 @@
+<!-- app/views/messages/index.html.erb -->
+<h2>Messages</h2>
+<% if @task.messages.any? %>
+    <% @task.messages.each do |message| %>
+      <% if message.message_type == "external" or current_user.has_role? :admin or current_user.has_role?(:observer) %>
+        <div class="p-4 border rounded mb-4">
+          <div class="flex justify-between items-center">
+            <p class="text-sm font-medium">
+              <%= message.user&.first_name || "Unknown User" %> 
+              (<%= message.message_type&.capitalize || "Unknown Visibility" %>)
+            </p>
+            <p class="text-xs text-gray-500">
+              <%= message.created_at&.strftime("%d %b %Y, %H:%M") || "Unknown Date" %>
+            </p>
+          </div>
+          <div class="mt-2 text-sm">
+            <%= message.content.to_s.presence || "No content provided." %>
+          </div>
+          <% if message.attachments.attached? %>
+            <div class="mt-2">
+              <h4 class="text-sm font-medium">Attachments:</h4>
+              <ul>
+                <% message.attachments.each do |attachment| %>
+                  <li>
+                    <%= link_to attachment.filename, rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-500 hover:underline" %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% else %>
+            <div class="mt-2 text-sm text-gray-500">No attachments.</div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <p class="text-gray-500">No messages to display.</p>
+  <% end %>
