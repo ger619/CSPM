@@ -1,3 +1,4 @@
+<% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
 <%= form_with url: add_team_project_path(@project), method: :post, local: true do %>
   <%= label_tag :team_id, 'Select Team', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
   <div class="flex gap-2">
@@ -8,4 +9,5 @@
     <%= submit_tag 'Add Team', class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
   </div>
   </div>
+<% end %>
 <% end %>

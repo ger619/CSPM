@@ -116,6 +116,18 @@ class Ticket < ApplicationRecord
     end
   end
 
+  def self.count_breached_sla
+    joins(:sla_tickets).where(sla_tickets: { sla_status: 'breached' }).count
+  end
+
+  def self.count_target_breached_sla
+    joins(:sla_tickets).where(sla_tickets: { sla_target_response_deadline: 'breached' }).count
+  end
+
+  def self.count_resolution_breached_sla
+    joins(:sla_tickets).where(sla_tickets: { sla_resolution_deadline: 'breached' }).count
+  end
+
   private
 
   def track_updates

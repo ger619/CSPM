@@ -31,19 +31,25 @@
           <% end %>
         </span>
         </h1>
-        <h1>Sub-Product</h1>
+        <h1>Sub-Products</h1>
         <span class="font-light">
-           <% selected_groupwares = @project.groupwares.where(software_id: @project.software_ids) %>
-          <% if selected_groupwares.any? %>
-        <ul>
-          <% selected_groupwares.each do |groupware| %>
-            <li><%= groupware.name %></li>
+          <% if @project.softwares.any? %>
+            <% @project.softwares.each do |software| %>
+              <ul>
+                <% software.groupwares.each do |groupware| %>
+                  <% active_tickets_count = @project.tickets.where(groupware_id: groupware.id).count %>
+                  <% if active_tickets_count > 0 %>
+                    <li>
+                      <%= groupware.name %> - Active Tickets: <%= active_tickets_count %>
+                    </li>
+                  <% end %>
+                <% end %>
+              </ul>
+            <% end %>
+          <% else %>
+            No sub-product present
           <% end %>
-        </ul>
-      <% else %>
-        No Groupware Assigned
-      <% end %>
-    </span>
+        </span>
       </div>
       <div>
         <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
@@ -51,10 +57,20 @@
           <h1>Assigned Ticket: <span class="font-light"><%= @assigned_tickets %></span></h1>
           <h1>Assigned & Closed: <span class="font-light"><%= @closed_assigned_tickets %></span></h1>
         <% end %>
-        <h1>Created Ticket: <span class="font-light"><%= @created_tickets %></span></h1>
+        <h1>Total New Tickets:
+          <span class="font-light"><%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></span>
+        </h1>
+
         <h1>Total Tickets: <span class="font-light"><%= @project.tickets.count %></span></h1>
         <h1>Resolved Tickets: <span class="font-light"><%= @resolved_tickets %></span></h1>
         <h1>Closed Tickets: <span class="font-light"><%= @closed_tickets %></span></h1>
+        <h1>SLA on Tickets: <span class="font-light"><%= @breached_sla_tickets_count %></span></h1>
+        <h1>SLA on Target Response <span class="font-light"><%= @breached_target_tickets_count %></span></h1>
+        <h1>SLA on Resolution Deadline <span class="font-light"><%= @breached_resolution_count %></span></h1>
+
+
+
+
       </div>
     </div>
 
@@ -67,7 +83,13 @@
       <%= render 'tickets/ticket' %>
     <% end %>
   </div>
+  <h1>Total Tickets:
+    <span class="font-medium">
+      <%= @project.tickets.count %>
+    </span>
+  </h1>
 </div>
+
 <div class="flex gap-10 mt-5">
   <!-- Pagination Controls -->
   <div class="pagination">
