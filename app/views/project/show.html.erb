@@ -47,8 +47,6 @@
             No sub-product present
           <% end %>
         </span>
-        <h1>Total New Tickets: <%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></h1>
-
       </div>
       <div>
         <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
