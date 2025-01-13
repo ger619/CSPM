@@ -70,11 +70,11 @@
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
         </th>
         <td class="px-2 py-2 ">
-          <% if ticket.priority == 'SEVERITY ONE' %>
+          <% if ticket.priority == 'SEVERITY 1' %>
                <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-            <% elsif ticket.priority == 'SEVERITY TWO' %>
+            <% elsif ticket.priority == 'SEVERITY 2' %>
                <p class='bg-red-600 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-            <% elsif ticket.priority == 'SEVERITY THREE' %>
+            <% elsif ticket.priority == 'SEVERITY 3' %>
                <p class='bg-yellow-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
             <% else %>
                <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
