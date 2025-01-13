@@ -29,7 +29,8 @@
 <body class="bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
 <main class="flex">
   <!-- Sidebar -->
-  <div id="sidebar" class="bg-gray-800 h-screen transition-all duration-300 w-64">
+  <% if current_user && user_signed_in?  %>
+  <div id="sidebar" class="transparent h-screen transition-all duration-300 w-64">
     <%= render 'layouts/sidebar' %>
   </div>
   
@@ -38,6 +39,16 @@
     <%= render 'layouts/topbar' %>
     <%= yield %>
   </div>
+  <% else %>
+    <main class="mx-auto">
+      <%= render 'layouts/sidebar' %>
+      <div class="p-8 ml-16">
+        <%= render 'layouts/topbar' %>
+        <%= yield %>
+      </div>
+    </main>
+  <%end%>
+  
 </main>
 
 <%= javascript_include_tag "loading" %>
