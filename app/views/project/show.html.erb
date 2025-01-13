@@ -57,11 +57,19 @@
           <h1>Assigned Ticket: <span class="font-light"><%= @assigned_tickets %></span></h1>
           <h1>Assigned & Closed: <span class="font-light"><%= @closed_assigned_tickets %></span></h1>
         <% end %>
-        <h1>Total New Tickets: <span class="font-light"><%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></span></h1>
+        <h1>Total New Tickets:
+          <span class="font-light"><%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></span>
+        </h1>
 
         <h1>Total Tickets: <span class="font-light"><%= @project.tickets.count %></span></h1>
         <h1>Resolved Tickets: <span class="font-light"><%= @resolved_tickets %></span></h1>
         <h1>Closed Tickets: <span class="font-light"><%= @closed_tickets %></span></h1>
+        <h1>SLA on Tickets: <span class="font-light"><%= @breached_sla_tickets_count %></span></h1>
+        <h1>SLA on Target Response <span class="font-light"><%= @breached_target_tickets_count %></span></h1>
+        <h1>SLA on Resolution Deadline <span class="font-light"><%= @breached_resolution_count %></span></h1>
+
+
+
 
       </div>
     </div>
