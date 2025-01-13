@@ -11,7 +11,7 @@ class Message < ApplicationRecord
 
   def visible_to?(user)
     return true if message_type == 'external'
-    return false if message_type == 'internal' && user.client?
+    return false if message_type == 'internal' && user&.client?
 
     true
   end

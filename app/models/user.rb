@@ -88,6 +88,10 @@ class User < ApplicationRecord
     users.include?(user)
   end
 
+  def client?
+    has_role?(:client)
+  end
+
   # To ensure either the first name or last name is present and they appear in the initials
   def name_initials
     if first_name.present? && last_name.present?
