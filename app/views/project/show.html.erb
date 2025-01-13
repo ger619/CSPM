@@ -38,7 +38,7 @@
               <ul>
                 <% software.groupwares.each do |groupware| %>
                   <li>
-                    <%= groupware.name %> - <%= @project.tickets.where(groupware_id: groupware.id).count %>
+                    <%= groupware.name %> - Active Tickets: <%= @project.tickets.where(groupware_id: groupware.id).count %>
                   </li>
                 <% end %>
               </ul>
@@ -70,7 +70,9 @@
       <%= render 'tickets/ticket' %>
     <% end %>
   </div>
+  <h1>Total Tickets: <span class="font-medium"><%= @project.tickets.count %></span></h1>
 </div>
+
 <div class="flex gap-10 mt-5">
   <!-- Pagination Controls -->
   <div class="pagination">
