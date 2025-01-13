@@ -47,6 +47,8 @@
             No sub-product present
           <% end %>
         </span>
+        <h1>Total New Tickets: <%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></h1>
+
       </div>
       <div>
         <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
@@ -54,10 +56,12 @@
           <h1>Assigned Ticket: <span class="font-light"><%= @assigned_tickets %></span></h1>
           <h1>Assigned & Closed: <span class="font-light"><%= @closed_assigned_tickets %></span></h1>
         <% end %>
-        <h1>Created Ticket: <span class="font-light"><%= @created_tickets %></span></h1>
+        <h1>Total New Tickets: <span class="font-light"><%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></span></h1>
+
         <h1>Total Tickets: <span class="font-light"><%= @project.tickets.count %></span></h1>
         <h1>Resolved Tickets: <span class="font-light"><%= @resolved_tickets %></span></h1>
         <h1>Closed Tickets: <span class="font-light"><%= @closed_tickets %></span></h1>
+
       </div>
     </div>
 
