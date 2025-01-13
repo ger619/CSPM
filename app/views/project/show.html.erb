@@ -31,19 +31,22 @@
           <% end %>
         </span>
         </h1>
-        <h1>Sub-Product</h1>
+        <h1>Sub-Products</h1>
         <span class="font-light">
-           <% selected_groupwares = @project.groupwares.where(software_id: @project.software_ids) %>
-          <% if selected_groupwares.any? %>
-        <ul>
-          <% selected_groupwares.each do |groupware| %>
-            <li><%= groupware.name %></li>
+          <% if @project.softwares.any? %>
+            <% @project.softwares.each do |software| %>
+              <ul>
+                <% software.groupwares.each do |groupware| %>
+                  <li>
+                    <%= groupware.name %> - <%= @project.tickets.where(groupware_id: groupware.id).count %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          <% else %>
+            No sub-product present
           <% end %>
-        </ul>
-      <% else %>
-        No Groupware Assigned
-      <% end %>
-    </span>
+        </span>
       </div>
       <div>
         <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>

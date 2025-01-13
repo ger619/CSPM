@@ -46,7 +46,6 @@ class ProjectController < ApplicationController
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
-
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
