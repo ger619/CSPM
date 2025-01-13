@@ -70,7 +70,11 @@
       <%= render 'tickets/ticket' %>
     <% end %>
   </div>
-  <h1>Total Tickets: <span class="font-medium"><%= @project.tickets.count %></span></h1>
+  <h1>Total Tickets:
+    <span class="font-medium">
+      <%= @project.tickets.count %>
+    </span>
+  </h1>
 </div>
 
 <div class="flex gap-10 mt-5">

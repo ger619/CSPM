@@ -4,7 +4,7 @@
       <tr>
         <th scope="col" class="px-6 py-3">Name of Project</th>
         <th scope="col" class="px-6 py-3">Project Description</th>
-        <th scope="col" class="px-6 py-3">Start Date</th>
+        <th scope="col" class="px-6 py-3">Number of Tickets</th>
         <th scope="col" class="px-6 py-3">Assignee</th>
         <th scope="col" class="px-6 py-3">Client</th>
         <th scope="col" class="px-6 py-3">Product Category</th>
@@ -30,8 +30,8 @@
               <td class="px-6 py-4 text-left">
                 <%= project.description.truncate(30) %>
               </td>
-              <td class="px-6 py-4 text-left whitespace-nowrap">
-                <%= project.start_date.present? ? project.start_date.strftime("%d %b %y") : "N/A" %>
+              <td class="px-6 py-4 text-center">
+                <%= project.tickets.count %>
               </td>
               <td class="px-6 py-4 text-left">
                 <%= project.user.name %>
