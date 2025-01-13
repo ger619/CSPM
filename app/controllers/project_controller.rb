@@ -46,7 +46,6 @@ class ProjectController < ApplicationController
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
-
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
@@ -96,6 +95,8 @@ class ProjectController < ApplicationController
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end
+    rescue ActiveRecord::RecordNotUnique
+      format.html { redirect_to edit_project_path(@project), alert: 'Duplicate groupware assignment detected. Please check your input.' }
     end
   end
 
