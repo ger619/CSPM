@@ -37,9 +37,12 @@
             <% @project.softwares.each do |software| %>
               <ul>
                 <% software.groupwares.each do |groupware| %>
-                  <li>
-                    <%= groupware.name %> - Active Tickets: <%= @project.tickets.where(groupware_id: groupware.id).count %>
-                  </li>
+                  <% active_tickets_count = @project.tickets.where(groupware_id: groupware.id).count %>
+                  <% if active_tickets_count > 0 %>
+                    <li>
+                      <%= groupware.name %> - Active Tickets: <%= active_tickets_count %>
+                    </li>
+                  <% end %>
                 <% end %>
               </ul>
             <% end %>
