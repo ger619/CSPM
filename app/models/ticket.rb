@@ -237,8 +237,20 @@ class Ticket < ApplicationRecord
   # Take the initials for the #{project.title} and append a random hex string to it
 
   def ticket_unique_id
-    initials = project.title.split.map { |word| word[0] }.join.upcase
-    self.unique_id = "#{initials}-#{SecureRandom.hex(2)}"
+    initials = if project&.title.present?
+                 project.title.split.map { |word| word[0] }.join.upcase
+               else
+                 'DEFAULT' # Fallback initials
+               end
+
+    last_ticket = Ticket.order(:created_at).last
+    next_number = if last_ticket&.unique_id.present?
+                    last_ticket.unique_id.split('-').last.to_i + 1
+                  else
+                    1
+                  end
+
+    self.unique_id = "#{initials}-#{next_number.to_s.rjust(4, '0')}"
     save
   end
 
