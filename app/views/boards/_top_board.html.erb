@@ -5,7 +5,7 @@
       &#8656; Back
     <% end %>
     <% unless current_user.has_role?(:client) %>
-      <%= button_to 'Add New Status +', new_product_board_path(@product.id), method: :get, class: 'mb-4 border border-b-4 border-r-2 border-black dark:border-slate-100 p-2 rounded font-semibold rounded'  %>
+      <%= button_to 'Add New Status +', new_product_board_path(@product.id), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
     <% end %>
     </div>
   </div>
