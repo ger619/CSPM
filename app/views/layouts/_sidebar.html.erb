@@ -1,20 +1,28 @@
 <% if current_user && user_signed_in?  %>
-  <div id="sidebar-wrapper" class="fixed w-70 top-0 left-0 z-40 min-h-screen overflow-y-auto transition-all duration-300 bg-white shadow-md">
-    <button id="toggleSidebar" class="p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-      <span class="sr-only">Toggle Sidebar</span>
-      <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-      </svg>
-    </button>
-
-    <!-- Set sidebar to initially be expanded (w-64) -->
-    <aside id="sidebar" class="w-64 h-screen transition-all duration-300 bg-white dark:bg-gray-800">
-      <%= link_to root_path do %>
-        <div class="items-center ps-2.5 mb-5 mt-5">
-          <%= image_tag 'logo.png', id: 'logo-top', class: 'h4 w-40 me-3 sm:h4' %>
-        </div>
+<button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+  <span class="sr-only">Open sidebar</span>
+  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+  </svg>
+</button>
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+  <div class="h-full px-3 py-4 overflow-y-auto ">
+    <%= link_to root_path do %>
+      <div class="items-center ps-2.5 mb-5">
+        <%= image_tag 'logo.png', class: 'h6 me-3 sm:h7' %>
+      </div>
+    <% end %>
+    <ul class="space-y-2 font-medium">
+      <%= link_to edit_user_registration_path  do %>
+        <li>
+          <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+            </svg>
+            <span class="flex-1 ms-3 whitespace-nowrap">Edit Profile</span>
+          </div>
+        </li>
       <% end %>
-      <ul class="space-y-2 font-medium p-4">
 
       <%= link_to project_index_path do %>
         <li>
@@ -158,78 +166,45 @@
         <% end %>
       <% end %>
 
-      <!-- Dropdown Menu -->
-        <li class="relative">
-          <button id="dropdownBtn" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M4.293 6.293a1 1 0 0 1 1.414 0L10 9.586l4.293-4.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 0-1.414z"></path>
+      <!-- Add Data Center Menu Item -->
+      <% if current_user.has_role? :admin or current_user.has_role?(:observer)%>
+      <li>
+        <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <svg class="w-5 h-5 black transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M3 3h18v18H3V3zm1 1v16h16V4H4zm2 4h12v2H6V8zm0 4h8v2H6v-2z" />
+          </svg>
+          <span class="flex-1 ms-3 whitespace-nowrap">Data Center</span>
+        </div>
+        <ul class="pl-6 space-y-1">
+          <%= link_to cease_fire_report_path do %>
+            <li>
+              <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
+                </svg>
+                <span class="flex-1 ms-3 whitespace-nowrap">Cease Fire Report</span>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+      <% end %>
+
+      <%= link_to  destroy_user_session_path, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } do  %>
+        <li>
+          <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
+              <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
+              <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
             </svg>
-            <span class="flex-1 ms-3 whitespace-nowrap">Data Center</span>
-          </button>
-          
-          <!-- Dropdown Content -->
-          <ul id="dropdownMenu" class="absolute hidden bg-white shadow-md rounded-md w-40 mt-2 space-y-2">
-            <%= link_to cease_fire_report_path do %>
-              <li>
-                <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
-                  </svg>
-                  <span class="flex-1 ms-3 whitespace-nowrap">Cease Fire Report</span>
-                </div>
-              </li>
-            <% end %>
-          </ul>
+            <span class="flex-1 ms-3 whitespace-nowrap">
+              Sign Out
+            </span>
+          </div>
         </li>
-      </ul>
-    </aside>
+      <% end %>
+    </ul>
   </div>
+</aside>
 <% end %>
-
-<script>
-  document.getElementById('toggleSidebar').addEventListener('click', () => {
-    const sidebar = document.getElementById('sidebar');
-    const sidebarItems = document.querySelectorAll('#sidebar span');
-    const sidebarMain = document.getElementById('sidebar-wrapper')
-    const logoImg = document.getElementById('logo-top')
-
-    // Toggle between collapsed and expanded states
-    if (sidebarMain.classList.contains('w-20')) {
-      sidebarMain.classList.remove('w-20')
-      sidebarMain.classList.add('w-70')
-      logoImg.classList.remove('w-10')
-      logoImg.classList.add('w-40')
-      sidebar.classList.remove('w-20');
-      sidebar.classList.add('w-64'); // Expand to larger width
-      sidebarItems.forEach(item => {
-        item.classList.remove('hidden'); // Show text
-      });
-    } else {
-      sidebarMain.classList.remove('w-70')
-      sidebarMain.classList.add('w-20')
-      logoImg.classList.remove('w-40')
-      logoImg.classList.add('w-10')
-      sidebar.classList.remove('w-64');
-      sidebar.classList.add('w-20'); // Collapse to smaller width
-      sidebarItems.forEach(item => {
-        item.classList.add('hidden'); // Hide text
-      });
-    }
-  });
-
-  document.getElementById("dropdownBtn").addEventListener("click", function() {
-      const dropdownMenu = document.getElementById("dropdownMenu");
-      dropdownMenu.classList.toggle("hidden");
-  });
-</script>
-
-<style>
-  #sidebar span.hidden {
-    display: none;
-  }
-
-  /* Ensure smooth transition for width changes */
-  .transition-all {
-    transition: all 0.3s ease;
-  }
-</style>
