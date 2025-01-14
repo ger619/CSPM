@@ -18,11 +18,11 @@ module ApplicationHelper
 
     case current_hour
     when 0..11
-      'Good morning'
+      'Good Morning'
     when 12..17
-      'Good afternoon'
+      'Good Afternoon'
     else
-      'Good evening'
+      'Good Evening'
     end
   end
 end
