@@ -43,13 +43,13 @@ class Ticket < ApplicationRecord
     start_time = adjust_start_time(start_time)
 
     case priority
-    when 'SEVERITY ONE'
+    when 'SEVERITY 1'
       update_column(:target_repair_deadline, next_business_time(start_time, 3.hours))
-    when 'SEVERITY TWO'
+    when 'SEVERITY 2'
       update_column(:target_repair_deadline, next_business_time(start_time, 5.hours))
-    when 'SEVERITY THREE'
+    when 'SEVERITY 3'
       update_column(:target_repair_deadline, next_business_time(start_time, 12.hours))
-    when 'SEVERITY FOUR'
+    when 'SEVERITY 4'
       update_column(:target_repair_deadline, next_business_time(start_time, 24.hours))
     end
   end
@@ -58,13 +58,13 @@ class Ticket < ApplicationRecord
     start_time = target_repair_deadline
     start_time = adjust_start_time(start_time)
     case priority
-    when 'SEVERITY ONE'
+    when 'SEVERITY 1'
       update_column(:resolution_deadline, next_business_time(start_time, 4.hours))
-    when 'SEVERITY TWO'
+    when 'SEVERITY 2'
       update_column(:resolution_deadline, next_business_time(start_time, 8.hours))
-    when 'SEVERITY THREE'
+    when 'SEVERITY 3'
       update_column(:resolution_deadline, next_business_time(start_time, 16.hours))
-    when 'SEVERITY FOUR'
+    when 'SEVERITY 4'
       update_column(:resolution_deadline, next_business_time(start_time, 24.hours))
     end
   end
