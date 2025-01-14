@@ -200,7 +200,7 @@ class Ticket < ApplicationRecord
     holidays = [
       Date.new(2024, 12, 25), # Christmas
       Date.new(2024, 12, 26), # Boxing Day
-      Date.new(2025, 1, 1),  # New Year's Day
+      Date.new(2025, 1, 1) # New Year's Day
       # Add more holidays as needed
     ]
 
@@ -224,6 +224,7 @@ class Ticket < ApplicationRecord
 
   def within_business_hours?(time, business_hours)
     return false if time.nil? # Gracefully handle nil time
+
     business_hours.any? do |hours|
       time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
     end
