@@ -162,6 +162,8 @@ class Ticket < ApplicationRecord
   end
 
   def adjust_start_time(start_time)
+    start_time ||= DateTime.now # Default to current time if start_time is nil
+
     business_hours = [
       { day: 1, start: 8, end: 13 }, { day: 1, start: 14, end: 17 },
       { day: 2, start: 8, end: 13 }, { day: 2, start: 14, end: 17 },
@@ -184,6 +186,8 @@ class Ticket < ApplicationRecord
   end
 
   def next_business_time(start_time, duration)
+    start_time ||= DateTime.now # Ensure start_time is not nil
+
     business_hours = [
       { day: 1, start: 8, end: 13 }, { day: 1, start: 14, end: 17 },
       { day: 2, start: 8, end: 13 }, { day: 2, start: 14, end: 17 },
@@ -196,18 +200,7 @@ class Ticket < ApplicationRecord
     holidays = [
       Date.new(2024, 12, 25), # Christmas
       Date.new(2024, 12, 26), # Boxing Day
-      Date.new(2025, 1, 1), # New Year's Day
-      Date.new(2025, 4, 18), # Good Friday
-      Date.new(2025, 4, 21), # Easter Monday
-      Date.new(2025, 5, 1), # Labour Day
-      Date.new(2025, 6, 2), # Madaraka day
-      Date.new(2025, 10, 10), # Moi Day
-      Date.new(2025, 10, 20), # Utamaduni Day
-      Date.new(2025, 10, 20), # Mashujaa Day
-      Date.new(2025, 12, 12), # Jamhuri Day
-      Date.new(2025, 12, 25), # Christmas
-      Date.new(2025, 12, 26) # Boxing Day
-
+      Date.new(2025, 1, 1) # New Year's Day
       # Add more holidays as needed
     ]
 
@@ -230,6 +223,8 @@ class Ticket < ApplicationRecord
   end
 
   def within_business_hours?(time, business_hours)
+    return false if time.nil? # Gracefully handle nil time
+
     business_hours.any? do |hours|
       time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
     end
