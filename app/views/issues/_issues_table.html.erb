@@ -23,23 +23,25 @@
             </span>
           <% end %>
         </h3>
-        <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Posted on <%= issue.created_at.strftime("%I:%M %p at %d %B %Y") %></time>
+        <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+          Posted on <%= issue.created_at.strftime("%I:%M %p at %d %B %Y") %>
+        </time>
         <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                <%= issue.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
-                <% if issue.content.body.attachments.any? %>
-                  <% issue.content.body.attachments.each do |attachment| %>
-                    <div class="mb-2">
-                      <% if attachment.previewable? %>
-                        <%= link_to rails_blob_path(attachment, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" do %>
-                          Preview: <%= attachment.filename.to_s %>
-                        <% end %>
-                      <% else %>
-                        <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
-                      <% end %>
-                    </div>
-                  <% end %>
+          <%= issue.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
+          <% if issue.content.body.attachments.any? %>
+            <% issue.content.body.attachments.each do |attachment| %>
+            <div class="mb-2">
+              <% if attachment.previewable? %>
+                <%= link_to rails_blob_path(attachment, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" do %>
+                  Preview: <%= attachment.filename.to_s %>
                 <% end %>
-              </p>    
+              <% else %>
+                <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+        </p>
       </li>
     </ol>
   <% end %>

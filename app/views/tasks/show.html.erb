@@ -5,6 +5,12 @@
       <%= button_to  product_path(@product), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  do %>
         &#8656; Back
       <% end %>
+      <!-- Delete Button -->
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+        <%= button_to product_board_task_path(@product, @board), method: :delete, data: { confirm: 'Are you sure?' }, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' do %>
+          Delete Task
+        <% end %>
+      <% end %>
     </div>
     <% if @task.image.present? %>
       <%= image_tag(@task.image, class: 'rounded object-cover w-full h-[400px]') %>

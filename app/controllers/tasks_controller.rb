@@ -45,7 +45,7 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
-    redirect_to product_board_path(@product, @board)
+    redirect_to product_path(@product), notice: 'Task was successfully deleted.'
   end
 
   # Assigning User a Task
