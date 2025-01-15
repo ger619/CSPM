@@ -32,7 +32,7 @@ class Ability
       cannot %i[create delete edit], Board
       cannot :manage, Task
     elsif user.has_role? :agent
-      can :read, Project
+      can %i[read assign_user unassign_user], Project
       can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
