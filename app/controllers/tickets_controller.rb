@@ -193,8 +193,8 @@ class TicketsController < ApplicationController
       )
 
       # Adding the SLA to the ticket
-      sla_ticket = SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
-        sla_ticket.sla_status = @ticket.sla_status
+      sla_ticket = SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla|
+        sla.sla_status = @ticket.sla_status
       end
 
       # Log the details of the SlaTicket including the SLA status
