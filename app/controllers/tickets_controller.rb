@@ -193,13 +193,16 @@ class TicketsController < ApplicationController
       )
 
       # Adding the SLA to the ticket
-      SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
+      sla_ticket = SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
         sla_ticket.sla_status = @ticket.sla_status
       end
 
+      # Log the details of the SlaTicket including the SLA status
+      Rails.logger.info("SlaTicket details: #{sla_ticket.attributes}, SLA Status: #{sla_ticket.sla_status}")
+
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
-      log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket.")
+      log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket, with Status: #{sla_ticket.sla_status}")
 
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
