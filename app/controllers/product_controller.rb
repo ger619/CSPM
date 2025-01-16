@@ -87,11 +87,11 @@ class ProductController < ApplicationController
 
       assigned_user = user
       UserMailer.assign_product_email(@product.user, @product, current_user, assigned_user).deliver_later
-      @product.users.each do |product_user|
-        next if product_user == current_user
+      # @product.users.each do |product_user|
+      #  next if product_user == current_user
 
-        UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
-      end
+      # UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
+      # end
 
       redirect_to @product, notice: 'User was successfully assigned.'
     end
