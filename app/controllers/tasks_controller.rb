@@ -63,11 +63,11 @@ class TasksController < ApplicationController
       # Send email to the newly assigned user
       UserMailer.task_assignment_email(user, @task, current_user, assigned_user).deliver_later
       # Send email to all users tagged on the product, except the current user
-      @product.users.each do |product_user|
-        next if product_user == current_user
+      # @product.users.each do |product_user|
+      #   next if product_user == current_user
 
-        UserMailer.task_assignment_email(product_user, @task, current_user, assigned_user).deliver_later
-      end
+      #   UserMailer.task_assignment_email(product_user, @task, current_user, assigned_user).deliver_later
+      # end
 
       redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully assigned.'
     end
@@ -90,11 +90,11 @@ class TasksController < ApplicationController
     @task.save
 
     UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
-    @product.users.each do |product_user|
-      next if product_user == current_user
+    # @product.users.each do |product_user|
+    #   next if product_user == current_user
 
-      UserMailer.add_state_email(product_user, @task, current_user).deliver_later
-    end
+    #   UserMailer.add_state_email(product_user, @task, current_user).deliver_later
+    # end
     redirect_to product_path(@product)
   end
 
