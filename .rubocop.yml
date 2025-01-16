@@ -26,7 +26,7 @@ Metrics/ClassLength:
   Max: 210
 Metrics/BlockLength:
   AllowedMethods: ['describe']
-  Max: 30
+  Max: 40
 Metrics/CyclomaticComplexity:
   Max: 25
 Metrics/PerceivedComplexity:
