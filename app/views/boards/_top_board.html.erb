@@ -14,10 +14,10 @@
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: product_path(@product), method: :get, class: 'flex gap-2' do |f| %>
         <%= f.text_field :query, placeholder: "Search ", class: "border border-r-4 border-b-4 rounded h-12" %>
-        <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+        <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
       <% end %>
       <%= form_with url: product_path(@product), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'ml-2 mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+        <%= f.submit "Clear", class: 'ml-2 mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
       <% end %>
     </div>
   </div>

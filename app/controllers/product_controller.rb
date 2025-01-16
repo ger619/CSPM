@@ -25,7 +25,9 @@ class ProductController < ApplicationController
                          'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing',
                          'Awaiting Client API', 'Resolved', 'Closed']
       @boards = preferred_order.flat_map do |status|
-        @product.boards.includes(:tasks).where(status:)
+        boards = @product.boards.includes(:tasks).where(status: status)
+        boards = boards.joins(:tasks).where('tasks.name ILIKE ?', "%#{params[:query]}%") if params[:query].present?
+        boards
       end
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
