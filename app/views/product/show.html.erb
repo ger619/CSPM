@@ -16,7 +16,7 @@
       <% new_board = Board.find_by(status: 'TO DO') %>
       <% if new_board %>
         <% @boards.first(1).each do |board| %>
-          <%= link_to 'Add Task', new_product_board_task_path(@product.id, board.id), class: "border-b-4 border-black border dark:border-slate-100 p-2 gap-4 text-xs rounded mt-2"%>
+          <%= link_to 'Add Task', new_product_board_task_path(@product.id, board.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
         <% end %>
       <% end %>
     </div>
@@ -70,7 +70,7 @@
         </span>
       <% end %>
     </h1>
-    
+
   </div>
   <div class="col-span-1">
     <%= render 'product/added_users' %>
