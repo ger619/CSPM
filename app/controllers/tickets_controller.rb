@@ -108,8 +108,8 @@ class TicketsController < ApplicationController
         # Assign the project manager if no agents are assigned
 
         # Assign status to new ticket
-        status = Status.find_by(name: 'New')
-        @ticket.statuses << status if status
+        # status = Status.find_by(name: 'New')
+        # @ticket.statuses << status if status
 
         SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
           sla_ticket.sla_status = @ticket.sla_status

@@ -13,6 +13,7 @@ class Ticket < ApplicationRecord
   has_many :events, dependent: :destroy
 
   before_update :track_updates
+  before_create :set_default_status
 
   resourcify
   has_many :users, through: :roles, class_name: 'User', source: :users
@@ -129,6 +130,12 @@ class Ticket < ApplicationRecord
   end
 
   private
+
+  # Assign status to new ticket
+  def set_default_status
+    status = Status.find_by(name: 'New')
+    statuses << status if status
+  end
 
   def track_updates
     self.update_count += 1
