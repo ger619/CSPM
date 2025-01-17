@@ -102,11 +102,11 @@
   <!-- Pagination Controls -->
   <div class="pagination">
     <% if @page > 1 %>
-      <%= link_to 'Previous', product_index_path(@product, page: @page - 1, query: params[:query]), class: 'mb-4 h-12 w-24 border border-b-4 border-black dark:border-slate-100 border-r-2 p-3 font-semibold rounded' %>
+      <%= link_to 'Previous', product_index_path(@product, page: @page - 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
     <% end %>
     <span>Page <%= @page %> of <%= @total_pages %></span>
     <% if @page < @total_pages %>
-      <%= link_to 'Next', product_index_path(@product, page: @page + 1, query: params[:query]), class: 'mb-4 h-12 w-24 border border-b-4 border-r-2 p-3 border-black dark:border-slate-100 font-semibold rounded' %>
+      <%= link_to 'Next', product_index_path(@product, page: @page + 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
     <% end %>
   </div>
 </div>
