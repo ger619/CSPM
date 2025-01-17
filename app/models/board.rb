@@ -1,7 +1,7 @@
 class Board < ApplicationRecord
   belongs_to :product
   belongs_to :user
-  has_many :tasks, dependent: :destroy
+  has_many :tasks, dependent: :nullify
 
   resourcify
   # To ensure that the ticket are connected to the user and their roles well defined
