@@ -13,7 +13,12 @@
  *= require_tree .
  *= require_self
  */
-.modal {
+ body {
+  transform: scale();
+  transform-origin: top left;
+}
+
+ .modal {
   position: fixed;
   z-index: 1;
   padding: 2em;

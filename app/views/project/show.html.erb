@@ -1,5 +1,5 @@
 <%= render 'tickets/ticket_topbar' %>
-<div class="p-2 border-2 border-gray-200 border rounded-lg dark:border-gray-700">
+<div style="transform: scale(0.9); transform-origin: top left;" class="p-2 border-2 border-gray-200 border rounded-lg dark:border-gray-700">
   <div class="grid grid-cols-7 gap-4 mb-4 h-full">
     <div class="p-4 items-center justify-center rounded col-span-2 border-r-2">
       <% unless notice == "Signed in successfully." %>
@@ -70,10 +70,6 @@
         <h1>SLA on Tickets: <span class="font-light"><%= @breached_sla_tickets_count %></span></h1>
         <h1>SLA on Target Response <span class="font-light"><%= @breached_target_tickets_count %></span></h1>
         <h1>SLA on Resolution Deadline <span class="font-light"><%= @breached_resolution_count %></span></h1>
-
-
-
-
       </div>
     </div>
 
@@ -98,7 +94,6 @@
   <div class="pagination">
     <% if @page > 1 %>
       <%= link_to 'Previous', project_path(page: @page - 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-
     <% end %>
     <span>Page <%= @page %> of <%= @total_pages %></span>
     <% if @page < @total_pages %>
