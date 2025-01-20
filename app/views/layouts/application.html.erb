@@ -30,7 +30,7 @@
 <main class="flex">
   <!-- Sidebar -->
   <% if current_user && user_signed_in?  %>
-  <div id="sidebar" class="transparent h-screen transition-all duration-300 w-64">
+  <div id="sidebar-parent" class="transparent h-screen transition-all duration-300 w-64">
     <%= render 'layouts/sidebar' %>
   </div>
   
@@ -42,7 +42,7 @@
   <% else %>
     <main class="mx-auto">
       <%= render 'layouts/sidebar' %>
-      <div class="p-8 ml-16">
+      <div class="p-8">
         <%= render 'layouts/topbar' %>
         <%= yield %>
       </div>
@@ -56,18 +56,16 @@
 <%= javascript_include_tag "Chart.bundle" %>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const sidebar = document.getElementById('sidebar');
+  document.getElementById('toggleSidebar').addEventListener('click', () => {
+    const sidebar = document.getElementById('sidebar-parent');
     const mainContent = document.getElementById('mainContent');
 
-      if (sidebar.classList.contains('w-64')) {
-        mainContent.classList.add('ml-16');
-        mainContent.classList.remove('ml-64');
-      } else {
-        mainContent.classList.add('ml-64');
-        mainContent.classList.remove('ml-16');
-      }
-  });
+    // Toggle sidebar width
+    sidebar.classList.toggle('w-64');
+    sidebar.classList.toggle('w-16');
+
+   
 </script>
+
 </body>
 </html>
