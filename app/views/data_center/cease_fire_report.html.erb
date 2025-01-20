@@ -41,6 +41,24 @@
                            'bg-red-500'
                          when 'Closed', 'Resolved'
                            'bg-green-500'
+                         when 'Reopened'
+                           'bg-red-900'
+                         when 'Under Development'
+                           'bg-blue-300'
+                         when 'Work in Progress'
+                            'bg-gray-500'
+                          when 'QA Testing'
+                            'bg-pink-500'
+                          when 'Awaiting Build'
+                            'bg-gray-800'
+                          when 'Client Confirmation Pending'
+                            'bg-purple-500'
+                          when 'On-Hold'
+                            'bg-yellow-300'
+                          when 'Assigned'
+                            'bg-blue-800'
+                          when 'Declined'
+                            'bg-gray-800'
                          else
                            ''
                          end %>
@@ -68,3 +86,4 @@
             cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date]),
             class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
 <% end %>
+
