@@ -1,20 +1,30 @@
 <h1 class="flex justify-center text-2xl font-bold mb-4">Generate Cease Fire Report</h1>
 <div class="p-2 w-full">
-    <%= form_with url: cease_fire_report_path, method: :get, local: true do |form| %>
+  <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
     <div class="flex justify-center gap-2">
-    <div class="flex gap-2">
-            <%= form.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-            <%= form.date_field :start_date, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
-        </div>
-        <div class="flex gap-2">
-            <%= form.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-            <%= form.date_field :end_date, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
-        </div>
-        <div>
-            <%= form.submit "Generate Report",  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-        </div>
+      <div class="flex gap-2">
+        <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.date_field :start_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+      </div>
+      <div class="flex gap-2">
+        <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.date_field :end_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+      </div>
+      <div class="flex gap-2">
+        <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.collection_select :client_id,
+                                   if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                                     Client.all
+                                   else
+                                     Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct
+                                   end,
+                                   :id, :name, { include_blank: 'All Clients' }, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+      </div>
+      <div>
+        <%= f.submit "Generate Report", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      </div>
     </div>
-    <% end %>
+  <% end %>
 </div>
 
 <% if @tickets.any? %>

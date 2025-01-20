@@ -22,6 +22,7 @@ class Ability
       cannot :manage, User, roles: { name: 'admin' }
       can :manage, Board
       can :manage, Task
+      can :generate, :report
     elsif user.has_role? :client
       can :read, Project
       can %i[create read assign_tag unassign_tag update_status add_status], Ticket
