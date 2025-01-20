@@ -36,7 +36,15 @@
         </thead>
         <tbody>
         <% @tickets.each do |ticket| %>
-            <tr>
+          <% row_class = case ticket.statuses.first&.name
+                         when 'New'
+                           'bg-red-500'
+                         when 'Closed', 'Resolved'
+                           'bg-green-500'
+                         else
+                           ''
+                         end %>
+            <tr class="<%= row_class %>">
                 <td class="border px-4 py-2"><%= ticket.subject %></td>
                 <td class="border px-4 py-2"><%= ticket.unique_id %></td>
                 <td class="border px-4 py-2"><%= ticket.issue %></td>
@@ -56,22 +64,7 @@
         </tbody>
   </table>
 </div>
-  <%= link_to "Download CSV", 
+  <%= link_to "Download CSV",
             cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date]),
             class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
 <% end %>
-
-<script>
-    $(document).ready(function() {
-        $('#ceasefire').DataTable({
-            "paging": true,
-            "ordering": true,
-            "info": true,
-            "searching": true,
-            "lengthChange": true,
-            "pageLength": 10,
-            "lengthMenu": [10, 25, 50, 75, 100],
-            "order": [[8, "desc"]]
-        });
-    });
-</script>
