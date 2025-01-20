@@ -1,20 +1,30 @@
 <h1 class="flex justify-center text-2xl font-bold mb-4">Generate Cease Fire Report</h1>
 <div class="p-2 w-full">
-    <%= form_with url: cease_fire_report_path, method: :get, local: true do |form| %>
+  <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
     <div class="flex justify-center gap-2">
-    <div class="flex gap-2">
-            <%= form.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-            <%= form.date_field :start_date, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
-        </div>
-        <div class="flex gap-2">
-            <%= form.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-            <%= form.date_field :end_date, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
-        </div>
-        <div>
-            <%= form.submit "Generate Report",  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-        </div>
+      <div class="flex gap-2">
+        <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.date_field :start_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+      </div>
+      <div class="flex gap-2">
+        <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.date_field :end_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+      </div>
+      <div class="flex gap-2">
+        <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.collection_select :client_id,
+                                   if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                                     Client.all
+                                   else
+                                     Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct
+                                   end,
+                                   :id, :name, { include_blank: 'All Clients' }, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+      </div>
+      <div>
+        <%= f.submit "Generate Report", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      </div>
     </div>
-    <% end %>
+  <% end %>
 </div>
 
 <% if @tickets.any? %>
@@ -22,15 +32,19 @@
     <table id="ceasefire" class="table-auto w-full">
         <thead>
             <tr>
-                <th class="px-4 py-2">Summary</th>
-                <th class="px-4 py-2">Issue Key</th>
-                <th class="px-4 py-2">Issue Type</th>
+              <th class="px-4 py-2">Created</th>
+              <th class="px-4 py-2">Issue Key</th>
+              <th class="px-4 py-2">Project Name</th>
+              <th class="px-4 py-2">Severity</th>
+              <th class="px-4 py-2">Summary</th>
+
+
+              <th class="px-4 py-2">Issue Type</th>
                 <th class="px-4 py-2">Status</th>
-                <th class="px-4 py-2">Project Name</th>
-                <th class="px-4 py-2">Priority</th>
+
+
                 <th class="px-4 py-2">Assigned To</th>
                 <th class="px-4 py-2">Reporter</th>
-                <th class="px-4 py-2">Created</th>
                 <th class="px-4 py-2">Details</th>
             </tr>
         </thead>
@@ -41,23 +55,43 @@
                            'bg-red-500'
                          when 'Closed', 'Resolved'
                            'bg-green-500'
+                         when 'Reopened'
+                           'bg-red-900'
+                         when 'Under Development'
+                           'bg-blue-300'
+                         when 'Work in Progress'
+                            'bg-gray-500'
+                          when 'QA Testing'
+                            'bg-pink-500'
+                          when 'Awaiting Build'
+                            'bg-gray-800'
+                          when 'Client Confirmation Pending'
+                            'bg-purple-500'
+                          when 'On-Hold'
+                            'bg-yellow-300'
+                          when 'Assigned'
+                            'bg-blue-800'
+                          when 'Declined'
+                            'bg-gray-800'
                          else
                            ''
                          end %>
             <tr class="<%= row_class %>">
-                <td class="border px-4 py-2"><%= ticket.subject %></td>
+              <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d- %b -%y") %></td>
                 <td class="border px-4 py-2"><%= ticket.unique_id %></td>
+              <td class="border px-4 py-2"><%= ticket.project.title %></td>
+              <td class="border px-4 py-2"><%= ticket.priority %></td>
+              <td class="border px-4 py-2"><%= ticket.subject %></td>
                 <td class="border px-4 py-2"><%= ticket.issue %></td>
                 <td class="border px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-                <td class="border px-4 py-2"><%= ticket.project.title %></td>
-                <td class="border px-4 py-2"><%= ticket.priority %></td>
-                <td class="border px-4 py-2"><% ticket.users.each do |user| %>
+
+                <td class="border px-4 py-2">
+                  <% ticket.users.each do |user| %>
                     <% if user.name.present? %>
                         <%= user.name %>
                     <% end %>
                 <% end %></td>
                 <td class="border px-4 py-2"><%= ticket.user.name %></td>
-                <td class="border px-4 py-2"><%= ticket.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
                 <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(800) %></td>
             </tr>
         <% end %>
@@ -68,3 +102,4 @@
             cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date]),
             class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
 <% end %>
+
