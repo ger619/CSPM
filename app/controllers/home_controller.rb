@@ -56,11 +56,10 @@ class HomeController < ApplicationController
 
     @status_per_project = current_user.projects.joins(tickets: :statuses).group('projects.title', 'statuses.name').count
 
-    # Total tickets per project
     @total_tickets_per_project = current_user.projects
-      .joins(:tickets)
-      .group('projects.title')
-      .count('tickets.id')
+                                             .joins(:tickets)
+                                             .group('projects.title')
+                                             .count('tickets.id')
 
     # Calculate the total number of tickets for all projects
     total_tickets = @total_tickets_per_project.values.sum
