@@ -2,7 +2,7 @@
   <div class="grid md:grid-cols-3 gap-4 mb-4">
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
       <p class="text-sm">
-        Number of Projects Assigned
+        Number of Service Desks
       </p>
       <span class="text-xl font-bold">
           <%= current_user.projects.distinct.pluck(:id).count %>
@@ -10,7 +10,7 @@
     </div>
     <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
       <p class="text-sm ">
-        Number of Tickets Assigned
+        Number of Tickets
       </p>
       <span class="text-xl font-bold">
           <%= current_user.tickets.distinct.pluck(:id).count %>
@@ -18,7 +18,7 @@
     </div>
     <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
       <p class="text-sm">
-        Number of Comments Created
+        Number of Comments
       </p>
       <span class="text-xl font-bold">
         <%= current_user.issues.distinct.pluck(:id).count %>
