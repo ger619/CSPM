@@ -56,7 +56,6 @@ class HomeController < ApplicationController
 
     @status_per_project = current_user.projects.joins(tickets: :statuses).group('projects.title', 'statuses.name').count
 
-    # Total tickets per project
     @total_tickets_per_project = current_user.projects
       .joins(:tickets)
       .group('projects.title')

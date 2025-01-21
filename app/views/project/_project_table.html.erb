@@ -72,10 +72,15 @@
       <% end %>
     </tbody>
   </table>
+  <% if (current_user.has_role?(:'project manager') || current_user.has_role?(:agent)) && current_user.projects.count > 0 %>
+    <% @assigned_projects_count = current_user.projects.count %>
+    <p class="p-2">Number of Projects: <%= @assigned_projects_count %></p>
+  <% end %>
 </div>
 
+
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('turbo:load', function() {
     const button = document.getElementById('button');
     button.addEventListener('click', function() {
       button.style.backgroundColor = '#1F6DE0';
