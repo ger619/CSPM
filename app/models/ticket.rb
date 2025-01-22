@@ -133,7 +133,7 @@ class Ticket < ApplicationRecord
 
   # Assign status to new ticket
   def set_default_status
-    status = Status.find_by(name: 'New')
+    status = Status.find_by(name: 'Assigned')
     statuses << status if status
   end
 

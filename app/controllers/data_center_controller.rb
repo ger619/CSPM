@@ -12,7 +12,7 @@ class DataCenterController < ApplicationController
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_date.end_of_day)
                  else
-                   Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_date.end_of_day,
+                   Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_of_day,
                                                         projects: { id: current_user.projects.ids })
                  end
 
