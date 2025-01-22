@@ -22,13 +22,15 @@ class ProjectController < ApplicationController
   def show
     if current_user.has_role?(:admin) or @project.users.include?(current_user) or current_user.has_role?(:observer) or current_user.has_role?(:agent)
       @ticket = if params[:query].present?
-                  @project.tickets.left_joins(:rich_text_content, :statuses)
-                    .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?',
-                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%")
-
+                  @project.tickets.left_joins(:rich_text_content, :statuses, :users)
+                    .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ?
+                    OR unique_id ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?',
+                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
+                           "%#{params[:query]}%", "%#{params[:query]}%")
                 else
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end
+
       @per_page = 10
       @page = (params[:page] || 1).to_i
       @total_pages = (@ticket.count / @per_page.to_f).ceil
