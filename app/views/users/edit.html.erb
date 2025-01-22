@@ -6,13 +6,39 @@
           <%= @user.errors[:roles].join('') %>
         </p>
         <% if current_user.has_role? :admin %>
-          <div class="flex">
+          <div class="flex-row mx-auto">
+            <div class="mb-5">
+              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                First Name
+              </label>
+              <% if current_user.has_role?(:admin) %>
+                <%= f.text_field :first_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Jay', required: true %>
+              <% else %>
+                <%= f.text_field :first_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#B2B8C2] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Jay', readonly: true %>
+              <% end %>
+            </div>
+            <div class="mb-5">
+              <label for="last name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Last Name
+              </label>
+              <% if current_user.has_role?(:admin) %>
+                <%= f.text_field :last_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Strong', required: true %>
+              <% else %>
+                <%= f.text_field :last_name, autofocus: true, autocomplete: 'name', class: "h-12 border border-[#B2B8C2] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Strong', readonly: true %>
+              <% end %>
+            </div>
+
           <div class="capitalize pb-4">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Edit Roles
+            </label>
             <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator]), :id, :name, class: "gap-4" %>
           </div>
 
-          <div class="capitalize pb-4 flex ml-4 gap-2">
-            <h1 class="font-bold">Edit Client</h1>
+          <div class="capitalize pb-4 gap-2">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Edit Client
+            </label>
             <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name, selected: @user.client_id), { prompt: 'Select Client', include_blank: true }, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-1/2" %>          </div>
           </div>
         <% elsif current_user.has_role?('project manager') %>
