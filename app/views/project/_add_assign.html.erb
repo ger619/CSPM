@@ -1,13 +1,33 @@
 <!-- app/views/project/_add_assign.html.erb -->
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-  <div class="grid grid-cols-2 mt-2 gap-2">
+  <div class="grid grid-cols-3 mt-2 gap-2">
     <div class="col-span-1 text-xs">
       <%= form_with url: assign_user_project_path(@project), local: true do %>
-        <%= label_tag :user_id, "SELECT USER" %>
+        <%= label_tag :user_id, "Clients" %>
         <div class="flex flex-wrap gap-2">
           <div>
             <%= select_tag :user_id, options_from_collection_for_select(
               @project.users_with_same_client
+                      .where.not(id: @project.users.pluck(:id))
+                      .distinct,
+              :id, :name),
+                           class: "h-12 max-w-[120px] border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-1",
+                           required: true
+            %>
+          </div>
+          <div class=" col-span-1">
+            <%= submit_tag "ADD USER", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-span-1 text-xs">
+      <%= form_with url: assign_user_project_path(@project), local: true do %>
+        <%= label_tag :user_id, "Craft silicon users" %>
+        <div class="flex flex-wrap gap-2">
+          <div>
+            <%= select_tag :user_id, options_from_collection_for_select(
+              @project.craftsilicon_users
                       .where.not(id: @project.users.pluck(:id))
                       .distinct,
               :id, :name),
