@@ -5,4 +5,8 @@ class Client < ApplicationRecord
   # has_many :data_centers, dependent: :nullify
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 50 }
+
+  def users_count
+    User.where(client_id: id).count
+  end
 end

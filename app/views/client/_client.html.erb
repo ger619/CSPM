@@ -7,14 +7,14 @@
         Name of the Client
       </th>
       <th scope="col" class="px-6 py-3">
+        No of Users Per Client
+      </th>
+      <th scope="col" class="px-6 py-3">
         Email Address
       </th>
 
       <th scope="col" class="px-6 py-3">
         Phone Number
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Address
       </th>
       <th scope="col" class="px-6 py-3">
         Name of The Contact Person
@@ -43,6 +43,9 @@
         <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap ">
           <%= client.name   %>
         </th>
+        <td class="px-6 py-4 truncate w-64">
+          <%= client.users_count %>
+        </td>
 
         <td class="px-6 py-4 truncate w-64">
           <%= client.email %>
@@ -50,9 +53,6 @@
 
         <td class="px-6 py-4 truncate w-64">
           <%= client.phone %>
-        </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.address %>
         </td>
         <td class="px-6 py-4 truncate w-64">
           <%= client.client_contact_person %>
