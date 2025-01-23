@@ -9,4 +9,8 @@ class Client < ApplicationRecord
   def users_count
     User.where(client_id: id).count
   end
+
+  def projects_count
+    Project.where(client_id: id).count
+  end
 end
