@@ -3,10 +3,10 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
   static targets = ['content']
 
-  static values = { limit: { type: Number, default: 1200 } }
+  static values = { limit: { type: Number, default: 3000 } }
 
   connect() {
-    this.limitValue = Math.min(this.limitValue, 1200); // Ensure limit does not exceed 1200
+    this.limitValue = Math.min(this.limitValue, 3000); // Ensure limit does not exceed 1200
     this.updateCounter();
     this.contentTarget.addEventListener('input', (event) => this.enforceLimit(event));
   }
