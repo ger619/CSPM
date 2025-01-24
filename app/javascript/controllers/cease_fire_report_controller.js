@@ -1,4 +1,4 @@
-import { Controller } from '@hotwired/stimulus'
+import { Controller } from '@hotwired/stimulus';
 
 // Connects to data-controller="cease-fire-report"
 export default class extends Controller {
@@ -55,8 +55,9 @@ export default class extends Controller {
     this.updateButtonText(button, select);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   updateButtonText(button, select) {
-    const selectedOptions = Array.from(select.selectedOptions).map(option => option.text).join(', ');
+    const selectedOptions = Array.from(select.selectedOptions).map((option) => option.text).join(', ');
     button.textContent = selectedOptions || 'Select Clients';
   }
 }
