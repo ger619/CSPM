@@ -67,8 +67,8 @@ class DataCenterController < ApplicationController
       end_date = Date.parse(params[:end_date])
 
       @users = User.includes(tickets: :project)
-                   .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
-                   .where(id: params[:user_id])
+        .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+        .where(id: params[:user_id])
 
       respond_to do |format|
         format.html # Default view
@@ -130,7 +130,8 @@ class DataCenterController < ApplicationController
   # Generate user report in CSV format
   def generate_user_csv(users)
     CSV.generate(headers: true) do |csv|
-      csv << ['User Name', 'Project Name', 'Ticket Subject', 'Ticket Status', 'SLA Status', 'SLA Target Response Deadline', 'SLA Resolution Deadline', 'Created At']
+      csv << ['User Name', 'Project Name', 'Ticket Subject', 'Ticket Status', 'SLA Status', 'SLA Target Response Deadline',
+              'SLA Resolution Deadline', 'Created At']
       users.each do |user|
         user.tickets.each do |ticket|
           sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
