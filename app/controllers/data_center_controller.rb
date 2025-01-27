@@ -20,7 +20,9 @@ class DataCenterController < ApplicationController
 
       respond_to do |format|
         format.html # Default view
-        format.csv { send_data generate_csv(@tickets), filename: "cease_fire_report_#{Date.today}.csv" }
+        client_name = Client.find(params[:client_id]).name if params[:client_id].present?
+        filename = "cease_fire_report_#{client_name}_#{Date.today}.csv"
+        format.csv { send_data generate_csv(@tickets), filename: filename }
       end
     else
       @tickets = Ticket.none
@@ -53,6 +55,27 @@ class DataCenterController < ApplicationController
       @tickets = Ticket.none
       flash[:alert] = 'Please provide a valid date range.'
       render :breach_report
+    end
+  end
+
+  # User activity report for the admin
+  def user_activity_report
+    authorize! :generate, :report # Check if the user can generate reports
+
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+
+      @users = User.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+
+      respond_to do |format|
+        format.html # Default view
+        format.csv { send_data generate_user_activity_csv(@users), filename: "user_activity_report_#{Date.today}.csv" }
+      end
+    else
+      @users = User.none
+      flash[:alert] = 'Please provide a valid date range.'
+      render :user_activity_report
     end
   end
 
