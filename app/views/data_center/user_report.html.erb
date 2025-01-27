@@ -21,6 +21,11 @@
   <% end %>
 </div>
 
+<%= pie_chart [
+                ["Met Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.present? } }],
+                ["Missed Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
+              ] %>
+
 <% if @users.any? %>
   <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <table id="user_report" class="table-auto w-full">
@@ -55,3 +60,4 @@
               user_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], user_id: params[:user_id]),
               class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
 <% end %>
+
