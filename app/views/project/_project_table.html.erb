@@ -2,6 +2,7 @@
   <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
     <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
       <tr>
+        <th scope="col" class="px-6 py-3">Logo</th>
         <th scope="col" class="px-6 py-3">Name of Project</th>
         <th scope="col" class="px-6 py-3">Project Description</th>
         <th scope="col" class="px-6 py-3">Number of Tickets</th>
@@ -24,6 +25,17 @@
         <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
 
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+              <td class="px-6 py-4 font-medium text-left">
+                <% if project.image.present? %>
+                  <%= link_to project_path(project.id) do %>
+                    <%= image_tag(project.image, class: 'w-16') %>
+                  <% end %>
+                <% else %>
+                  <%= link_to project_path(project.id) do %>
+                    <%= image_tag 'default.png', class: 'w-16' %>
+                  <% end %>
+                <% end %>
+              </td>
               <td class="px-6 py-4 font-medium text-left">
                 <%= link_to project.title.truncate_words(3), project_path(project.id) %>
               </td>
