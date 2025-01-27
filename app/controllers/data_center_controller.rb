@@ -39,7 +39,7 @@ class DataCenterController < ApplicationController
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_date.end_of_day)
                  else
-                   Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_of_day,
+                   Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_date.end_of_day,
                                                         projects: { id: current_user.projects.ids })
                  end
 
@@ -47,7 +47,7 @@ class DataCenterController < ApplicationController
 
       respond_to do |format|
         format.html # Default view
-        format.csv { send_data generate_csv(@tickets), filename: "breach_report_#{Date.today}.csv" }
+        format.csv { send_data generate_breach_details_csv(@tickets), filename: "breach_details_report_#{Date.today}.csv" }
       end
     else
       @tickets = Ticket.none
@@ -73,6 +73,30 @@ class DataCenterController < ApplicationController
           ticket.user.name,
           ticket.created_at,
           ticket.content.to_plain_text.truncate(800)
+        ]
+      end
+    end
+  end
+
+  def generate_breach_details_csv(tickets)
+    CSV.generate(headers: true) do |csv|
+      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'SLA Status',
+              'Target Response Deadline', 'Resolution Deadline']
+      tickets.each do |ticket|
+        sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
+        csv << [
+          ticket.subject,
+          ticket.unique_id,
+          ticket.issue,
+          ticket.statuses.first&.name || 'N/A',
+          ticket.project.title,
+          ticket.priority,
+          ticket.users.map(&:name).select(&:present?).join(', '),
+          ticket.user.name,
+          ticket.created_at,
+          sla_ticket&.sla_status || 'N/A',
+          sla_ticket&.sla_target_response_deadline.presence || 'not breached',
+          sla_ticket&.sla_resolution_deadline.presence || 'not breached'
         ]
       end
     end
