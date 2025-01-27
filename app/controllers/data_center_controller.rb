@@ -59,23 +59,25 @@ class DataCenterController < ApplicationController
   end
 
   # User activity report for the admin
-  def user_activity_report
+  def user_report
     authorize! :generate, :report # Check if the user can generate reports
 
     if params[:start_date].present? && params[:end_date].present?
       start_date = Date.parse(params[:start_date])
       end_date = Date.parse(params[:end_date])
 
-      @users = User.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+      @users = User.includes(tickets: :project)
+                   .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+                   .where(id: params[:user_id])
 
       respond_to do |format|
         format.html # Default view
-        format.csv { send_data generate_user_activity_csv(@users), filename: "user_activity_report_#{Date.today}.csv" }
+        format.csv { send_data generate_user_csv(@users), filename: "user_report_#{Date.today}.csv" }
       end
     else
       @users = User.none
       flash[:alert] = 'Please provide a valid date range.'
-      render :user_activity_report
+      render :user_report
     end
   end
 
@@ -121,6 +123,26 @@ class DataCenterController < ApplicationController
           sla_ticket&.sla_target_response_deadline.presence || 'not breached',
           sla_ticket&.sla_resolution_deadline.presence || 'not breached'
         ]
+      end
+    end
+  end
+
+  # Generate user report in CSV format
+  def generate_user_csv(users)
+    CSV.generate(headers: true) do |csv|
+      csv << ['User Name', 'Project Name', 'Ticket Subject', 'Ticket Status', 'SLA Status', 'SLA Target Response Deadline', 'SLA Resolution Deadline', 'Created At']
+      users.each do |user|
+        user.tickets.each do |ticket|
+          sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
+          csv << [
+            user.name,
+            ticket.project.title,
+            ticket.subject,
+            ticket.statuses.first&.name || 'N/A',
+            sla_ticket&.sla_target_response_deadline || 'N/A',
+            ticket.created_at
+          ]
+        end
       end
     end
   end
