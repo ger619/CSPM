@@ -3,6 +3,7 @@ class Project < ApplicationRecord
   has_and_belongs_to_many :softwares
   has_and_belongs_to_many :groupwares
   belongs_to :client, optional: true
+  has_one_attached :image
 
   has_many :tickets, dependent: :destroy
   has_many :issues, foreign_key: :project_id, class_name: 'Issue', dependent: :destroy

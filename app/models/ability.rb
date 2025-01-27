@@ -42,6 +42,7 @@ class Ability
       can :read, Product
       can :read, Board
       can :read, Task
+      can :generate, :report
     else
       can :read, Project
       can :read, Ticket
