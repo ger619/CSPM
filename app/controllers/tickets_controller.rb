@@ -197,13 +197,16 @@ class TicketsController < ApplicationController
         sla.sla_status = @ticket.sla_status
       end
 
+      # Check if sla_target_response_deadline is blank and set to 'not breached' if it is
+      sla_target_response_deadline = sla_ticket.sla_target_response_deadline.presence || 'Not Breached'
+
       # Log the details of the SlaTicket including the SLA status
       Rails.logger.info("SlaTicket details: #{sla_ticket.attributes}, SLA Status: #{sla_ticket.sla_status}")
 
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
-      log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket, with Status: #{sla_ticket.sla_status}")
-
+      log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket, with Status:
+          #{sla_ticket.sla_status} and Target Response Deadline #{sla_target_response_deadline}")
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end

@@ -31,6 +31,7 @@ class Ticket < ApplicationRecord
   has_many :statuses, through: :add_statuses, dependent: :destroy
 
   has_many :sla_tickets, dependent: :destroy
+  has_one :sla_ticket, dependent: :destroy
 
   after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline, :ticket_unique_id
   def set_initial_response_time
