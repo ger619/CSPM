@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   get 'cease_fire_report', to: 'data_center#cease_fire_report', as: 'cease_fire_report'
+  get 'breach_report', to: 'data_center#breach_report', as: 'breach_report'
 
   root "home#index"
   get "home/index"
