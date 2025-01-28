@@ -16,7 +16,7 @@ class Issue < ApplicationRecord
   private
 
   def content_length_within_limit
-    return unless content.to_plain_text.length > 800
+    return unless content.to_plain_text.length > 3000
 
     errors.add(:content, 'must be less than or equal to 800 characters')
   end
