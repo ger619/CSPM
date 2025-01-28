@@ -4,7 +4,7 @@
     <div class="col-span-1 text-xs">
       <%= form_with url: add_task_product_board_task_path(@product, @board, @task), local: true do %>
         <%= label_tag :user_id, "SELECT USER" %>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex gap-2">
           <div>
             <% available_users = User.with_agent_role.where.not(id: @task.users.pluck(:id)).where(id: @product.users.pluck(:id)).distinct %>
             <% if available_users %>

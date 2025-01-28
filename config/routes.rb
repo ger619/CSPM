@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     end
     resources :boards do
       resources :tasks do
+        resources :bug
         member do
           post :add_task
           delete :remove_task
