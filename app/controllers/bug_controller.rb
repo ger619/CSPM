@@ -14,6 +14,7 @@ class BugController < ApplicationController
   end
 
   def new
+    @task = @board.tasks.find(params[:task_id])
     @bug = @task.bugs.new
   end
 
@@ -36,6 +37,6 @@ class BugController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:status, :task_id, :user_id)
+    params.require(:bug).permit(:issue, :priority, :product_id, :board_id, :task_id, :user_id)
   end
 end

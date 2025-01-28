@@ -75,11 +75,11 @@
         </li>
     </ul>
   <!-- Profile Dropdown Items -->
-  <ul id="dropdownItem" class="absolute z-50 top-2 mt-8 hidden bg-white shadow-md rounded-md w-40 mt-4 space-y-2">
+  <ul id="dropdownItem" class="absolute z-50 top-2 mt-8 hidden bg-white dark:bg-gray-800 shadow-md rounded-md w-40 mt-4 space-y-2">
             <%= link_to edit_user_registration_path  do %>
               <li>
                 <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <span class="flex-1 ms-3 whitespace-nowrap">Edit Profile</span>
+                  <span class="flex-1 ms-3 whitespace-nowrap dark:">Edit Profile</span>
                 </div>
               </li>
             <% end %>
@@ -92,9 +92,9 @@
                 </div>
               </li>
             <% end %>
-          </ul>    
+          </ul>
   </div>
-  
+
 </div>
 <% end %>
 
@@ -103,7 +103,7 @@
     const dropdown = document.querySelector('#dropdownNotification');
     dropdown.classList.toggle('hidden');
   });
-  
+
   // Toggle the profile dropdown
   document.getElementById("dropdownProfile").addEventListener("click", function() {
       const dropdownMenu = document.getElementById("dropdownItem");
