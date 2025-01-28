@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_11_150910) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_28_122600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -99,6 +99,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_11_150910) do
     t.index ["user_id"], name: "index_boards_on_user_id"
   end
 
+  create_table "bugs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "issue"
+    t.string "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "task_id", null: false
+    t.index ["task_id"], name: "index_bugs_on_task_id"
+  end
+
   create_table "clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -124,7 +133,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_11_150910) do
     t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
-    t.integer "task_id"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -435,6 +443,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_11_150910) do
   add_foreign_key "assignees", "users"
   add_foreign_key "boards", "products"
   add_foreign_key "boards", "users"
+  add_foreign_key "bugs", "tasks"
   add_foreign_key "clients", "users"
   add_foreign_key "comments", "projects"
   add_foreign_key "comments", "tickets"

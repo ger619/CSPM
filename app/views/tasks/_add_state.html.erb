@@ -4,7 +4,7 @@
       <div class="col-span-1 text-xs">
         <%= form_with url: add_state_product_board_task_path(@product, @board, @task), local: true do %>
           <%= label_tag :status, "SELECT STATE" %>
-          <div class="flex flex-wrap gap-2">
+          <div class="flex">
             <div>
               <%= select_tag :status, options_for_select(@product.boards.map { |board| [board.status, board.id] }), class: "h-12 mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", required: true %>
             </div>
