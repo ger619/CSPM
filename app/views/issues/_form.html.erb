@@ -3,11 +3,11 @@
   <h3 class="pb-4 font-bold"> Message *</h3>
 
   <div class="relative z-0 w-full mb-6 group">
-    <div data-controller="text-limit" data-text-limit-limit-value="1200">
-      <p id="char-count">0/1200</p>
+    <div data-controller="text-limit" data-text-limit-limit-value="3000">
+      <p id="char-count">0/3000</p>
 
       <%= f.rich_text_area :content, id: "content",
-                           data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
+                           data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') || current_user.has_role?(:client) },
                            class: "min-h-[300px] #{'border-red-500' if @issue&.errors[:content].any?}" %>
 
       <% if @issue&.errors[:content].any? %>
