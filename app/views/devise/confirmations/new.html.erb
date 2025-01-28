@@ -15,7 +15,7 @@
           </p>
           <div class="field">
             <%= f.label :email, class: "block mb-2 text-sm font-medium" %><br />
-            <%= f.email_field :email, autofocus: true, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'jay@craftsilicon.com', required: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+            <%= f.email_field :email, autofocus: true, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", placeholder: 'jay@craftsilicon.com', required: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
           </div>
           <div class="actions mt-2">
             <%= f.submit "Resend Instructions", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full' %>

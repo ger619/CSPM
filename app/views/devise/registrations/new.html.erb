@@ -12,18 +12,18 @@
         <%= render "devise/shared/error_messages", resource: resource %>
         <div>
           <label for="email" class="block mb-1 text-sm font-medium">Your email</label>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", required: true %>
         </div>
         <div class="field">
           <%= f.label :password, class: "block mb-1 text-sm font-medium" %>
           <% if @minimum_password_length %>
           <em>(<%= @minimum_password_length %> characters minimum)</em>
           <% end %><br />
-          <%= f.password_field :password, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+          <%= f.password_field :password, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", required: true %>
         </div>
         <div class="field">
           <%= f.label :password_confirmation, class: "block mb-1 text-sm font-medium " %><br />
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", required: true %>
         </div>
         <div class="actions">
           <%= f.submit "SIGN UP", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full' %>

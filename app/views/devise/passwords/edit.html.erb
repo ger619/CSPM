@@ -16,12 +16,12 @@
             <% if @minimum_password_length %>
               <em>(<%= @minimum_password_length %> characters minimum)</em><br />
             <% end %>
-            <%= f.password_field :password, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+            <%= f.password_field :password, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", required: true %>
           </div>
 
           <div class="field">
             <%= f.label :password_confirmation, "Confirm new password" %><br />
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", required: true %>
           </div>
 
           <div class="actions">

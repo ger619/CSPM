@@ -17,7 +17,7 @@
         <%= f.label :software_id, 'Product Categories *', class: "capitalize block mb-1 text-sm font-medium" %>
         <%= f.collection_select :software_id, @project.softwares, :id, :name,
                                 { prompt: "Select Product" },
-                                { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5",
+                                { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
                                   id: "software-select", data: { action: "change->form#updateGroupwareOptions" } }
         %>
       </div>
@@ -30,7 +30,7 @@
                                 :id,
                                 :name,
                                 { prompt: "Select The Product" },
-                                { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5",
+                                { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
                                   id: "groupware-select",
                                   required: true }
         %>

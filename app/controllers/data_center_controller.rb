@@ -45,6 +45,8 @@ class DataCenterController < ApplicationController
                  end
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
+      @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+      @tickets = @tickets.where(severity: params[:severity]) if params[:severity].present?
 
       respond_to do |format|
         format.html # Default view
