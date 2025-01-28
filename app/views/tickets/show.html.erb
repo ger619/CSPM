@@ -20,6 +20,8 @@
     </div>
     <% if @ticket.ticket_image.present? %>
       <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
+    <% elsif @project.image.present? %>
+      <%= image_tag @project.image, class: 'w-16' %>
     <% else %>
       <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
     <% end %>
