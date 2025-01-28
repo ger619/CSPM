@@ -16,12 +16,6 @@
         <%= @project.title %>
       </h1>
       <p class="capitalize"><%= @project.description %></p>
-      <div>
-        <%= render 'project/add_assign' %>
-      </div>
-      <div>
-        <%= render 'project/add_teams' %>
-      </div>
     </div>
 
     <div class="font-semibold p-2 justify-between rounded col-span-3 border-r-2 flex gap-4">
@@ -77,14 +71,17 @@
         <h1>SLA on Target Response <span class="font-light"><%= @breached_target_tickets_count %></span></h1>
         <h1>SLA on Resolution Deadline <span class="font-light"><%= @breached_resolution_count %></span></h1>
 
-
-
-
       </div>
     </div>
 
     <div class="col-span-2">
       <%= render 'assign_people' %>
+      <div>
+        <%= render 'project/add_assign' %>
+      </div>
+      <div>
+        <%= render 'project/add_teams' %>
+      </div>
     </div>
   </div>
   <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px]">
