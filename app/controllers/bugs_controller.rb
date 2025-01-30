@@ -33,6 +33,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :product_id, :board_id, :task_id)
+    params.require(:bug).permit(:issue, :priority, :product_id, :board_id, :task_id)
   end
 end
