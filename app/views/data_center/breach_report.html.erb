@@ -4,19 +4,20 @@
     <div class="flex justify-center gap-2">
       <div class="flex gap-2">
         <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :start_date, value: params[:start_date], class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+        <%= f.date_field :start_date, value: params[:start_date], class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
       </div>
       <div class="flex gap-2">
         <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :end_date, value: params[:end_date], class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+        <%= f.date_field :end_date, value: params[:end_date], class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
       </div>
       <div class="flex gap-2">
         <%= f.label :status, "Status", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.select :status,
                      options_from_collection_for_select(Status.all, :name, :name, params[:status]),
                      { include_blank: 'All Statuses' },
-                     class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2" %>
+                     class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2 dark:text-black" %>
       </div>
+
       <div class="flex gap-2">
         <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.select :client_id,
@@ -29,7 +30,15 @@
                        :id, :name, params[:client_id]
                      ),
                      { include_blank: 'All Clients' },
-                     class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2" %>
+                     class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2 dark:text-black" %>
+      </div>
+
+      <div class="flex gap-2">
+        <%= f.label :priority, "Severity", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.select :priority,
+                     options_for_select(['SEVERITY 1', 'SEVERITY 2', 'SEVERITY 3', 'SEVERITY 4'], params[:priority]),
+                     { include_blank: 'All Severities' },
+                     class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2 dark:text-black" %>
       </div>
 
       <div>
@@ -46,7 +55,7 @@
       <tr>
         <th class="px-4 py-2">Created</th>
         <th class="px-4 py-2">Issue Key</th>
-        <th class="px-4 py-2">Project Name</th>
+        <th class="px-4 py-2">Support Desk</th>
         <th class="px-4 py-2">Severity</th>
         <th class="px-4 py-2">Summary</th>
         <th class="px-4 py-2">Issue Type</th>
@@ -79,6 +88,6 @@
     </table>
   </div>
   <%= link_to "Download CSV",
-              breach_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
+              breach_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status], severity: params[:severity]),
               class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
 <% end %>

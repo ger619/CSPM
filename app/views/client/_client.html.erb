@@ -13,6 +13,9 @@
         No of Projects Per Client
       </th>
       <th scope="col" class="px-6 py-3">
+        No of Tickets Per Client
+      </th>
+      <th scope="col" class="px-6 py-3">
         Email Address
       </th>
 
@@ -51,6 +54,9 @@
         </td>
         <td class="px-6 py-4 truncate w-64">
           <%= client.projects_count %>
+        </td>
+        <td class="px-6 py-4 truncate w-64">
+          <%= client.projects.sum { |project| project.tickets.count } %>
         </td>
 
         <td class="px-6 py-4 truncate w-64">

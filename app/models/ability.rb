@@ -8,7 +8,7 @@ class Ability
       can :generate, :report
     elsif user.has_role? :observer
       can :read, :all
-      can :generate, :report
+      can %i[generate report cease_fire_report breach_report user_report], :report
 
     elsif user.has_role?('project manager')
       can %i[read assign_user unassign_user], Project

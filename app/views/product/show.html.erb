@@ -14,9 +14,11 @@
     <% unless current_user.has_role?(:client) %>
     <div class="mt-2">
       <% new_board = Board.find_by(status: 'TO DO') %>
-      <% if new_board %>
+      <% if new_board && @boards.present? && @tasks.present? %>
         <% @boards.first(1).each do |board| %>
-          <%= link_to 'Add Task', new_product_board_task_path(@product.id, board.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+          <% @tasks.first(1).each do |task| %>
+            <%= link_to 'Add Task', new_product_board_task_bug_path(@product.id, board.id, task.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
