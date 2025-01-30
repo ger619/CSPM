@@ -4,6 +4,7 @@ class Product < ApplicationRecord
   belongs_to :client
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
+  has_many :bugs, dependent: :destroy
 
   has_rich_text :content
   has_many_attached :images

@@ -29,6 +29,7 @@ class ProductController < ApplicationController
         boards = boards.joins(:tasks).where('tasks.name ILIKE ?', "%#{params[:query]}%") if params[:query].present?
         boards
       end
+      @bugs = Bug.joins(task: :board).where(boards: { product_id: @product.id })
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
