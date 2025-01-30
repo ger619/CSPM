@@ -2,15 +2,15 @@
 <div class="p-2 w-full">
   <%= form_with url: breach_report_path, method: :get, local: true do |f| %>
     <div class="flex justify-center gap-2">
-      <div class="flex gap-2">
+      <div class="flex flex-col gap-2">
         <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.date_field :start_date, value: params[:start_date], class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
       </div>
-      <div class="flex gap-2">
+      <div class="flex flex-col gap-2">
         <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.date_field :end_date, value: params[:end_date], class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
       </div>
-      <div class="flex gap-2">
+      <div class="flex flex-col gap-2">
         <%= f.label :status, "Status", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.select :status,
                      options_from_collection_for_select(Status.all, :name, :name, params[:status]),
@@ -18,7 +18,7 @@
                      class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2 dark:text-black" %>
       </div>
 
-      <div class="flex gap-2">
+      <div class="flex flex-col gap-2">
         <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.select :client_id,
                      options_from_collection_for_select(
@@ -33,7 +33,7 @@
                      class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2 dark:text-black" %>
       </div>
 
-      <div class="flex gap-2">
+      <div class="flex flex-col gap-2">
         <%= f.label :priority, "Severity", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.select :priority,
                      options_for_select(['SEVERITY 1', 'SEVERITY 2', 'SEVERITY 3', 'SEVERITY 4'], params[:priority]),
@@ -41,8 +41,8 @@
                      class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg mr-2 dark:text-black" %>
       </div>
 
-      <div>
-        <%= f.submit "Generate Report", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <div class="gap-2 pt-10">
+        <%= f.submit "Generate Report", class: 'h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
       </div>
     </div>
   <% end %>
