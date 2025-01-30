@@ -1,15 +1,18 @@
-<div class="grid grid-cols-2 gap-2 font-bold">
-  <p><%= @bug.issue %></p>
-  <p><%= @bug.priority %></p>
+<div class="grid grid-cols-3 gap-2 font-bold">
+  <div class="col-span-2">
+    <% if @bug.video.attached? %>
+      <video width="854" height="480" controls>
+        <source src="<%= url_for(@bug.video) %>" type="<%= @bug.video.content_type %>">
+        Your browser does not support the video tag.
+      </video>
+    <% end %>
+  </div>
+  <div class="col-span-1 justify-end">
+    <p><%= @bug.issue %></p>
+    <p><%= @bug.priority %></p>
+    <p><%= @bug.content %></p>
+    <%= render 'bugs/add_user_remove' %>
+  </div>
 </div>
-<div class="flex justify-center">
-  <% if @bug.video.attached? %>
-    <video width="854" height="480" controls>
-      <source src="<%= url_for(@bug.video) %>" type="<%= @bug.video.content_type %>">
-      Your browser does not support the video tag.
-    </video>
-  <% end %>
-</div>
-<div>
-  <p><%= @bug.content %></p>
-</div>
+
+

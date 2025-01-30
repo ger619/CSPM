@@ -42,6 +42,26 @@ class BugsController < ApplicationController
     redirect_to product_board_task_path(@product, @board, @task), notice: 'Bug was successfully deleted.'
   end
 
+  def add_bug
+    @task = Task.find(params[:task_id])
+    @bug = @task.bugs.find(params[:id])
+    user = User.find(params[:user_id])
+
+    if @bug.users.include?(user)
+      redirect_to product_board_task_bug_path(@product, @board, @task, @bug), notice: 'User has already been assigned.'
+    else
+      @bug.user = current_user
+      @bug.users.clear
+      @bug.users << user
+
+      # Send email to the newly assigned user
+      assigned_user = user # Assuming the first user is the assigned user
+      UserMailer.assignment_email(user, @bug, current_user, assigned_user).deliver_later
+
+      redirect_to product_board_task_bug_path(@product, @board, @task, @bug), notice: 'User was successfully assigned.'
+    end
+  end
+
   private
 
   def set_product

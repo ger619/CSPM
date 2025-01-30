@@ -57,6 +57,9 @@ class User < ApplicationRecord
   has_many :states
   has_many :tasks, through: :states
 
+  has_many :add_bugs
+  has_many :bugs, through: :add_bugs
+
   has_many :softwares
   belongs_to :client, optional: true
   has_and_belongs_to_many :teams
