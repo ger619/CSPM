@@ -2,6 +2,7 @@ class BugsController < ApplicationController
   before_action :set_product
   before_action :set_board
   before_action :set_task
+  before_action :set_bug, only: %i[show edit update destroy]
 
   def new
     @bug = @task.bugs.build
@@ -18,6 +19,23 @@ class BugsController < ApplicationController
     end
   end
 
+  def show; end
+
+  def edit; end
+
+  def update
+    if @bug.update(bug_params)
+      redirect_to product_board_task_path(@product, @board, @task), notice: 'Bug was successfully updated.'
+    else
+      render :edit, alert: 'Bug was unsuccessfully updated.'
+    end
+  end
+
+  def destroy
+    @bug.destroy
+    redirect_to product_board_task_path(@product, @board, @task), notice: 'Bug was successfully deleted.'
+  end
+
   private
 
   def set_product
@@ -32,7 +50,11 @@ class BugsController < ApplicationController
     @task = @board.tasks.find(params[:task_id])
   end
 
+  def set_bug
+    @bug = @task.bugs.find(params[:id])
+  end
+
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :product_id, :board_id, :task_id)
+    params.require(:bug).permit(:issue, :priority, :content, :product_id, :board_id, :task_id)
   end
 end
