@@ -23,6 +23,7 @@ class Ticket < ApplicationRecord
   validate :content_length_within_limit
 
   validates :content, presence: true
+  validates :unique_id, uniqueness: true
 
   has_many :taggings
   has_many :users, through: :taggings, dependent: :destroy
