@@ -19,7 +19,7 @@ class BugsController < ApplicationController
     @bug.board_id = @board.id
 
     if @bug.save
-      redirect_to product_board_task_bug_path(@product, @board, @task, @bug), notice: 'Bug was successfully created.'
+      redirect_to product_board_task_path(@product, @board, @task), notice: 'Bug was successfully created.'
     else
       render :new, alert: 'Bug was unsuccessfully created.'
     end
@@ -31,7 +31,7 @@ class BugsController < ApplicationController
 
   def update
     if @bug.update(bug_params)
-      redirect_to product_board_task_bug_path(@product, @board, @task, @bug), notice: 'Bug was successfully updated.'
+      redirect_to product_board_task_path(@product, @board, @task), notice: 'Bug was successfully updated.'
     else
       render :edit, alert: 'Bug was unsuccessfully updated.'
     end
@@ -61,6 +61,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :product_id, :board_id, :task_id)
+    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, :board_id, :task_id)
   end
 end
