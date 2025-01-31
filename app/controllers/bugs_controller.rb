@@ -54,8 +54,6 @@ class BugsController < ApplicationController
     end
   end
 
-
-
   def unassign_tag
     user = User.find(params[:user_id])
     @ticket.users.delete(user)
