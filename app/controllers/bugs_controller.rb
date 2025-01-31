@@ -1,12 +1,8 @@
 class BugsController < ApplicationController
   before_action :set_product
-  # before_action :set_board
-  # before_action :set_task
   before_action :set_bug, only: %i[show edit update destroy]
 
-  def index
-    @bugs = Bug.joins(task: :board).where(boards: { product_id: @product.id })
-  end
+  def index; end
 
   def new
     @bug = @product.bugs.build
@@ -41,14 +37,12 @@ class BugsController < ApplicationController
   end
 
   def add_bug
-    @task = Task.find(params[:task_id])
-    @bug = @task.bugs.find(params[:id])
-    user = User.find(params[:user_id])
-
-    if @bug.users.include?(user)
-      redirect_to product_path(@product), notice: 'User has already been assigned.'
+    set_bug
+    if @bug.users.include?(User.find(params[:user_id]))
+      redirect_to product_bugs_path(@product), notice: 'User has already been assigned.'
     else
       @bug.user = current_user
+      user = User.find(params[:user_id])
       @bug.users.clear
       @bug.users << user
 
@@ -58,6 +52,15 @@ class BugsController < ApplicationController
 
       redirect_to product_bugs_path(@product, @bug), notice: 'User was successfully assigned.'
     end
+  end
+
+
+
+  def unassign_tag
+    user = User.find(params[:user_id])
+    @ticket.users.delete(user)
+    log_event(@ticket, current_user, 'unassign', "#{user.name} was unassigned from the ticket.")
+    redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
   private
