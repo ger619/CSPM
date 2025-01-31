@@ -23,6 +23,9 @@
       <% end %>
     </div>
     <% end %>
+    <div class="flex flex-row">
+      <%= link_to 'Add Bug', new_product_bug_path(@product ), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+    </div>
   </div>
   <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2 ">
     <h1>Date Created: <span class="font-light p-1"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></span></h1>

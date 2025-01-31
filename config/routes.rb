@@ -47,14 +47,15 @@ Rails.application.routes.draw do
       post :add_user
       delete :remove_user
     end
+    resources :bugs do
+     member do
+       post :add_bug
+       delete :remove_bug
+     end
+    end
     resources :boards do
       resources :tasks do
-        # resources :bugs do
-        #  member do
-        #   post :add_bug
-        #    delete :remove_bug
-        #  end
-        # end
+
         member do
           post :add_task
           delete :remove_task

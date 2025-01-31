@@ -1,10 +1,10 @@
 <div class="grid grid-cols-2 mt-2 gap-2">
   <div class="col-span-1 text-xs">
-    <%= form_with url: add_bug_product_board_task_bug_path(@product, @board, @task, @bug), local: true do %>
+    <%= form_with url: add_bug_product_bug_path(@product, @bug), local: true do %>
       <%= label_tag :user_id, "SELECT USER" %>
       <div class="flex gap-2">
         <div>
-          <% available_users = User.with_agent_role.where.not(id: @task.users.pluck(:id)).where(id: @product.users.pluck(:id)).distinct %>
+          <% available_users = User.with_agent_role.where(id: @product.users.pluck(:id)).distinct %>
           <% if available_users %>
             <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "h-12 mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", required: true %>
           <% end %>

@@ -30,9 +30,7 @@ class ProductController < ApplicationController
         boards
       end
 
-      @bugs = Bug.joins(task: :board).where(boards: { product_id: @product.id }).select(
-        'bugs.*, tasks.id as task_id, boards.id as board_id, boards.product_id as product_id'
-      )
+      @bugs = @product.bugs
 
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
