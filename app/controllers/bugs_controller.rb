@@ -14,15 +14,14 @@ class BugsController < ApplicationController
     # If a software_id is already selected, filter groupwares accordingly
     @groupwares = if @bug.software_id.present?
                     @product.groupwares
-                            .joins(:softwares)
-                            .where(softwares: { id: @ticket.software_id })
-                            .distinct
+                      .joins(:softwares)
+                      .where(softwares: { id: @ticket.software_id })
+                      .distinct
                   else
                     # If no software is selected, load all groupwares for the project
                     @product.groupwares
-                            .distinct
+                      .distinct
                   end
-
   end
 
   def create
@@ -89,6 +88,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id,  software_ids: [], groupware_ids: [])
+    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, software_ids: [], groupware_ids: [])
   end
 end
