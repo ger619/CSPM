@@ -1,16 +1,16 @@
 <%= render 'tickets/ticket_topbar' %>
-<div class="p-2 border-2 border-gray-200 border rounded-lg dark:border-gray-700">
-  <div class="grid grid-cols-7 gap-4 mb-4 h-full">
-    <div class="p-4 items-center justify-center rounded col-span-2 border-r-2">
+<div class="p-2 border-2 border-gray-200 rounded-lg dark:border-gray-700">
+  <div class="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4 h-full">
+    <div class="p-4 items-center justify-center rounded md:col-span-2 border-r-2">
       <% unless notice == "Signed in successfully." %>
         <p class="notice"><%= notice %></p>
       <% end %>
       <p class="alert"><%= alert %></p>
       <h1 class="text-2xl flex gap-2">
         <% if @project.image.present? %>
-            <%= image_tag(@project.image, class: 'w-16') %>
+          <%= image_tag(@project.image, class: 'w-16') %>
         <% else %>
-            <%= image_tag 'default.png', class: 'w-16' %>
+          <%= image_tag 'default.png', class: 'w-16' %>
         <% end %>
 
         <%= @project.title %>
@@ -18,21 +18,21 @@
       <p class="capitalize"><%= @project.description %></p>
     </div>
 
-    <div class="font-semibold p-2 justify-between rounded col-span-3 border-r-2 flex gap-4">
+    <div class="font-semibold p-2 justify-between rounded md:col-span-3 border-r-2 flex flex-col md:flex-row gap-4">
       <div>
         <h1>Project Manager: <span class="font-light"><%= @project.user&.name || 'No Project Manager Assigned' %></span></h1>
         <h1>Product:
           <span class="font-light">
-          <% if @project.softwares.any? %>
+            <% if @project.softwares.any? %>
             <ul>
               <% @project.softwares.each do |software| %>
                 <li><%= software.name %></li>
               <% end %>
             </ul>
-          <% else %>
-            No Product Assigned
-          <% end %>
-        </span>
+            <% else %>
+              No Product Assigned
+            <% end %>
+          </span>
         </h1>
         <h1>Sub-Products</h1>
         <span class="font-light">
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <%= render 'assign_people' %>
       <div>
         <%= render 'project/add_assign' %>
@@ -96,12 +96,11 @@
   </h1>
 </div>
 
-<div class="flex gap-10 mt-5">
+<div class="flex flex-col md:flex-row gap-10 mt-5">
   <!-- Pagination Controls -->
   <div class="pagination">
     <% if @page > 1 %>
       <%= link_to 'Previous', project_path(page: @page - 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-
     <% end %>
     <span>Page <%= @page %> of <%= @total_pages %></span>
     <% if @page < @total_pages %>
