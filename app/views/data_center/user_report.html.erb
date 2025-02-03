@@ -21,14 +21,44 @@
   <% end %>
 </div>
 
-<%= pie_chart [
-                ["Met Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Not Breached" } }],
-                ["Missed Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Breached" } }],
-                ["Pending", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
-              ] %>
+
 
 <% if @users.any? %>
+  <div class=" flex justify-center gap-2">
+    <div class="mb-4 px-4 sm:px-6 lg:px-8 py-8">
+    <h2 class="text-xl font-bold mb-4 text-center">User Breach Report</h2>
+    <%= pie_chart [
+                  ["Met Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Not Breached" } }],
+                  ["Missed Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Breached" } }],
+                  ["Pending", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
+                ] %>
+    </div>
+<div>
   <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+    <h2 class="text-xl font-bold mb-4 text-center">Ticket Status Summary</h2>
+    <div class="grid grid-cols-3">
+      <div class="col-span-2">
+        <%= pie_chart @status_counts, height: "300px", library: { title: { text: "Ticket Status Distribution" } } %>
+      </div>
+
+      <div class="col-span-1">
+        <ul>
+          <% @status_counts.each do |status, count| %>
+            <li><%= status %>: <%= count %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  </div>
+  </div>
+  <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex justify-end">
+      <%= link_to "Download CSV",
+                  user_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], user_id: params[:user_id]),
+                  class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
+    </div>
     <table id="user_report" class="table-auto w-full">
       <thead>
       <tr>
@@ -59,8 +89,6 @@
       </tbody>
     </table>
   </div>
-  <%= link_to "Download CSV",
-              user_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], user_id: params[:user_id]),
-              class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
+
 <% end %>
 

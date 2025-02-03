@@ -17,6 +17,7 @@ class DataCenterController < ApplicationController
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
       @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+      @status_counts = @tickets.joins(:statuses).group('statuses.name').count
 
       respond_to do |format|
         format.html # Default view
@@ -49,6 +50,8 @@ class DataCenterController < ApplicationController
       @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
       @tickets = @tickets.where(priority: params[:priority]) if params[:priority].present?
 
+      @status_counts = @tickets.joins(:statuses).group('statuses.name').count
+
       respond_to do |format|
         format.html # Default view
         format.csv { send_data generate_breach_details_csv(@tickets), filename: "breach_details_report_#{Date.today}.csv" }
@@ -71,6 +74,8 @@ class DataCenterController < ApplicationController
       @users = User.includes(tickets: :project)
         .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
         .where(id: params[:user_id])
+
+      @status_counts = @users.flat_map(&:tickets).group_by { |ticket| ticket.statuses.first&.name || 'N/A' }.transform_values(&:count)
 
       respond_to do |format|
         format.html # Default view
