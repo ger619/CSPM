@@ -140,6 +140,7 @@ class DataCenterController < ApplicationController
           csv << [
             user.name,
             ticket.project.title,
+            ticket.unique_id,
             ticket.subject,
             ticket.statuses.first&.name || 'N/A',
             sla_ticket&.sla_target_response_deadline || 'N/A',
