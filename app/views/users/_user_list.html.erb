@@ -29,10 +29,10 @@
     <tbody>
     <% @users.each do |user| %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap capitalize text-left">
+        <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap capitalize text-left">
           <%= link_to user.name, users_path(user.id) %>
         </th>
-        
+
         <td class="px-6 py-4 text-left">
           <%= user.email %>
         </td>
