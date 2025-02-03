@@ -112,6 +112,16 @@ class ProductController < ApplicationController
     redirect_to product_url, notice: 'Product was successfully destroyed.'
   end
 
+  def groupwares
+    software_id = params[:software_id]
+    # Fetch groupwares associated with the current project and the selected software_id
+    groupwares = @product.groupwares
+      .joins(:softwares)
+      .where(softwares: { id: software_id })
+      .distinct
+    render json: groupwares
+  end
+
   private
 
   def set_product
