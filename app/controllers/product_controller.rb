@@ -130,6 +130,6 @@ class ProductController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :description, :start_date, :end_date, :image, :content, :scope, :fod, :brd,
-                                    :plan, :user_id, :client_id, :software_id, images: [])
+                                    :plan, :user_id, :client_id, images: [], software_ids: [], groupware_ids: [])
   end
 end

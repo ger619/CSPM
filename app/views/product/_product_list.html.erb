@@ -65,9 +65,9 @@
           <td class="px-6 py-4">
             <%= product.user.name %>
           </td>
-          <td class="px-6 py-4 capitalize ">
+          <td class="px-6 py-4 capitalize">
             <% product.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
-              <li><%= software.name %></li>
+              <%= software.name %>
             <% end %>
           </td>
           <td class="px-6 py-4 capitalize ">
