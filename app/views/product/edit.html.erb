@@ -15,13 +15,28 @@
         </div>
       </div>
       <div class="grid grid-cols-2 gap-2">
+        <!-- Categories and Client Fields -->
+        <div class="relative z-0 w-full mb-6 group">
+          <%= f.label :categories, ('Product Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
+          <%= f.collection_select :software_ids, Software.all, :id, :name,
+                                  { prompt: "Select Product", include_hidden: false },
+                                  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                                  data: { action: "change->form#updateGroupwareOptions" },
+                                  multiple: true %>
+        </div>
+        <div class="relative z-0 w-full mb-6 group">
+          <%= f.label :categories, ('Sub Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
+          <%= f.collection_select :groupware_ids, @product.groupwares.where(software_id: @product.software_ids), :id, :name,
+                                  { prompt: "Select Sub Product", include_hidden: false },
+                                  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                                  id: "groupware-select",
+                                  multiple: true %>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
         <div class="relative z-0 w-full mb-6 group">
         <%= f.label :image, ('Product Image'), class: "capitalize block mb-1 text-sm font-medium" %>
         <%= f.file_field :images, multiple: true,  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :software, ('Product Categories*'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :software_id, Software.all, :id, :name, { prompt: "Select Product" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         </div>
         <div class="relative z-0 w-full mb-6 group">
           <%= f.label :software, ('Client Available*'), class: "capitalize block mb-1 text-sm font-medium" %>
