@@ -37,7 +37,6 @@
     </tr>
     </thead>
     <tbody>
-
     <% @product.each do |product|  %>
       <% if product.added_to?(current_user) or current_user.has_role?(:admin) %>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
@@ -97,7 +96,6 @@
     </tbody>
   </table>
 </div>
-
 <div class="flex gap-10 mt-5">
   <!-- Pagination Controls -->
   <div class="pagination">
