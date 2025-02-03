@@ -84,7 +84,7 @@
     <!-- Content (Subject) Field -->
     <div class="relative z-0 w-full mb-6 group">
       <%= f.label :title, ('Subject*'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-      <div data-controller="text-limit" data-text-limit-limit-value="30000">
+      <div data-controller="text-limit" data-text-limit-limit-value="3000">
         <p id="char-count">0/3000</p>
         <%= f.rich_text_area :content, id: "content",
                              data: { text_limit_target: "content" },
