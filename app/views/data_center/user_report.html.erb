@@ -34,6 +34,7 @@
       <tr>
         <th class="px-4 py-2">User Name</th>
         <th class="px-4 py-2">Project Name</th>
+        <th class="px-4 py-2">Ticket ID</th>
         <th class="px-4 py-2">Ticket Subject</th>
         <th class="px-4 py-2">Ticket Status</th>
         <th class="px-4 py-2">SLA Target Response Deadline</th>
@@ -47,6 +48,7 @@
           <tr>
             <td class="border px-4 py-2"><%= user.name %></td>
             <td class="border px-4 py-2"><%= ticket.project.title %></td>
+            <td class="border px-4 py-2"><%= ticket.unique_id %></td>
             <td class="border px-4 py-2"><%= ticket.subject %></td>
             <td class="border px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
             <td class="border px-4 py-2"><%= sla_ticket&.sla_target_response_deadline || "N/A" %></td>
