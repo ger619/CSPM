@@ -1,87 +1,84 @@
 <div class="overflow-x-auto shadow-md sm:rounded-lg">
   <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
-    <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <th scope="col" class="px-6 py-3">Logo</th>
-        <th scope="col" class="px-6 py-3">Name of Project</th>
-        <th scope="col" class="px-6 py-3">Project Description</th>
-        <th scope="col" class="px-6 py-3">Number of Tickets</th>
-        <th scope="col" class="px-6 py-3">Assignee</th>
-        <th scope="col" class="px-6 py-3">Client</th>
-        <th scope="col" class="px-6 py-3">Product Category</th>
-        <th scope="col" class="px-6 py-3">VIEW</th>
-        <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-          <% if can? :edit, @project %>
-          <th scope="col" class="px-6 py-3">EDIT</th>
-            <% end %>
-          <% if can? :delete, @project %>
-          <th scope="col" class="px-6 py-3">DELETE</th>
-            <% end %>
+    <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-4 py-2">Logo</th>
+      <th scope="col" class="px-4 py-2">Name of Project</th>
+      <th scope="col" class="px-4 px-2">Project Description</th>
+      <th scope="col" class="px-4 px-2">Number of Tickets</th>
+      <th scope="col" class="px-4 px-2">Assignee</th>
+      <th scope="col" class="px-4 px-2">Client</th>
+      <th scope="col" class="px-4 px-2">Product Category</th>
+      <th scope="col" class="px-4 px-2">VIEW</th>
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+        <% if can? :edit, @project %>
+          <th scope="col" class="px-4 px-2">EDIT</th>
         <% end %>
-      </tr>
+        <% if can? :delete, @project %>
+          <th scope="col" class="px-4 px-2">DELETE</th>
+        <% end %>
+      <% end %>
+    </tr>
     </thead>
     <tbody>
-      <% @project.each do |project| %>  <!-- Looping through each project -->
-        <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
-
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-              <td class="px-6 py-4 font-medium text-left">
-                <% if project.image.present? %>
-                  <%= link_to project_path(project.id) do %>
-                    <%= image_tag(project.image, class: 'w-16') %>
-                  <% end %>
-                <% else %>
-                  <%= link_to project_path(project.id) do %>
-                    <%= image_tag 'default.png', class: 'w-16' %>
-                  <% end %>
-                <% end %>
-              </td>
-              <td class="px-6 py-4 font-medium text-left">
-                <%= link_to project.title.truncate_words(3), project_path(project.id) %>
-              </td>
-              <td class="px-6 py-4 text-left">
-                <%= project.description.truncate(30) %>
-              </td>
-              <td class="px-6 py-4 text-center">
-                <%= project.tickets.count %>
-              </td>
-              <td class="px-6 py-4 text-left">
-                <%= project.user.name %>
-              </td>
-              <td class="px-6 py-4 text-left">
-              <% if project.present? && project.client.present? %>
+    <% @project.each do |project| %>  <!-- Looping through each project -->
+      <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+          <td class="px-4 py-4 font-medium text-left">
+            <% if project.image.present? %>
+              <%= link_to project_path(project.id) do %>
+                <%= image_tag(project.image, class: 'w-16') %>
+              <% end %>
+            <% else %>
+              <%= link_to project_path(project.id) do %>
+                <%= image_tag 'default.png', class: 'w-16' %>
+              <% end %>
+            <% end %>
+          </td>
+          <td class="px-4 py-4 font-medium text-left">
+            <%= link_to project.title.truncate_words(3), project_path(project.id) %>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <%= project.description.truncate(30) %>
+          </td>
+          <td class="px-4 py-4 text-center">
+            <%= project.tickets.count %>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <%= project.user.name %>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <% if project.present? && project.client.present? %>
               <%= project.client.name %>
             <% else %>
               No Client Assigned
             <% end %>
-              </td>
-              <td class="px-6 py-4 text-left">
-                <ul>
-                  <% project.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
-                    <li><%= software.name %></li>
-                  <% end %>
-                </ul>
-              </td>
-              <td class="px-6 py-4 text-left">
-                <%= link_to "VIEW", project_path(project.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
-              </td>
-              <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-                <% if can? :edit, project %>
-                <td class="px-6 py-4 text-left">
-                    <%= link_to 'Edit', edit_project_path(project), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
-                </td>
-                  <% end %>
-                <% if can? :delete, project %>
-                <td class="px-6 py-4 text-left">
-                    <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
-
-                </td>
-                <% end %>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <ul>
+              <% project.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
+                <li><%= software.name %></li>
               <% end %>
-            </tr>
-
-        <% end %>
+            </ul>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <%= link_to "VIEW", project_path(project.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+          </td>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+            <% if can? :edit, project %>
+              <td class="px-4 py-4 text-left">
+                <%= link_to 'Edit', edit_project_path(project), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+              </td>
+            <% end %>
+            <% if can? :delete, project %>
+              <td class="px-4 py-4 text-left">
+                <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+              </td>
+            <% end %>
+          <% end %>
+        </tr>
       <% end %>
+    <% end %>
     </tbody>
   </table>
   <% if (current_user.has_role?(:'project manager') || current_user.has_role?(:agent)) && current_user.projects.count > 0 %>
@@ -89,7 +86,6 @@
     <p class="p-2">Number of Projects: <%= @assigned_projects_count %></p>
   <% end %>
 </div>
-
 
 <script>
   document.addEventListener('turbo:load', function() {
