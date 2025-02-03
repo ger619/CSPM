@@ -67,8 +67,8 @@
             <%= product.user.name %>
           </td>
           <td class="px-6 py-4 capitalize ">
-            <% if product.software.present? && product.software.name.present? %>
-              <%= product.software.name %>
+            <% product.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
+              <li><%= software.name %></li>
             <% end %>
           </td>
           <td class="px-6 py-4 capitalize ">
