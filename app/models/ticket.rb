@@ -5,6 +5,7 @@ class Ticket < ApplicationRecord
   has_many_attached :attachments
   has_many :issues, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :notifications, dependent: :destroy # Notification model is not defined in the snippet
   has_rich_text :content
   has_one_attached :image
   belongs_to :software, optional: true
