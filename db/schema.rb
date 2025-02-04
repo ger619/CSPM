@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_31_124134) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_03_113401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -115,7 +115,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_124134) do
     t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.uuid "product_id", null: false
+    t.string "summary"
+    t.uuid "software_id", null: false
+    t.uuid "groupware_id", null: false
+    t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
     t.index ["product_id"], name: "index_bugs_on_product_id"
+    t.index ["software_id"], name: "index_bugs_on_software_id"
     t.index ["user_id"], name: "index_bugs_on_user_id"
   end
 
@@ -171,6 +176,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_124134) do
     t.index ["user_id"], name: "index_groupwares_on_user_id"
   end
 
+  create_table "groupwares_products", id: false, force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.uuid "groupware_id", null: false
+    t.index ["groupware_id", "product_id"], name: "index_groupwares_products_on_groupware_id_and_product_id"
+    t.index ["product_id", "groupware_id"], name: "index_groupwares_products_on_product_id_and_groupware_id"
+  end
+
   create_table "groupwares_projects", id: false, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "groupware_id", null: false
@@ -223,10 +235,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_124134) do
     t.datetime "updated_at", null: false
     t.uuid "software_id"
     t.uuid "client_id"
+    t.uuid "groupware_id"
     t.index ["client_id"], name: "index_products_on_client_id"
+    t.index ["groupware_id"], name: "index_products_on_groupware_id"
     t.index ["name"], name: "index_products_on_name", unique: true
     t.index ["software_id"], name: "index_products_on_software_id"
     t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "products_softwares", id: false, force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.uuid "software_id", null: false
+    t.index ["product_id", "software_id"], name: "index_products_softwares_on_product_id_and_software_id", unique: true
+    t.index ["software_id", "product_id"], name: "index_products_softwares_on_software_id_and_product_id", unique: true
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -456,7 +477,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_124134) do
   add_foreign_key "assignees", "users"
   add_foreign_key "boards", "products"
   add_foreign_key "boards", "users"
+  add_foreign_key "bugs", "groupwares"
   add_foreign_key "bugs", "products"
+  add_foreign_key "bugs", "softwares"
   add_foreign_key "bugs", "users"
   add_foreign_key "clients", "users"
   add_foreign_key "comments", "projects"
@@ -474,6 +497,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_124134) do
   add_foreign_key "notifications", "tickets"
   add_foreign_key "notifications", "users"
   add_foreign_key "products", "clients"
+  add_foreign_key "products", "groupwares"
   add_foreign_key "products", "softwares"
   add_foreign_key "products", "users"
   add_foreign_key "projects", "clients"

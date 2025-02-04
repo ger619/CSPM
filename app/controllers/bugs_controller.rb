@@ -6,6 +6,22 @@ class BugsController < ApplicationController
 
   def new
     @bug = @product.bugs.build
+
+    # Fetch associated softwares for the project
+    @softwares = @product.softwares
+
+    # Fetch groupwares associated with the project and the selected software
+    # If a software_id is already selected, filter groupwares accordingly
+    @groupwares = if @bug.software_id.present?
+                    @product.groupwares
+                      .joins(:softwares)
+                      .where(softwares: { id: @ticket.software_id })
+                      .distinct
+                  else
+                    # If no software is selected, load all groupwares for the project
+                    @product.groupwares
+                      .distinct
+                  end
   end
 
   def create
@@ -72,6 +88,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id)
+    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, software_ids: [], groupware_ids: [])
   end
 end

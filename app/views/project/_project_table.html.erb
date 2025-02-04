@@ -55,11 +55,9 @@
             <% end %>
           </td>
           <td class="px-4 py-4 text-left">
-            <ul>
               <% project.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
-                <li><%= software.name %></li>
+                <%= software.name %>
               <% end %>
-            </ul>
           </td>
           <td class="px-4 py-4 text-left">
             <%= link_to "VIEW", project_path(project.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>

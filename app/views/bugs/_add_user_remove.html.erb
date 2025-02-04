@@ -21,14 +21,14 @@
   <h3 class="text-lg font-semibold">Assigned Users:</h3>
   <ul class="list-disc pl-5">
     <% @bug.users.each do |user| %>
-      <li class="mt-2">
+      <p class="mt-2">
         <% if user.profile_picture.attached? %>
           <%= image_tag user.profile_picture, class: 'inline-block h-10 w-10 rounded-full mr-2' %>
         <% else %>
           <%= image_tag 'default.png', class: 'inline-block h-10 w-10 rounded-full mr-2' %>
         <% end %>
         <span class="font-medium"><%= user.name || user.email %></span>
-      </li>
+      </p>
     <% end %>
   </ul>
 </div>

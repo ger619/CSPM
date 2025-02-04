@@ -60,8 +60,8 @@
       </div>
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium" %><br />
-        <div data-controller="text-limit" data-text-limit-limit-value="1200">
-          <p id="char-count">0/1200</p>
+        <div data-controller="text-limit" data-text-limit-limit-value="3000">
+          <p id="char-count">0/3000</p>
           <%= f.rich_text_area :content, id: "content",
                                data: { text_limit_target: "content" },
                                class: "min-h-[300px] #{'border-red-500' if @project.errors[:content].any?}",
@@ -71,7 +71,6 @@
           <% end %>
         </div>
       </div>
-    </div>
     <%= f.submit  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
   <% end %>
 </div>
