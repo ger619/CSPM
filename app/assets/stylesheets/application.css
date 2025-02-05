@@ -170,3 +170,16 @@
 .dataTables_wrapper {
   position: initial !important; /* Overrides DataTables' position: relative */
 }
+
+.hide-on-sidebar {
+  transition: all 0.3s ease-in-out;
+}
+
+.hidden-column {
+  opacity: 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+

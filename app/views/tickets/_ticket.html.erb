@@ -29,24 +29,23 @@
       <th scope="col" class="px-2 py-2">
         Reported By
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2 py-2 hide-on-sidebar">
         VIEW
       </th>
 
-        <th scope="col" class="px-2 py-2">
+        <th scope="col" class="px-2 py-2 hide-on-sidebar">
           EDIT
         </th>
 
-
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2 py-2 hide-on-sidebar">
         DELETE
       </th>
 
       <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-        <th scope="col" class="px-2 py-2">
+        <th scope="col" class="px-2 py-2 hide-on-sidebar">
           Number of Edits
         </th>
-        <th scope="col" class="px-2 py-2">
+        <th scope="col" class="px-2 py-2 hide-on-sidebar">
           Last Edit
         </th>
       <% end %>
@@ -187,24 +186,24 @@
           <% end %>
         </td>
         <td class="px-2 py-2">
-          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 hide-on-sidebar'  %>
         </td>
 
         <td class="px-2 py-2">
           <% if can?(:edit, ticket) %>
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 hide-on-sidebar' %>
           <% end %>
         </td>
         <td class="px-2 py-2">
           <% if can? :destroy, ticket %>
-            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' h-12 bg-[#F65160] hover:bg-[#F65160] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' h-12 bg-[#F65160] hover:bg-[#F65160] p-3 rounded font-bold rounded-lg text-slate-100 hide-on-sidebar'  %>
           <% end %>
         </td>
         <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-        <td class="px-2 py-2 text-center">
+        <td class="px-2 py-2 text-center hide-on-sidebar">
          <%= ticket.update_count %>
         </td>
-        <td class="px-2 py-2 text-center">
+        <td class="px-2 py-2 text-center hide-on-sidebar">
           <%= ticket.last_updated_at ? ticket.last_updated_at.strftime("%T") : 'Never' %>
         </td>
           <% end %>
@@ -214,3 +213,23 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById("sidebar"); // Ensure sidebar has this ID
+    const tableColumns = document.querySelectorAll(".hide-on-sidebar"); 
+
+    function toggleColumns() {
+      if (sidebar.classList.contains("w-64")) {
+        tableColumns.forEach(col => col.style.display = "none");
+      } else {
+        tableColumns.forEach(col => col.style.display = "table-cell");
+      }
+    }
+
+    toggleColumns(); // Run initially
+    const observer = new MutationObserver(toggleColumns);
+    observer.observe(sidebar, { attributes: true });
+  });
+
+</script>
