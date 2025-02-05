@@ -37,6 +37,7 @@
                   <% end %>
                 <% else %>
                   <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
+
                 <% end %>
               </div>
             <% end %>
