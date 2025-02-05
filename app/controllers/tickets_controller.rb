@@ -92,7 +92,10 @@ class TicketsController < ApplicationController
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
       else
-        if @ticket.groupware_id.present?
+        if @ticket.user.empty?
+          @ticket.users << @project.user
+
+        elsif @ticket.groupware_id.present?
           groupware = Groupware.find(@ticket.groupware_id)
           tagged_user = groupware.user
           # Assign the tagged user if present and part of the project
@@ -102,8 +105,6 @@ class TicketsController < ApplicationController
                              # Assign the default user if tagged user is not part of the project
                              @project.user
                            end
-        elsif @ticket.users.empty?
-          @ticket.users << @project.user
         end
         # Assign the project manager if no agents are assigned
 
