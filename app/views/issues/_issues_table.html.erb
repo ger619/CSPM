@@ -1,52 +1,45 @@
 <div class="flex-col ml-4">
   <%= button_to 'New Message +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
   <div id="alert-additional-content-1" class="p-4" role="alert">
-      <div class="scrollable-section mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-  <% @issue.each do |issue| %>
-    <ol class="relative border-s border-gray-200 dark:border-gray-700 mt-10">
-      <li class="mb-10 ms-6">
-        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-          <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-          </svg>
-        </span>
-        <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-          <%= issue.user.name %>
-          <% if can? :edit, issue %>
-            <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
-              <%= link_to 'Edit', edit_project_ticket_issue_path(issue.ticket.project, @ticket, issue) %>
+    <div class="scrollable-section mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
+      <% @issue.each do |issue| %>
+        <ol class="relative border-s border-gray-200 dark:border-gray-700 mt-10">
+          <li class="mb-10 ms-6">
+            <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+              <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+              </svg>
             </span>
-          <% end %>
-          <% if can? :delete, issue %>
-            <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
-              <%= link_to 'Delete', [issue.ticket.project, @ticket, issue], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } %>
-            </span>
-          <% end %>
-        </h3>
-        <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-          Posted on <%= issue.created_at.strftime("%I:%M %p at %d %B %Y") %>
-        </time>
-        <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-          <%= issue.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
-            <% if issue.content.body.attachments.any? %>
-              <% issue.content.body.attachments.each do |attachment| %>
-              <div class="mb-2">
-                <% if attachment.previewable? %>
-                  <%= link_to rails_blob_path(attachment, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" do %>
-                    Preview: <%= attachment.filename.to_s %>
-                  <% end %>
-                <% else %>
+            <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+              <%= issue.user.name %>
+              <% if can? :edit, issue %>
+                <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
+                  <%= link_to 'Edit', edit_project_ticket_issue_path(issue.ticket.project, @ticket, issue) %>
+                </span>
+              <% end %>
+              <% if can? :delete, issue %>
+                <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
+                  <%= link_to 'Delete', [issue.ticket.project, @ticket, issue], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } %>
+                </span>
+              <% end %>
+            </h3>
+            <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+              Posted on <%= issue.created_at.strftime("%I:%M %p at %d %B %Y") %>
+            </time>
+            <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
+              <%= issue.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
+              <% if issue.content.body.attachments.any? %>
+                <% issue.content.body.attachments.each do |attachment| %>
+                <div class="mb-2">
                   <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
-
-                <% end %>
-              </div>
+                </div>
+              <% end %>
             <% end %>
-        <% end %>
-        </p>
-      </li>
-    </ol>
-  <% end %>
-  </div>
+            </p>
+          </li>
+        </ol>
+      <% end %>
+    </div>
   </div>
 
   <div class="flex gap-10 mt-5">
