@@ -210,40 +210,61 @@
 <% end %>
 
 <script>
-  document.getElementById('toggleSidebar').addEventListener('click', () => {
-    const sidebar = document.getElementById('sidebar');
-    const sidebarItems = document.querySelectorAll('#sidebar span');
-    const sidebarMain = document.getElementById('sidebar-wrapper')
-    const logoImg = document.getElementById('logo-top')
+  document.addEventListener("turbo:load", function() {
+      const sidebar = document.getElementById('sidebar');
+      const sidebarItems = document.querySelectorAll('#sidebar span');
+      const sidebarMain = document.getElementById('sidebar-wrapper');
+      const logoImg = document.getElementById('logo-top');
+      let isManuallyToggled = false; // Track manual toggling
 
-    // Toggle between collapsed and expanded states
-    if (sidebarMain.classList.contains('w-20')) {
-      sidebarMain.classList.remove('w-20')
-      sidebarMain.classList.add('w-70')
-      logoImg.classList.remove('w-10')
-      logoImg.classList.add('w-40')
-      sidebar.classList.remove('w-20');
-      sidebar.classList.add('w-64'); // Expand to larger width
-      sidebarItems.forEach(item => {
-        item.classList.remove('hidden'); // Show text
+      document.getElementById('toggleSidebar').addEventListener('click', () => {
+          isManuallyToggled = !isManuallyToggled; // Toggle manual state
+
+          if (sidebarMain.classList.contains('w-20')) {
+              expandSidebar();
+          } else {
+              collapseSidebar();
+          }
       });
-    } else {
-      sidebarMain.classList.remove('w-70')
-      sidebarMain.classList.add('w-20')
-      logoImg.classList.remove('w-40')
-      logoImg.classList.add('w-10')
-      sidebar.classList.remove('w-64');
-      sidebar.classList.add('w-20'); // Collapse to smaller width
-      sidebarItems.forEach(item => {
-        item.classList.add('hidden'); // Hide text
+
+      sidebarMain.addEventListener("mouseenter", () => {
+          if (!isManuallyToggled) {
+              expandSidebar();
+          }
       });
-    }
+
+      sidebarMain.addEventListener("mouseleave", () => {
+          if (!isManuallyToggled) {
+              collapseSidebar();
+          }
+      });
+
+      function expandSidebar() {
+          sidebarMain.classList.remove('w-20');
+          sidebarMain.classList.add('w-70');
+          logoImg.classList.remove('w-10');
+          logoImg.classList.add('w-40');
+          sidebar.classList.remove('w-20');
+          sidebar.classList.add('w-64');
+          sidebarItems.forEach(item => item.classList.remove('hidden'));
+      }
+
+      function collapseSidebar() {
+          sidebarMain.classList.remove('w-70');
+          sidebarMain.classList.add('w-20');
+          logoImg.classList.remove('w-40');
+          logoImg.classList.add('w-10');
+          sidebar.classList.remove('w-64');
+          sidebar.classList.add('w-20');
+          sidebarItems.forEach(item => item.classList.add('hidden'));
+      }
   });
 
   document.getElementById("dropdownBtn").addEventListener("click", function() {
       const dropdownMenu = document.getElementById("dropdownMenu");
       dropdownMenu.classList.toggle("hidden");
   });
+
 </script>
 
 <style>
