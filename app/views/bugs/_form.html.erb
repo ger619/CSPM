@@ -14,30 +14,30 @@
     <%= f.label :video, 'Upload Video', class: "capitalize block mb-1 text-sm font-medium" %><br />
     <%= f.file_field :video, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" %>
   </div>
+  <div class="grid grid-cols-2 gap-2 mt-4">
+    <div class="relative z-0 w-full mb-6 group">
+      <%= f.label :software_id, 'Product Categories *', class: "capitalize block mb-1 text-sm font-medium" %>
+      <%= f.collection_select :software_id, @product.softwares, :id, :name,
+                              { prompt: "Select Product" },
+                              { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
+                                id: "software-select", data: { action: "change->form#updateGroupwareOptions" } }
+      %>
+    </div>
 
-  <div class="relative z-0 w-full mb-6 group">
-    <%= f.label :software_id, 'Product Categories *', class: "capitalize block mb-1 text-sm font-medium" %>
-    <%= f.collection_select :software_id, @product.softwares, :id, :name,
-                            { prompt: "Select Product" },
-                            { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
-                              id: "software-select", data: { action: "change->form#updateGroupwareOptions" } }
-    %>
+    <!-- Groupware Field -->
+    <div class="relative z-0 w-full mb-6 group" id="groupware-field">
+      <%= f.label :groupware_id, 'Sub Category *', class: "capitalize block mb-1 text-sm font-medium" %>
+      <%= f.collection_select :groupware_id,
+                              [], # Initially load no groupwares
+                              :id,
+                              :name,
+                              { prompt: "Select The Product" },
+                              { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
+                                id: "groupware-select",
+                                required: true }
+      %>
+    </div>
   </div>
-
-  <!-- Groupware Field -->
-  <div class="relative z-0 w-full mb-6 group" id="groupware-field" style="display: none;">
-    <%= f.label :groupware_id, 'Sub Category *', class: "capitalize block mb-1 text-sm font-medium" %>
-    <%= f.collection_select :groupware_id,
-                            [], # Initially load no groupwares
-                            :id,
-                            :name,
-                            { prompt: "Select The Product" },
-                            { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
-                              id: "groupware-select",
-                              required: true }
-    %>
-  </div>
-
 
   <!-- Content (Subject) Field -->
   <div class="relative z-0 w-full mb-6 group">

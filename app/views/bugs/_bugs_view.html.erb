@@ -2,9 +2,11 @@
   <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
     <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
     <tr>
-      <th scope="col" class="px-6 py-3">Issue</th>
-      <th scope="col" class="px-6 py-3">Priority</th>
-      <th scope="col" class="px-6 py-3">Description</th>
+      <th scope="col" class="px-6 py-3">Bug</th>
+      <th scope="col" class="px-6 py-3">Severity</th>
+      <th scope="col" class="px-6 py-3">Product</th>
+      <th scope="col" class="px-6 py-3">SubProduct</th>
+      <th scope="col" class="px-6 py-3">Details</th>
       <th scope="col" class="px-6 py-3">VIEW</th>
       <th scope="col" class="px-6 py-3">EDIT</th>
       <th scope="col" class="px-6 py-3">DELETE</th>
@@ -20,6 +22,12 @@
           </td>
           <td class="px-6 py-4 font-medium text-left">
             <%= bug.priority %>
+          </td>
+          <td class="px-6 py-4 font-medium text-left">
+            <%= bug.software.name %>
+          </td>
+          <td class="px-6 py-4 font-medium text-left">
+            <%= bug.software.groupwares.find_by(id: bug.groupware_id)&.name %>
           </td>
           <td class="px-6 py-4 text-left">
             <%= bug.content.to_plain_text.truncate(40) %>
