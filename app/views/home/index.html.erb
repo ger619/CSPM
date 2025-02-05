@@ -1,61 +1,69 @@
-<div class="p-4 border-2 border-white   rounded-lg">
-  <div class="grid md:grid-cols-3 gap-4 mb-4">
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
-      <p class="text-sm">
+<div class="p-4 border-2 border-white rounded-lg">
+  <!-- First Grid Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg">
+      <p class="text-xs sm:text-sm">
         Number of Service Desks
       </p>
-      <span class="text-xl font-bold">
-          <%= current_user.projects.distinct.pluck(:id).count %>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= current_user.projects.distinct.pluck(:id).count %>
       </span>
     </div>
-    <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
-      <p class="text-sm ">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg">
+      <p class="text-xs sm:text-sm">
         Number of Tickets
       </p>
-      <span class="text-xl font-bold">
-          <%= current_user.tickets.distinct.pluck(:id).count %>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= current_user.tickets.distinct.pluck(:id).count %>
       </span>
     </div>
-    <div class="col-span-1 flex items-center  dark:bg-gray-700 justify-between p-4 h-24 rounded shadow hover:shadow-lg ">
-      <p class="text-sm">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg">
+      <p class="text-xs sm:text-sm">
         Number of Comments
       </p>
-      <span class="text-xl font-bold">
+      <span class="text-lg sm:text-xl font-bold">
         <%= current_user.issues.distinct.pluck(:id).count %>
       </span>
     </div>
   </div>
-  <div class="flex items-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
-    <p class="text-2xl text-gray-400 dark:text-gray-500">
+
+  <!-- Table Section -->
+  <div class="flex items-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4">
+    <p class="text-base sm:text-2xl text-gray-400 dark:text-gray-500">
       <%= render 'home/table_ticket_per_project' %>
     </p>
   </div>
 
+  <!-- Conditional Admin Section -->
   <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
-    <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800">
+    <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800 p-2 sm:p-4">
       <%= render 'home/breach_visualisation' %>
     </div>
   <% end %>
 
-  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
+  <!-- Total List Section -->
+  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4">
     <%= render 'home/total_list' %>
   </div>
 
-  <div class="grid grid-cols-2 gap-4 mb-4">
+  <!-- Responsive Grid Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
     <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
       <%= render 'home/closed_reopened' %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
       <%= render 'home/total_number_tickets' %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
       <%= render 'home/pie_charts' %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800">
       <%= render 'home/list_project' %>
     </div>
   </div>
-  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
+
+  <!-- Chart Data Section -->
+  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4">
     <%= render 'home/chart_data_per_user' %>
   </div>
 </div>
