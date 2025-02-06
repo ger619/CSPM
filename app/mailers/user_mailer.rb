@@ -77,4 +77,13 @@ class UserMailer < ApplicationMailer
     @url = project_ticket_url(@comment.ticket.project, @comment.ticket)
     mail(to: @user.email, subject: 'New Comment')
   end
+
+  def bug_mailer(user, bug, current_user, assigned_user)
+    @user = user
+    @bug = bug
+    @current_user = current_user
+    @assigned_user = assigned_user
+    @url = product_bug_url(@bug.product, @bug)
+    mail(to: @user.email, subject: 'Bug Assignment')
+  end
 end
