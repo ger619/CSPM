@@ -93,6 +93,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, :software_id, :groupware_id)
+    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, :software_id, :groupware_id, images: [] )
   end
 end

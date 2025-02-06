@@ -10,4 +10,7 @@ class Bug < ApplicationRecord
 
   has_many :status_bugs, dependent: :destroy
   has_many :statuses, through: :status_bugs, dependent: :destroy
+
+  has_many_attached :images
 end
+

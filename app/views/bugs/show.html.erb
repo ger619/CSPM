@@ -6,6 +6,16 @@
         Your browser does not support the video tag.
       </video>
     <% end %>
+
+    <% if @bug.images.attached? %>
+      <div class="grid grid-cols-3 gap-2 mt-4">
+        <% @bug.images.each do |image| %>
+          <div class="col-span-1">
+            <%= image_tag url_for(image), class: "w-full h-auto rounded-lg" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
   <div class="col-span-1 justify-end">
     <p><%= @bug.issue %></p>
@@ -15,5 +25,3 @@
     <%= render 'bugs/status_bug' %>
   </div>
 </div>
-
-
