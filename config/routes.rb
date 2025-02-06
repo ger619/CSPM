@@ -51,11 +51,11 @@ Rails.application.routes.draw do
      member do
        post :add_bug
        delete :remove_bug
+       post :bug_status
      end
     end
     resources :boards do
       resources :tasks do
-
         member do
           post :add_task
           delete :remove_task

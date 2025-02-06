@@ -60,10 +60,19 @@ class BugsController < ApplicationController
 
       # Send email to the newly assigned user
       assigned_user = user # Assuming the first user is the assigned user
-      UserMailer.assignment_email(user, @bug, current_user, assigned_user).deliver_later
+      UserMailer.bug_mailer(user, @bug, current_user, assigned_user).deliver_later
 
-      redirect_to product_bugs_path(@product, @bug), notice: 'User was successfully assigned.'
+      redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
+
     end
+  end
+
+  def bug_status
+    @bug = Bug.find(params[:id])
+    status = Status.find(params[:status_id])
+    @bug.statuses.clear
+    @bug.statuses << status
+    redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
   end
 
   def unassign_tag
@@ -84,6 +93,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, :software_id, :groupware_id)
+    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, :software_id, :groupware_id, images: [])
   end
 end

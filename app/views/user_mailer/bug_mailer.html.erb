@@ -1,0 +1,8 @@
+<p>Hello <%= @user.first_name %> <%= @user.last_name %>,</p>
+
+<p>The user <%= @assigned_user.first_name %> <%= @assigned_user.last_name %> have been assigned to the bug:
+  <%= @bug.issue %> of topic: <%= @bug.priority %> by <%= @current_user.name %> </p>
+<p>Click <a href="<%= @url %>">here</a> to view the bug</p>
+
+<p>Best regards,</p>
+<p>Your Team</p>
