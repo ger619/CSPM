@@ -11,15 +11,11 @@ class BugsController < ApplicationController
     @softwares = @product.softwares
 
     # Fetch groupwares associated with the project and the selected software
-    # If a software_id is already selected, filter groupwares accordingly
     @groupwares = if @bug.software_id.present?
                     @product.groupwares
                       .joins(:softwares)
-                      .where(softwares: { id: @ticket.software_id })
-                      .distinct
-                  else
-                    # If no software is selected, load all groupwares for the project
-                    @product.groupwares
+                      .where(softwares: { id: @bug.software_id })
+                      .where(id: @product.groupware_ids)
                       .distinct
                   end
   end

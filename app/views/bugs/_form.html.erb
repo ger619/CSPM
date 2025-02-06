@@ -1,4 +1,4 @@
-<%= form_with(model: [@product, @bug], url: product_path(@product.id), local: true) do |f| %>
+<%= form_with(model: [@product, @bug], local: true) do |f| %>
   <div class="grid grid-cols-2 gap-2 mt-4">
     <div class="relative z-0 w-[100%] mb-6 group">
       <%= f.label :issue, 'Issue *', class: "capitalize block mb-1 text-sm font-medium" %><br />
@@ -71,7 +71,7 @@
         groupwareField.style.display = 'block';
 
         // Fetch groupwares associated with the selected software and product
-        fetch(`/products/${<%= @product.id %>}/groupwares?software_id=${softwareId}&selected_groupware_ids=${selectedGroupwareId}`)
+        fetch(`/products/${<%= @product.id %>}/groupwares?software_id=${softwareId}`)
           .then(response => response.json())
           .then(groupwares => {
             // Clear options and populate new groupwares
