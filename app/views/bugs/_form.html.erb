@@ -28,7 +28,7 @@
     <div class="relative z-0 w-full mb-6 group" id="groupware-field">
       <%= f.label :groupware_id, 'Sub Category *', class: "capitalize block mb-1 text-sm font-medium" %>
       <%= f.collection_select :groupware_id,
-                              @product.groupwares.where(software_id: @bug.software_id), # Load groupwares based on selected software
+                              @product.groupwares.where(id: @product.groupware_ids, software_id: @bug.software_id), # Load groupwares based on selected software and saved groupwares
                               :id,
                               :name,
                               { prompt: "Select The Product" },
@@ -71,12 +71,16 @@
         groupwareField.style.display = 'block';
 
         // Fetch groupwares associated with the selected software and product
-        fetch(`/products/${<%= @product.id %>}/groupwares?software_id=${softwareId}&selected_groupware_ids=${selectedGroupwareId}`)
+        fetch(`/products/${<%= @product.id %>}/groupwares?software_id=${softwareId}`)
           .then(response => response.json())
           .then(groupwares => {
+            // Filter groupwares based on the product's saved groupware IDs
+            const savedGroupwareIds = <%= @product.groupware_ids.to_json %>;
+            const filteredGroupwares = groupwares.filter(groupware => savedGroupwareIds.includes(groupware.id));
+
             // Clear options and populate new groupwares
             groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
-            groupwares.forEach(groupware => {
+            filteredGroupwares.forEach(groupware => {
               const option = document.createElement('option');
               option.value = groupware.id;
               option.textContent = groupware.name;
