@@ -1,34 +1,42 @@
-<div class="grid grid-cols-2 mt-2 gap-2">
-  <div class="col-span-1 text-xs">
-    <%= form_with url: add_bug_product_bug_path(@product, @bug), local: true do %>
-      <%= label_tag :user_id, "SELECT USER" %>
-      <div class="flex gap-2">
-        <div>
-          <% available_users = User.with_agent_role.where(id: @product.users.pluck(:id)).distinct %>
-          <% if available_users %>
-            <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email), class: "h-12 mr-1 max-w-[120px] form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", required: true %>
-          <% end %>
-        </div>
-        <div>
-          <%= submit_tag "Assign User", class: "mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
-
-<div class="mt-4">
-  <h3 class="text-lg font-semibold">Assigned Users:</h3>
-  <ul class="list-disc pl-5">
-    <% @bug.users.each do |user| %>
-      <p class="mt-2">
-        <% if user.profile_picture.attached? %>
-          <%= image_tag user.profile_picture, class: 'inline-block h-10 w-10 rounded-full mr-2' %>
-        <% else %>
-          <%= image_tag 'default.png', class: 'inline-block h-10 w-10 rounded-full mr-2' %>
+<% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
+  <div>
+    <h3>Assigned Users</h3>
+    <div class="flex flex-wrap gap-2 mt-2">
+      <% if @bug.users.any? %>
+        <% @bug.users.each do |user| %>
+          <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2 col-span-1 text-sm rounded">
+            <% if user.name.present? %>
+              <%= user.name %>
+            <% else %>
+              <%= truncate(user.email, length: 15, omission: '...') %>
+            <% end %>
+          </p>
         <% end %>
-        <span class="font-medium"><%= user.name || user.email %></span>
-      </p>
-    <% end %>
-  </ul>
-</div>
+      <% else %>
+        <p class="text-red-500 text-sm">
+          No agents assigned. Please assign at least one agent to this ticket.
+        </p>
+      <% end %>
+    </div>
+    <div class="flex flex-wrap mt-2 gap-2">
+      <div class="text-xs">
+        <%= form_with url: add_bug_product_bug_path(@product, @bug), local: true do %>
+          <%= label_tag :user_id, "Select User" %>
+          <div class="flex flex-wrap">
+            <% available_users = User.with_assigned_role.where.not(id: @bug.users.pluck(:id)).where(id: @product.users.pluck(:id)).distinct %>
+            <% if available_users.any? %>
+              <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email),
+                             class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[120px] h-12 mr-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              %>
+              <div class="">
+                <%= submit_tag "ASSIGN USER", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+              </div>
+            <% else %>
+              <p class="text-gray-500 text-sm">No available users to assign.</p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
