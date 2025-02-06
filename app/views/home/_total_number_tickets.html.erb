@@ -1,4 +1,11 @@
-<div class="gap-2">
-  <p class="pt-3">Total Number of Tickets per Project</p>
-  <%= column_chart @total_tickets_per_project, colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], library: { legend: { position: 'bottom' }, plugins: { datalabels: { align: 'end', anchor: 'end' } } } %>
+<div class="gap-2 w-full max-w-screen-lg mx-auto">
+  <p class="pt-3 text-center text-sm sm:text-base truncate">
+    Total Number of Tickets per Project
+  </p>
+  <%= column_chart @total_tickets_per_project, 
+        colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], 
+        library: { 
+          legend: { position: 'bottom' }, 
+          plugins: { datalabels: { align: 'end', anchor: 'end' } } 
+        } %>
 </div>

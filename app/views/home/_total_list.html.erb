@@ -1,30 +1,44 @@
-<div class="p-2 w-full">
-  <h1 class="flex justify-center mb-2 text-lg sm:text-xl font-semibold">Tickets Chart</h1>
+<div class="p-2 w-full max-w-screen-lg mx-auto">
+  <!-- Header -->
+  <h1 class="flex justify-center mb-2 text-lg sm:text-xl font-semibold text-center truncate">
+    Tickets Chart
+  </h1>
 
+  <!-- Form Section -->
   <%= form_with url: home_index_path, method: :get, local: true do %>
-    <div class="flex flex-col sm:flex-row sm:gap-4 justify-center">
+    <div class="flex flex-col sm:flex-row sm:gap-4 justify-center w-full">
+      <!-- Start Date Field -->
       <div class="flex flex-col gap-2 w-full sm:w-1/3">
         <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-bold" %>
         <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
 
+      <!-- End Date Field -->
       <div class="flex flex-col gap-2 w-full sm:w-1/3">
         <%= label_tag :end_date, 'End Date', class: "capitalize text-sm font-bold" %>
         <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
 
+      <!-- Grouping Period Field -->
       <div class="flex flex-col gap-2 w-full sm:w-1/3">
         <%= label_tag :grouping_period, 'Time Period', class: "capitalize text-sm font-bold" %>
         <%= select_tag :grouping_period, options_for_select([%w[Day day], %w[Month month], %w[Year year]], params[:grouping_period]), class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
 
+      <!-- Search Button -->
       <div class="w-full sm:w-auto mt-2 sm:mt-0">
         <%= submit_tag 'Search', class: 'border border-black dark:border-white border-b-4 border-r-2 p-2.5 rounded font-semibold w-full sm:w-auto' %>
       </div>
     </div>
   <% end %>
 
+  <!-- Chart Section -->
   <div class="w-full mt-4">
-    <%= column_chart @chart_data, colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], library: { legend: { position: 'bottom' }, plugins: { datalabels: { align: 'end', anchor: 'end' } } } %>
+    <%= column_chart @chart_data, 
+          colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], 
+          library: { 
+            legend: { position: 'bottom' }, 
+            plugins: { datalabels: { align: 'end', anchor: 'end' } } 
+          } %>
   </div>
 </div>
