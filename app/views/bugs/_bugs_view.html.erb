@@ -6,7 +6,7 @@
       <th scope="col" class="px-6 py-3">Severity</th>
       <th scope="col" class="px-6 py-3">Product</th>
       <th scope="col" class="px-6 py-3">SubProduct</th>
-      <th scope="col" class="px-6 py-3">Details</th>
+      <th scope="col" class="px-6 py-3">Summary</th>
       <th scope="col" class="px-6 py-3">VIEW</th>
       <th scope="col" class="px-6 py-3">EDIT</th>
       <th scope="col" class="px-6 py-3">DELETE</th>
@@ -30,7 +30,7 @@
             <%= bug.software.groupwares.find_by(id: bug.groupware_id)&.name %>
           </td>
           <td class="px-6 py-4 text-left">
-            <%= bug.content.to_plain_text.truncate(40) %>
+            <%= bug.summary&.truncate(40) %>
           </td>
           <td class="px-6 py-4 text-left">
             <%= link_to "VIEW", product_bug_path(bug.product_id, bug), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
