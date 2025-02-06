@@ -7,4 +7,7 @@ class Bug < ApplicationRecord
 
   has_many :add_bugs, dependent: :destroy
   has_many :users, through: :add_bugs, dependent: :destroy
+
+  has_many :status_bugs, dependent: :destroy
+  has_many :statuses, through: :status_bugs, dependent: :destroy
 end

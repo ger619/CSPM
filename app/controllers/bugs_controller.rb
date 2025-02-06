@@ -66,6 +66,13 @@ class BugsController < ApplicationController
     end
   end
 
+  def add_status_bug
+    @bug = Bug.find(params[:id])
+    @status = Status.find(params[:status_id])
+    @bug.statuses << @status
+    redirect_to product_bug_path(@product, @bug), notice: 'Status was successfully added.'
+  end
+
   def unassign_tag
     user = User.find(params[:user_id])
     @ticket.users.delete(user)
