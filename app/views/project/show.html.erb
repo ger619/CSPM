@@ -18,8 +18,8 @@
       <p class="capitalize"><%= @project.description %></p>
     </div>
 
-    <div class="font-semibold p-2 justify-between rounded md:col-span-3 border-r-2 flex flex-col md:flex-row gap-4">
-      <div>
+    <div class="font-semibold p-2 rounded md:col-span-2 border-r-2 flex flex-col md:flex-row">
+      <div class="text-xs mr-2">
         <h1>Project Manager: <span class="font-light"><%= @project.user&.name || 'No Project Manager Assigned' %></span></h1>
         <h1>Product:
           <span class="font-light">
@@ -54,7 +54,7 @@
           <% end %>
         </span>
       </div>
-      <div>
+      <div class="text-xs">
         <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
         <% if current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?('project manager') %>
           <h1>Assigned Ticket: <span class="font-light"><%= @assigned_tickets %></span></h1>
@@ -74,12 +74,12 @@
       </div>
     </div>
 
-    <div class="md:col-span-2">
+    <div class="md:col-span-2 text-xs">
       <%= render 'assign_people' %>
-      <div>
+      <div class="text-xs">
         <%= render 'project/add_assign' %>
       </div>
-      <div>
+      <div class="text-xs">
         <%= render 'project/add_teams' %>
       </div>
     </div>

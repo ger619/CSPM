@@ -1,51 +1,51 @@
-<div class="overflow-x-auto shadow-md sm:rounded-lg w-[100%] ">
+<div class="overflow-x-auto shadow-md sm:rounded-lg w-[98%] ">
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
     <tr>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2 py-2 text-xs">
         Date of Issue
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2 text-xs">
         Ticket ID
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
         Issue
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
         Priority
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
         Details
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
        Assigned To
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
         STATUS
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
         PROGRESS BAR
       </th>
-      <th scope="col" class="px-2 py-2">
+      <th scope="col" class="px-2">
         Reported By
       </th>
-      <th scope="col" class="px-2 py-2 hide-on-sidebar">
+      <th scope="col" class="px-2 hide-on-sidebar">
         VIEW
       </th>
 
-        <th scope="col" class="px-2 py-2 hide-on-sidebar">
+        <th scope="col" class="px-2 hide-on-sidebar">
           EDIT
         </th>
 
-      <th scope="col" class="px-2 py-2 hide-on-sidebar">
+      <th scope="col" class="px-2 hide-on-sidebar">
         DELETE
       </th>
 
       <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-        <th scope="col" class="px-2 py-2 hide-on-sidebar">
+        <th scope="col" class="px-2 hide-on-sidebar">
           Number of Edits
         </th>
-        <th scope="col" class="px-2 py-2 hide-on-sidebar">
+        <th scope="col" class="px-2 hide-on-sidebar">
           Last Edit
         </th>
       <% end %>

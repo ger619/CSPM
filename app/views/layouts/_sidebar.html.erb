@@ -2,7 +2,7 @@
   <div id="sidebar-wrapper" class="fixed w-64 top-0 left-0 z-40 min-h-screen overflow-y-auto transition-all duration-300 bg-[#1a237e] shadow-md">
     <button id="toggleSidebar" class="p-2 mt-2 ms-3 text-sm text-white rounded-lg hover:bg-[#1a237e] focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
       <span class="sr-only">Toggle Sidebar</span>
-      <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <svg class="w-2 h-2" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
       </svg>
     </button>
@@ -10,7 +10,7 @@
     <!-- Set sidebar to initially be expanded (w-64) -->
     <aside id="sidebar" class="w-64 h-screen transition-all duration-300 text-white bg-[#1a237e] dark:bg-gray-800">
       <%= link_to root_path do %>
-        <div class="items-center ps-2.5 mb-2 mt-2">
+        <div class="items-center flex justify-center ps-2.5">
           <%= image_tag 'logo.png', id: 'logo-top', class: 'h2 w-28 me-3 sm:h4' %>
         </div>
       <% end %>
@@ -172,7 +172,7 @@
             <%= link_to cease_fire_report_path do %>
               <li>
                 <div class="flex items-center p-2 rounded-lg hover:bg-transparent dark:hover:bg-gray-700 group">
-                  <svg class="w-4 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-5 text-[#fff] transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
                   </svg>
                   <span class="flex-1 ms-3 hover:text-[#3F8CFF] whitespace-nowrap">Cease Fire Report</span>
@@ -182,7 +182,7 @@
             <%= link_to breach_report_path do %>
             <li>
               <div class="flex items-center p-2 rounded-lg hover:bg-transparent dark:hover:bg-gray-700 group">
-                <svg class="w-4 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-5 text-[#fff] transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
                 </svg>
                 <span class="flex-1 hover:text-[#3F8CFF] ms-3 whitespace-nowrap">Breach Report</span>
@@ -194,7 +194,7 @@
             <%= link_to user_report_path do %>
                 <li>
                   <div class="flex items-center p-2 rounded-lg hover:bg-transparent dark:hover:bg-gray-700 group">
-                    <svg class="w-4 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-5 text-[#fff] transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
                     </svg>
                     <span class="flex-1 hover:text-[#3F8CFF] ms-3 whitespace-nowrap">User Report</span>
