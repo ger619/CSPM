@@ -1,6 +1,19 @@
-<% @bug.statuses.each do |status| %>
-  <% status.name %>
+<% if @bug.statuses.any? %>
+  <% @bug.statuses.each do |status| %>
+    <p class="border-b-4 border-r-2 border border-black dark:border-slate-100 p-2 min-w-3 gap-2 col-span-1 text-sm rounded">
+      <% if status.name.present? %>
+        <%= status.name %>
+      <% else %>
+        <%= truncate(status.email, length: 15, omission: '...') %>
+      <% end %>
+    </p>
+  <% end %>
+<% else %>
+  <p class="text-red-500 text-sm">
+    No agents assigned. Please assign at least one agent to this ticket.
+  </p>
 <% end %>
+
 
 <% if current_user.has_role? :admin or current_user.has_role? :agent or  current_user.has_role?('project manager') %>
   <%= form_with url: bug_status_product_bug_path(@product, @bug), local: true do %>

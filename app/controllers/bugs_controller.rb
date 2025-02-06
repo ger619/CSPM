@@ -67,7 +67,7 @@ class BugsController < ApplicationController
     end
   end
 
-  def add_status_bug
+  def bug_status
     @bug = Bug.find(params[:id])
     status = Status.find(params[:status_id])
     @bug.statuses.clear
