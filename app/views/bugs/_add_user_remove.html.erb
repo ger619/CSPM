@@ -1,4 +1,3 @@
-<% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
   <div>
     <h3>Assigned Users</h3>
     <div class="flex flex-wrap gap-2 mt-2">
@@ -18,7 +17,9 @@
         </p>
       <% end %>
     </div>
-    <div class="flex flex-wrap mt-2 gap-2">
+    <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
+
+  <div class="flex flex-wrap mt-2 gap-2">
       <div class="text-xs">
         <%= form_with url: add_bug_product_bug_path(@product, @bug), local: true do %>
           <%= label_tag :user_id, "Select User" %>
@@ -39,4 +40,5 @@
       </div>
     </div>
   </div>
-<% end %>
+    <% end %>
+
