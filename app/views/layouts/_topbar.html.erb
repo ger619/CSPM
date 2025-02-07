@@ -1,13 +1,10 @@
-<% if current_user && user_signed_in? %>
+<% if current_user && user_signed_in?  %>
 <div class="flex justify-between items-center p-4 mb-6 bg-white shadow-md dark:bg-gray-800">
-
-  <!-- User Greeting -->
   <div class="text-lg font-semibold text-gray-700 dark:text-gray-200">
     <%= greeting_message %>, <%= current_user.first_name %> <%= current_user.last_name %>
   </div>
 
-  <!-- Right section with notifications and profile -->
-  <div class="flex items-center gap-4 text-gray-700 dark:text-gray-200 relative space-x-4">
+  <div class="flex items-center gap-4 text-gray-700 dark:text-gray-200 relative">
     <!-- Notification Button -->
     <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
       <svg class="w-8 h-8 text-[#0A1629] animate-wiggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21">
@@ -55,9 +52,10 @@
       </div>
     </div>
 
-    <!-- Profile Section -->
-    <div class="flex items-center gap-4">
-      <ul id="dropdownProfile" class="flex items-center space-x-4">
+  </div>
+
+  <div class="flex items-center gap-4 text-gray-700 dark:text-gray-200 relative">
+    <ul id="dropdownProfile" class="flex items-center space-x-4">
         <li class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
           <% if current_user.profile_picture.attached? %>
             <%= image_tag current_user.profile_picture, class: 'w-10 h-10 rounded-full' %>
@@ -75,31 +73,32 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           </svg>
         </li>
-      </ul>
-      <!-- Profile Dropdown Items -->
-      <ul id="dropdownItem" class="absolute z-50 top-2 mt-8 hidden bg-white dark:bg-gray-800 shadow-md rounded-md w-40 mt-4 space-y-2">
-        <%= link_to edit_user_registration_path  do %>
-          <li>
-            <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
-              <span class="flex-1 ms-3 whitespace-nowrap dark:">Edit Profile</span>
-            </div>
-          </li>
-        <% end %>
-        <%= link_to destroy_user_session_path, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } do  %>
-          <li>
-            <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
-              <span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
-            </div>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-
+    </ul>
+  <!-- Profile Dropdown Items -->
+  <ul id="dropdownItem" class="absolute z-50 top-2 mt-8 hidden bg-white dark:bg-gray-800 shadow-md rounded-md w-40 mt-4 space-y-2">
+            <%= link_to edit_user_registration_path  do %>
+              <li>
+                <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <span class="flex-1 ms-3 whitespace-nowrap dark:">Edit Profile</span>
+                </div>
+              </li>
+            <% end %>
+            <%= link_to destroy_user_session_path, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } do  %>
+              <li>
+                <div class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <span class="flex-1 ms-3 whitespace-nowrap">
+                    Sign Out
+                  </span>
+                </div>
+              </li>
+            <% end %>
+          </ul>
   </div>
+
 </div>
+<% end %>
 
 <script>
-  // Toggle the notification dropdown
   document.querySelector('#dropdownNotificationButton').addEventListener('click', function() {
     const dropdown = document.querySelector('#dropdownNotification');
     dropdown.classList.toggle('hidden');
@@ -107,8 +106,12 @@
 
   // Toggle the profile dropdown
   document.getElementById("dropdownProfile").addEventListener("click", function() {
-    const dropdownMenu = document.getElementById("dropdownItem");
-    dropdownMenu.classList.toggle("hidden");
+      const dropdownMenu = document.getElementById("dropdownItem");
+      dropdownMenu.classList.toggle("hidden");
+  });
+
+  document.getElementById("dropdownNavbarLink").addEventListener("click", function() {
+      const dropdownMenu = document.getElementById("dropdownNavbar");
+      dropdownMenu.classList.toggle("hidden");
   });
 </script>
-<% end %>
