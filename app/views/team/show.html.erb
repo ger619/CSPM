@@ -11,7 +11,6 @@
     <tbody>
     <%# @project.each do |project| %>  <!-- Looping through each project -->
     <% @team.users.each do |user| %>
-      <%# if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
           <td class="px-4 py-4 font-medium text-left">
               <p class="text-gray-700 dark:text-gray-300"><%= user.name %></p>
@@ -23,7 +22,6 @@
             <p class="text-gray-700 dark:text-gray-300"><%= user.client&.name || 'No Client' %></p>
           </td>
         </tr>
-      <%# end %>
     <% end %>
     </tbody>
   </table>
