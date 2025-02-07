@@ -65,8 +65,8 @@
 
           <h1>Assigned & Closed: <span class="font-light"><%= @closed_assigned_tickets %></span></h1>
         <% end %>
-        <h1>Total New Tickets:
-          <span class="font-light"><%= @project.tickets.joins(:statuses).where(statuses: { name: 'New' }).count %></span>
+        <h1>Total Open Tickets:
+          <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: ['Closed', 'Resolved'] }).count %></span>
         </h1>
 
         <h1>Total Tickets: <span class="font-light"><%= @project.tickets.count %></span></h1>
