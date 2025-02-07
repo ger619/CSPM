@@ -34,12 +34,12 @@ class ProjectController < ApplicationController
 
       @tickets = if params[:filter] == 'closed_assigned'
                    @project.tickets.joins(:users, :statuses)
-                           .where(users: { id: current_user.id })
-                           .where(statuses: { name: %w[Closed Resolved] })
+                     .where(users: { id: current_user.id })
+                     .where(statuses: { name: %w[Closed Resolved] })
                  else
                    @project.tickets.joins(:users, :statuses)
-                           .where(users: { id: current_user.id })
-                           .where.not(statuses: { name: %w[Closed Resolved] })
+                     .where(users: { id: current_user.id })
+                     .where.not(statuses: { name: %w[Closed Resolved] })
                  end
 
       @per_page = 10
