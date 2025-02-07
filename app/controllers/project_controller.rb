@@ -31,6 +31,13 @@ class ProjectController < ApplicationController
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end
       @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
+      @tickets = if params[:filter] == 'closed_assigned'
+                   @project.tickets.joins(:users, :statuses)
+                     .where(users: { id: current_user.id })
+                     .where(statuses: { name: %w[Closed Resolved] })
+                 else
+                   @project.tickets
+                 end
 
       @per_page = 10
       @page = (params[:page] || 1).to_i
@@ -50,9 +57,7 @@ class ProjectController < ApplicationController
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
-      # @breached_sla_tickets_count = @project.tickets.count_breached_sla
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
-      @breached_resolution_count = @project.tickets.count_resolution_breached_sla
 
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
