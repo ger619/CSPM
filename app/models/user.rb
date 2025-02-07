@@ -72,7 +72,7 @@ class User < ApplicationRecord
 
   # To have a list of user who only have a specific role
   def self.with_agent_project_manager_role
-    joins(:roles).where(roles: { name: 'project manager' }, first_login: true)
+    joins(:roles).where(roles: { name: 'project manager' }, first_login: true, active: true)
   end
 
   def self.with_agent_role
@@ -80,11 +80,11 @@ class User < ApplicationRecord
   end
 
   def self.with_assigned_role
-    joins(:roles).where(roles: { name: ['agent', 'project manager', 'admin'] }, first_login: true)
+    joins(:roles).where(roles: { name: ['agent', 'project manager', 'admin'] }, first_login: true, active: true)
   end
 
   def self.with_client_role
-    joins(:roles).where(roles: { name: ['client'] }, first_login: true)
+    joins(:roles).where(roles: { name: ['client'] }, first_login: true, active: true)
   end
 
   def tagging_to(user)
