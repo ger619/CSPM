@@ -30,24 +30,19 @@ class ProjectController < ApplicationController
                 else
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end
-      if params[:filter] == 'Assigned'
-        @ticket = @ticket.joins(:users).where(users: { id: current_user.id })
-      end
+      @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
 
       @per_page = 10
       @page = (params[:page] || 1).to_i
       @total_pages = (@ticket.count / @per_page.to_f).ceil
       @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
       # To pick the number of tickets that have status closed
-      @closed_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' }).count
+      # @closed_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' }).count
       # To pick the number of tickets that have status resolved
-      @resolved_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Resolved' }).count
       # Show the number of tickets assigned to the curent user
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       # Show the number of tickets assigned to the curent user
       @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
-
-
 
       # assigned tickets that are closed or resolved
 
@@ -55,7 +50,7 @@ class ProjectController < ApplicationController
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
-      @breached_sla_tickets_count = @project.tickets.count_breached_sla
+      # @breached_sla_tickets_count = @project.tickets.count_breached_sla
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
       @breached_resolution_count = @project.tickets.count_resolution_breached_sla
 

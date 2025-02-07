@@ -67,9 +67,9 @@
           <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: ['Closed', 'Resolved'] }).count %></span>
         </h1>
 
-        <h1>Resolved Tickets: <span class="font-light"><%= @resolved_tickets %></span></h1>
-        <h1>Closed Tickets: <span class="font-light"><%= @closed_tickets %></span></h1>
-        <h1>SLA on Tickets: <span class="font-light"><%= @breached_sla_tickets_count %></span></h1>
+        <!--
+        <h1>Closed Tickets: <span class="font-light"><%#= @closed_tickets %></span></h1>\
+        -->
         <h1>SLA on Target Response <span class="font-light"><%= @breached_target_tickets_count %></span></h1>
         <h1>SLA on Resolution Deadline <span class="font-light"><%= @breached_resolution_count %></span></h1>
 
