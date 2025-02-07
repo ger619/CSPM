@@ -31,12 +31,15 @@ class ProjectController < ApplicationController
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end
       @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
+
       @tickets = if params[:filter] == 'closed_assigned'
                    @project.tickets.joins(:users, :statuses)
                      .where(users: { id: current_user.id })
                      .where(statuses: { name: %w[Closed Resolved] })
                  else
-                   @project.tickets
+                   @project.tickets.joins(:users, :statuses)
+                     .where(users: { id: current_user.id })
+                     .where.not(statuses: { name: %w[Closed Resolved] })
                  end
 
       @per_page = 10
