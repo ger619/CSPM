@@ -1,0 +1,42 @@
+<div class="overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
+    <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-4 py-2">Name of Person</th>
+      <th scope="col" class="px-4 px-2">Role</th>
+      <th scope="col" class="px-4 px-2">VIEW</th>
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+          <th scope="col" class="px-4 px-2">EDIT</th>
+          <th scope="col" class="px-4 px-2">DELETE</th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <%# @project.each do |project| %>  <!-- Looping through each project -->
+      <%# if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+          <td class="px-4 py-4 font-medium text-left">
+            <%#= link_to project.title.truncate_words(3), project_path(project.id) %>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <%#= project.description.truncate(30) %>
+          </td>
+          <td class="px-4 py-4 text-left">
+            <%#= link_to "VIEW", project_path(project.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+          </td>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+
+              <td class="px-4 py-4 text-left">
+                <%#= link_to 'Edit', edit_project_path(project), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+              </td>
+
+              <td class="px-4 py-4 text-left">
+                <%#= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+              </td>
+          <% end %>
+        </tr>
+      <%# end %>
+    <%# end %>
+    </tbody>
+  </table>
+</div>
