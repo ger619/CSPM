@@ -30,6 +30,9 @@ class ProjectController < ApplicationController
                 else
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end
+      if params[:filter] == 'Assigned'
+        @ticket = @ticket.joins(:users).where(users: { id: current_user.id })
+      end
 
       @per_page = 10
       @page = (params[:page] || 1).to_i
@@ -42,8 +45,12 @@ class ProjectController < ApplicationController
       # Show the number of tickets assigned to the curent user
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       # Show the number of tickets assigned to the curent user
-      @assigned_tickets = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
+      @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
+
+
+
       # assigned tickets that are closed or resolved
+
       @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })

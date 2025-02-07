@@ -57,7 +57,12 @@
       <div>
         <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
         <% if current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?('project manager') %>
-          <h1>Assigned Ticket: <span class="font-light"><%= @assigned_tickets %></span></h1>
+          <h1 class="pt-1">
+            My Tickets: <%= @assigned_tickets_count %> <%= link_to 'View', project_path(@project, filter: 'Assigned'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
+            <span class="font-light"><%= @assigned_tickets %></span>
+          </h1>
+
+
           <h1>Assigned & Closed: <span class="font-light"><%= @closed_assigned_tickets %></span></h1>
         <% end %>
         <h1>Total New Tickets:
