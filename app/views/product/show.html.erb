@@ -85,7 +85,7 @@
 
 <div class="relative w-full overflow-hidden flex justify-center">
   <% if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
-    <div class="w-full max-w-7xl overflow-auto transform origin-top scale-90 md:scale-100">
+    <div class="w-full overflow-auto transform origin-top scale-90 md:scale-100">
       <%= render 'boards/board_display' %>
     </div>
   <% end %>
