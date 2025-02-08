@@ -1,4 +1,4 @@
-<div class="overflow-x-auto shadow-md sm:rounded-lg w-[90%] ">
+<div class="overflow-x-auto shadow-md sm:rounded-lg w-full p-1">
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
     <tr>
@@ -15,7 +15,7 @@
         Priority
       </th>
       <th scope="col" class="px-2">
-        Details
+        Summary
       </th>
       <th scope="col" class="px-2">
        Assigned To
@@ -29,15 +29,15 @@
       <th scope="col" class="px-2">
         Reported By
       </th>
-      <th scope="col" class="px-2 hide-on-sidebar">
+      <th scope="col" class="px-2 ">
         VIEW
       </th>
 
-        <th scope="col" class="px-2 hide-on-sidebar">
+        <th scope="col" class="px-2 ">
           EDIT
         </th>
 
-      <th scope="col" class="px-2 hide-on-sidebar">
+      <th scope="col" class="px-2">
         DELETE
       </th>
 
@@ -55,7 +55,7 @@
 
     <% @ticket.each do |ticket| %>
     <% if ticket.present? %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
 
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket)   %>
@@ -186,17 +186,17 @@
           <% end %>
         </td>
         <td class="px-2 py-2">
-          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 hide-on-sidebar'  %>
+          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'mb-4 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 '  %>
         </td>
 
         <td class="px-2 py-2">
           <% if can?(:edit, ticket) %>
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 hide-on-sidebar' %>
+            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'mb-4 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 ' %>
           <% end %>
         </td>
         <td class="px-2 py-2">
           <% if can? :destroy, ticket %>
-            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' h-12 bg-[#F65160] hover:bg-[#F65160] p-3 rounded font-bold rounded-lg text-slate-100 hide-on-sidebar'  %>
+            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-3 rounded font-bold rounded-lg text-slate-100'  %>
           <% end %>
         </td>
         <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
