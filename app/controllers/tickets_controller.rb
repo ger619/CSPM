@@ -251,8 +251,7 @@ class TicketsController < ApplicationController
 
     log_event(@ticket, current_user, 'status_change', "Status was changed to #{status.name}.")
 
-    if status.name.in?(['Awaiting Build', 'On-Hold', 'Closed', 'Declined', 'Reopened', 'QA Testing', 'Under Development', 'Work in Progress',
-                        'Client Confirmation Pending'])
+    if status.name.in?(%w[Resolved Closed Declined Reopened])
       redirect_to new_project_ticket_comment_path(@project, @ticket)
     else
       redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'

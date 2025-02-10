@@ -1,4 +1,4 @@
-<div class="p-4 space-y-6">
+<div class="p-2 container">
   <!-- Topbar and Alert -->
   <%= render 'issues/issue_topbar' %>
   <%= render 'layouts/alert', class: "" %>
@@ -54,8 +54,8 @@
           <%= @ticket.subject %>
          </span>
         </div>
-        <div class="mb-2.5 font-bold capitalize ">Content:
-          <span class="font-extralight p-2">
+        <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
+          <span class="font-extralight pl-2 flex flex-wrap">
           <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
           <% if @ticket.content.body.attachments.any? %>
             <% @ticket.content.body.attachments.each do |attachment| %>
@@ -145,6 +145,7 @@
     <%= render 'tickets/timeline' %>
   </div>
 <% end %>
+</div>
 <style>
     .zoomable-image {
         cursor: pointer;
