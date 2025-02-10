@@ -8,8 +8,7 @@
         All Service Desks
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= current_user.projects.distinct.count %>
-      </span>
+        <%= Project.distinct.count %>      </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
@@ -20,10 +19,10 @@
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
-        All Tickets
+        All Tickets created in the last one week
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+        <%= Ticket.where('created_at >= ?', 1.week.ago).count %>
       </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
