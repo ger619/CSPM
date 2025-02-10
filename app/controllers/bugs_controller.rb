@@ -25,7 +25,7 @@ class BugsController < ApplicationController
     @bug.user = current_user
 
     if @bug.save
-      redirect_to product_path(@product), notice: 'Bug was successfully created.'
+      redirect_to product_bug_path(@product, @bug), notice: 'Bug was successfully created.'
     else
       render :new, alert: 'Bug was unsuccessfully created.'
     end
@@ -37,7 +37,7 @@ class BugsController < ApplicationController
 
   def update
     if @bug.update(bug_params)
-      redirect_to product_path(@product), notice: 'Bug was successfully updated.'
+      redirect_to product_bug_path(@product, @bug), notice: 'Bug was successfully updated.'
     else
       render :edit, alert: 'Bug was unsuccessfully updated.'
     end
@@ -93,6 +93,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, :software_id, :groupware_id, :summary, images: [])
+    params.require(:bug).permit(:issue, :priority, :content, :product_id, :software_id, :groupware_id, :summary, video: [], images: [])
   end
 end
