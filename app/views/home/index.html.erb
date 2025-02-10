@@ -8,22 +8,7 @@
         All Service Desks
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= current_user.projects.distinct.count %>
-      </span>
-    </div>
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-      <p class="text-xs sm:text-sm truncate">
-        All Open Tickets
-      </p>
-      <span class="text-lg sm:text-xl font-bold">
-        <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>      </span>
-    </div>
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-      <p class="text-xs sm:text-sm truncate">
-        All Tickets
-      </p>
-      <span class="text-lg sm:text-xl font-bold">
-        <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+        <%= Project.distinct.count %>
       </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
@@ -31,7 +16,8 @@
         Active Clients(Clients who have login more than once)
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>      </span>
+        <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
+      </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
@@ -39,6 +25,30 @@
       </p>
       <span class="text-lg sm:text-xl font-bold">
         <%= Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved] }).where('tickets.updated_at >= ?', 1.week.ago).count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Tickets
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.distinct.count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Open Tickets
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Tickets created in the last one week
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.where('created_at >= ?', 1.week.ago).count %>
       </span>
     </div>
   </div>
