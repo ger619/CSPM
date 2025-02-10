@@ -8,14 +8,16 @@
         All Service Desks
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= Project.distinct.count %>      </span>
+        <%= Project.distinct.count %>
+      </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
         All Open Tickets
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>      </span>
+        <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+      </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
@@ -30,7 +32,8 @@
         Active Clients(Clients who have login more than once)
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>      </span>
+        <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
+      </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
