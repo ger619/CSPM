@@ -12,7 +12,7 @@ class Ticket < ApplicationRecord
   has_many :ratings, dependent: :destroy
   validates :image, content_type: %w[image/png image/jpeg], size: { less_than: 5.megabytes }
   has_many :events, dependent: :destroy
-  validates :unique_id, uniqueness: true
+
   before_update :track_updates
   before_create :set_default_status
 
