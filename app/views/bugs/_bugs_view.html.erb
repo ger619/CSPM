@@ -33,14 +33,14 @@
             <%= bug.summary&.truncate(40) %>
           </td>
           <td class="px-6 py-4 text-left">
-            <%= link_to "VIEW", product_bug_path(bug.product_id, bug), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+            <%= link_to "VIEW", product_bug_path(bug.product_id, bug), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
           </td>
           <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
             <td class="px-6 py-4 text-left">
-              <%= link_to 'Edit', edit_product_bug_path(bug.product_id, bug), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+              <%= link_to 'Edit', edit_product_bug_path(bug.product_id, bug), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
             </td>
             <td class="px-6 py-4 text-left">
-              <%= button_to 'Delete', product_bug_path(bug.product_id, bug), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+              <%= button_to 'Delete', product_bug_path(bug.product_id, bug), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
             </td>
           <% end %>
         </tr>
@@ -48,8 +48,23 @@
     <% end %>
     </tbody>
   </table>
-
+  <div class="flex items-center gap-4 m-2">
+    <% if @page > 1 %>
+      <%= link_to 'Previous',
+                  product_path(page: @page - 1, query: params[:query]),
+                  class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
+    <% end %>
+    <span class="text-sm font-medium text-gray-700">
+      Page <%= @page %> of <%= @total_pages %>
+    </span>
+    <% if @page < @total_pages %>
+      <%= link_to 'Next',
+                  product_path(page: @page + 1, query: params[:query]),
+                  class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
+    <% end %>
+  </div>
 </div>
+
 
 
 <script>

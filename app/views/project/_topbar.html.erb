@@ -3,11 +3,11 @@
     <% if can? :create, @project %>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
         <div class="flex gap-1">
-          <%= button_to root_path, method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' do %>
+          <%= button_to root_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' do %>
             &#8656; Back
           <% end %>
 
-        <%= button_to '+ Add Service Desk ', new_project_path, method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+        <%= button_to '+ Add Service Desk ', new_project_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded-md font-bold rounded-lg text-slate-100', id: 'button' %>
         </div>
       <% end %>
     <% end %>
@@ -16,11 +16,11 @@
   <div class="grid col-span-1 justify-end">
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: project_index_path, method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
-      <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mr-2 ', id: 'button'  %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black p-1" %>
+      <%= f.submit "Search", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] rounded font-bold rounded-md text-slate-100 mr-2 p-2', id: 'button'  %>
       <% end %>
       <%= form_with url: project_index_path, method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.submit "Clear", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'  %>
+        <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] rounded font-bold rounded-md text-slate-100 p-2', id: 'button'  %>
       <% end %>
     </div>
   </div>

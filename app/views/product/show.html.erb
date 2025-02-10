@@ -17,14 +17,14 @@
       <% if new_board && @boards.present? && @tasks.present? %>
         <% @boards.first(1).each do |board| %>
           <% @tasks.first(1).each do |task| %>
-            <%= link_to 'Add Task', new_product_board_task_bug_path(@product.id, board.id, task.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+            <%= link_to 'Add Task', new_product_board_task_bug_path(@product.id, board.id, task.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
           <% end %>
         <% end %>
       <% end %>
     </div>
     <% end %>
     <div class="flex flex-row">
-      <%= link_to 'Add Bug', new_product_bug_path(@product ), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <%= link_to 'Add Bug', new_product_bug_path(@product ), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
     </div>
   </div>
   <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2 ">

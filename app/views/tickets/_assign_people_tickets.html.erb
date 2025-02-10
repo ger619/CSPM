@@ -28,10 +28,10 @@
             <% available_users = User.with_assigned_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)).distinct %>
             <% if available_users.any? %>
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email),
-                  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[120px] h-12 mr-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class: "border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 block mr-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               %>
               <div class="">
-                <%= submit_tag "ASSIGN USER", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+                <%= submit_tag "ASSIGN USER", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
               </div>
             <% else %>
               <p class="text-gray-500 text-sm">No available users to assign.</p>
@@ -46,9 +46,9 @@
             <%= label_tag :user_id, "REMOVE USER" %>
             <div class="flex flex-wrap">
               <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name),
-                             class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[120px] h-12 mr-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                             class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block mr-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               %>
-              <%= submit_tag "REMOVE", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+              <%= submit_tag "REMOVE", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
             </div>
           <% end %>
         </div>

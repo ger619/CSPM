@@ -60,17 +60,17 @@
               <% end %>
           </td>
           <td class="px-4 py-4 text-left">
-            <%= link_to "VIEW", project_path(project.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+            <%= link_to "VIEW", project_path(project.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' %>
           </td>
           <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
             <% if can? :edit, project %>
               <td class="px-4 py-4 text-left">
-                <%= link_to 'Edit', edit_project_path(project), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+                <%= link_to 'Edit', edit_project_path(project), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' %>
               </td>
             <% end %>
             <% if can? :delete, project %>
               <td class="px-4 py-4 text-left">
-                <%= button_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+                <%= link_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
               </td>
             <% end %>
           <% end %>
