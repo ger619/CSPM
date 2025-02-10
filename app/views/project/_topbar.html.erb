@@ -3,7 +3,7 @@
     <% if can? :create, @project %>
       <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
         <div class="flex gap-1">
-          <%= button_to root_path, method: :get, class: 'mb-4 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' do %>
+          <%= button_to root_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' do %>
             &#8656; Back
           <% end %>
 

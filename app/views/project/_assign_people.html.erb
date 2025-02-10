@@ -1,12 +1,12 @@
 <div class="flex flex-start">
   <div class="text-xs mr-2">
     <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
-      <h3>Craft Silicon staff</h3>
+      <h3 class="mb-1">Craft Silicon staff</h3>
       <div class="flex flex-wrap gap-2">
         <%= form_with url: '#', local: true do %>
           <% craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') } %>
           <%= select_tag 'assigned_agents', options_from_collection_for_select(craft_silicon_users, 'id', 'name'),
-                         class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-xs dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white"
+                         class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-xs dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white"
           %>
         <% end %>
       </div>
@@ -15,7 +15,7 @@
 
   <div class="text-xs">
     <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
-      <h3>Non-Craft Silicon staff</h3>
+      <h3 class="mb-1">Clients</h3>
       <div class="flex flex-wrap gap-2">
         <%= form_with url: '#', local: true do %>
           <% non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') } %>
