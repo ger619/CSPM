@@ -5,25 +5,25 @@
         <%= label_tag :user_id, "SELECT USER", class: "block font-semibold" %>
         <div class="flex flex-wrap gap-2">
           <div class="w-full sm:max-w-[120px]">
-            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role.where.not(id: @product.users.pluck(:id)).distinct, :id, :name), class: "h-12 w-full form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", required: true %>
+            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role.where.not(id: @product.users.pluck(:id)).distinct, :id, :name), class: "w-full form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", required: true %>
           </div>
           <div class="flex justify-center w-full sm:w-auto">
-            <%= submit_tag "ADD USERS", class: 'w-full sm:w-auto h-12 text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold text-slate-100' %>
+            <%= submit_tag "ADD USERS", class: 'w-full sm:w-auto text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold text-slate-100' %>
           </div>
         </div>
       <% end %>
     </div>
-    
+
     <div class="text-xs">
       <% if @product.users.present? %>
         <%= form_with url: remove_user_product_path(@product), method: :delete, local: true do %>
           <%= label_tag :user_id, "REMOVE USER", class: "block font-semibold" %>
           <div class="flex flex-wrap gap-2">
             <div class="w-full sm:max-w-[120px]">
-              <%= select_tag :user_id, options_from_collection_for_select(@product.users, :id, :name), class: "h-12 w-full form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+              <%= select_tag :user_id, options_from_collection_for_select(@product.users, :id, :name), class: "w-full form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
             </div>
             <div class="flex justify-center w-full sm:w-auto">
-              <%= submit_tag "REMOVE USER", class: 'w-full sm:w-auto h-12 text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold text-slate-100' %>
+              <%= submit_tag "REMOVE USER", class: 'w-full sm:w-auto text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold text-slate-100' %>
             </div>
           </div>
         <% end %>
