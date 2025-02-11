@@ -1,0 +1,40 @@
+<!-- app/views/data_center/project_report.html.erb -->
+<h1>Project Report</h1>
+
+<%= form_with url: project_report_path, method: :get, local: true do %>
+  <div>
+    <%= label_tag :project_id, 'Select Project' %>
+    <%= select_tag :project_id, options_from_collection_for_select(Project.all, :id, :title, params[:project_id]), prompt: 'Choose a project' %>
+    <%= submit_tag 'Show Report' %>
+  </div>
+<% end %>
+
+<% if @project %>
+  <h2>Project Report for <%= @project.title %></h2>
+
+  <% if @tickets_by_user_and_day.present? %>
+    <table>
+      <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Date</th>
+        <th>Ticket Count</th>
+        <th>Ticket Numbers</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @tickets_by_user_and_day.each do |(user, date), tickets| %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= date %></td>
+          <td><%= tickets.count %></td> <!-- tickets is an array -->
+          <td><%= tickets.map(&:unique_id).join(', ') %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <%= link_to 'Download CSV Report', project_report_path(@project, format: :csv), class: 'btn btn-primary' %>
+
+  <% end %>
+<% end %>

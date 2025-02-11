@@ -24,12 +24,13 @@ class ProjectController < ApplicationController
       @ticket = if params[:query].present?
                   @project.tickets.left_joins(:rich_text_content, :statuses, :users)
                     .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ?
-                    OR unique_id ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?',
+                    OR unique_id ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
                            "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
-                           "%#{params[:query]}%", "%#{params[:query]}%")
+                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%")
                 else
                   @project.tickets.with_rich_text_content.order('created_at DESC')
                 end
+      @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
       @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
 
       @tickets = if params[:filter] == 'closed_assigned'
