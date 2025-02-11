@@ -25,13 +25,9 @@ class ProjectController < ApplicationController
 
       # Apply filters if params are present
       @ticket = @ticket.where('tickets.created_at::date = ?', params[:created_at]) if params[:created_at].present?
-
       @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
-
       @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
-
       @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
-
       @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
 
       if params[:query].present?
@@ -56,6 +52,9 @@ class ProjectController < ApplicationController
                      .where(users: { id: current_user.id })
                      .where.not(statuses: { name: %w[Closed Resolved] })
                  end
+
+      # Order by descending creation date
+      @ticket = @ticket.order(created_at: :desc)
 
       # Pagination
       @per_page = 10
