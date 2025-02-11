@@ -20,17 +20,31 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-    if current_user.has_role?(:admin) or @project.users.include?(current_user) or current_user.has_role?(:observer) or current_user.has_role?(:agent)
-      @ticket = if params[:query].present?
-                  @project.tickets.left_joins(:rich_text_content, :statuses, :users)
-                    .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ?
-                    OR unique_id ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
-                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
-                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%")
-                else
-                  @project.tickets.with_rich_text_content.order('created_at DESC')
-                end
+    if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
+      @ticket = @project.tickets.left_joins(:rich_text_content, :statuses, :users)
+
+      # Apply filters if params are present
+      @ticket = @ticket.where('tickets.created_at::date = ?', params[:created_at]) if params[:created_at].present?
+
+      @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+
+      @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
+
+      @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
+
+      @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
+
+      if params[:query].present?
+        query = "%#{params[:query]}%"
+        @ticket = @ticket.where(
+          'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
+         OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
+          query, query, query, query, query, query, query, query
+        )
+      end
+
       @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
+
       @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
 
       @tickets = if params[:filter] == 'closed_assigned'
@@ -43,26 +57,21 @@ class ProjectController < ApplicationController
                      .where.not(statuses: { name: %w[Closed Resolved] })
                  end
 
+      # Pagination
       @per_page = 10
       @page = (params[:page] || 1).to_i
       @total_pages = (@ticket.count / @per_page.to_f).ceil
       @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
-      # To pick the number of tickets that have status closed
-      # @closed_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' }).count
-      # To pick the number of tickets that have status resolved
-      # Show the number of tickets assigned to the curent user
-      @created_tickets = @project.tickets.where(user_id: current_user.id).count
-      # Show the number of tickets assigned to the curent user
-      @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
 
-      # assigned tickets that are closed or resolved
+      # Ticket counts
+      @created_tickets = @project.tickets.where(user_id: current_user.id).count
+      @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
 
       @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
-
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
