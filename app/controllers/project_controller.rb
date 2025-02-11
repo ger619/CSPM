@@ -24,7 +24,14 @@ class ProjectController < ApplicationController
       @ticket = @project.tickets.left_joins(:rich_text_content, :statuses, :users)
 
       # Apply filters if params are present
-      @ticket = @ticket.where('tickets.created_at::date = ?', params[:created_at]) if params[:created_at].present?
+      if params[:start_date].present? && params[:end_date].present?
+        @ticket = @ticket.where('tickets.created_at::date BETWEEN ? AND ?', params[:start_date], params[:end_date])
+      elsif params[:start_date].present?
+        @ticket = @ticket.where('tickets.created_at::date >= ?', params[:start_date])
+      elsif params[:end_date].present?
+        @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
+      end
+
       @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
       @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
       @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
