@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get 'cease_fire_report', to: 'data_center#cease_fire_report', as: 'cease_fire_report'
   get 'breach_report', to: 'data_center#breach_report', as: 'breach_report'
   get 'user_report', to: 'data_center#user_report', as: 'user_report'
+  get 'project_report', to: 'data_center#project_report', as: 'project_report'
 
   root "home#index"
   get "home/index"

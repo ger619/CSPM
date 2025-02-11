@@ -88,7 +88,37 @@ class DataCenterController < ApplicationController
     end
   end
 
+  def project_report
+    if params[:project_id].present?
+      @project = Project.find(params[:project_id])
+      @tickets = @project.tickets.joins(:statuses)
+        .where.not(statuses: { name: %w[Resolved Closed Denied] })
+
+      @tickets_by_user_and_day = @tickets.group_by { |ticket| [ticket.user, ticket.created_at.to_date] }
+
+      # generate_project_report_graph(@tickets_by_user_and_day)
+
+      respond_to do |format|
+        format.html # Default view
+        format.csv { send_data generate_project_report_csv(@tickets_by_user_and_day), filename: "project_report_#{Date.today}.csv" }
+      end
+    else
+      @project = nil
+      @tickets_by_user_and_day = {}
+    end
+  end
+
   private
+
+  def generate_project_report_csv(tickets_by_user_and_day)
+    CSV.generate(headers: true) do |csv|
+      csv << ['User Name', 'Date', 'Ticket Count', 'Ticket Numbers']
+      tickets_by_user_and_day.each do |(user, date), tickets|
+        ticket_numbers = tickets.map(&:unique_id).join(', ')
+        csv << [user.name, date, tickets.count, ticket_numbers]
+      end
+    end
+  end
 
   def generate_csv(tickets)
     CSV.generate(headers: true) do |csv|
