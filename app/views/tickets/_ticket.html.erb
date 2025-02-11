@@ -4,8 +4,13 @@
       <div class="flex-wrap flex items-center justify-around gap-2">
 
         <div class="flex flex-col">
-          <%= label_tag :ticket_created_at, 'Select Date' %>
-          <%= f.date_field :created_at, class: "border p-1 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md" %>
+          <%= label_tag :start_date, 'Start Date' %>
+          <%= f.date_field :start_date, class: "border p-1 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md" %>
+        </div>
+
+        <div class="flex flex-col">
+          <%= label_tag :end_date, 'End Date' %>
+          <%= f.date_field :end_date, class: "border p-1 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md" %>
         </div>
 
         <div class="flex flex-col">
@@ -27,7 +32,6 @@
           <%= label_tag :users, 'Assignee' %>
           <%= f.select :user_id, options_from_collection_for_select(@project.users, :id, ->(u) { "#{u.first_name} #{u.last_name}" }, params[:user_id]), prompt: 'Select User' %>
         </div>
-
 
         <div class="flex flex-col mt-5">
           <%= submit_tag 'Search', class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 mr-1' %>
