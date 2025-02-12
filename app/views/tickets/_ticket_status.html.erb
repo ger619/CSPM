@@ -49,6 +49,10 @@
       <p class='bg-green-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
         <%= status.name %>
       </p>
+    <% when 'Pending' %>
+      <p class='bg-gradient-to-r from-green-800 to-black text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
+        <%= status.name %>
+      </p>
     <% when 'Declined' %>
       <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
         <%= status.name %>
