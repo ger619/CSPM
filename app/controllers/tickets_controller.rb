@@ -148,7 +148,7 @@ class TicketsController < ApplicationController
         # Check if groupware_id is present
         # if @ticket.groupware_id.present?
         #  groupware = Groupware.find(@ticket.groupware_id)
-         #  tagged_user = groupware.user
+        #  tagged_user = groupware.user
 
         # Assign the tagged user if present
         #  @ticket.users << tagged_user if tagged_user.present?
