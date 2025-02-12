@@ -1,6 +1,6 @@
 <% if current_user && user_signed_in?  %>
 <div class="flex justify-between items-center p-4 mb-6 bg-white shadow-md dark:bg-gray-800">
-  <div class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+  <div class="text-lg font-semibold text-gray-700 dark:text-gray-200 capitalize">
     <%= greeting_message %>, <%= current_user.first_name %> <%= current_user.last_name %>
   </div>
 
