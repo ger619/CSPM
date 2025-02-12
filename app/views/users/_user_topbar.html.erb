@@ -1,21 +1,21 @@
 <div class="grid grid-cols-2 ">
   <div class="grid col-span-1">
     <div class="flex gap-1">
-      <%= button_to root_path, method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'  do %>
+      <%= button_to root_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100', id: 'button'  do %>
         &#8656; Back
       <% end %>
-      <%= button_to 'Add New User +', new_user_invitation_path , method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
+      <%= button_to 'Add New User +', new_user_invitation_path , method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
     </div>
   </div>
   <!-- Search on the right -->
   <div class="grid col-span-1 justify-end">
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: users_path(@users), method: :get, class: 'flex gap-1' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
-        <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mr-1', id: 'button'   %>
+        <%= f.text_field :query, placeholder: "Search ", class: "p-1 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+        <%= f.submit "Search", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-1', id: 'button'   %>
       <% end %>
       <%= form_with url: users_path(@users), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
+        <%= f.submit "Clear", class: ' bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
       <% end %>
     </div>
   </div>
