@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_06_091826) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_063519) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -260,6 +260,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_06_091826) do
     t.uuid "client_id"
     t.uuid "software_id"
     t.uuid "groupware_id"
+    t.boolean "special", default: false
     t.index ["client_id"], name: "index_projects_on_client_id"
     t.index ["groupware_id"], name: "index_projects_on_groupware_id"
     t.index ["software_id"], name: "index_projects_on_software_id"

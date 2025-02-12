@@ -174,14 +174,11 @@ class TicketsController < ApplicationController
       @ticket.user = current_user
       user = User.find(params[:user_id])
 
-      # Filter out users who have the role of creator
-      creator = @ticket.users.select { |u| u.has_role?(:creator, @ticket) }
-
-      # Clear users except the creators
-      @ticket.users = creator
+      # Clear all users from the ticket
+      @ticket.users.clear
 
       # Add the new user
-      @ticket.users << user unless @ticket.users.include?(user)
+      @ticket.users << user
 
       assigned_user = user
 
@@ -206,7 +203,7 @@ class TicketsController < ApplicationController
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
       log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket, with Status:
-          #{sla_ticket.sla_status} and Target Response Deadline #{sla_target_response_deadline}")
+        #{sla_ticket.sla_status} and Target Response Deadline #{sla_target_response_deadline}")
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end

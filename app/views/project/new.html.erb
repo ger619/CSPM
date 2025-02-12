@@ -57,6 +57,10 @@
           <%= f.label :start_date, 'Start Date *', class: "capitalize block mb-1 text-sm font-medium"  %><br />
           <%= f.date_field :start_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
         </div>
+        <div class="flex items-center mb-6">
+          <%= f.label :special, 'Special Service *', class: "capitalize block mb-1 text-sm font-bold mr-3 text-red" %>
+          <%= f.check_box :special, class: "mr-2" %>
+        </div>
       </div>
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium" %><br />
