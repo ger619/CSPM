@@ -45,6 +45,10 @@
       <p class='bg-blue-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-blue-900'>
         <%= status.name %>
       </p>
+    <% when 'Approved' %>
+      <p class='bg-green-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
+        <%= status.name %>
+      </p>
     <% when 'Declined' %>
       <p class='bg-gray-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-gray-900'>
         <%= status.name %>
