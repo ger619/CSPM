@@ -1,7 +1,7 @@
 <div class="grid grid-cols-2 ">
   <div class="col-span-1">
     <div class="flex flex-wrap gap-1">
-    <%= button_to  project_path(@project), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  do %>
+    <%= button_to  project_path(@project), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100'  do %>
         &#8656; Back
       <% end %>
     </div>
@@ -10,11 +10,11 @@
   <div class="grid col-span-1 justify-end">
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: "h-12 border border-b-4 border-r-2 rounded" %>
-        <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
+        <%= f.text_field :query, placeholder: "Search ", class: "p-1 border border-b-4 border-r-2 rounded" %>
+        <%= f.submit "Search", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
       <% end %>
       <%= form_with url: project_ticket_path(@project, @ticket), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+        <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
       <% end %>
 
     </div>

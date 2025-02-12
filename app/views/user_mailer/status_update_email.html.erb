@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1>Hello, <%= @current_user.name %></h1>
+<p> Ticket ID <%= @ticket.unique_id %></p>
 <p>The status of the ticket: <%= @ticket.issue %> has been updated to <% @ticket.statuses.each do |status| %><%= status.name %><% end %> by <%= @current_user.name %></p>
 <p>Ticket Description: <%= @ticket.content %></p>
 <p>Click <a href="<%= @url %>">here</a> to view the ticket.</p>
