@@ -14,8 +14,7 @@ class Ability
       can %i[read assign_user unassign_user], Project
       can %i[create read assign_tag unassign_tag add_status], Ticket
       can %i[edit destroy update], Ticket
-      can %i[create read], Issue
-      can %i[edit delete update], Issue, user_id: user.id
+      can :manage, Issue, user_id: user.id
       can %i[create read add_user remove_user edit update], Product
       cannot %i[delete], Product
       can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
