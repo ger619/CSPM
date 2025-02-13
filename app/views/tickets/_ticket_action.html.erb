@@ -1,5 +1,5 @@
 
-<% if @project.special %>
+<% if @project.special and @ticket.issue == 'CHANGE REQUEST' %>
   <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
   <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
     <% if @ticket.statuses.empty? %>
