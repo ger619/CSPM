@@ -1,5 +1,5 @@
 <% if current_user && user_signed_in?  %>
-  <div id="sidebar-wrapper" class="fixed w-64 top-0 left-0 z-40 min-h-screen overflow-y-auto transition-all duration-300 bg-[#1a237e] shadow-md">
+  <div id="sidebar-wrapper" class="fixed w-64 top-0 left-0 z-40 min-h-screen overflow-x-auto transition-all duration-300 bg-[#1a237e] shadow-md">
     <button id="toggleSidebar" class="p-2 mt-2 ms-3 text-sm text-white rounded-lg hover:bg-[#1a237e] focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
       <span class="sr-only">Toggle Sidebar</span>
       <svg class="w-3 h-3" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -166,7 +166,7 @@
             </svg>
             <span class="flex-1 ms-3 whitespace-nowrap">Data Center</span>
           </button>
-          
+
           <!-- Dropdown Content -->
           <ul id="dropdownMenu" class="absolute hidden text-white bg-[#1a237e]shadow-md rounded-md w-20 mt-2 space-y-2">
             <%= link_to cease_fire_report_path do %>
@@ -201,6 +201,16 @@
                   </div>
                 </li>
             <% end %>
+              <%= link_to project_report_path do %>
+                <li>
+                  <div class="flex items-center p-2 rounded-lg hover:bg-transparent dark:hover:bg-gray-700 group">
+                    <svg class="w-4 h-5 text-[#fff] transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
+                    </svg>
+                    <span class="flex-1 hover:text-[#3F8CFF] ms-3 whitespace-nowrap">Project Report</span>
+                  </div>
+                </li>
+              <% end %>
           <% end %>
           </ul>
         </li>

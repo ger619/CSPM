@@ -31,6 +31,10 @@ class ProductController < ApplicationController
       end
 
       @bugs = @product.bugs
+      @per_page = 10
+      @page = (params[:page] || 1).to_i
+      @total_pages = (@bugs.count / @per_page.to_f).ceil
+      @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
 
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
@@ -53,6 +57,16 @@ class ProductController < ApplicationController
     respond_to do |format|
       if (current_user.has_role?(:admin) || current_user.has_role?('project_manager')) && @product.errors.empty?
         if @product.save
+          # Save the selected software
+          @product.softwares = Software.where(id: params[:product][:software_ids])
+
+          # Save the selected groupware only if it is selected
+          if params[:product][:groupware_ids].present?
+            @product.groupwares = Groupware.where(id: params[:product][:groupware_ids])
+          else
+            @product.groupwares.clear
+          end
+
           current_user.add_role :creator, @product
           format.html { redirect_to product_path(@product), notice: 'Product was successfully created.' }
         else
@@ -110,16 +124,6 @@ class ProductController < ApplicationController
   def destroy
     @product.destroy
     redirect_to product_url, notice: 'Product was successfully destroyed.'
-  end
-
-  def groupwares
-    software_id = params[:software_id]
-    # Fetch groupwares associated with the current project and the selected software_id
-    groupwares = @product.groupwares
-      .joins(:softwares)
-      .where(softwares: { id: software_id })
-      .distinct
-    render json: groupwares
   end
 
   private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_03_113401) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_063519) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -260,6 +260,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_03_113401) do
     t.uuid "client_id"
     t.uuid "software_id"
     t.uuid "groupware_id"
+    t.boolean "special", default: false
     t.index ["client_id"], name: "index_projects_on_client_id"
     t.index ["groupware_id"], name: "index_projects_on_groupware_id"
     t.index ["software_id"], name: "index_projects_on_software_id"
@@ -322,6 +323,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_03_113401) do
     t.datetime "updated_at", null: false
     t.index ["task_id"], name: "index_states_on_task_id"
     t.index ["user_id"], name: "index_states_on_user_id"
+  end
+
+  create_table "status_bugs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "bug_id", null: false
+    t.uuid "status_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bug_id"], name: "index_status_bugs_on_bug_id"
+    t.index ["status_id"], name: "index_status_bugs_on_status_id"
   end
 
   create_table "statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -510,6 +520,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_03_113401) do
   add_foreign_key "softwares", "users"
   add_foreign_key "states", "tasks"
   add_foreign_key "states", "users"
+  add_foreign_key "status_bugs", "bugs"
+  add_foreign_key "status_bugs", "statuses"
   add_foreign_key "statuses", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"

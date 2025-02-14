@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @assigned_user.email, subject: 'New Ticket Created')
+    mail(to: @assigned_user.email, subject: "New Ticket Created with #{@ticket.unique_id}")
   end
 
   # From Ticket Controller create
@@ -28,7 +28,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @user.email, subject: 'Ticket Assignment')
+    mail(to: @user.email, subject: "Ticket Assigned with #{@ticket.unique_id}")
   end
 
   # From Ticket Controller
@@ -38,7 +38,7 @@ class UserMailer < ApplicationMailer
     @ticket = ticket
     @current_user = current_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @user.email, subject: 'Ticket status updated')
+    mail(to: @user.email, subject: "Ticket #{@ticket.unique_id} status updates")
   end
 
   # From Product Controller
@@ -75,6 +75,15 @@ class UserMailer < ApplicationMailer
     @comment = comment
     @current_user = current_user
     @url = project_ticket_url(@comment.ticket.project, @comment.ticket)
-    mail(to: @user.email, subject: 'New Comment')
+    mail(to: @user.email, subject: 'Root Cause Analysis ')
+  end
+
+  def bug_mailer(user, bug, current_user, assigned_user)
+    @user = user
+    @bug = bug
+    @current_user = current_user
+    @assigned_user = assigned_user
+    @url = product_bug_url(@bug.product, @bug)
+    mail(to: @user.email, subject: 'Bug Assignment')
   end
 end

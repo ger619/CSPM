@@ -11,15 +11,11 @@ class BugsController < ApplicationController
     @softwares = @product.softwares
 
     # Fetch groupwares associated with the project and the selected software
-    # If a software_id is already selected, filter groupwares accordingly
     @groupwares = if @bug.software_id.present?
                     @product.groupwares
                       .joins(:softwares)
-                      .where(softwares: { id: @ticket.software_id })
-                      .distinct
-                  else
-                    # If no software is selected, load all groupwares for the project
-                    @product.groupwares
+                      .where(softwares: { id: @bug.software_id })
+                      .where(id: @product.groupware_ids)
                       .distinct
                   end
   end
@@ -29,7 +25,7 @@ class BugsController < ApplicationController
     @bug.user = current_user
 
     if @bug.save
-      redirect_to product_path(@product), notice: 'Bug was successfully created.'
+      redirect_to product_bug_path(@product, @bug), notice: 'Bug was successfully created.'
     else
       render :new, alert: 'Bug was unsuccessfully created.'
     end
@@ -41,7 +37,7 @@ class BugsController < ApplicationController
 
   def update
     if @bug.update(bug_params)
-      redirect_to product_path(@product), notice: 'Bug was successfully updated.'
+      redirect_to product_bug_path(@product, @bug), notice: 'Bug was successfully updated.'
     else
       render :edit, alert: 'Bug was unsuccessfully updated.'
     end
@@ -64,10 +60,19 @@ class BugsController < ApplicationController
 
       # Send email to the newly assigned user
       assigned_user = user # Assuming the first user is the assigned user
-      UserMailer.assignment_email(user, @bug, current_user, assigned_user).deliver_later
+      UserMailer.bug_mailer(user, @bug, current_user, assigned_user).deliver_later
 
-      redirect_to product_bugs_path(@product, @bug), notice: 'User was successfully assigned.'
+      redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
+
     end
+  end
+
+  def bug_status
+    @bug = Bug.find(params[:id])
+    status = Status.find(params[:status_id])
+    @bug.statuses.clear
+    @bug.statuses << status
+    redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
   end
 
   def unassign_tag
@@ -88,6 +93,6 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :video, :content, :product_id, software_ids: [], groupware_ids: [])
+    params.require(:bug).permit(:issue, :priority, :content, :product_id, :software_id, :groupware_id, :summary, video: [], images: [])
   end
 end

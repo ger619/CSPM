@@ -1,7 +1,62 @@
 <div class="p-4 border-2 border-white rounded-lg flex flex-col items-center">
+
+<!-- Topbar Section  for admin and observer-->
+  <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6 w-full ">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Service Desks
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Project.distinct.count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        Active Clients(Clients who have login more than once)
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        Tickets Closed in the last one week
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved] }).where('tickets.updated_at >= ?', 1.week.ago).count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Tickets
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.distinct.count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Open Tickets
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        All Tickets created in the last one week
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= Ticket.where('created_at >= ?', 1.week.ago).count %>
+      </span>
+    </div>
+  </div>
+    <% end %>
+
   <!-- First Grid Section -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4 w-full">
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full max-w-xs">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4 w-full">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
         Number of Service Desks
       </p>
@@ -9,26 +64,28 @@
         <%= current_user.projects.distinct.pluck(:id).count %>
       </span>
     </div>
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full max-w-xs">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
-        Number of Tickets
+        My Open Tickets
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= current_user.tickets.distinct.pluck(:id).count %>
+        <%= current_user.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.pluck(:id).count %>
       </span>
     </div>
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full max-w-xs">
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
-        Number of Comments
+        Total Number of of Open Tickets
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= current_user.issues.distinct.pluck(:id).count %>
+        <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
       </span>
+
     </div>
   </div>
 
+
   <!-- Table Section -->
-  <div class="flex flex-wrap items-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full max-w-screen-lg">
+  <div class="flex flex-wrap items-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
     <p class="text-base sm:text-2xl text-gray-400 dark:text-gray-500">
       <%= render 'home/table_ticket_per_project' %>
     </p>
@@ -36,34 +93,34 @@
 
   <!-- Conditional Admin Section -->
   <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
-    <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full max-w-screen-lg">
+    <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
       <%= render 'home/breach_visualisation' %>
     </div>
   <% end %>
 
   <!-- Total List Section -->
-  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full max-w-screen-md">
+  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
     <%= render 'home/total_list' %>
   </div>
 
   <!-- Responsive Grid Section -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full max-w-sm">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 w-full">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full">
       <%= render 'home/closed_reopened' %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full max-w-sm">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full">
       <%= render 'home/total_number_tickets' %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full max-w-sm">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full">
       <%= render 'home/pie_charts' %>
     </div>
-    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full max-w-sm">
+    <div class="flex items-center justify-center rounded bg-gray-50 p-2 dark:bg-gray-800 w-full">
       <%= render 'home/list_project' %>
     </div>
   </div>
 
   <!-- Chart Data Section -->
-  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full max-w-screen-md">
+  <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
     <%= render 'home/chart_data_per_user' %>
   </div>
 </div>

@@ -146,15 +146,15 @@ class TicketsController < ApplicationController
 
         # Assign the project manager if no agents are assigned
         # Check if groupware_id is present
-        if @ticket.groupware_id.present?
-          groupware = Groupware.find(@ticket.groupware_id)
-          tagged_user = groupware.user
+        # if @ticket.groupware_id.present?
+        #  groupware = Groupware.find(@ticket.groupware_id)
+        #  tagged_user = groupware.user
 
-          # Assign the tagged user if present
-          @ticket.users << tagged_user if tagged_user.present?
-        elsif @ticket.users.empty?
-          @ticket.users << @project.user
-        end
+        # Assign the tagged user if present
+        #  @ticket.users << tagged_user if tagged_user.present?
+        # elsif @ticket.users.empty?
+        #  @ticket.users << @project.user
+        # end
 
         # Assign the default user if no users are assigned
 
@@ -174,14 +174,11 @@ class TicketsController < ApplicationController
       @ticket.user = current_user
       user = User.find(params[:user_id])
 
-      # Filter out users who have the role of creator
-      creator = @ticket.users.select { |u| u.has_role?(:creator, @ticket) }
-
-      # Clear users except the creators
-      @ticket.users = creator
+      # Clear all users from the ticket
+      @ticket.users.clear
 
       # Add the new user
-      @ticket.users << user unless @ticket.users.include?(user)
+      @ticket.users << user
 
       assigned_user = user
 
@@ -206,7 +203,7 @@ class TicketsController < ApplicationController
       UserMailer.ticket_assignment_email(user, @ticket, current_user, assigned_user).deliver_later
 
       log_event(@ticket, current_user, 'assign', "#{user.name} was assigned to the ticket, with Status:
-          #{sla_ticket.sla_status} and Target Response Deadline #{sla_target_response_deadline}")
+        #{sla_ticket.sla_status} and Target Response Deadline #{sla_target_response_deadline}")
       redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully assigned.'
     end
   end
@@ -251,8 +248,7 @@ class TicketsController < ApplicationController
 
     log_event(@ticket, current_user, 'status_change', "Status was changed to #{status.name}.")
 
-    if status.name.in?(['Awaiting Build', 'On-Hold', 'Closed', 'Declined', 'Reopened', 'QA Testing', 'Under Development', 'Work in Progress',
-                        'Client Confirmation Pending'])
+    if status.name.in?(%w[Resolved Closed Declined Reopened])
       redirect_to new_project_ticket_comment_path(@project, @ticket)
     else
       redirect_to project_ticket_path(@project, @ticket), notice: 'Status was successfully assigned.'

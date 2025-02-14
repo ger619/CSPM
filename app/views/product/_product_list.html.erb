@@ -8,10 +8,10 @@
       <th scope="col" class="px-6 py-3">
         Production Description
       </th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-6 py-3 hide-in-sidebar">
         Start Date
       </th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-6 py-3 hide-in-sidebar">
         End Date
       </th>
       <th scope="col" class="px-6 py-3">
@@ -23,14 +23,14 @@
       <th scope="col" class="px-6 py-3">
         Clients
       </th>
-      <th scope="col" class="px-6 py-3 hide-in-sidebar">
+      <th scope="col" class="px-6 py-3 ">
         VIEW
       </th>
-      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-        <th scope="col" class="px-6 py-3 hide-in-sidebar">
+      <% if current_user.has_role? :admin %>
+        <th scope="col" class="px-6">
           EDIT
         </th>
-        <th scope="col" class="px-6 py-3 hide-in-sidebar">
+        <th scope="col" class="px-6 py-3">
           REMOVE
         </th>
       <% end %>
@@ -46,10 +46,10 @@
           <td class="px-6 py-4">
             <%= product.description.truncate(50) %>
           </td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 hide-in-sidebar">
             <%= product.start_date.strftime("%d-%b-%y") %>
           </td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 hide-in-sidebar">
             <% if product.end_date.present? %>
               <% if product.end_date <= Date.today %>
                 <p class="text-red-900 p-1 rounded font-bold">
@@ -75,18 +75,18 @@
               <%= product.client.name %>
             <% end %>
           </td>
-          <td class="px-6 py-4 hide-in-sidebar">
-            <%= link_to "VIEW", product_path(product.id), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+          <td class="px-6 py-4 ">
+            <%= link_to "VIEW", product_path(product.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
           </td>
           <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
               <% if can? :edit, product %>
-              <td class="px-6 py-4 hide-in-sidebar">
-                <%= link_to 'Edit', edit_product_path(product), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+              <td class="px-6 py-4 ">
+                <%= link_to 'EDIT', edit_product_path(product), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 uppercase'  %>
               </td>
             <% end %>
               <% if can? :delete, product %>
-              <td class="px-6 py-4 hide-in-sidebar">
-                <%= button_to 'delete', product, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
+              <td class="px-6 py-4 ">
+                <%= button_to 'delete', product, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
               </td>
             <% end %>
           <% end %>

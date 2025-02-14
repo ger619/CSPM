@@ -25,4 +25,8 @@ module ApplicationHelper
       'Good Evening'
     end
   end
+
+  def previewable?(attachment)
+    attachment.content_type.start_with?('image/')
+  end
 end

@@ -1,18 +1,32 @@
 <div class="grid grid-cols-3 gap-2 font-bold">
   <div class="col-span-2">
     <% if @bug.video.attached? %>
-      <video width="854" height="480" controls>
-        <source src="<%= url_for(@bug.video) %>" type="<%= @bug.video.content_type %>">
-        Your browser does not support the video tag.
-      </video>
+      <% @bug.video.each do |video| %>
+        <video width="854" height="480" controls>
+          <source src="<%= url_for(video) %>" type="<%= video.content_type %>">
+          Your browser does not support the video tag.
+        </video>
+      <% end %>
+    <% end %>
+
+    <% if @bug.images.attached? %>
+      <div class="grid grid-cols-3 gap-2 mt-4">
+        <% @bug.images.each do |image| %>
+          <div class="col-span-1">
+            <%= image_tag url_for(image), class: "w-full h-auto rounded-lg" %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
   </div>
   <div class="col-span-1 justify-end">
-    <p><%= @bug.issue %></p>
-    <p><%= @bug.priority %></p>
-    <p><%= @bug.content %></p>
+    Issue:  <p><%= @bug.issue %></p>
+    Severity: <p><%= @bug.priority %></p>
+    Reporter:  <p><%= @bug.user.name %></p>
+
     <%= render 'bugs/add_user_remove' %>
+    <%= render 'bugs/status_bug' %>
+    <p><%= @bug.content %></p>
+    <p><%= @bug.summary %></p>
   </div>
 </div>
-
-

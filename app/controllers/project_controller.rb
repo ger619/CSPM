@@ -5,12 +5,23 @@ class ProjectController < ApplicationController
   # GET /projects
   def index
     @project = if params[:query].present?
-                 Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+                 Project.joins(:tickets)
+                   .where('projects.title ILIKE :query OR projects.description ILIKE :query OR tickets.unique_id ILIKE :query',
+                          query: "%#{params[:query]}%")
+                   .distinct
                else
-                 Project.all.with_rich_text_content.order('created_at ASC')
+                 Project.all.with_rich_text_content.order('projects.created_at ASC')
                end
 
     @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
+
+    @tickets = if params[:query].present?
+                 Ticket.where('unique_id ILIKE ?', "%#{params[:query]}%")
+               else
+                 Ticket.none
+               end
+
+    @tickets = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @per_page = 10
     @page = (params[:page] || 1).to_i
@@ -20,38 +31,64 @@ class ProjectController < ApplicationController
 
   # GET /projects/id
   def show
-    if current_user.has_role?(:admin) or @project.users.include?(current_user) or current_user.has_role?(:observer) or current_user.has_role?(:agent)
-      @ticket = if params[:query].present?
-                  @project.tickets.left_joins(:rich_text_content, :statuses, :users)
-                    .where('action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ?
-                    OR unique_id ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?',
-                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
-                           "%#{params[:query]}%", "%#{params[:query]}%")
-                else
-                  @project.tickets.with_rich_text_content.order('created_at DESC')
-                end
+    if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
+      @ticket = @project.tickets.left_joins(:rich_text_content, :statuses, :users)
 
+      # Apply filters if params are present
+      if params[:start_date].present? && params[:end_date].present?
+        @ticket = @ticket.where('tickets.created_at::date BETWEEN ? AND ?', params[:start_date], params[:end_date])
+      elsif params[:start_date].present?
+        @ticket = @ticket.where('tickets.created_at::date >= ?', params[:start_date])
+      elsif params[:end_date].present?
+        @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
+      end
+
+      @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+      @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
+      @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
+      @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
+
+      if params[:query].present?
+        query = "%#{params[:query]}%"
+        @ticket = @ticket.where(
+          'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
+         OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
+          query, query, query, query, query, query, query, query
+        )
+      end
+
+      @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
+
+      @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
+
+      @tickets = if params[:filter] == 'closed_assigned'
+                   @project.tickets.joins(:users, :statuses)
+                     .where(users: { id: current_user.id })
+                     .where(statuses: { name: %w[Closed Resolved] })
+                 else
+                   @project.tickets.joins(:users, :statuses)
+                     .where(users: { id: current_user.id })
+                     .where.not(statuses: { name: %w[Closed Resolved] })
+                 end
+
+      # Order by descending creation date
+      @ticket = @ticket.order(created_at: :desc)
+
+      # Pagination
       @per_page = 10
       @page = (params[:page] || 1).to_i
       @total_pages = (@ticket.count / @per_page.to_f).ceil
       @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
-      # To pick the number of tickets that have status closed
-      @closed_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' }).count
-      # To pick the number of tickets that have status resolved
-      @resolved_tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Resolved' }).count
-      # Show the number of tickets assigned to the curent user
+
+      # Ticket counts
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
-      # Show the number of tickets assigned to the curent user
-      @assigned_tickets = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
-      # assigned tickets that are closed or resolved
+      @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
+
       @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
-      @breached_sla_tickets_count = @project.tickets.count_breached_sla
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
-      @breached_resolution_count = @project.tickets.count_resolution_breached_sla
-
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
@@ -188,6 +225,7 @@ class ProjectController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def project_params
-    params.require(:project).permit(:title, :description, :start_date, :content, :client_id, :user_id, :image, software_ids: [], groupware_ids: [])
+    params.require(:project).permit(:title, :description, :start_date, :content, :client_id, :user_id, :image, :special,
+                                    software_ids: [], groupware_ids: [])
   end
 end

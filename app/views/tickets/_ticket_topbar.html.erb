@@ -1,12 +1,12 @@
 
-<div class="grid grid-cols-2 ">
+<div class="grid grid-cols-2 mb-4 ">
   <div class="grid col-span-1">
     <div class="flex gap-1">
-      <%= button_to project_index_path, method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' do %>
+      <%= button_to project_index_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' do %>
         &#8656; Back
       <% end %>
       <% unless current_user.has_role?(:observer) %>
-      <%=  button_to 'Add New Ticket +', new_project_ticket_path(@project.id), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'   %>
+      <%=  button_to 'Add New Ticket +', new_project_ticket_path(@project.id), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'   %>
       <%  end %>
     </div>
   </div>
@@ -14,11 +14,11 @@
   <div class="grid col-span-1 justify-end">
     <div class="flex flex-col md:flex-row items-start md:items-center w-full">
       <%= form_with url: project_path(@project), method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
-        <%= f.submit "Search", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border border-[#3F8CFF] p-1 hover:border-[#3A81EB] border-2 rounded-lg" %>
+        <%= f.submit "Search", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
       <% end %>
       <%= form_with url: project_path(@project), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+        <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
       <% end %>
     </div>
   </div>

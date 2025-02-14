@@ -12,7 +12,7 @@ class Ticket < ApplicationRecord
   has_many :ratings, dependent: :destroy
   validates :image, content_type: %w[image/png image/jpeg], size: { less_than: 5.megabytes }
   has_many :events, dependent: :destroy
-
+  validates :unique_id, uniqueness: true
   before_update :track_updates
   before_create :set_default_status
 
@@ -105,7 +105,7 @@ class Ticket < ApplicationRecord
       30
     when 'On-Hold'
       40
-    when 'Work in Progress', 'Under Development'
+    when 'Work in Progress', 'Under Development', 'Pending'
       50
     when 'QA Testing'
       60
@@ -113,7 +113,7 @@ class Ticket < ApplicationRecord
       70
     when 'Awaiting Build'
       80
-    when 'Resolved', 'Closed', 'Declined'
+    when 'Resolved', 'Closed', 'Declined', 'Approved'
       100
     else
       0

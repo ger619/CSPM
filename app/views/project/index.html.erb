@@ -1,4 +1,4 @@
-<div class="p-2 max-w-screen-lg mx-auto">
+
   <!-- Topbar Section -->
   <div class="mb-4">
     <%= render 'project/topbar' %>
@@ -13,18 +13,17 @@
   <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-5">
     <div class="flex items-center gap-4">
       <% if @page > 1 %>
-        <%= link_to 'Previous', 
-          project_index_path(page: @page - 1, query: params[:query]), 
-          class: 'h-10 bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all' %>
+        <%= link_to 'Previous',
+          project_index_path(page: @page - 1, query: params[:query]),
+          class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
       <% end %>
       <span class="text-sm font-medium text-gray-700">
         Page <%= @page %> of <%= @total_pages %>
       </span>
       <% if @page < @total_pages %>
-        <%= link_to 'Next', 
-          project_index_path(page: @page + 1, query: params[:query]), 
-          class: 'h-10 bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all' %>
+        <%= link_to 'Next',
+          project_index_path(page: @page + 1, query: params[:query]),
+          class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
       <% end %>
     </div>
   </div>
-</div>
