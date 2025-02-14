@@ -1,7 +1,10 @@
+<div class="p-4 space-y-6">
+  <!-- Topbar and Alert -->
+  <%= render 'issues/issue_topbar' %>
+  <%= render 'layouts/alert', class: "" %>
 
-<%= render 'issues/issue_topbar' %>
-<%= render 'layouts/alert', class: "" %>
-<div class="grid md:grid-cols-5 md:items-center ">
+  <!-- Ticket Information Section -->
+  <div class="grid md:grid-cols-5 md:items-center ">
   <div class="mb-4 font-bold capitalize">
     <p>Ticket ID:
       <span class="font-medium uppercase">
@@ -87,7 +90,7 @@
     <% end %>
   </div>
 </div>
-<div class="grid grid-cols-4 mb-6">
+  <div class="grid grid-cols-4 mb-6">
   <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">
     <h1 class="text-3xl text-center mb-10">Communication Center</h1>
     <!-- Tabs Section -->
@@ -228,5 +231,3 @@
   // Set default tab to open
   document.getElementById("tab-history").click();
 </script>
-
-

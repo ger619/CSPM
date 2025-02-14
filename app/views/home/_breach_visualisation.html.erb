@@ -1,21 +1,32 @@
-<h1 class="text-center">SLA ONE</h1>
-<div class="col-span-1 flex items-center justify-between p-4 rounded shadow hover:shadow-lg">
-  <%= column_chart @sla_breaches_per_project,
-                   xtitle: "Projects",
-                   ytitle: "SLA Breaches",
-                   title: "SLA Breaches Per Project",
-                   colors: ["#e74c3c"] %> <!-- Fixed color for SLA breaches -->
+<h1 class="text-center text-lg sm:text-xl font-semibold mb-4">SLA ONE</h1>
 
-  <%= column_chart @non_breached_tickets_per_project,
-                   xtitle: "Projects",
-                   ytitle: "Non-SLA Breaches",
-                   title: "Non-SLA Breached Tickets Per Project",
-                   colors: ["#3498db"] %> <!-- Fixed color for Non-SLA breaches -->
+<div class="flex flex-col sm:flex-row items-center justify-between p-4 rounded shadow hover:shadow-lg gap-4">
+  <div class="chart-container w-full sm:w-1/2">
+    <%= column_chart @sla_breaches_per_project,
+                     xtitle: "Projects",
+                     ytitle: "SLA Breaches",
+                     title: "SLA Breaches",
+                     colors: ["#e74c3c"] %> <!-- Fixed color for SLA breaches -->
+  </div>
+
+  <div class="chart-container w-full sm:w-1/2">
+    <%= column_chart @non_breached_tickets_per_project,
+                     xtitle: "Projects",
+                     ytitle: "Non-SLA Breaches",
+                     title: "Non-SLA Breaches",
+                     colors: ["#3498db"] %> <!-- Fixed color for Non-SLA breaches -->
+  </div>
 </div>
 
 <style>
+  .chart-container {
+    flex: 1; /* Ensures the charts take equal space */
+    min-width: 100%; /* Makes charts fill the width on mobile */
+  }
+
+  @media (min-width: 640px) { /* For screens larger than 640px (sm breakpoint) */
     .chart-container {
-        flex: 1; /* Ensures the charts take equal space */
-        margin: 10px;
+      min-width: 48%; /* Prevents charts from being too small on wider screens */
     }
+  }
 </style>

@@ -1,5 +1,9 @@
-<div class="overflow-auto overflow-y-scroll h-screen">
-  <% board.tasks.each do |task| %>
-    <%= render 'tasks/card', task: task %>
-  <% end %>
+<div class="overflow-auto overflow-y-scroll h-screen max-h-screen md:h-auto scroll-smooth p-2">
+  <div class="flex flex-col gap-2">
+    <% board.tasks.each do |task| %>
+      <div class="w-full min-w-0">
+        <%= render 'tasks/card', task: task %>
+      </div>
+    <% end %>
+  </div>
 </div>
