@@ -16,12 +16,14 @@ class ProjectController < ApplicationController
     @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @tickets = if params[:query].present?
-                 Ticket.where('unique_id ILIKE ?', "%#{params[:query]}%")
+                 if current_user.has_any_role?(:admin, :observer) || @project.any? { |project| project.users.include?(current_user) }
+                   Ticket.joins(:project).where('unique_id ILIKE ?', "%#{params[:query]}%").where(projects: { id: @project.ids })
+                 else
+                   Ticket.none
+                 end
                else
                  Ticket.none
                end
-
-    @tickets = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @per_page = 10
     @page = (params[:page] || 1).to_i
