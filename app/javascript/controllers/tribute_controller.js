@@ -1,3 +1,5 @@
+import Tribute from 'tributejs';
+
 document.addEventListener('turbo:load', () => {
   const editor = document.querySelector('#content');
   const currentUrl = window.location.pathname;
