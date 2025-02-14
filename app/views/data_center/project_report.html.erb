@@ -1,40 +1,62 @@
 <!-- app/views/data_center/project_report.html.erb -->
-<h1>Project Report</h1>
-
+<h1 class="flex justify-center text-2xl font-bold mb-4">Project Report</h1>
+<div class="p-2 w-full">
 <%= form_with url: project_report_path, method: :get, local: true do %>
-  <div>
-    <%= label_tag :project_id, 'Select Project' %>
-    <%= select_tag :project_id, options_from_collection_for_select(Project.all, :id, :title, params[:project_id]), prompt: 'Choose a project' %>
-    <%= submit_tag 'Show Report' %>
+    <div class="flex flex-wrap justify-center gap-2">
+      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
+        <%= label_tag :project_id, 'Select Project', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+        <% projects = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                        Project.all
+                      else
+                        current_user.projects
+                      end %>
+
+        <%= select_tag :project_id, options_from_collection_for_select(projects, :id, :title, params[:project_id]), prompt: 'Choose a project', class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" %>      </div>
+      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
+        <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+        <%= date_field_tag :start_date, params[:start_date], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" %>
+      </div>
+      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
+        <%= label_tag :end_date, 'End Date' , class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+        <%= date_field_tag :end_date, params[:end_date], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2"  %>
+      </div>
+      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3 pt-9">
+        <%= submit_tag 'Show Report', class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+      </div>
+  <% end %>
   </div>
-<% end %>
+</div>
 
+<div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
 <% if @project %>
-  <h2>Project Report for <%= @project.title %></h2>
-
-  <% if @tickets_by_user_and_day.present? %>
+  <div class="flex justify-center">
+    <h2>
+      Project Report for <%= @project.title %>
+    </h2>
+    <%= link_to 'Download CSV Report', project_report_path(format: :csv, project_id: @project.id, start_date: params[:start_date], end_date: params[:end_date]), class: 'btn btn-primary' %>
+  </div>
+    <div class="flex mx-auto justify-center">
+  <% if @tickets_by_user.present? %>
     <table>
       <thead>
       <tr>
         <th>User Name</th>
-        <th>Date</th>
         <th>Ticket Count</th>
-        <th>Ticket Numbers</th>
       </tr>
       </thead>
       <tbody>
-      <% @tickets_by_user_and_day.each do |(user, date), tickets| %>
+      <% @tickets_by_user.each do |user_id, ticket_count| %>
+        <% user = User.find(user_id) %>
         <tr>
-          <td><%= user.name %></td>
-          <td><%= date %></td>
-          <td><%= tickets.count %></td> <!-- tickets is an array -->
-          <td><%= tickets.map(&:unique_id).join(', ') %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket_count %></td>
         </tr>
       <% end %>
       </tbody>
     </table>
-
-    <%= link_to 'Download CSV Report', project_report_path(@project, format: :csv), class: 'btn btn-primary' %>
-
+  <% else %>
+    <p>No tickets found for the selected date range.</p>
   <% end %>
 <% end %>
+  </div>
+</div>

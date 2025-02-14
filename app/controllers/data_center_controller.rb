@@ -89,33 +89,45 @@ class DataCenterController < ApplicationController
   end
 
   def project_report
-    if params[:project_id].present?
+    authorize! :generate, :report # Check if the user can generate reports
+
+    if params[:project_id].present? && params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date]).beginning_of_day
+      end_date = Date.parse(params[:end_date]).end_of_day
+
       @project = Project.find(params[:project_id])
-      @tickets = @project.tickets.joins(:statuses)
-        .where.not(statuses: { name: %w[Resolved Closed Denied] })
 
-      @tickets_by_user_and_day = @tickets.group_by { |ticket| [ticket.user, ticket.created_at.to_date] }
+      if current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.projects.include?(@project)
+        @tickets = @project.tickets.joins(:statuses)
+          .where.not(statuses: { name: %w[Resolved Closed Denied] })
+          .where(created_at: start_date..end_date)
 
-      # generate_project_report_graph(@tickets_by_user_and_day)
+        @tickets_by_user = @tickets.group(:user_id).count
 
-      respond_to do |format|
-        format.html # Default view
-        format.csv { send_data generate_project_report_csv(@tickets_by_user_and_day), filename: "project_report_#{Date.today}.csv" }
+        respond_to do |format|
+          format.html # Default view
+          format.csv { send_data generate_project_report_csv(@tickets_by_user), filename: "project_report_#{Date.today}.csv" }
+        end
+      else
+        flash[:alert] = 'You do not have access to this project.'
+        redirect_to root_path
       end
     else
       @project = nil
-      @tickets_by_user_and_day = {}
+      @tickets_by_user = {}
+      flash[:alert] = 'Please provide a valid project and date range.'
+      render :project_report
     end
   end
 
   private
 
-  def generate_project_report_csv(tickets_by_user_and_day)
+  def generate_project_report_csv(tickets_by_user)
     CSV.generate(headers: true) do |csv|
-      csv << ['User Name', 'Date', 'Ticket Count', 'Ticket Numbers']
-      tickets_by_user_and_day.each do |(user, date), tickets|
-        ticket_numbers = tickets.map(&:unique_id).join(', ')
-        csv << [user.name, date, tickets.count, ticket_numbers]
+      csv << ['User Name', 'Ticket Count']
+      tickets_by_user.each do |user_id, ticket_count|
+        user = User.find(user_id)
+        csv << [user.name, ticket_count]
       end
     end
   end
