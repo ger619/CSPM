@@ -5,12 +5,23 @@ class ProjectController < ApplicationController
   # GET /projects
   def index
     @project = if params[:query].present?
-                 Project.where('title ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+                 Project.joins(:tickets)
+                   .where('projects.title ILIKE :query OR projects.description ILIKE :query OR tickets.unique_id ILIKE :query',
+                          query: "%#{params[:query]}%")
+                   .distinct
                else
-                 Project.all.with_rich_text_content.order('created_at ASC')
+                 Project.all.with_rich_text_content.order('projects.created_at ASC')
                end
 
     @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
+
+    @tickets = if params[:query].present?
+                 Ticket.where('unique_id ILIKE ?', "%#{params[:query]}%")
+               else
+                 Ticket.none
+               end
+
+    @tickets = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @per_page = 10
     @page = (params[:page] || 1).to_i
