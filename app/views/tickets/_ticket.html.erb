@@ -30,7 +30,7 @@
         <% if current_user.has_role?(:agent) or current_user.has_role?('project manager') or current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
           <div class="flex flex-col">
             <%= label_tag :users, 'Assignee' %>
-            <%= f.select :user_id, options_from_collection_for_select(@project.users, :id, ->(u) { "#{u.first_name} #{u.last_name}" }, params[:user_id]), prompt: 'Select User', class: 'text-black' %>
+            <%= f.select :user_id, options_from_collection_for_select(@project.users.with_assigned_role, :id, ->(u) { "#{u.first_name} #{u.last_name}" }, params[:user_id]), prompt: 'Select User', class: 'text-black' %>
           </div>
         <% end %>
 
