@@ -1,4 +1,4 @@
-import Tribute from "tributejs";
+import Tribute from 'tributejs';
 
 document.addEventListener('turbo:load', () => {
   const editor = document.querySelector('#content');
