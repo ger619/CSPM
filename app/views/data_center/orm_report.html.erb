@@ -19,9 +19,9 @@
       <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
         <%= f.label :client_id, "Client" %>
         <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
-          <%= f.collection_select :client_id, Client.all, :id, :name, include_blank: true %>
+          <%= f.collection_select :client_id, Client.all, :id, :name, prompt: 'All Clients' %>
         <% else %>
-          <%= f.collection_select :client_id, Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct, :id, :name, include_blank: true %>
+          <%= f.collection_select :client_id, Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct, :id, :name, prompt: 'All clients' %>
         <% end %>
       </div>
       <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6 pt-9">
@@ -115,8 +115,8 @@
           <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
           <td class="capitalize border px-4 py-2"><%= ticket.project.title %></td>
           <td class="border px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border px-4 py-2"><%= ticket.subject %></td>
           <td class="border px-4 py-2"><%= ticket.issue %></td>
+          <td class="border px-4 py-2"><%= ticket.subject %></td>
           <td class="border px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
           <td class="border px-4 py-2"><%= ticket.priority %></td>
           <td class="border px-4 py-2"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
