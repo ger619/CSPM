@@ -55,22 +55,25 @@
          </span>
         </div>
         <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
+          <% if @ticket.content.present? %>
           <span class="font-extralight pl-2 flex flex-wrap">
-          <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
-          <% if @ticket.content.body.attachments.any? %>
-            <% @ticket.content.body.attachments.each do |attachment| %>
-              <div class="mb-2">
-                <% if attachment.previewable? %>
-                  <%= link_to rails_blob_path(attachment, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" do %>
-                    Preview: <%= attachment.filename.to_s %>
+            <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
+            <% if @ticket.content.body.attachments.any? %>
+              <% @ticket.content.body.attachments.each do |attachment| %>
+                <div class="mb-2">
+                  <% if attachment.previewable? %>
+                    <%= link_to rails_blob_path(attachment, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" do %>
+                      Preview: <%= attachment.filename.to_s %>
+                    <% end %>
+                  <% else %>
+                    <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
                   <% end %>
-                <% else %>
-                  <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
-                <% end %>
-              </div>
+                </div>
+              <% end %>
             <% end %>
-          <% end %>
           </span>
+            <% end %>
+
         </div>
       </div>
     </div>
