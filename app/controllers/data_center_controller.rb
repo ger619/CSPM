@@ -132,21 +132,21 @@ class DataCenterController < ApplicationController
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(project: :client)
-                         .joins(:statuses)
-                         .where(tickets: { created_at: start_date..end_date })
-                         .where.not(statuses: { name: outstanding_statuses })
+                     .joins(:statuses)
+                     .where(tickets: { created_at: start_date..end_date })
+                     .where.not(statuses: { name: outstanding_statuses })
                  else
                    Ticket.joins(project: :client)
-                         .joins(:statuses)
-                         .where(tickets: { created_at: start_date..end_date, projects: { id: current_user.projects.ids } })
-                         .where.not(statuses: { name: outstanding_statuses })
+                     .joins(:statuses)
+                     .where(tickets: { created_at: start_date..end_date, projects: { id: current_user.projects.ids } })
+                     .where.not(statuses: { name: outstanding_statuses })
                  end
 
       if days.positive?
         closed_resolved_tickets = Ticket.joins(project: :client)
-                                        .joins(:statuses)
-                                        .where(statuses: { name: %w[Closed Resolved] })
-                                        .where('tickets.created_at >= ?', days.days.ago)
+          .joins(:statuses)
+          .where(statuses: { name: %w[Closed Resolved] })
+          .where('tickets.created_at >= ?', days.days.ago)
         @tickets = @tickets.or(closed_resolved_tickets)
       end
 
@@ -168,7 +168,6 @@ class DataCenterController < ApplicationController
   end
 
   private
-
 
   def generate_orm_report_csv(tickets)
     CSV.generate(headers: true) do |csv|
