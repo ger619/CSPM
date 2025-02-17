@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get 'breach_report', to: 'data_center#breach_report', as: 'breach_report'
   get 'user_report', to: 'data_center#user_report', as: 'user_report'
   get 'project_report', to: 'data_center#project_report', as: 'project_report'
+  get 'orm_report', to: 'data_center#orm_report', as: 'orm_report'
 
   root "home#index"
   get "home/index"
