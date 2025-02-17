@@ -22,7 +22,7 @@ class DataCenterController < ApplicationController
       respond_to do |format|
         format.html # Default view
         client_name = Client.find(params[:client_id]).name if params[:client_id].present?
-        filename = "cease_fire_report_#{client_name}_#{Date.today}.csv"
+        filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
         format.csv { send_data generate_csv(@tickets), filename: filename }
       end
     else

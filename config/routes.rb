@@ -71,6 +71,13 @@ Rails.application.routes.draw do
   resources :projects do
     resources :groupwares, only: :index
   end
+  resources :product do
+    resources :groupwares do
+      collection do
+        get 'show_product_groupware', to: 'groupwares#show_product_groupware'
+      end
+    end
+  end
 
   resources :software do
     resources :groupwares # Nested groupwares if needed in the context of software

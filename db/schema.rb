@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_063519) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_17_114957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -149,7 +149,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_063519) do
     t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
-    t.integer "task_id"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -295,6 +294,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_063519) do
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "scripts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "module"
+    t.uuid "groupware_id", null: false
+    t.uuid "software_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["groupware_id"], name: "index_scripts_on_groupware_id"
+    t.index ["software_id"], name: "index_scripts_on_software_id"
   end
 
   create_table "sla_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -517,6 +526,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_063519) do
   add_foreign_key "projects", "users"
   add_foreign_key "ratings", "tickets"
   add_foreign_key "ratings", "users"
+  add_foreign_key "scripts", "groupwares"
+  add_foreign_key "scripts", "softwares"
   add_foreign_key "sla_tickets", "tickets"
   add_foreign_key "softwares", "users"
   add_foreign_key "states", "tasks"
