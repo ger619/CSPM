@@ -5,7 +5,7 @@ class BugsController < ApplicationController
   def index; end
 
   def new
-    @bug = @product.bugs.build
+    @bug = @product.bugs.new
 
     # Fetch associated softwares for the project
     @softwares = @product.softwares
@@ -15,7 +15,6 @@ class BugsController < ApplicationController
                     @product.groupwares
                       .joins(:softwares)
                       .where(softwares: { id: @bug.software_id })
-                      .where(id: @product.groupware_ids)
                       .distinct
                   end
   end

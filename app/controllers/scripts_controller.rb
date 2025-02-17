@@ -1,31 +1,12 @@
-class GroupwaresController < ApplicationController
+class ScriptsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_software
-  before_action :set_groupware, only: %i[edit update destroy]
-  def index
-    if params[:project_id]
-      project = Project.find(params[:project_id])
-      groupwares = project.groupwares.where(software_id: params[:software_id])
-    else
-      groupwares = Groupware.where(software_id: params[:software_id])
-    end
-
-    render json: groupwares
-  end
-
-  def show_product_groupware
-    if params[:product_id]
-      product = Product.find(params[:product_id])
-      groupwares = product.groupwares.where(software_id: params[:software_id])
-    else
-      groupwares = Groupware.where(software_id: params[:software_id])
-    end
-
-    render json: groupwares
-  end
+  before_action :set_groupware
+  before_action :set_script, only: %i[edit update destroy]
 
   def new
     @groupware = @software.groupwares.new
+    @script = @groupware.scripts.new
   end
 
   def create
@@ -69,7 +50,11 @@ class GroupwaresController < ApplicationController
     @groupware = @software.groupwares.find(params[:id])
   end
 
-  def groupware_params
-    params.require(:groupware).permit(:name, :software_id, :description, :user_id)
+  def set_script
+    @script = @groupware.scripts.find(params[:id])
+  end
+
+  def scripts_params
+    params.require(:script).permit(:module, :groupware_id, :software_id)
   end
 end
