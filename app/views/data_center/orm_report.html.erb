@@ -4,30 +4,38 @@
 <div class="p-2 w-full">
   <%= form_with url: orm_report_path, method: :get, local: true do |f| %>
     <div class="flex flex-wrap justify-center gap-2">
-      <div class="flex flex-col gap-2 w-full sm:w-1/4 md:w-1/4">
+      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
         <%= f.label :start_date, "Start Date" %>
         <%= f.date_field :start_date, value: params[:start_date] %>
       </div>
-      <div class="flex flex-col gap-2 w-full sm:w-1/4 md:w-1/4">
+      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
         <%= f.label :end_date, "End Date" %>
         <%= f.date_field :end_date, value: params[:end_date] %>
       </div>
-      <div class="flex flex-col gap-2 w-full sm:w-1/4 md:w-1/4">
-        <%= f.label :days, "Include Closed and Resolved tickets for past (days)" %>
+      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
+        <%= f.label :days, "Show Closed & Resolved (days)" %>
         <%= f.number_field :days, value: params[:days] %>
       </div>
-      <div class="flex flex-col gap-2 w-full sm:w-1/4 md:w-1/4 pt-9">
-    <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
-  </div>
-<% end %>
-  </div>
+      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
+        <%= f.label :client_id, "Client" %>
+        <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
+          <%= f.collection_select :client_id, Client.all, :id, :name, include_blank: true %>
+        <% else %>
+          <%= f.collection_select :client_id, Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct, :id, :name, include_blank: true %>
+        <% end %>
+      </div>
+      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6 pt-9">
+        <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <% if @tickets.present? %>
   <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end">
       <%= link_to "Download CSV",
-                  orm_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id]),
+                  orm_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
                   class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
     </div>
     <table id="orm_report" class="table-auto w-full">
@@ -71,9 +79,9 @@
                        when 'Declined'
                          'bg-gray-800'
                        when 'Approved'
-                          'bg-green-700'
+                         'bg-green-700'
                        when 'Pending'
-                          'bg-gradient-to-r from-red-800 to-green-800'
+                         'bg-gradient-to-r from-red-800 to-green-800'
                        else
                          ''
                        end %>
@@ -93,6 +101,4 @@
       </tbody>
     </table>
   </div>
-<% else %>
-  <p>No tickets found for the given date range.</p>
 <% end %>

@@ -150,6 +150,12 @@ class DataCenterController < ApplicationController
         @tickets = @tickets.or(closed_resolved_tickets)
       end
 
+      @clients = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                   Client.all
+                 else
+                   Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
+                 end
+
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
       @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
       @status_counts = @tickets.joins(:statuses).group('statuses.name').count
@@ -162,6 +168,7 @@ class DataCenterController < ApplicationController
       end
     else
       @tickets = Ticket.none
+      @clients = [] # Ensure @clients is not nil
       flash[:alert] = 'Please provide a valid date range.'
       render :orm_report
     end
