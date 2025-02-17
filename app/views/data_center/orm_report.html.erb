@@ -38,6 +38,32 @@
                   orm_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
                   class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
     </div>
+    <table id="orm_report" class="table-auto w-full mb-4">
+      <thead>
+      <tr>
+        <th class="border border-black px-4 py-2">Project Name</th>
+        <th class="border border-black px-4 py-2">Total Number of Tickets</th>
+        <th class="border border-black px-4 py-2">Status</th>
+        <th class="border border-black px-4 py-2">Count</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @ticket_counts.each do |project_id, total_count| %>
+        <% project = Project.find(project_id) %>
+        <tr>
+          <td class="capitalize border border-black px-4 py-2" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= project.title %></td>
+          <td class="border border-black px-4 py-2" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= total_count %></td>
+        </tr>
+        <% @project_status_counts.select { |k, _| k.first == project_id }.each do |(proj_id, status), count| %>
+          <tr>
+            <td class="border border-black px-4 py-2"><%= status %></td>
+            <td class="border border-black px-4 py-2"><%= count %></td>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+
     <table id="orm_report" class="table-auto w-full">
       <thead>
       <tr>
