@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_17_114957) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_18_095750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -313,7 +313,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_114957) do
     t.datetime "updated_at", null: false
     t.string "sla_target_response_deadline"
     t.string "sla_resolution_deadline"
+    t.uuid "user_id"
     t.index ["ticket_id"], name: "index_sla_tickets_on_ticket_id"
+    t.index ["user_id"], name: "index_sla_tickets_on_user_id"
   end
 
   create_table "softwares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -529,6 +531,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_114957) do
   add_foreign_key "scripts", "groupwares"
   add_foreign_key "scripts", "softwares"
   add_foreign_key "sla_tickets", "tickets"
+  add_foreign_key "sla_tickets", "users"
   add_foreign_key "softwares", "users"
   add_foreign_key "states", "tasks"
   add_foreign_key "states", "users"
