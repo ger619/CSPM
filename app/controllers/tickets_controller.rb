@@ -192,7 +192,6 @@ class TicketsController < ApplicationController
       # Adding the SLA to the ticket
       sla_ticket = SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla|
         sla.sla_status = @ticket.sla_status
-
       end
 
       # Check if sla_target_response_deadline is blank and set to 'not breached' if it is
