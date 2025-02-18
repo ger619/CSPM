@@ -16,8 +16,8 @@
 
   <!-- Stats Section -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8 mt-6">
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:total_tickets_last_30_days], id: "initial_response_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:tickets_count], id: "initial_response_time_not_breached" %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached" %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: "34", id: "initial_response_time_not_breached" %>
     <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: "120", id: "target_repair_time_breached" %>
     <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: "$25,000", id: "target_repair_time_not_breached" %>
     <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: "120", id: "target_resolution_time_breached" %>
@@ -64,11 +64,11 @@
       .then(data => {
           // Ensure the elements exist before updating them
           const totalTicketsEl = document.getElementById("total_tickets_last_30_days");
-          const ticketsCountEl = document.getElementById("tickets_count");
+          const breachCountEl = document.getElementById("initial_response_time_breached");
           const usersCountEl = document.getElementById("users_count");
 
           if (totalTicketsEl) totalTicketsEl.innerText = data.total_tickets_last_30_days;
-          if (ticketsCountEl) ticketsCountEl.innerText = data.tickets_count;
+          if (breachCountEl) breachCountEl.innerText = data.breached_tickets_last_30_days;
           if (usersCountEl) usersCountEl.innerText = data.users_count;
       })
       .catch(error => {
