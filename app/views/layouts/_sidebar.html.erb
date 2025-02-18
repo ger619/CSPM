@@ -223,6 +223,29 @@
           <% end %>
           </ul>
         </li>
+
+        <li class="relative">
+          <button id="dropdownDashboard" class="flex items-center p-2 rounded-lg hover:bg-[#112638] dark:hover:bg-gray-700 group">
+            <svg class="w-4 h-5 text-[#fff] transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M4.293 6.293a1 1 0 0 1 1.414 0L10 9.586l4.293-4.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 0-1.414z"></path>
+            </svg>
+            <span class="flex-1 ms-3 whitespace-nowrap">Custom Dashboards</span>
+          </button>
+
+          <!-- Dropdown Content -->
+          <ul id="dropdownMenuDashboard" class="absolute hidden text-white bg-[#1a237e]shadow-md rounded-md w-20 mt-2 space-y-2">
+            <%= link_to dashboard_path do %>
+              <li>
+                <div class="flex items-center p-2 rounded-lg hover:bg-transparent dark:hover:bg-gray-700 group">
+                  <svg class="w-4 h-5 text-[#fff] transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 6h12v12H6V6zm1 1v10h10V7H7zm3 3h4v4h-4v-4z" />
+                  </svg>
+                  <span class="flex-1 ms-3 hover:text-[#3F8CFF] whitespace-nowrap">SLA Statistics</span>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </li>
       </ul>
     </aside>
   </div>
@@ -282,6 +305,11 @@
   document.getElementById("dropdownBtn").addEventListener("click", function() {
       const dropdownMenu = document.getElementById("dropdownMenu");
       dropdownMenu.classList.toggle("hidden");
+  });
+
+  document.getElementById("dropdownDashboard").addEventListener("click", function() {
+      const dropdownMenuDashboard = document.getElementById("dropdownMenuDashboard");
+      dropdownMenuDashboard.classList.toggle("hidden");
   });
 
 </script>

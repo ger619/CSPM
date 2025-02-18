@@ -1,0 +1,20 @@
+<div>
+  <canvas id="<%= chart_id %>"></canvas>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const ctx = document.getElementById("<%= chart_id %>").getContext("2d");
+
+  new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Category A", "Category B", "Category C"],
+      datasets: [{
+        data: [45, 30, 25], 
+        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"]
+      }]
+    }
+  });
+});
+</script>
