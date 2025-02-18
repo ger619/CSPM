@@ -192,6 +192,7 @@ class TicketsController < ApplicationController
       # Adding the SLA to the ticket
       sla_ticket = SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla|
         sla.sla_status = @ticket.sla_status
+
       end
 
       # Check if sla_target_response_deadline is blank and set to 'not breached' if it is
@@ -230,7 +231,8 @@ class TicketsController < ApplicationController
 
     if status.name == 'Client Confirmation Pending'
       sla_ticket = SlaTicket.find_or_initialize_by(ticket_id: @ticket.id)
-      sla_ticket.update(sla_target_response_deadline: @ticket.sla_target_response_deadline)
+      assigned_user = @ticket.users.first # Pick the first assigned user on the ticket
+      sla_ticket.update(sla_target_response_deadline: @ticket.sla_target_response_deadline, user_id: assigned_user.id)
     end
 
     if status.name == 'Resolved'
@@ -246,7 +248,7 @@ class TicketsController < ApplicationController
       UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
     end
 
-    log_event(@ticket, current_user, 'status_change', "Status was changed to #{status.name}.")
+    log_event(@ticket, current_user, 'status_change', "Status was changed to #{status.name}")
 
     if status.name.in?(%w[Resolved Closed Declined Reopened])
       redirect_to new_project_ticket_comment_path(@project, @ticket)

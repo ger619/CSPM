@@ -272,6 +272,6 @@ class Ticket < ApplicationRecord
   def content_length_within_limit
     return unless content.to_plain_text.length > 3000
 
-    errors.add(:content, 'must be less than or equal to 1200 characters')
+    errors.add(:content, 'must be less than or equal to 3000 characters')
   end
 end
