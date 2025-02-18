@@ -62,8 +62,6 @@
       fetch(`/dashboards/fetch_stats?software_name=${softwareName}`)
       .then(response => response.json())
       .then(data => {
-          console.log("Fetched Data:", data); // Debugging log
-
           // Ensure the elements exist before updating them
           const totalTicketsEl = document.getElementById("total_tickets_last_30_days");
           const ticketsCountEl = document.getElementById("tickets_count");

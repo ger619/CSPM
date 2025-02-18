@@ -9,18 +9,11 @@ class DashboardsController < ApplicationController
   def fetch_stats
     software_name = params[:software_name]
 
-    # Log the software name
-    Rails.logger.debug("Software Name: #{software_name}")
-
     software = Software.find_by(name: software_name)&.id
 
     if software
       tickets_count = Ticket.where(software_id: software).count
       total_tickets_last_30_days = Ticket.where(software_id: software).where('created_at >= ?', 30.days.ago).count
-
-      # Log the counts for tickets
-      Rails.logger.debug("Tickets Count: #{tickets_count}")
-      Rails.logger.debug("Total Tickets in the Last 30 Days: #{total_tickets_last_30_days}")
 
       stats = {
         users_count: User.count,
