@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'dashboard', to: 'dashboards#index'
+  get 'dashboards/fetch_stats', to: 'dashboards#fetch_stats'
   devise_for :users, controllers: { invitations: 'invitations' }
   resources :users do
     collection do

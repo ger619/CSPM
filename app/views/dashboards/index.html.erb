@@ -3,12 +3,9 @@
     <div class="relative w-80">
         <input type="text" id="search" class="w-full px-4 py-2 border rounded-lg" placeholder="Search SLA Tracking..." onkeyup="filterDropdown()">
         <div id="dropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">BR Investment SLA Tracking</div>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">BR Islamic SLA Tracking</div>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">BREFT SLA Tracking</div>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">CBS India SLA Tracking</div>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">CBS SLA Tracking</div>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">Alternate Channels SLA Tracking</div>
+            <% @softwares.each do |software| %>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)"><%= software.name %></div>
+            <%end%>
         </div>
     </div>
 
@@ -19,14 +16,14 @@
 
   <!-- Stats Section -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8 mt-6">
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:users_count], icon: "👤" %>
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:tickets_count], icon: "✅" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: "120", icon: "📅" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: "$25,000", icon: "💰" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: "120", icon: "📅" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: "$25,000", icon: "💰" %>
-    <%= render 'dashboards/stat_card', title: "No SLA Count", value: "2,340", icon: "📦" %>
-    <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: "1,450", icon: "🎫" %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:total_tickets_last_30_days], icon: "👤", id: "total_tickets_last_30_days" %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:tickets_count], icon: "✅", id: "tickets_count" %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: "120", icon: "📅", id: "target_repair_time_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: "$25,000", icon: "💰", id: "target_repair_time_not_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: "120", icon: "📅", id: "target_resolution_time_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: "$25,000", icon: "💰", id: "target_resolution_time_not_breached" %>
+    <%= render 'dashboards/stat_card', title: "No SLA Count", value: "2,340", icon: "📦", id: "no_sla_count" %>
+    <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:br_islamic_tickets_count], icon: "🎫", id: "br_islamic_tickets_count" %>
   </div>
 
   <!-- Charts Section -->
@@ -57,8 +54,43 @@
   }
 
   function selectItem(element) {
-      document.getElementById("search").value = element.textContent;
+      const softwareName = element.textContent;
+      document.getElementById("search").value = softwareName;
       document.getElementById("dropdown").classList.add("hidden");
+
+      // Make AJAX request to fetch the stats for the selected software
+      fetch(`/dashboards/fetch_stats?software_name=${softwareName}`)
+      .then(response => response.json())
+      .then(data => {
+          console.log("Fetched Data:", data); // Debugging log
+
+          // Ensure the elements exist before updating them
+          const totalTicketsEl = document.getElementById("total_tickets_last_30_days");
+          const ticketsCountEl = document.getElementById("tickets_count");
+          const usersCountEl = document.getElementById("users_count");
+
+          if (totalTicketsEl) totalTicketsEl.innerText = data.total_tickets_last_30_days;
+          if (ticketsCountEl) ticketsCountEl.innerText = data.tickets_count;
+          if (usersCountEl) usersCountEl.innerText = data.users_count;
+      })
+      .catch(error => {
+          console.error("Error fetching stats:", error);
+      });
+  }
+
+  
+  function updateStatValues(data) {
+      // Loop through each stat and update the value based on its title
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => {
+          const title = card.querySelector('.title').innerText;  // Get the stat title
+
+          if (data[title]) {
+              // Update the value only if it exists in the data
+              const valueElement = card.querySelector('.value');
+              valueElement.innerText = data[title];
+          }
+      });
   }
 
    document.addEventListener("click", function(event) {

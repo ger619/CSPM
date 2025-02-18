@@ -149,6 +149,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_095750) do
     t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
+    t.integer "task_id"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"

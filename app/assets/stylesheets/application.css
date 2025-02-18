@@ -182,3 +182,12 @@
   overflow: hidden;
   transition: all 0.3s ease-in-out;
 }
+
+#sidebar span.hidden {
+  display: none;
+}
+
+/* Ensure smooth transition for width changes */
+.transition-all {
+  transition: all 0.3s ease;
+}
