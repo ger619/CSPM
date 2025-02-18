@@ -32,12 +32,12 @@
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="bg-white p-4 shadow-md rounded-lg">
-      <h2 class="text-lg font-semibold mb-3">User Activity</h2>
+      <h2 class="text-lg font-semibold mb-3">Target Resolution Time (Breached)</h2>
       <%= render 'dashboards/pie_chart', chart_id: "userActivityChart" %>
     </div>
 
     <div class="bg-white p-4 shadow-md rounded-lg">
-      <h2 class="text-lg font-semibold mb-3">Sales Breakdown</h2>
+      <h2 class="text-lg font-semibold mb-3">Target Resolution Time (Not Breached)</h2>
       <%= render 'dashboards/pie_chart', chart_id: "salesChart" %>
     </div>
   </div>
