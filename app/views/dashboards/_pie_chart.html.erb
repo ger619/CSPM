@@ -1,20 +1,16 @@
-<div>
-  <canvas id="<%= chart_id %>"></canvas>
-</div>
-
+<canvas id="<%= chart_id %>" width="400" height="400"></canvas>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const ctx = document.getElementById("<%= chart_id %>").getContext("2d");
-
-  new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels: ["Category A", "Category B", "Category C"],
-      datasets: [{
-        data: [45, 30, 25], 
-        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"]
-      }]
-    }
+  document.addEventListener("DOMContentLoaded", function() {
+    var ctx = document.getElementById("<%= chart_id %>").getContext('2d');
+    var myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ["Breached", "Not Breached"],
+        datasets: [{
+          data: [<%= @stats[:response_breached_tickets_last_30_days] %>, <%= @stats[:not_response_breached_tickets_last_30_days] %>],
+          backgroundColor: ["#ff6384", "#36a2eb"]
+        }]
+      }
+    });
   });
-});
 </script>
