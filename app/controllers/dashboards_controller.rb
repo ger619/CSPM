@@ -29,7 +29,7 @@ class DashboardsController < ApplicationController
 
   private
 
-  def get_default_stats
+  def get_default_stats # rubocop:disable Naming/AccessorMethodName
     # Default statistics, assuming 'BREFT' is the default software
     br_islamic_software_id = Software.find_by(name: 'BREFT')&.id
     {
