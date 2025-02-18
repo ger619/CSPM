@@ -33,7 +33,7 @@ class DashboardsController < ApplicationController
 
       not_response_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 500.days.ago)
+        .where('tickets.created_at >= ?', 30.days.ago)
         .where(sla_target_response_deadline: 'Not Breached')
         .count
 
