@@ -23,7 +23,7 @@
     <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: "120", icon: "📅", id: "target_resolution_time_breached" %>
     <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: "$25,000", icon: "💰", id: "target_resolution_time_not_breached" %>
     <%= render 'dashboards/stat_card', title: "No SLA Count", value: "2,340", icon: "📦", id: "no_sla_count" %>
-    <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:br_islamic_tickets_count], icon: "🎫", id: "br_islamic_tickets_count" %>
+    <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], icon: "🎫", id: "br_islamic_tickets_count" %>
   </div>
 
   <!-- Charts Section -->
