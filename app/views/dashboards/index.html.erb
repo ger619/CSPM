@@ -1,19 +1,32 @@
-<div class="container mx-auto p-6">
-  <div class="flex justify-between">
-    <h1 class="text-3xl font-bold mb-6">SLA Statistics Dashboard</h1>
+<div class="container mx-auto mb-6 p-6">
+  <div class="flex justify-between items-center">
+    <div class="relative w-80">
+        <input type="text" id="search" class="w-full px-4 py-2 border rounded-lg" placeholder="Search SLA Tracking..." onkeyup="filterDropdown()">
+        <div id="dropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">BR Investment SLA Tracking</div>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">BR Islamic SLA Tracking</div>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">BREFT SLA Tracking</div>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">CBS India SLA Tracking</div>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">CBS SLA Tracking</div>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)">Alternate Channels SLA Tracking</div>
+        </div>
+    </div>
+
+    <h1 class="text-3xl font-bold">All Stats Within Last 30 Days</h1>
     
-    <button>Refresh</button>
-  </div>
+    <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Refresh</button>
+</div>
 
   <!-- Stats Section -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-    <%= render 'dashboards/stat_card', title: "Total Users", value: @stats[:users_count], icon: "👤" %>
-    <%= render 'dashboards/stat_card', title: "Total Tickets", value: @stats[:tickets_count], icon: "✅" %>
-    <%= render 'dashboards/stat_card', title: "New Signups", value: "120", icon: "📅" %>
-    <%= render 'dashboards/stat_card', title: "Revenue", value: "$25,000", icon: "💰" %>
-    <%= render 'dashboards/stat_card', title: "Orders", value: "2,340", icon: "📦" %>
-    <%= render 'dashboards/stat_card', title: "Tickets Resolved", value: "1,450", icon: "🎫" %>
-    <%= render 'dashboards/stat_card', title: "Pending Issues", value: "42", icon: "⚠️" %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8 mt-6">
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:users_count], icon: "👤" %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:tickets_count], icon: "✅" %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: "120", icon: "📅" %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: "$25,000", icon: "💰" %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: "120", icon: "📅" %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: "$25,000", icon: "💰" %>
+    <%= render 'dashboards/stat_card', title: "No SLA Count", value: "2,340", icon: "📦" %>
+    <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: "1,450", icon: "🎫" %>
   </div>
 
   <!-- Charts Section -->
@@ -29,3 +42,30 @@
     </div>
   </div>
 </div>
+
+<script>
+  function filterDropdown() {
+      let input = document.getElementById("search").value.toLowerCase();
+      let dropdown = document.getElementById("dropdown");
+      let items = dropdown.getElementsByClassName("dropdown-item");
+      dropdown.classList.remove("hidden");
+
+      for (let item of items) {
+          let text = item.textContent || item.innerText;
+          item.style.display = text.toLowerCase().includes(input) ? "block" : "none";
+      }
+  }
+
+  function selectItem(element) {
+      document.getElementById("search").value = element.textContent;
+      document.getElementById("dropdown").classList.add("hidden");
+  }
+
+   document.addEventListener("click", function(event) {
+      let searchInput = document.getElementById("search");
+      let dropdown = document.getElementById("dropdown");
+      if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+          dropdown.classList.add("hidden");
+      }
+  });
+</script>
