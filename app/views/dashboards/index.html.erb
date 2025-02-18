@@ -17,12 +17,12 @@
   <!-- Stats Section -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8 mt-6">
     <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: "34", id: "initial_response_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: "120", id: "target_repair_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: "$25,000", id: "target_repair_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: "120", id: "target_resolution_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: "$25,000", id: "target_resolution_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "No SLA Count", value: "2,340", id: "no_sla_count" %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:not_breached_tickets_last_30_days], id: "initial_response_time_not_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: @stats[:response_breached_tickets_last_30_days], id: "target_repair_time_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached" %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: @stats[:not_resolution_breached_tickets_last_30_days], id: "target_resolution_time_not_breached" %>
+    <%= render 'dashboards/stat_card', title: "No SLA Count", value: "0", id: "no_sla_count" %>
     <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days" %>
   </div>
 
@@ -65,11 +65,19 @@
           // Ensure the elements exist before updating them
           const totalTicketsEl = document.getElementById("total_tickets_last_30_days");
           const breachCountEl = document.getElementById("initial_response_time_breached");
-          const usersCountEl = document.getElementById("users_count");
-
+          const notBreachCountEl = document.getElementById("initial_response_time_not_breached");
+          const responseBreachCountEl = document.getElementById("target_repair_time_breached");
+          const notResponseBreachCountEl = document.getElementById("target_repair_time_not_breached");
+          const resolutionBreachCountEl = document.getElementById("target_resolution_time_breached");
+          const notResolutionBreachCountEl = document.getElementById("target_resolution_time_not_breached");
+        
           if (totalTicketsEl) totalTicketsEl.innerText = data.total_tickets_last_30_days;
           if (breachCountEl) breachCountEl.innerText = data.breached_tickets_last_30_days;
-          if (usersCountEl) usersCountEl.innerText = data.users_count;
+          if (notBreachCountEl) notBreachCountEl.innerText = data.not_breached_tickets_last_30_days;
+          if (responseBreachCountEl) responseBreachCountEl.innerText = data.response_breached_tickets_last_30_days;
+          if (notResponseBreachCountEl) notResponseBreachCountEl.innerText = data.not_response_breached_tickets_last_30_days;
+          if (resolutionBreachCountEl) resolutionBreachCountEl.innerText = data.resolution_breached_tickets_last_30_days;
+          if (notResolutionBreachCountEl) notResolutionBreachCountEl.innerText = data.not_resolution_breached_tickets_last_30_days;
       })
       .catch(error => {
           console.error("Error fetching stats:", error);

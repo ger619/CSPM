@@ -12,16 +12,51 @@ class DashboardsController < ApplicationController
     software = Software.find_by(name: software_name)&.id
 
     if software
-      total_tickets_last_30_days = Ticket.where(software_id: software).where('created_at >= ?', 30.days.ago).count
+      total_tickets_last_30_days = Ticket.where(software_id: software).where('created_at >= ?', 90.days.ago).count
       breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 30.days.ago)
+        .where('tickets.created_at >= ?', 500.days.ago)
         .where(sla_status: 'Breached')
+        .count
+
+      not_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
+        .where(tickets: { software_id: software })
+        .where('tickets.created_at >= ?', 500.days.ago)
+        .where(sla_status: 'Not Breached')
+        .count
+
+      response_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
+        .where(tickets: { software_id: software })
+        .where('tickets.created_at >= ?', 500.days.ago)
+        .where(sla_target_response_deadline: 'Breached')
+        .count
+
+      not_response_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
+        .where(tickets: { software_id: software })
+        .where('tickets.created_at >= ?', 500.days.ago)
+        .where(sla_target_response_deadline: 'Not Breached')
+        .count
+
+      resolution_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
+        .where(tickets: { software_id: software })
+        .where('tickets.created_at >= ?', 500.days.ago)
+        .where(sla_resolution_deadline: 'Breached')
+        .count
+
+      not_resolution_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
+        .where(tickets: { software_id: software })
+        .where('tickets.created_at >= ?', 500.days.ago)
+        .where(sla_resolution_deadline: 'Not Breached')
         .count
 
       stats = {
         total_tickets_last_30_days: total_tickets_last_30_days,
-        breached_tickets_last_30_days: breached_tickets_last_30_days
+        breached_tickets_last_30_days: breached_tickets_last_30_days,
+        not_breached_tickets_last_30_days: not_breached_tickets_last_30_days,
+        response_breached_tickets_last_30_days: response_breached_tickets_last_30_days,
+        not_response_breached_tickets_last_30_days: not_response_breached_tickets_last_30_days,
+        resolution_breached_tickets_last_30_days: resolution_breached_tickets_last_30_days,
+        not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days
       }
 
       render json: stats
