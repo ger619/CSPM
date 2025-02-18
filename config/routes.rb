@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'dashboard', to: 'dashboards#index'
   devise_for :users, controllers: { invitations: 'invitations' }
   resources :users do
     collection do
@@ -89,5 +90,5 @@ Rails.application.routes.draw do
 
   resources :client
   resources :status
-  resources :team
+  resources :team  
 end
