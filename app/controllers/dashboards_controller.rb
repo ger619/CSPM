@@ -15,19 +15,19 @@ class DashboardsController < ApplicationController
       total_tickets_last_30_days = Ticket.where(software_id: software).where('created_at >= ?', 90.days.ago).count
       breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 500.days.ago)
+        .where('tickets.created_at >= ?', 30.days.ago)
         .where(sla_status: 'Breached')
         .count
 
       not_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 500.days.ago)
+        .where('tickets.created_at >= ?', 30.days.ago)
         .where(sla_status: 'Not Breached')
         .count
 
       response_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 500.days.ago)
+        .where('tickets.created_at >= ?', 30.days.ago)
         .where(sla_target_response_deadline: 'Breached')
         .count
 
@@ -39,13 +39,13 @@ class DashboardsController < ApplicationController
 
       resolution_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 500.days.ago)
+        .where('tickets.created_at >= ?', 30.days.ago)
         .where(sla_resolution_deadline: 'Breached')
         .count
 
       not_resolution_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 500.days.ago)
+        .where('tickets.created_at >= ?', 30.days.ago)
         .where(sla_resolution_deadline: 'Not Breached')
         .count
 
