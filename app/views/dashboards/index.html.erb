@@ -22,7 +22,7 @@
     <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached" %>
     <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached" %>
     <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: @stats[:not_resolution_breached_tickets_last_30_days], id: "target_resolution_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "No SLA Count", value: "0", id: "no_sla_count" %>
+    <%= render 'dashboards/stat_card', title: "No SLA Count", value: @stats[:not_resolution_data_breached_tickets_last_30_days], id: "no_sla_count" %>
     <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days" %>
   </div>
 
@@ -72,6 +72,7 @@
         document.getElementById("target_repair_time_not_breached").innerText = data.not_response_breached_tickets_last_30_days;
         document.getElementById("target_resolution_time_breached").innerText = data.resolution_breached_tickets_last_30_days;
         document.getElementById("target_resolution_time_not_breached").innerText = data.not_resolution_breached_tickets_last_30_days;
+        document.getElementById("no_sla_count").innerText = data.not_resolution_data_breached_tickets_last_30_days;
 
         // Re-render Pie Charts with Updated Data
         document.getElementById("responseTimeChart").innerHTML = "";
