@@ -77,14 +77,14 @@
         // Re-render Pie Charts with Updated Data
         document.getElementById("responseTimeChart").innerHTML = "";
         new Chartkick.PieChart("responseTimeChart", [
-          ["Breached", data.response_breached_tickets_last_30_days],
-          ["Not Breached", data.not_response_breached_tickets_last_30_days]
+          [`Breached: (${data.response_breached_tickets_last_30_days})`, data.response_breached_tickets_last_30_days],
+          [`Not Breached: (${data.not_response_breached_tickets_last_30_days})`, data.not_response_breached_tickets_last_30_days]
         ]);
 
         document.getElementById("resolutionTimeChart").innerHTML = "";
         new Chartkick.PieChart("resolutionTimeChart", [
-          ["Breached", data.resolution_breached_tickets_last_30_days],
-          ["Not Breached", data.not_resolution_breached_tickets_last_30_days]
+          [`Breached: (${data.resolution_breached_tickets_last_30_days})`, data.resolution_breached_tickets_last_30_days],
+          [`Not Breached: (${data.not_resolution_breached_tickets_last_30_days})`, data.not_resolution_breached_tickets_last_30_days]
         ]);
       })
       .catch(error => {
