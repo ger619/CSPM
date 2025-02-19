@@ -143,11 +143,15 @@
             legend: "right" // Move the legend to the right side
         });
 
-        document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
-        new Chartkick.PieChart("resolutionTimeChartAssignee", [
-          [`Breached (${data.response_breached_tickets_last_30_days})`, data.response_breached_tickets_last_30_days],
-          [`Not Breached (${data.not_response_breached_tickets_last_30_days})`, data.not_response_breached_tickets_last_30_days]
-        ]);
+      document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
+      let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_assignee).map(([name, count]) => {
+            // Ensure name is correctly formatted
+            let formattedName = Array.isArray(name) ? name.join(" ") : String(name);
+            return [`${formattedName} (${count})`, count];
+        });
+        new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
+            legend: "right" // Move the legend to the right side
+        });
       })
       .catch(error => {
         console.error("Error fetching stats:", error);
