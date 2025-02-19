@@ -71,7 +71,7 @@ class DashboardsController < ApplicationController
         .joins(ticket: { taggings: :user }) # Ensures proper joins
         .where(tickets: { software_id: software })
         .where('tickets.created_at >= ?', 300.days.ago)
-        .where(sla_target_resolution_deadline: 'Breached')
+        .where(sla_resolution_deadline: 'Breached')
         .group('users.first_name', 'users.last_name')
         .count
 
