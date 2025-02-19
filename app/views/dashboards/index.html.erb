@@ -136,7 +136,7 @@
         document.getElementById("breachedTicketsAssigneeChart").innerHTML = "";
         let assigneeData = Object.entries(data.breached_tickets_per_assignee).map(([name, count]) => {
             // Ensure name is correctly formatted
-            let formattedName = Array.isArray(name) ? name.join(" ") : String(name);
+            let formattedName = String(name).replace(/[\[\]"]/g, ''); // Remove brackets and quotes
             return [`${formattedName} (${count})`, count];
         });
         new Chartkick.PieChart("breachedTicketsAssigneeChart", assigneeData, {
@@ -146,7 +146,7 @@
       document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
       let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_assignee).map(([name, count]) => {
             // Ensure name is correctly formatted
-            let formattedName = Array.isArray(name) ? name.join(" ") : String(name);
+            let formattedName = String(name).replace(/[\[\]"]/g, '');
             return [`${formattedName} (${count})`, count];
         });
         new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
