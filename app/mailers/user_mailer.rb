@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @assigned_user.email, subject: "New Ticket Created with #{@ticket.unique_id}")
+    mail(to: @assigned_user.email, subject: "A new ticket has been created with Ticket ID #{@ticket.unique_id}.")
   end
 
   # From Ticket Controller create
@@ -28,7 +28,7 @@ class UserMailer < ApplicationMailer
     @current_user = current_user
     @assigned_user = assigned_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @user.email, subject: "Ticket Assigned with #{@ticket.unique_id}")
+    mail(to: @user.email, subject: "Ticket assigned with Ticket ID #{@ticket.unique_id}.")
   end
 
   # From Ticket Controller
@@ -38,7 +38,7 @@ class UserMailer < ApplicationMailer
     @ticket = ticket
     @current_user = current_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @user.email, subject: "Ticket #{@ticket.unique_id} status updates")
+    mail(to: @user.email, subject: "Status update for Ticket #{@ticket.unique_id}.")
   end
 
   # From Product Controller

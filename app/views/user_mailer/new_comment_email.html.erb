@@ -5,12 +5,17 @@
 </head>
 <body>
 <h1>Hello, <%= @user.name %></h1>
-<p>The is <%= @comment.what %> </p>
-<p>Why the issue arose? and our solution.</p>
+
+<p><strong>Issue:</strong> <%= @comment.what %></p>
+
+<p><strong>Reason for the Issue and Our Solution:</strong></p>
+
 <div>
   <%= @comment.content %>
 </div>
+
 <p>Click <a href="<%= @url %>">here</a> to view the comment.</p>
+
 <p>Best regards,</p>
 <p>Your Team</p>
 <p><%= @current_user.name %></p>
