@@ -1,11 +1,15 @@
 <p>Hello <%= @assigned_user.first_name %> <%= @assigned_user.last_name %>,</p>
 
-<p>Hello <%= @assigned_user.first_name %> <%= @assigned_user.last_name %> has been assigned a ticket: <%= @ticket.issue %> by <%= @current_user.name %></p>
-<p> Ticket ID <%= @ticket.unique_id %></p>
-<p>Priority: <%= @ticket.priority %></p>
-<p>Content: <%= @ticket.content.to_plain_text.truncate(3000) %></p>
+<p>We would like to inform you that you have been assigned a new ticket: "<%= @ticket.issue %>" by <%= @current_user.name %>.</p>
+
+<p><strong>Ticket Details:</strong></p>
+<ul>
+  <li><strong>Ticket ID:</strong> <%= @ticket.unique_id %></li>
+  <li><strong>Priority:</strong> <%= @ticket.priority %></li>
+  <li><strong>Description:</strong> <%= @ticket.content.to_plain_text.truncate(3000) %></li>
+</ul>
+
 <p>Click <a href="<%= @url %>">here</a> to view the ticket.</p>
 
 <p>Best regards,</p>
 <p>Your Team</p>
-
