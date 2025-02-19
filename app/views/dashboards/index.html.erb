@@ -11,7 +11,12 @@
 
     <h1 class="text-3xl font-bold">All Stats Within Last 30 Days</h1>
 
-    <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Refresh</button>
+    <button type="button" 
+      onclick="refreshStats()" 
+      class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+      Refresh
+    </button>
+
   </div>
 
   <!-- Stats Section -->
@@ -42,9 +47,28 @@
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-lg font-semibold mb-3 text-center">Response Time Assignees (Breached)</h2>
+        <div id="breachedTicketsAssigneeChart">
+          <%= pie_chart [["Breached", @stats[:response_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_response_breached_tickets_last_30_days]]], id: "responseTimeChart" %>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Assignees (Breached)</h2>
+        <div id="resolutionTimeChartAssignee">
+          <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]], id: "resolutionTimeChart" %>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
+  let selectedSoftware = null;
+
   function filterDropdown() {
     let input = document.getElementById("search").value.toLowerCase();
     let dropdown = document.getElementById("dropdown");
@@ -58,10 +82,31 @@
   }
 
   function selectItem(element) {
-    const softwareName = element.textContent;
+    const softwareName = element.textContent.trim();
     document.getElementById("search").value = softwareName;
+    selectedSoftware = softwareName; // Store the selected software
+
+    // Remove 'selected' class from all items
+    document.querySelectorAll(".dropdown-item").forEach(item => {
+      item.classList.remove("selected");
+    });
+
+    // Add 'selected' class to clicked item
+    element.classList.add("selected");
     document.getElementById("dropdown").classList.add("hidden");
 
+    fetchStats(softwareName); // Call the fetch function
+  }
+  
+  function refreshStats() {
+    if (selectedSoftware) {
+      fetchStats(selectedSoftware);
+    } else {
+      alert("Please select a software first.");
+    }
+  }
+
+  function fetchStats(softwareName) {
     fetch(`/dashboards/fetch_stats?software_name=${softwareName}`)
       .then(response => response.json())
       .then(data => {
@@ -74,18 +119,39 @@
         document.getElementById("target_resolution_time_not_breached").innerText = data.not_resolution_breached_tickets_last_30_days;
         document.getElementById("no_sla_count").innerText = data.not_resolution_data_breached_tickets_last_30_days;
 
-        // Re-render Pie Charts with Updated Data
+        // Refresh charts
         document.getElementById("responseTimeChart").innerHTML = "";
         new Chartkick.PieChart("responseTimeChart", [
-          ["Breached", data.response_breached_tickets_last_30_days],
-          ["Not Breached", data.not_response_breached_tickets_last_30_days]
+          [`Breached (${data.response_breached_tickets_last_30_days})`, data.response_breached_tickets_last_30_days],
+          [`Not Breached (${data.not_response_breached_tickets_last_30_days})`, data.not_response_breached_tickets_last_30_days]
         ]);
 
         document.getElementById("resolutionTimeChart").innerHTML = "";
         new Chartkick.PieChart("resolutionTimeChart", [
-          ["Breached", data.resolution_breached_tickets_last_30_days],
-          ["Not Breached", data.not_resolution_breached_tickets_last_30_days]
+          [`Breached (${data.resolution_breached_tickets_last_30_days})`, data.resolution_breached_tickets_last_30_days],
+          [`Not Breached (${data.not_resolution_breached_tickets_last_30_days})`, data.not_resolution_breached_tickets_last_30_days]
         ]);
+
+        // Generate Assignee Breached Tickets Pie Chart
+        document.getElementById("breachedTicketsAssigneeChart").innerHTML = "";
+        let assigneeData = Object.entries(data.breached_tickets_per_assignee).map(([name, count]) => {
+            // Ensure name is correctly formatted
+            let formattedName = String(name).replace(/[\[\]"]/g, ''); // Remove brackets and quotes
+            return [`${formattedName} (${count})`, count];
+        });
+        new Chartkick.PieChart("breachedTicketsAssigneeChart", assigneeData, {
+            legend: "right" // Move the legend to the right side
+        });
+
+      document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
+      let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_assignee).map(([name, count]) => {
+            // Ensure name is correctly formatted
+            let formattedName = String(name).replace(/[\[\]"]/g, '');
+            return [`${formattedName} (${count})`, count];
+        });
+        new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
+            legend: "right" // Move the legend to the right side
+        });
       })
       .catch(error => {
         console.error("Error fetching stats:", error);
