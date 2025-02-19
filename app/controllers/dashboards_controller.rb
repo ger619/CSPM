@@ -12,7 +12,7 @@ class DashboardsController < ApplicationController
     software = Software.find_by(name: software_name)&.id
 
     if software
-      total_tickets_last_30_days = Ticket.where(software_id: software).where('created_at >= ?', 90.days.ago).count
+      total_tickets_last_30_days = Ticket.where(software_id: software).where('created_at >= ?', 30.days.ago).count
       breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
         .where('tickets.created_at >= ?', 30.days.ago)
