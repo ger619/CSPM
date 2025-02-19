@@ -49,6 +49,16 @@ class DashboardsController < ApplicationController
         .where(sla_resolution_deadline: 'Not Breached')
         .count
 
+      not_resolution_data_breached_tickets_last_30_days = Ticket
+        .where(software_id: software)
+        .where('created_at >= ?', 30.days.ago)
+        .where.not(id: SlaTicket.where.not(sla_resolution_deadline: nil)
+                                .or(SlaTicket.where.not(sla_target_response_deadline: nil))
+                                .or(SlaTicket.where.not(sla_status: nil))
+                                .select(:ticket_id))
+        .distinct
+        .count
+
       stats = {
         total_tickets_last_30_days: total_tickets_last_30_days,
         breached_tickets_last_30_days: breached_tickets_last_30_days,
@@ -56,7 +66,8 @@ class DashboardsController < ApplicationController
         response_breached_tickets_last_30_days: response_breached_tickets_last_30_days,
         not_response_breached_tickets_last_30_days: not_response_breached_tickets_last_30_days,
         resolution_breached_tickets_last_30_days: resolution_breached_tickets_last_30_days,
-        not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days
+        not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days,
+        not_resolution_data_breached_tickets_last_30_days: not_resolution_data_breached_tickets_last_30_days
       }
 
       render json: stats
