@@ -72,12 +72,12 @@ class DashboardsController < ApplicationController
         .group('users.first_name', 'users.last_name')
         .count
 
-      breached_resolution_tickets_per_assignee = SlaTicket
-        .joins(ticket: { taggings: :user }) # Ensures proper joins
+      breached_resolution_tickets_per_project = SlaTicket
+        .joins(ticket: :project) # Join the projects table
         .where(tickets: { software_id: software })
         .where('tickets.created_at >= ?', 30.days.ago)
-        .where(sla_resolution_deadline: 'Breached')
-        .group('users.first_name', 'users.last_name')
+        .where(sla_target_response_deadline: 'Breached')
+        .group('projects.title') # Group by project title
         .count
 
       stats = {
@@ -89,7 +89,7 @@ class DashboardsController < ApplicationController
         resolution_breached_tickets_last_30_days: resolution_breached_tickets_last_30_days,
         not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days,
         breached_tickets_per_assignee: breached_tickets_per_assignee,
-        breached_resolution_tickets_per_assignee: breached_resolution_tickets_per_assignee,
+        breached_resolution_tickets_per_project: breached_resolution_tickets_per_project,
         pending_resolution_30_days: pending_resolution_30_days,
         pending_initial_response_30_days: pending_initial_response_30_days,
         pending_target_response_30_days: pending_target_response_30_days
