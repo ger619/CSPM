@@ -56,14 +56,14 @@
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
       <div class="bg-white p-4 shadow-md rounded-lg">
-        <h2 class="text-lg font-semibold mb-3 text-center">Target Response Time Assignees (Breached)</h2>
+        <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Assignees (Breached)</h2>
         <div id="breachedTicketsAssigneeChart">
           <%= pie_chart [["Breached", @stats[:response_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_response_breached_tickets_last_30_days]]], id: "responseTimeChart" %>
         </div>
       </div>
 
       <div class="bg-white p-4 shadow-md rounded-lg">
-        <h2 class="text-lg font-semibold mb-3 text-center">Target Response Time Projects (Breached)</h2>
+        <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Projects (Breached)</h2>
         <div id="resolutionTimeChartAssignee">
           <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]], id: "resolutionTimeChart" %>
         </div>
@@ -154,7 +154,7 @@
         let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_project).map(([name, count]) => {
               // Ensure name is correctly formatted
               let formattedName = String(name).replace(/[\[\]"]/g, '');
-              return [`${formattedName} (${count})`, count];
+              return [`${formattedName} (${count} ticket(s))`, count];
           });
           new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
               legend: "right" // Move the legend to the right side
