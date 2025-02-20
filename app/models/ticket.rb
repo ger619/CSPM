@@ -65,6 +65,7 @@ class Ticket < ApplicationRecord
       0
     end
   end
+
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
@@ -119,7 +120,6 @@ class Ticket < ApplicationRecord
 
     'Breached' if res_sla_breached?
   end
-
 
   def self.count_breached_sla
     joins(:sla_tickets).where(sla_tickets: { sla_status: 'breached' }).count
