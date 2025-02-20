@@ -1,6 +1,7 @@
 require 'csv'
 class DataCenterController < ApplicationController
   before_action :authenticate_user!
+
   def cease_fire_report
     authorize! :generate, :report # Check if the user can generate reports
 
