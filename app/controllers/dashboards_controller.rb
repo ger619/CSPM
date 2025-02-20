@@ -33,7 +33,7 @@ class DashboardsController < ApplicationController
 
       not_response_breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { software_id: software })
-        .where('tickets.created_at >= ?', 30.days.ago)
+        .where('tickets.created_at >= ?', 300.days.ago)
         .where(sla_target_response_deadline: 'Not Breached')
         .count
 
@@ -49,14 +49,19 @@ class DashboardsController < ApplicationController
         .where(sla_resolution_deadline: 'Not Breached')
         .count
 
-      not_resolution_data_breached_tickets_last_30_days = Ticket
-        .where(software_id: software)
+      pending_resolution_30_days = Ticket.where(software_id: software)
         .where('created_at >= ?', 30.days.ago)
-        .where.not(id: SlaTicket.where.not(sla_resolution_deadline: nil)
-                                .or(SlaTicket.where.not(sla_target_response_deadline: nil))
-                                .or(SlaTicket.where.not(sla_status: nil))
-                                .select(:ticket_id))
-        .distinct
+        .where(id: SlaTicket.where(sla_resolution_deadline: nil).select(:ticket_id))
+        .count
+
+      pending_initial_response_30_days = Ticket.where(software_id: software)
+        .where('created_at >= ?', 30.days.ago)
+        .where(id: SlaTicket.where(sla_status: nil).select(:ticket_id))
+        .count
+
+      pending_target_response_30_days = Ticket.where(software_id: software)
+        .where('created_at >= ?', 30.days.ago)
+        .where(id: SlaTicket.where(sla_target_response_deadline: nil).select(:ticket_id))
         .count
 
       breached_tickets_per_assignee = SlaTicket
@@ -83,9 +88,11 @@ class DashboardsController < ApplicationController
         not_response_breached_tickets_last_30_days: not_response_breached_tickets_last_30_days,
         resolution_breached_tickets_last_30_days: resolution_breached_tickets_last_30_days,
         not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days,
-        not_resolution_data_breached_tickets_last_30_days: not_resolution_data_breached_tickets_last_30_days,
         breached_tickets_per_assignee: breached_tickets_per_assignee,
-        breached_resolution_tickets_per_assignee: breached_resolution_tickets_per_assignee
+        breached_resolution_tickets_per_assignee: breached_resolution_tickets_per_assignee,
+        pending_resolution_30_days: pending_resolution_30_days,
+        pending_initial_response_30_days: pending_initial_response_30_days,
+        pending_target_response_30_days: pending_target_response_30_days
       }
 
       render json: stats
