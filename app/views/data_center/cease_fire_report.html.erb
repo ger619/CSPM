@@ -58,7 +58,7 @@
   <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end">
       <%= link_to "Download CSV",
-                  cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id]),
+                  cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
                   class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
     </div>
     <table id="ceasefire" class="table-auto w-full">
