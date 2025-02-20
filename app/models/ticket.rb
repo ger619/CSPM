@@ -36,6 +36,35 @@ class Ticket < ApplicationRecord
   has_one :sla_ticket, dependent: :destroy
 
   after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline, :ticket_unique_id
+
+  def progress_percentage
+    # Example logic to calculate progress percentage
+    status = statuses.first
+    return 0 unless status # Return 0 if there is no status
+
+    case status.name
+    when 'Reopened'
+      5
+    when 'New'
+      10
+    when 'Assigned'
+      30
+    when 'On-Hold'
+      40
+    when 'Work in Progress', 'Under Development', 'Pending'
+      50
+    when 'QA Testing'
+      60
+    when 'Client Confirmation Pending'
+      70
+    when 'Awaiting Build'
+      80
+    when 'Resolved', 'Closed', 'Declined', 'Approved'
+      100
+    else
+      0
+    end
+  end
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
@@ -91,34 +120,6 @@ class Ticket < ApplicationRecord
     'Breached' if res_sla_breached?
   end
 
-  def progress_percentage
-    # Example logic to calculate progress percentage
-    status = statuses.first
-    return 0 unless status # Return 0 if there is no status
-
-    case status.name
-    when 'Reopened'
-      5
-    when 'New'
-      10
-    when 'Assigned'
-      30
-    when 'On-Hold'
-      40
-    when 'Work in Progress', 'Under Development', 'Pending'
-      50
-    when 'QA Testing'
-      60
-    when 'Client Confirmation Pending'
-      70
-    when 'Awaiting Build'
-      80
-    when 'Resolved', 'Closed', 'Declined', 'Approved'
-      100
-    else
-      0
-    end
-  end
 
   def self.count_breached_sla
     joins(:sla_tickets).where(sla_tickets: { sla_status: 'breached' }).count
