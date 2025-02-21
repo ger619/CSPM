@@ -1,4 +1,4 @@
-<div class="overflow-x-auto shadow-md sm:rounded-lg w-full">
+<div class="overflow-x-auto shadow-md sm:rounded-lg mx-auto container">
   <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
     <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
     <tr>
@@ -29,7 +29,9 @@
               <% end %>
           </td>
           <td class="px-6 py-4 font-medium text-left">
-            <%= bug.software.groupwares.find_by(id: bug.groupware_id)&.name %>
+            <% if bug.software.present? %>
+              <%= bug.software.groupwares.find_by(id: bug.groupware_id)&.name %>
+            <% end %>
           </td>
           <td class="px-6 py-4 text-left">
             <%= bug.summary&.truncate(40) %>
