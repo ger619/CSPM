@@ -82,7 +82,10 @@ Rails.application.routes.draw do
   end
 
   resources :software do
-    resources :groupwares # Nested groupwares if needed in the context of software
+    resources :groupwares do
+      resources :scripts
+
+    end # Nested groupwares if needed in the context of software
   end
 
   resources :tasks do
@@ -99,5 +102,5 @@ Rails.application.routes.draw do
 
   resources :client
   resources :status
-  resources :team  
+  resources :team
 end

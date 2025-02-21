@@ -43,6 +43,11 @@ class GroupwaresController < ApplicationController
 
   def edit; end
 
+  def show
+    @groupware = Groupware.find(params[:id])
+    @scripts = Script.all # Ensure @scripts is an array of Script objects
+  end
+
   def update
     respond_to do |format|
       if @groupware.update(groupware_params)
