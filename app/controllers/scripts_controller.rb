@@ -4,6 +4,10 @@ class ScriptsController < ApplicationController
   before_action :set_groupware
   before_action :set_script, only: %i[edit update destroy]
 
+  def index
+    @scripts = Script.all # Ensure @scripts is an array of Script objects
+  end
+
   def new
     @groupware = @software.groupwares.new
     @script = @groupware.scripts.new

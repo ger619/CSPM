@@ -236,6 +236,9 @@ class Ticket < ApplicationRecord
   def within_business_hours?(time, business_hours)
     return false if time.nil? # Gracefully handle nil time
 
+    # Exclude Saturdays if priority is 'SEVERITY 1', 'SEVERITY 2', or 'SEVERITY 3'
+    return false if ['SEVERITY 2', 'SEVERITY 3', 'SEVERITY 4'].include?(priority) && time.wday == 6
+
     business_hours.any? do |hours|
       time.wday == hours[:day] && time.hour >= hours[:start] && time.hour < hours[:end]
     end
