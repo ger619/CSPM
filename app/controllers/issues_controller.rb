@@ -69,6 +69,6 @@ class IssuesController < ApplicationController
 
   # Permit content and attachments to be handled in the params
   def issue_params
-    params.require(:issue).permit(:content, :ticket_id, :project_id, :user_id, attachments: [])
+    params.require(:issue).permit(:content, :ticket_id, :project_id, :user_id, :message_type, attachments: [])
   end
 end

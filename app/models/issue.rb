@@ -12,6 +12,10 @@ class Issue < ApplicationRecord
   has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
 
   validate :content_length_within_limit
+  validates :message_type, inclusion: { in: %w[internal external], message: '%<value>s is not a valid message type' }
+
+  scope :internal, -> { where(message_type: 'internal') }
+  scope :external, -> { where(message_type: 'external') }
 
   private
 
