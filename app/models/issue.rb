@@ -1,4 +1,5 @@
 class Issue < ApplicationRecord
+  before_validation :set_default_message_type, on: :create
   belongs_to :ticket
   belongs_to :project
   belongs_to :user
@@ -12,8 +13,16 @@ class Issue < ApplicationRecord
   has_many :creators, -> { where(roles: { name: :creator }) }, class_name: 'User', through: :roles, source: :users
 
   validate :content_length_within_limit
+  validates :message_type, inclusion: { in: %w[internal external], message: '%<value>s is not a valid message type' }
+
+  scope :internal, -> { where(message_type: 'internal') }
+  scope :external, -> { where(message_type: 'external') }
 
   private
+
+  def set_default_message_type
+    self.message_type ||= 'external'
+  end
 
   def content_length_within_limit
     return unless content.to_plain_text.length > 3000
