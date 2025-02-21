@@ -87,4 +87,10 @@ class UserMailer < ApplicationMailer
     @url = product_bug_url(@bug.product, @bug)
     mail(to: @user.email, subject: 'Bug Assignment')
   end
+
+  def sla_breach_notification(user, ticket)
+    @user = user
+    @ticket = ticket
+    mail(to: @user.email, subject: "SLA Breach Alert for Ticket ##{@ticket.id}")
+  end
 end
