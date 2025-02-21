@@ -19,14 +19,9 @@
   <% unless current_user.has_role?(:client) %>
     <div class="mb-4">
       <%= f.label :message_type, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.select :message_type, [["External", "external"], ["Internal", "internal"]], {}, class: "mt-1 block w-full" %>
+      <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]], {}, class: "mt-1 block w-full" %>
     </div>
   <% end %>
-
-  <div class="mb-4">
-    <%= f.label :attachments, "Attachments", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.file_field :attachments, multiple: true, class: "mt-1 block w-full" %>
-  </div>
 
   <%= f.submit "Post Message", class: "px-4 py-2 bg-blue-500 text-white rounded" %>
 <% end %>
