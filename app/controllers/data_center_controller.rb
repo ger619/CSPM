@@ -17,7 +17,13 @@ class DataCenterController < ApplicationController
                  end
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
-      @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+
+      @tickets = if params[:status].blank?
+                   @tickets.joins(:statuses)
+                 else
+                   @tickets.joins(:statuses).where(statuses: { name: params[:status] })
+                 end
+
       @status_counts = @tickets.joins(:statuses).group('statuses.name').count
 
       respond_to do |format|
