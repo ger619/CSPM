@@ -11,6 +11,9 @@
         Project Manager
       </th>
       <th scope="col" class="px-2 py-2">
+        VIEW
+      </th>
+      <th scope="col" class="px-2 py-2">
         EDIT
       </th>
     </tr>
@@ -29,14 +32,16 @@
           <%= group.user.present? ? group.user.name : 'No User Assigned' %>
         </th>
         <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
+          <%= link_to 'VIEW', [group.software, group], class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+        </th>
+        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
           <%= link_to 'Edit', edit_software_groupware_path(group.software, group), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
         </th>
-        <!--
-        <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  uppercase">
-          <%#= link_to 'Delete', [group.software, group], data: { turbo_confirm: 'Are you sure?' }, class: 'text-blue-500' %>
-        </th>
-        -->
-
+        <td class="px-2 py-2">
+          <% if can? :destroy, group %>
+            <%= button_to 'DELETE', [group.software, group], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-2 rounded-md font-bold rounded-lg text-slate-100'  %>
+          <% end %>
+        </td>
 
       </tr>
 
