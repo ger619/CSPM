@@ -4,21 +4,32 @@
     <div class="col-span-1 text-xs flex flex-col">
       <%= form_with url: assign_user_project_path(@project), local: true do %>
         <%= label_tag :user_id, "Clients" %>
-        <div class="flex flex-wrap gap-2">
-          <div class="text-xs">
-            <%= select_tag :user_id, options_from_collection_for_select(
-              @project.users_with_same_client
-                      .where.not(id: @project.users.pluck(:id))
-                      .distinct,
-              :id, :name),
-                           class: "border border-gray-300 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
-                           required: true
-            %>
+        <div class="col-span-1 text-xs flex flex-col">
+  <%= form_with url: assign_user_project_path(@project), local: true do %>
+    <div class="flex flex-wrap gap-2">
+            <div class="relative w-80">
+              <!-- Searchable Input -->
+              <input type="text" id="searchClientUser" class="border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" placeholder="Search User..." onkeyup="filterClientUserDropdown()">
+              
+              <!-- Dropdown List -->
+              <div id="clientUserDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+                <% @project.users_with_same_client.where.not(id: @project.users.pluck(:id)).distinct.each do |user| %>
+                  <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectClientUser(this)">
+                    <%= user.name %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Hidden Input to store selected user ID -->
+              <input type="hidden" id="selectedClientUserId" name="user_id" required>
+            </div>
+
+            <div class="col-span-1">
+              <%= submit_tag "ADD USER", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold text-xs rounded-md text-slate-100' %>
+            </div>
           </div>
-          <div class=" col-span-1">
-            <%= submit_tag "ADD USER", class: 'text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-          </div>
-        </div>
+        <% end %>
+      </div>
       <% end %>
     </div>
     <div class="col-span-1 text-xs">
@@ -42,25 +53,129 @@
         </div>
       <% end %>
     </div>
+    
     <div class="col-span-1 text-xs">
       <% if @project.users.present? %>
         <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
           <%= label_tag :user_id, "REMOVE USER" %>
           <div class="flex flex-wrap gap-2">
-            <div>
-              <%= select_tag :user_id, options_from_collection_for_select(@project.users, :id, :name),
-                  class: "border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white"
-              %>
+            <div class="relative w-80">
+              <!-- Searchable Input -->
+              <input type="text" id="searchRemoveUser" class="border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" placeholder="Search User..." onkeyup="filterRemoveUserDropdown()">
+              
+              <!-- Dropdown List -->
+              <div id="removeUserDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+                <% @project.users.each do |user| %>
+                  <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
+                    <%= user.name %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Hidden Input to store selected user ID -->
+              <input type="hidden" id="selectedRemoveUserId" name="user_id" required>
             </div>
-            <%= submit_tag "REMOVE USER", class: 'text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-md text-slate-100' %>
+
+            <%= submit_tag "REMOVE USER", class: 'text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold text-slate-100' %>
           </div>
         <% end %>
       <% end %>
     </div>
+
   </div>
 <% end %>
 
 <script>
+  function filterRemoveUserDropdown() {
+    let input = document.getElementById("searchRemoveUser").value.toLowerCase();
+    let dropdown = document.getElementById("removeUserDropdown");
+    let items = dropdown.getElementsByClassName("dropdown-item");
+
+    dropdown.classList.remove("hidden");
+
+    let hasMatch = false;
+    for (let item of items) {
+      let text = item.textContent.toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = "block";
+        hasMatch = true;
+      } else {
+        item.style.display = "none";
+      }
+    }
+
+    if (!hasMatch) {
+      dropdown.classList.add("hidden");
+    }
+  }
+
+  function selectRemoveUser(element) {
+    let userName = element.textContent.trim();
+    let userId = element.getAttribute("data-user-id");
+
+    let inputField = document.getElementById("searchRemoveUser");
+    inputField.value = userName;
+    inputField.style.paddingRight = "12px"; // Prevents text from being cut off
+    inputField.style.overflow = "visible"; // Ensures full visibility
+
+    document.getElementById("selectedRemoveUserId").value = userId;
+    document.getElementById("removeUserDropdown").classList.add("hidden");
+  }
+
+  document.addEventListener("click", function(event) {
+    let dropdown = document.getElementById("removeUserDropdown");
+    let searchInput = document.getElementById("searchRemoveUser");
+
+    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+
+  function filterClientUserDropdown() {
+    let input = document.getElementById("searchClientUser").value.toLowerCase();
+    let dropdown = document.getElementById("clientUserDropdown");
+    let items = dropdown.getElementsByClassName("dropdown-item");
+
+    dropdown.classList.remove("hidden");
+
+    let hasMatch = false;
+    for (let item of items) {
+      let text = item.textContent.toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = "block";
+        hasMatch = true;
+      } else {
+        item.style.display = "none";
+      }
+    }
+
+    if (!hasMatch) {
+      dropdown.classList.add("hidden");
+    }
+  }
+
+  function selectClientUser(element) {
+    let userName = element.textContent.trim();
+    let userId = element.getAttribute("data-user-id");
+
+    let inputField = document.getElementById("searchClientUser");
+    inputField.value = userName;
+    inputField.style.paddingRight = "12px"; // Prevents text from being cut off
+    inputField.style.overflow = "visible"; // Ensures full visibility
+
+    document.getElementById("selectedClientUserId").value = userId;
+    document.getElementById("clientUserDropdown").classList.add("hidden");
+  }
+
+  document.addEventListener("click", function(event) {
+    let dropdown = document.getElementById("clientUserDropdown");
+    let searchInput = document.getElementById("searchClientUser");
+
+    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });  
+
   function filterCraftDropdown() {
     let input = document.getElementById("searchCraftUser").value.toLowerCase();
     let dropdown = document.getElementById("craftDropdown");
@@ -85,7 +200,7 @@
   }
 
   function selectCraftUser(element) {
-    let userName = element.textContent;
+    let userName = element.textContent.trim();
     let userId = element.getAttribute("data-user-id");
 
     let inputField = document.getElementById("searchCraftUser");

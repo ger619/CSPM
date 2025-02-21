@@ -4,14 +4,30 @@
 <%= form_with url: project_report_path, method: :get, local: true do %>
     <div class="flex flex-wrap justify-center gap-2">
       <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
-        <%= label_tag :project_id, 'Select Project', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+  <%= label_tag :project_id, 'Select Project', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+
+  <div class="relative w-full">
+    <!-- Searchable Input -->
+      <input type="text" id="searchProject" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" placeholder="Search Project..." onkeyup="filterProjectDropdown()">
+
+      <!-- Dropdown List -->
+      <div id="projectDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
         <% projects = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                         Project.all
                       else
                         current_user.projects
                       end %>
+        <% projects.each do |project| %>
+          <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-project-id="<%= project.id %>" onclick="selectProject(this)">
+            <%= project.title %>
+          </div>
+        <% end %>
+      </div>
 
-        <%= select_tag :project_id, options_from_collection_for_select(projects, :id, :title, params[:project_id]), prompt: 'Choose a project', class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" %>      </div>
+      <!-- Hidden Input to store selected project ID -->
+      <input type="hidden" id="selectedProjectId" name="project_id" required>
+    </div>
+  </div>
       <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
         <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
         <%= date_field_tag :start_date, params[:start_date], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" %>
@@ -60,3 +76,50 @@
 <% end %>
   </div>
 </div>
+
+<script>
+  function filterProjectDropdown() {
+    let input = document.getElementById("searchProject").value.toLowerCase();
+    let dropdown = document.getElementById("projectDropdown");
+    let items = dropdown.getElementsByClassName("dropdown-item");
+
+    dropdown.classList.remove("hidden");
+
+    let hasMatch = false;
+    for (let item of items) {
+      let text = item.textContent.toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = "block";
+        hasMatch = true;
+      } else {
+        item.style.display = "none";
+      }
+    }
+
+    if (!hasMatch) {
+      dropdown.classList.add("hidden");
+    }
+  }
+
+  function selectProject(element) {
+    let projectTitle = element.textContent.trim();
+    let projectId = element.getAttribute("data-project-id");
+
+    let inputField = document.getElementById("searchProject");
+    inputField.value = projectTitle;
+    inputField.style.paddingRight = "12px"; // Prevents text from being cut off
+    inputField.style.overflow = "visible"; // Ensures full visibility
+
+    document.getElementById("selectedProjectId").value = projectId;
+    document.getElementById("projectDropdown").classList.add("hidden");
+  }
+
+  document.addEventListener("click", function(event) {
+    let dropdown = document.getElementById("projectDropdown");
+    let searchInput = document.getElementById("searchProject");
+
+    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
