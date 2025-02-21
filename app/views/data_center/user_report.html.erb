@@ -12,7 +12,24 @@
       </div>
       <div class="flex flex-col gap-2">
         <%= f.label :user_id, "User", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.collection_select :user_id, User.with_role(:agent).or(User.with_role(:project_manager)), :id, :name, { prompt: "Select User" }, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
+
+        <div class="relative w-full">
+          <!-- Searchable Input -->
+          <input type="text" id="searchUser" class="h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black px-2 w-full" placeholder="Search User..." onkeyup="filterUserDropdown()">
+
+          <!-- Dropdown List -->
+          <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+            <% users = User.with_role(:agent).or(User.with_role(:project_manager)).or(User.with_role(:admin)) %>
+            <% users.each do |user| %>
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
+                <%= user.name || user.email %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Hidden Input to store selected user ID -->
+          <input type="hidden" id="selectedUserId" name="user_id" required>
+        </div>
       </div>
       <div class="gap-2 pt-10">
         <%= f.submit "Generate Report", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
@@ -20,8 +37,6 @@
     </div>
   <% end %>
 </div>
-
-
 
 <% if @users.any? %>
   <div class=" flex justify-center gap-2">
@@ -92,3 +107,49 @@
 
 <% end %>
 
+<script>
+  function filterUserDropdown() {
+    let input = document.getElementById("searchUser").value.toLowerCase();
+    let dropdown = document.getElementById("userDropdown");
+    let items = dropdown.getElementsByClassName("dropdown-item");
+
+    dropdown.classList.remove("hidden");
+
+    let hasMatch = false;
+    for (let item of items) {
+      let text = item.textContent.toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = "block";
+        hasMatch = true;
+      } else {
+        item.style.display = "none";
+      }
+    }
+
+    if (!hasMatch) {
+      dropdown.classList.add("hidden");
+    }
+  }
+
+  function selectUser(element) {
+    let userName = element.textContent.trim();
+    let userId = element.getAttribute("data-user-id");
+
+    let inputField = document.getElementById("searchUser");
+    inputField.value = userName;
+    inputField.style.paddingRight = "12px"; // Prevents text from being cut off
+    inputField.style.overflow = "visible"; // Ensures full visibility
+
+    document.getElementById("selectedUserId").value = userId;
+    document.getElementById("userDropdown").classList.add("hidden");
+  }
+
+  document.addEventListener("click", function(event) {
+    let dropdown = document.getElementById("userDropdown");
+    let searchInput = document.getElementById("searchUser");
+
+    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
