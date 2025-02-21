@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_18_095750) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_21_080658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -116,8 +116,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_095750) do
     t.uuid "user_id"
     t.uuid "product_id", null: false
     t.string "summary"
-    t.uuid "software_id", null: false
-    t.uuid "groupware_id", null: false
+    t.uuid "software_id"
+    t.uuid "groupware_id"
     t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
     t.index ["product_id"], name: "index_bugs_on_product_id"
     t.index ["software_id"], name: "index_bugs_on_software_id"
@@ -149,7 +149,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_095750) do
     t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
-    t.integer "task_id"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"

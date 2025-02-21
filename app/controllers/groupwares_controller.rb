@@ -30,6 +30,7 @@ class GroupwaresController < ApplicationController
 
   def create
     @groupware = @software.groupwares.new(groupware_params)
+    @groupware.software_id = params[:software_id] # Ensure software_id is set
 
     respond_to do |format|
       if @groupware.save
@@ -53,6 +54,8 @@ class GroupwaresController < ApplicationController
   end
 
   def destroy
+    @software = Software.find(params[:software_id])
+    @groupware = @software.groupwares.find(params[:id])
     @groupware.destroy
     respond_to do |format|
       format.html { redirect_to software_path(@software), notice: 'Groupware was successfully destroyed.' }

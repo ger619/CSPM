@@ -9,6 +9,7 @@ class Ticket < ApplicationRecord
   has_rich_text :content
   has_one_attached :image
   belongs_to :software, optional: true
+  belongs_to :groupware, optional: true
   has_many :ratings, dependent: :destroy
   validates :image, content_type: %w[image/png image/jpeg], size: { less_than: 5.megabytes }
   has_many :events, dependent: :destroy
