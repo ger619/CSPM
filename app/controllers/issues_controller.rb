@@ -18,6 +18,7 @@ class IssuesController < ApplicationController
     @issue = @ticket.issues.new(issue_params)
     @issue.project = @project
     @issue.user = current_user
+    @issue.message_type ||= 'external'
 
     # Validate that content is not blank
     if @issue.content.blank?
@@ -30,9 +31,11 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
+        Rails.logger.info "Issue successfully created: #{@issue.id}"
         current_user.add_role :creator, @issue
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
       else
+        Rails.logger.info "Issue Errors: #{@issue.errors.full_messages}"
         format.html { render :new, alert: 'Issue was not created.' }
       end
     end

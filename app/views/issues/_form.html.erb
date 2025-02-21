@@ -19,7 +19,9 @@
   <% unless current_user.has_role?(:client) %>
     <div class="mb-4">
       <%= f.label :message_type, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]], {}, class: "mt-1 block w-full" %>
+      <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
+             { selected: @issue.message_type || "external" },
+             class: "mt-1 block w-full" %>
     </div>
   <% end %>
 

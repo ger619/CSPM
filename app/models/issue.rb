@@ -1,4 +1,5 @@
 class Issue < ApplicationRecord
+  before_validation :set_default_message_type, on: :create
   belongs_to :ticket
   belongs_to :project
   belongs_to :user
@@ -18,6 +19,10 @@ class Issue < ApplicationRecord
   scope :external, -> { where(message_type: 'external') }
 
   private
+
+  def set_default_message_type
+    self.message_type ||= 'external'
+  end
 
   def content_length_within_limit
     return unless content.to_plain_text.length > 3000
