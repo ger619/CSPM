@@ -24,7 +24,9 @@
             <%= bug.priority %>
           </td>
           <td class="px-6 py-4 font-medium text-left">
+            <% if bug.software.present? %>
             <%= bug.software.name %>
+              <% end %>
           </td>
           <td class="px-6 py-4 font-medium text-left">
             <%= bug.software.groupwares.find_by(id: bug.groupware_id)&.name %>
