@@ -13,4 +13,10 @@ class Bug < ApplicationRecord
   has_many :statuses, through: :status_bugs, dependent: :destroy
 
   has_many_attached :images
+  before_create :set_default_status
+
+  def set_default_status
+    status = Status.find_by(name: 'TO DO')
+    statuses << status if status
+  end
 end
