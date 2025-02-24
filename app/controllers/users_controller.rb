@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    users = User.where('first_name ILIKE ?', "%#{params[:q]}%").limit(10)
+    users = User.where('first_name ILIKE ?', "%#{params[:q]}%").limit(250)
     render json: users.select(:id, :first_name, :last_name)
   end
 

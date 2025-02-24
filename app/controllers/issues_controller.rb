@@ -66,7 +66,7 @@ class IssuesController < ApplicationController
   end
 
   def extract_mentioned_users(content)
-    usernames = content.scan(/@([\w\s]+)/).flatten # Extract usernames after '@'
+    usernames = content.to_plain_text.scan(/@([\w\s]+)/).flatten # Convert to plain text
     User.where("CONCAT(first_name, ' ', last_name) IN (?)", usernames)
   end
 
