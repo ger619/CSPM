@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
+
+ActiveRecord::Schema[7.2].define(version: 2025_02_24_084209) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -118,8 +120,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
     t.string "summary"
     t.uuid "software_id"
     t.uuid "groupware_id"
+    t.uuid "script_id"
     t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
     t.index ["product_id"], name: "index_bugs_on_product_id"
+    t.index ["script_id"], name: "index_bugs_on_script_id"
     t.index ["software_id"], name: "index_bugs_on_software_id"
     t.index ["user_id"], name: "index_bugs_on_user_id"
   end
@@ -149,7 +153,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
     t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
-    t.integer "task_id"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -238,11 +241,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
     t.uuid "software_id"
     t.uuid "client_id"
     t.uuid "groupware_id"
+    t.uuid "script_id"
     t.index ["client_id"], name: "index_products_on_client_id"
     t.index ["groupware_id"], name: "index_products_on_groupware_id"
     t.index ["name"], name: "index_products_on_name", unique: true
+    t.index ["script_id"], name: "index_products_on_script_id"
     t.index ["software_id"], name: "index_products_on_software_id"
     t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "products_scripts", id: false, force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.uuid "script_id", null: false
+    t.index ["product_id", "script_id"], name: "index_products_scripts_on_product_id_and_script_id"
+    t.index ["script_id", "product_id"], name: "index_products_scripts_on_script_id_and_product_id"
   end
 
   create_table "products_softwares", id: false, force: :cascade do |t|
@@ -304,6 +316,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
     t.uuid "software_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.text "description"
     t.index ["groupware_id"], name: "index_scripts_on_groupware_id"
     t.index ["software_id"], name: "index_scripts_on_software_id"
   end
@@ -503,6 +517,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
   add_foreign_key "boards", "users"
   add_foreign_key "bugs", "groupwares"
   add_foreign_key "bugs", "products"
+  add_foreign_key "bugs", "scripts"
   add_foreign_key "bugs", "softwares"
   add_foreign_key "bugs", "users"
   add_foreign_key "clients", "users"
@@ -522,6 +537,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_21_130333) do
   add_foreign_key "notifications", "users"
   add_foreign_key "products", "clients"
   add_foreign_key "products", "groupwares"
+  add_foreign_key "products", "scripts"
   add_foreign_key "products", "softwares"
   add_foreign_key "products", "users"
   add_foreign_key "projects", "clients"

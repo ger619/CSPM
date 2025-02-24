@@ -2,6 +2,7 @@ class Product < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :softwares
   has_and_belongs_to_many :groupwares
+  has_and_belongs_to_many :scripts
   belongs_to :client
   has_many :bugs
   has_many :boards, dependent: :destroy

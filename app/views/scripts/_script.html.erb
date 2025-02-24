@@ -29,14 +29,14 @@
           <%= script.description %>
         </th>
         <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
-          <%= link_to 'VIEW', [script.software, script], class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+          <%#= link_to 'VIEW', [script.software, script], class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
         </th>
         <th scope="row" class="px-2 py-2 font-medium  whitespace-nowrap  capitalize">
-          <%= link_to 'Edit', edit_software_script_path(script.software, script), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+          <%#= link_to 'Edit', edit_software_script_path(script.software, script), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
         </th>
         <td class="px-2 py-2">
           <% if can? :destroy, script %>
-            <%= button_to 'DELETE', [script.software, script], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-2 rounded-md font-bold rounded-lg text-slate-100'  %>
+            <%#= button_to 'DELETE', [script.software, script], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-2 rounded-md font-bold rounded-lg text-slate-100'  %>
           <% end %>
         </td>
 

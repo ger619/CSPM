@@ -78,6 +78,9 @@ Rails.application.routes.draw do
       collection do
         get 'show_product_groupware', to: 'groupwares#show_product_groupware'
       end
+      member do
+        get 'show_index', to: 'scripts#show_index'
+      end
     end
   end
 
