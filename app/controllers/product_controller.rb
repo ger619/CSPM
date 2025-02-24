@@ -67,6 +67,13 @@ class ProductController < ApplicationController
             @product.groupwares.clear
           end
 
+          # Save the select script onlyd if it is elected
+          if params[:product][:script_ids].present?
+            @product.scripts = Script.where(id: params[:product][:script_ids])
+          else
+            @product.scripts.clear
+          end
+
           current_user.add_role :creator, @product
           format.html { redirect_to product_path(@product), notice: 'Product was successfully created.' }
         else

@@ -21,7 +21,14 @@ class GroupwaresController < ApplicationController
       groupwares = Groupware.where(software_id: params[:software_id])
     end
 
-    render json: groupwares
+    groupware_scripts = groupwares.includes(:scripts).map do |groupware|
+      {
+        groupware: groupware,
+        scripts: groupware.scripts
+      }
+    end
+
+    render json: groupware_scripts
   end
 
   def new
