@@ -15,12 +15,12 @@ document.addEventListener('turbo:load', () => {
     const tribute = new Tribute({
       trigger: '@',
       allowSpaces: false,
-      lookup: 'key', // Ensure this matches the filterable key
+      lookup: 'key',
       values: async (text, cb) => {
-        console.log('Typing:', text); // Debugging: Check if real-time trigger works
-        
-        if (!text.trim()) return cb([]); // Stop if no meaningful input
-        
+        console.log('Typing:', text);
+
+        if (!text.trim()) return cb([]);
+
         try {
           const response = await fetch(`/users/search?q=${encodeURIComponent(text)}`);
           if (!response.ok) throw new Error('Failed to fetch users');
@@ -29,16 +29,16 @@ document.addEventListener('turbo:load', () => {
           console.log('Fetched users:', users);
 
           if (!Array.isArray(users) || users.length === 0) {
-            return cb([]); // Prevent errors if users is undefined or empty
+            return cb([]);
           }
 
-          // Ensure unique results by mapping users by ID
           const uniqueUsers = Array.from(new Map(users.map(user => [
             user.id, 
             { 
-              key: `${user.first_name} ${user.last_name}`, // Tribute uses this for filtering
-              value: `@${user.first_name}`, // This gets inserted in the text
-              fullName: `${user.first_name} ${user.last_name}`
+              key: `${user.first_name} ${user.last_name}`,
+              value: `@${user.first_name}`,
+              fullName: `${user.first_name} ${user.last_name}`,
+              email: `${user.email}` // Store the email for later use
             }
           ])).values());
 
@@ -46,14 +46,14 @@ document.addEventListener('turbo:load', () => {
           cb(uniqueUsers);
         } catch (error) {
           console.error('Error fetching users:', error);
-          cb([]); // Provide an empty list in case of an error
+          cb([]);
         }
       },
       menuItemTemplate(item) {
-        return `<span>${item.original.fullName}</span>`;
+        return `<span>${item.original.fullName} (${item.original.email})</span>`;
       },
       selectTemplate(item) {
-        return `${item.original.value}`; // Inserts "@first_name"
+        return `${item.original.value}`;
       },
       menuClass: 'tribute-container',
       positionMenu(menu, trigger) {
@@ -65,5 +65,35 @@ document.addEventListener('turbo:load', () => {
     });
 
     tribute.attach(editor);
+
+    // Listen for Tribute selection event
+    editor.addEventListener('tribute-replaced', async (event) => {
+      const selectedUser = tribute.current.collection.find(user => user.value === event.detail.item.original.value);
+
+      if (selectedUser && selectedUser.email) {
+        console.log('Selected User:', selectedUser);
+
+        // Send the email to the backend
+        try {
+          const response = await fetch('/notifications/send_email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content // For Rails
+            },
+            body: JSON.stringify({ email: selectedUser.email })
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            console.log('Email notification sent successfully:', result);
+          } else {
+            console.error('Error sending email notification:', result);
+          }
+        } catch (error) {
+          console.error('Error in API request:', error);
+        }
+      }
+    });
   }
 });
