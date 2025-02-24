@@ -31,11 +31,10 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
-        Rails.logger.info "Issue successfully created: #{@issue.id}"
+        notify_mentioned_users(@issue)
         current_user.add_role :creator, @issue
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
       else
-        Rails.logger.info "Issue Errors: #{@issue.errors.full_messages}"
         format.html { render :new, alert: 'Issue was not created.' }
       end
     end
@@ -50,6 +49,7 @@ class IssuesController < ApplicationController
 
   def update
     if @issue.update(issue_params)
+      notify_mentioned_users(@issue)
       redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
@@ -57,6 +57,18 @@ class IssuesController < ApplicationController
   end
 
   private
+
+  def notify_mentioned_users(comment)
+    mentioned_users = extract_mentioned_users(comment.content)
+    mentioned_users.each do |user|
+      UserMailer.mention_notification(user, comment).deliver_later
+    end
+  end
+
+  def extract_mentioned_users(content)
+    usernames = content.scan(/@([\w\s]+)/).flatten # Extract usernames after '@'
+    User.where("CONCAT(first_name, ' ', last_name) IN (?)", usernames)
+  end
 
   def set_project
     @project = Project.find(params[:project_id])
