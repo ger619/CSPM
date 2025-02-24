@@ -2,24 +2,31 @@ class ScriptsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_software
   before_action :set_groupware
-  before_action :set_script, only: %i[edit update destroy]
 
-  def index
-    @scripts = Script.all # Ensure @scripts is an array of Script objects
+  def show_index
+    if params[:groupware_id]
+      groupware = Groupware.find(params[:groupware_id])
+      scripts = groupware.scripts
+    else
+      scripts = Script.all
+    end
+
+    render json: scripts
   end
 
   def new
-    @groupware = @software.groupwares.new
-    @script = @groupware.scripts.new
+    @script = Script.new
   end
 
   def create
-    @groupware = @software.groupwares.new(groupware_params)
+    @script = @groupware.scripts.build(script_params)
+    @script.software = @software
 
     respond_to do |format|
-      if @groupware.save
-        format.html { redirect_to software_path(@software), notice: 'Groupware was successfully created.' }
+      if @script.save
+        format.html { redirect_to software_groupware_path(@software, @groupware), notice: 'Script was successfully created.' }
       else
+        Rails.logger.debug @script.errors.full_messages
         format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -51,14 +58,10 @@ class ScriptsController < ApplicationController
   end
 
   def set_groupware
-    @groupware = @software.groupwares.find(params[:id])
+    @groupware = Groupware.find(params[:groupware_id])
   end
 
-  def set_script
-    @script = @groupware.scripts.find(params[:id])
-  end
-
-  def scripts_params
-    params.require(:script).permit(:module, :groupware_id, :software_id)
+  def script_params
+    params.require(:script).permit(:name, :description)
   end
 end
