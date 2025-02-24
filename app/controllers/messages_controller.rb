@@ -13,9 +13,6 @@ class MessagesController < ApplicationController
   end
 
   def index
-    Rails.logger.debug "Task: #{@task.inspect}"
-    Rails.logger.debug "Messages: #{@messages.inspect}"
-
     @messages = @task.messages.select { |message| message.visible_to?(current_user) }
   end
 
