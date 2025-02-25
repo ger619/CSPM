@@ -106,4 +106,5 @@ Rails.application.routes.draw do
   resources :client
   resources :status
   resources :team
+  resources :location
 end

@@ -1,0 +1,47 @@
+
+<div class="overflow-x-auto shadow-md sm:rounded-lg w-[100%] ">
+  <table class="w-full text-sm text-left rtl:text-right">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">
+        Name of the City
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Country Code
+      </th>
+      <% if can? :edit, @client %>
+        <th scope="col" class="px-6 py-3">
+          EDIT
+        </th>
+      <% end %>
+      <% if can? :edit, @client %>
+        <th scope="col" class="px-6 py-3">
+          DELETE
+        </th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% @location.each do | location| %>
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
+        <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap ">
+          <%= location.city   %>
+        </th>
+        <td class="px-6 py-4 truncate w-64">
+          <%= location.country %>
+        </td>
+        <% if can? :edit, location %>
+          <td class="px-4 py-4">
+            <%= link_to 'EDIT', edit_location_path(location),  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'   %>
+          </td>
+        <% end %>
+        <td class="px-4 py-4">
+          <% if can? :delete, location %>
+            <%= button_to 'DELETE', location, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold"  %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
