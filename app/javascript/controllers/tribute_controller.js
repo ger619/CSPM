@@ -5,19 +5,13 @@ document.addEventListener('turbo:load', () => {
   const currentUrl = window.location.pathname;
   const isAdmin = editor?.dataset.isAdmin === 'true';
 
-  if (editor && isAdmin && (currentUrl.includes('/tickets/new') || 
-      currentUrl.match(/\/tickets\/[0-9a-fA-F-]+\/edit/) || 
-      currentUrl.includes('/comments/new') || 
-      currentUrl.match(/\/comments\/[0-9a-fA-F-]+\/edit/) || 
-      currentUrl.includes('/issues/new') || 
-      currentUrl.match(/\/issues\/[0-9a-fA-F-]+\/edit/))) {
+  if (editor && isAdmin && (currentUrl.includes('/tickets/new') || currentUrl.match(/\/tickets\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/comments/new') || currentUrl.match(/\/comments\/[0-9a-fA-F-]+\/edit/) || currentUrl.includes('/issues/new') || currentUrl.match(/\/issues\/[0-9a-fA-F-]+\/edit/))) {
 
     const tribute = new Tribute({
       trigger: '@',
       allowSpaces: false,
       lookup: 'key',
       values: async (text, cb) => {
-        console.log('Typing:', text);
 
         if (!text.trim()) return cb([]);
 
@@ -42,10 +36,8 @@ document.addEventListener('turbo:load', () => {
             }
           ])).values());
 
-          console.log('Filtered users:', uniqueUsers);
           cb(uniqueUsers);
         } catch (error) {
-          console.error('Error fetching users:', error);
           cb([]);
         }
       },
