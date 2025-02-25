@@ -11,6 +11,11 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Support Desk Assignment')
   end
 
+  def mention_notification(user, comment)
+    @user = user
+    @comment = comment
+    mail(to: @user.email, subject: 'You were mentioned in a comment')
+  end
   # From Ticket Controller create
 
   def create_ticket_email(ticket, current_user, assigned_user)
