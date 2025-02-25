@@ -71,6 +71,24 @@
     </div>
   </div>
 
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Assignees (Breached)</h2>
+        <div id="breachedResolvedTicketsAssigneeChart">
+          <%= pie_chart [["Breached", @stats[:breached_tickets_resolved_per_assignee]]] %>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 shadow-md rounded-lg">
+        <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Projects (Breached)</h2>
+        <div id="resolutionResolvedTimeChartAssignee">
+          <%= pie_chart [["Breached", @stats[:breached_resolution_resolved_tickets_per_project]]]%>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   let selectedSoftware = null;
 
@@ -175,6 +193,35 @@
       .catch(error => {
         console.error("Error fetching stats:", error);
       });
+      new Chartkick.PieChart("breachedResolvedTicketsAssigneeChart", assigneeData, {
+        legend: "right"
+      });
+    }
+
+    document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
+    if (data.breached_resolution_tickets_per_project) {
+      let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_project).map(([name, count]) => {
+        let formattedName = String(name).replace(/[\[\]"]/g, '');
+        return [`${formattedName} (${count} ticket(s))`, count];
+      });
+      new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
+        legend: "right"
+      });
+    }
+
+    document.getElementById("resolutionResolvedTimeChartAssignee").innerHTML = "";
+    if (data.breached_resolution_resolved_tickets_per_project) {
+      let assigneeResolvedData = Object.entries(data.breached_resolution_resolved_tickets_per_project).map(([name, count]) => {
+        let formattedName = String(name).replace(/[\[\]"]/g, '');
+        return [`${formattedName} (${count} ticket(s))`, count];
+      });
+      new Chartkick.PieChart("resolutionResolvedTimeChartAssignee", assigneeResolvedData, {
+        legend: "right"
+      });
+    }
+  })
+  .catch(error => console.error("Error fetching stats:", error));
+
   }
 
   document.addEventListener("click", function(event) {

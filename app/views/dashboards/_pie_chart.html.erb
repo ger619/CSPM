@@ -8,7 +8,7 @@
         labels: ["Breached", "Not Breached"],
         datasets: [{
           data: [<%= @stats[:response_breached_tickets_last_30_days] %>, <%= @stats[:not_response_breached_tickets_last_30_days] %>],
-          backgroundColor: ["#ff6384", "#36a2eb"]
+          backgroundColor: ["green", "brown"]
         }]
       }
     });
