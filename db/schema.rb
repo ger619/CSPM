@@ -151,6 +151,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_100153) do
     t.uuid "user_id"
     t.uuid "project_id"
     t.string "status"
+    t.integer "task_id"
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -199,7 +200,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_100153) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "message_type", default: "external"
+    t.string "message_type"
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["ticket_id"], name: "index_issues_on_ticket_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
