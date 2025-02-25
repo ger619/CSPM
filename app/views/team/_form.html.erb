@@ -9,16 +9,10 @@
     <%= f.text_area :description, class: "h-24 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Enter team description' %>
   </div>
   <div class="mb-5">
-    <%= f.label :user_ids, 'Pick Users', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-    <%= f.collection_select :user_ids, User.with_agent_role.distinct, :id, :name, {}, multiple: true,
+    <%= f.label :user_ids, 'Pick Agents and Project Managers', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+    <%= f.collection_select :user_ids, User.with_assigned_role.distinct, :id, :name, {}, multiple: true,
                             class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-black",
                             placeholder: 'Select Craft Silicon' %>
-
-    <%= f.label :user_ids, 'Pick Clients', class: "block mt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-
-    <%= f.collection_select :user_ids, User.with_client_role.distinct, :id, :name, {}, multiple: true,
-                            class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-black",
-                            placeholder: 'Select Clients' %>
   </div>
   <div class="mb-5">
     <%= f.submit 'Create Team', class: "h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold" %>

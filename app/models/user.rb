@@ -81,7 +81,7 @@ class User < ApplicationRecord
   end
 
   def self.with_assigned_role
-    joins(:roles).where(roles: { name: ['agent', 'project manager', 'admin'] }, first_login: true, active: true)
+    joins(:roles).where(roles: { name: ['agent', 'project manager', 'admin', 'observer'] }, first_login: true, active: true)
   end
 
   def self.with_client_role
