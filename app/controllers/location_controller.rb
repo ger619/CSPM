@@ -1,6 +1,6 @@
 class LocationController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_location, only: %i[show edit update destroy]
+  # before_action :set_location, only: %i[show edit update destroy]
   load_and_authorize_resource
 
   def index
@@ -26,7 +26,6 @@ class LocationController < ApplicationController
 
   def create
     @location = Location.new(location_params)
-    @location.user_id = current_user.id
 
     respond_to do |format|
       if current_user.has_role?(:admin)
@@ -40,6 +39,25 @@ class LocationController < ApplicationController
           render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a location.'
         end
       end
+    end
+  end
+
+  def edit; end
+
+  def update
+    respond_to do |format|
+      if @location.update(location_params)
+        format.html { redirect_to location_index_path, notice: 'Location was successfully updated.' }
+      else
+        format.html { render 'edit', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @location.destroy
+    respond_to do |format|
+      format.html { redirect_to location_index_path, notice: 'Location was successfully destroyed.' }
     end
   end
 
