@@ -43,8 +43,8 @@ document.addEventListener('turbo:load', () => {
                   fullName: `${user.first_name} ${user.last_name}`,
                   email: `${user.email}`, // Store the email for later use
                 },
-              ])
-            ).values()
+              ]),
+            ).values(),
           );
 
           return cb(uniqueUsers);
@@ -53,9 +53,7 @@ document.addEventListener('turbo:load', () => {
         }
       },
       menuItemTemplate: (item) =>
-        `<span>${item.original.fullName} (${item.original.email})</span>`,
-      selectTemplate: (item) => `${item.original.value}`,
-      menuClass: 'tribute-container',
+        `<span>${item.original.fullName} (${item.original.email})</span>`, selectTemplate: (item) => `${item.original.value}`, menuClass: 'tribute-container',
       positionMenu(menu, trigger) {
         const rect = trigger.getBoundingClientRect();
         menu.style.left = `${rect.left}px`;
@@ -69,7 +67,7 @@ document.addEventListener('turbo:load', () => {
     // Listen for Tribute selection event
     editor.addEventListener('tribute-replaced', async (event) => {
       const selectedUser = tribute.current.collection.find(
-        (user) => user.value === event.detail.item.original.value
+        (user) => user.value === event.detail.item.original.value,
       );
 
       if (selectedUser && selectedUser.email) {
@@ -90,10 +88,10 @@ document.addEventListener('turbo:load', () => {
           if (response.ok) {
             // console.log('Email notification sent successfully:', result);
           } else {
-            console.error('Error sending email notification:', result);
+            // console.error('Error sending email notification:', result);
           }
         } catch (error) {
-          console.error('Error in API request:', error);
+          // console.error('Error in API request:', error);
         }
       }
     });
