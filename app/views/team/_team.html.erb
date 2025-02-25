@@ -12,7 +12,7 @@
     </thead>
     <tbody>
     <% @team.each do |team|   %>
-      <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
+      <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?('project manager')%>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
           <td class="px-6 py-4 font-medium text-left">
             <%= link_to team.name, team_path(team.id) %>

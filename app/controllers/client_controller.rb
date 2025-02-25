@@ -6,14 +6,14 @@ class ClientController < ApplicationController
   def index
     @client = Client.all
     @client = if params[:query].present?
-                query = "%#{sanitize_sql_like(params[:query])}%" # Sanitize the query
                 @client.where(
-                  'name ILIKE :query OR email ILIKE :query OR phone ILIKE :query OR address ILIKE :query OR
-                   client_contact_person ILIKE :query OR client_contact_phone_number ILIKE :query OR
-                   client_contact_person_email ILIKE :query', query: query
+                  'name ILIKE ? OR email ILIKE ? OR phone ILIKE ? OR address ILIKE ? OR client_contact_person ILIKE ? OR
+                   client_contact_phone_number ILIKE ? OR client_contact_person_email ILIKE ?', "%#{params[:query]}%",
+                  "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%",
+                  "%#{params[:query]}%", "%#{params[:query]}%"
                 )
               else
-                @client.order(created_at: :desc)
+                @client.order('created_at DESC')
               end
 
     @per_page = 10
