@@ -29,7 +29,7 @@ class DashboardsController < ApplicationController
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
-        .where(sla_tickets: { sla_status: 'Not Breached' })
+        .where(sla_tickets: { sla_status: ['Not Breached', nil] })
         .count
       # Breached response deadline tickets per Team
       response_breached_tickets_last_30_days = Ticket.joins(:users)
@@ -43,7 +43,7 @@ class DashboardsController < ApplicationController
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
-        .where(sla_tickets: { sla_target_response_deadline: 'Not Breached' })
+        .where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
         .count
       # Breached resolution deadline tickets per Team
       resolution_breached_tickets_last_30_days = Ticket.joins(:users)
@@ -57,24 +57,7 @@ class DashboardsController < ApplicationController
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
-        .where(sla_tickets: { sla_resolution_deadline: 'Not Breached' })
-        .count
-
-      # Pending resolution tickets per Team to be removed!
-
-      pending_resolution_30_days = Ticket.where(user_id: user_ids)
-        .where('created_at >= ?', 30.days.ago)
-        .where(id: SlaTicket.where(sla_resolution_deadline: nil).select(:ticket_id))
-        .count
-
-      pending_initial_response_30_days = Ticket.where(user_id: user_ids)
-        .where('created_at >= ?', 30.days.ago)
-        .where(id: SlaTicket.where(sla_status: nil).select(:ticket_id))
-        .count
-
-      pending_target_response_30_days = Ticket.where(user_id: user_ids)
-        .where('created_at >= ?', 30.days.ago)
-        .where(id: SlaTicket.where(sla_target_response_deadline: nil).select(:ticket_id))
+        .where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
         .count
 
       # Breached tickets per assignee to select per team working
@@ -123,11 +106,8 @@ class DashboardsController < ApplicationController
         not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days,
         breached_tickets_per_assignee: breached_tickets_per_assignee,
         breached_resolution_tickets_per_project: breached_resolution_tickets_per_project,
-        pending_resolution_30_days: pending_resolution_30_days,
-        pending_initial_response_30_days: pending_initial_response_30_days,
         breached_tickets_resolved_per_assignee: breached_tickets_resolved_per_assignee,
-        breached_resolution_resolved_tickets_per_project: breached_resolution_resolved_tickets_per_project,
-        pending_target_response_30_days: pending_target_response_30_days
+        breached_resolution_resolved_tickets_per_project: breached_resolution_resolved_tickets_per_project
       }
 
       render json: stats

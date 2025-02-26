@@ -19,17 +19,16 @@
   </div>
 
   <!-- Stats Section -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-8 mt-6">
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:not_breached_tickets_last_30_days], id: "initial_response_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "Initial Response Time - In Progress & Before Status Change", value: @stats[:pending_initial_response_30_days], id: "initial_response_pending" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: @stats[:response_breached_tickets_last_30_days], id: "target_repair_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Repair Time - In Progress & Before Status Change", value: @stats[:pending_target_response_30_days], id: "target_repair_time_pending" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: @stats[:not_resolution_breached_tickets_last_30_days], id: "target_resolution_time_not_breached" %>
-    <%= render 'dashboards/stat_card', title: "Target Resolution Time - In Progress & Before Status Change", value: @stats[:pending_resolution_30_days], id: "target_resolution_time_pending" %>
-    <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-3">
+  <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8 mt-6">
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached", class: 'col-span-1' %>
+    <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:not_breached_tickets_last_30_days], id: "initial_response_time_not_breached", class: 'col-span-1'  %>
+
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: @stats[:response_breached_tickets_last_30_days], id: "target_repair_time_breached", class: 'col-span-1'  %>
+    <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached", class: 'col-span-1'  %>
+
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached", class: 'col-span-1'  %>
+    <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: @stats[:not_resolution_breached_tickets_last_30_days], id: "target_resolution_time_not_breached", class: 'col-span-1'  %>
+    <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
       <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days"%>
     </div>
   </div>
@@ -153,9 +152,6 @@
         document.getElementById("target_repair_time_not_breached").innerText = data.not_response_breached_tickets_last_30_days;
         document.getElementById("target_resolution_time_breached").innerText = data.resolution_breached_tickets_last_30_days;
         document.getElementById("target_resolution_time_not_breached").innerText = data.not_resolution_breached_tickets_last_30_days;
-        document.getElementById("initial_response_pending").innerText = data.pending_initial_response_30_days;
-        document.getElementById("target_repair_time_pending").innerText = data.pending_target_response_30_days;
-        document.getElementById("target_resolution_time_pending").innerText = data.pending_resolution_30_days;
 
         // Refresh charts
         document.getElementById("responseTimeChart").innerHTML = "";
