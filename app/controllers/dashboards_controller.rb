@@ -86,11 +86,12 @@ class DashboardsController < ApplicationController
         .group('users.first_name', 'users.last_name')
         .count
 
-      breached_resolution_tickets_per_project = SlaTicket
-        .joins(ticket: :project) # Join the projects table
-        .where(tickets: { user_id: user_ids })
+      breached_resolution_tickets_per_project = Ticket.joins(:users)
+        .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
-        .where(sla_target_response_deadline: 'Breached')
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_target_response_deadline: 'Breached' })
+        .joins(:project) # Join the projects table
         .group('projects.title') # Group by project title
         .count
 
@@ -103,11 +104,12 @@ class DashboardsController < ApplicationController
         .group('users.first_name', 'users.last_name')
         .count
 
-      breached_resolution_resolved_tickets_per_project = SlaTicket
-        .joins(ticket: :project) # Join the projects table
-        .where(tickets: { user_id: user_ids })
+      breached_resolution_resolved_tickets_per_project = Ticket.joins(:users)
+        .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
-        .where(sla_resolution_deadline: 'Breached')
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
+        .joins(:project) # Join the projects table
         .group('projects.title') # Group by project title
         .count
 
