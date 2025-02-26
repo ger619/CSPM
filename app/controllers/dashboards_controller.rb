@@ -17,48 +17,50 @@ class DashboardsController < ApplicationController
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .count
-
+      # Breached tickets per Team
       breached_tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_status: 'Breached' })
         .count
-
+      # Not Breached tickets per Team
       not_breached_tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_status: 'Not Breached' })
         .count
-
+      # Breached response deadline tickets per Team
       response_breached_tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: 'Breached' })
         .count
-
+      # Not Breached response deadline tickets per Team
       not_response_breached_tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: 'Not Breached' })
         .count
-
+      # Breached resolution deadline tickets per Team
       resolution_breached_tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .count
-
+      # Not Breached resolution deadline tickets per Team
       not_resolution_breached_tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Not Breached' })
         .count
+
+      # Pending resolution tickets per Team to be removed!
 
       pending_resolution_30_days = Ticket.where(user_id: user_ids)
         .where('created_at >= ?', 30.days.ago)
