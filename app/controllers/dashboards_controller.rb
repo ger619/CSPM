@@ -77,7 +77,7 @@ class DashboardsController < ApplicationController
         .where(id: SlaTicket.where(sla_target_response_deadline: nil).select(:ticket_id))
         .count
 
-      # Breached tickets per assignee to select per team
+      # Breached tickets per assignee to select per team working
       breached_tickets_per_assignee = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
