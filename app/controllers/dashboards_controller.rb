@@ -77,11 +77,12 @@ class DashboardsController < ApplicationController
         .where(id: SlaTicket.where(sla_target_response_deadline: nil).select(:ticket_id))
         .count
 
-      breached_tickets_per_assignee = SlaTicket
-        .joins(ticket: { taggings: :user }) # Ensures proper joins
-        .where(tickets: { user_id: user_ids })
+      # Breached tickets per assignee to select per team
+      breached_tickets_per_assignee = Ticket.joins(:users)
+        .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
-        .where(sla_target_response_deadline: 'Breached')
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_target_response_deadline: 'Breached' })
         .group('users.first_name', 'users.last_name')
         .count
 
