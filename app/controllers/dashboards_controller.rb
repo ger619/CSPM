@@ -4,7 +4,6 @@ class DashboardsController < ApplicationController
   def index
     @teams = Team.all
     @stats = default_stats
-    @selected_team = params[:team_name]
   end
 
   def fetch_stats
@@ -118,9 +117,11 @@ class DashboardsController < ApplicationController
   end
 
   def tickets
+    @teams = Team.all
     team_name = params[:team_name]
     type = params[:type]
     team = Team.find_by(name: team_name)&.id
+    @selected_team = params[:team_name]
 
     if team
       user_ids = Team.find(team).users.pluck(:id)
