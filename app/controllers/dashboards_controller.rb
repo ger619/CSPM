@@ -94,11 +94,12 @@ class DashboardsController < ApplicationController
         .group('projects.title') # Group by project title
         .count
 
-      breached_tickets_resolved_per_assignee = SlaTicket
-        .joins(ticket: { taggings: :user }) # Ensures proper joins
-        .where(tickets: { user_id: user_ids })
+      # Breached tickets resolved per assignee (Working)
+      breached_tickets_resolved_per_assignee = Ticket.joins(:users)
+        .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
-        .where(sla_resolution_deadline: 'Breached')
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .group('users.first_name', 'users.last_name')
         .count
 
