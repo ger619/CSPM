@@ -116,6 +116,39 @@ class DashboardsController < ApplicationController
     end
   end
 
+  def tickets
+    team_name = params[:team_name]
+    type = params[:type]
+    team = Team.find_by(name: team_name)&.id
+    @selected_team = params[:team_name]
+
+
+    if team
+      user_ids = Team.find(team).users.pluck(:id)
+      @tickets = Ticket.joins(:users)
+        .where(users: { id: user_ids })
+        .where('tickets.created_at >= ?', 30.days.ago)
+        .joins(:sla_tickets)
+
+      case type
+      when 'initial_response_time_breached'
+        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
+      when 'initial_response_time_not_breached'
+        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
+      when 'target_repair_time_breached'
+        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
+      when 'target_repair_time_not_breached'
+        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
+      when 'target_resolution_time_breached'
+        @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: 'Breached' })
+      when 'target_resolution_time_not_breached'
+        @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
+      end
+    else
+      @tickets = []
+    end
+  end
+
   private
 
   def default_stats
