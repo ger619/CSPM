@@ -13,7 +13,11 @@ class DashboardsController < ApplicationController
 
     if team
       user_ids = Team.find(team).users.pluck(:id)
-      total_tickets_last_30_days = Ticket.where(user_id: user_ids).where('created_at >= ?', 30.days.ago).count
+      total_tickets_last_30_days = Ticket.joins(:users)
+        .where(users: { id: user_ids })
+        .where('tickets.created_at >= ?', 30.days.ago)
+        .count
+
       breached_tickets_last_30_days = SlaTicket.joins(:ticket)
         .where(tickets: { user_id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
