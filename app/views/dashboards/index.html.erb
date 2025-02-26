@@ -1,10 +1,10 @@
 <div class="mx-auto mb-6 p-6">
   <div class="flex justify-between items-center">
     <div class="relative w-80">
-      <input type="text" id="search" class="w-full px-4 py-2 border rounded-lg" placeholder="Search SLA Tracking..." onkeyup="filterDropdown()">
+      <input type="text" id="search" class="w-full px-4 py-2 border rounded-lg" placeholder="Search Teams..." onkeyup="filterDropdown()">
       <div id="dropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
-        <% @softwares.each do |software| %>
-          <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)"><%= software.name %></div>
+        <% @teams.each do |team| %>
+          <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectItem(this)"><%= team.name %></div>
         <% end %>
       </div>
     </div>
@@ -12,11 +12,10 @@
     <h1 class="text-3xl font-bold">All Stats Within Last 30 Days</h1>
 
     <button type="button"
-      onclick="refreshStats()"
-      class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            onclick="refreshStats()"
+            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
       Refresh
     </button>
-
   </div>
 
   <!-- Stats Section -->
@@ -34,7 +33,6 @@
       <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days"%>
     </div>
   </div>
-
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -55,42 +53,57 @@
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-      <div class="bg-white p-4 shadow-md rounded-lg">
-        <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Assignees (Breached)</h2>
-        <div id="breachedTicketsAssigneeChart">
-          <%= pie_chart [["Breached", @stats[:response_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_response_breached_tickets_last_30_days]]] %>
-        </div>
+    <div class="bg-white p-4 shadow-md rounded-lg">
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Assignees (Breached)</h2>
+      <div id="breachedTicketsAssigneeChart">
+        <% if @stats[:breached_tickets_per_assignee] %>
+          <%= pie_chart @stats[:breached_tickets_per_assignee].map { |name, count| ["#{name} (#{count})", count] }, legend: "right" %>
+        <% else %>
+          <p>No data available</p>
+        <% end %>
       </div>
+    </div>
 
-      <div class="bg-white p-4 shadow-md rounded-lg">
-        <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Projects (Breached)</h2>
-        <div id="resolutionTimeChartAssignee">
-          <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]]%>
-        </div>
+    <div class="bg-white p-4 shadow-md rounded-lg">
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Projects (Breached)</h2>
+      <div id="resolutionTimeChartAssignee">
+        <% if @stats[:breached_resolution_tickets_per_project] %>
+          <%= pie_chart @stats[:breached_resolution_tickets_per_project].map { |name, count| ["#{name} (#{count})", count] }, legend: "right" %>
+        <% else %>
+          <p>No data available</p>
+        <% end %>
       </div>
     </div>
   </div>
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-      <div class="bg-white p-4 shadow-md rounded-lg">
-        <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Assignees (Breached)</h2>
-        <div id="breachedResolvedTicketsAssigneeChart">
-          <%= pie_chart [["Breached", @stats[:breached_tickets_resolved_per_assignee]]] %>
-        </div>
+    <div class="bg-white p-4 shadow-md rounded-lg">
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Assignees (Breached)</h2>
+      <div id="breachedResolvedTicketsAssigneeChart">
+        <% if @stats[:breached_tickets_resolved_per_assignee] %>
+          <%= pie_chart @stats[:breached_tickets_resolved_per_assignee].map { |name, count| ["#{name} (#{count})", count] }, legend: "right" %>
+        <% else %>
+          <p>No data available</p>
+        <% end %>
       </div>
+    </div>
 
-      <div class="bg-white p-4 shadow-md rounded-lg">
-        <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Projects (Breached)</h2>
-        <div id="resolutionResolvedTimeChartAssignee">
-          <%= pie_chart [["Breached", @stats[:breached_resolution_resolved_tickets_per_project]]]%>
-        </div>
+    <div class="bg-white p-4 shadow-md rounded-lg">
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Projects (Breached)</h2>
+      <div id="resolutionResolvedTimeChartAssignee">
+        <% if @stats[:breached_resolution_resolved_tickets_per_project] %>
+          <%= pie_chart @stats[:breached_resolution_resolved_tickets_per_project].map { |name, count| ["#{name} (#{count})", count] }, legend: "right" %>
+        <% else %>
+          <p>No data available</p>
+        <% end %>
       </div>
     </div>
   </div>
+</div>
 
 <script>
-  let selectedSoftware = null;
+  let selectedTeam = null;
 
   function filterDropdown() {
     let input = document.getElementById("search").value.toLowerCase();
@@ -105,9 +118,9 @@
   }
 
   function selectItem(element) {
-    const softwareName = element.textContent.trim();
-    document.getElementById("search").value = softwareName;
-    selectedSoftware = softwareName; // Store the selected software
+    const teamName = element.textContent.trim();
+    document.getElementById("search").value = teamName;
+    selectedTeam = teamName; // Store the selected team
 
     // Remove 'selected' class from all items
     document.querySelectorAll(".dropdown-item").forEach(item => {
@@ -118,92 +131,89 @@
     element.classList.add("selected");
     document.getElementById("dropdown").classList.add("hidden");
 
-    fetchStats(softwareName); // Call the fetch function
+    fetchStats(teamName); // Call the fetch function
   }
 
   function refreshStats() {
-    if (selectedSoftware) {
-      fetchStats(selectedSoftware);
+    if (selectedTeam) {
+      fetchStats(selectedTeam);
     } else {
-      alert("Please select a software first.");
+      alert("Please select a team first.");
     }
   }
 
-  function fetchStats(softwareName) {
-    fetch(`/dashboards/fetch_stats?software_name=${softwareName}`)
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById("total_tickets_last_30_days").innerText = data.total_tickets_last_30_days;
-    document.getElementById("initial_response_time_breached").innerText = data.breached_tickets_last_30_days;
-    document.getElementById("initial_response_time_not_breached").innerText = data.not_breached_tickets_last_30_days;
-    document.getElementById("target_repair_time_breached").innerText = data.response_breached_tickets_last_30_days;
-    document.getElementById("target_repair_time_not_breached").innerText = data.not_response_breached_tickets_last_30_days;
-    document.getElementById("target_resolution_time_breached").innerText = data.resolution_breached_tickets_last_30_days;
-    document.getElementById("target_resolution_time_not_breached").innerText = data.not_resolution_breached_tickets_last_30_days;
-    document.getElementById("initial_response_pending").innerText = data.pending_initial_response_30_days;
-    document.getElementById("target_repair_time_pending").innerText = data.pending_target_response_30_days;
-    document.getElementById("target_resolution_time_pending").innerText = data.pending_resolution_30_days;
+  function fetchStats(teamName) {
+    fetch(`/dashboards/fetch_stats?team_name=${teamName}`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("total_tickets_last_30_days").innerText = data.total_tickets_last_30_days;
+        document.getElementById("initial_response_time_breached").innerText = data.breached_tickets_last_30_days;
+        document.getElementById("initial_response_time_not_breached").innerText = data.not_breached_tickets_last_30_days;
+        document.getElementById("target_repair_time_breached").innerText = data.response_breached_tickets_last_30_days;
+        document.getElementById("target_repair_time_not_breached").innerText = data.not_response_breached_tickets_last_30_days;
+        document.getElementById("target_resolution_time_breached").innerText = data.resolution_breached_tickets_last_30_days;
+        document.getElementById("target_resolution_time_not_breached").innerText = data.not_resolution_breached_tickets_last_30_days;
+        document.getElementById("initial_response_pending").innerText = data.pending_initial_response_30_days;
+        document.getElementById("target_repair_time_pending").innerText = data.pending_target_response_30_days;
+        document.getElementById("target_resolution_time_pending").innerText = data.pending_resolution_30_days;
 
-    // Refresh charts
-      document.getElementById("responseTimeChart").innerHTML = "";
-      new Chartkick.PieChart("responseTimeChart", [
-        [`Breached (${data.response_breached_tickets_last_30_days})`, data.response_breached_tickets_last_30_days],
-        [`Not Breached (${data.not_response_breached_tickets_last_30_days})`, data.not_response_breached_tickets_last_30_days]
-      ], { colors: ["#ff0000", "#36a2eb"] });
+        // Refresh charts
+        document.getElementById("responseTimeChart").innerHTML = "";
+        new Chartkick.PieChart("responseTimeChart", [
+          [`Breached (${data.response_breached_tickets_last_30_days})`, data.response_breached_tickets_last_30_days],
+          [`Not Breached (${data.not_response_breached_tickets_last_30_days})`, data.not_response_breached_tickets_last_30_days]
+        ], { colors: ["#ff0000", "#36a2eb"] });
 
-      document.getElementById("resolutionTimeChart").innerHTML = "";
-      new Chartkick.PieChart("resolutionTimeChart", [
-        [`Breached (${data.resolution_breached_tickets_last_30_days})`, data.resolution_breached_tickets_last_30_days],
-        [`Not Breached (${data.not_resolution_breached_tickets_last_30_days})`, data.not_resolution_breached_tickets_last_30_days]
-      ], { colors: ["#ff0000", "#36a2eb"] });
+        document.getElementById("resolutionTimeChart").innerHTML = "";
+        new Chartkick.PieChart("resolutionTimeChart", [
+          [`Breached (${data.resolution_breached_tickets_last_30_days})`, data.resolution_breached_tickets_last_30_days],
+          [`Not Breached (${data.not_resolution_breached_tickets_last_30_days})`, data.not_resolution_breached_tickets_last_30_days]
+        ], { colors: ["#ff0000", "#36a2eb"] });
 
-      // Generate Assignee Breached Tickets Pie Chart
-      document.getElementById("breachedTicketsAssigneeChart").innerHTML = "";
-      let assigneeData = Object.entries(data.breached_tickets_per_assignee).map(([name, count]) => {
-        // Ensure name is correctly formatted
-        let formattedName = String(name).replace(/[\[\]"]/g, ''); // Remove brackets and quotes
-        return [`${formattedName} (${count})`, count];
-      });
-      new Chartkick.PieChart("breachedTicketsAssigneeChart", assigneeData, {
-        legend: "right" // Move the legend to the right side
-      });
+        // Generate Assignee Breached Tickets Pie Chart
+        document.getElementById("breachedTicketsAssigneeChart").innerHTML = "";
+        let assigneeData = Object.entries(data.breached_tickets_per_assignee).map(([name, count]) => {
+          let formattedName = String(name).replace(/[\[\]"]/g, ''); // Remove brackets and quotes
+          return [`${formattedName} (${count})`, count];
+        });
+        new Chartkick.PieChart("breachedTicketsAssigneeChart", assigneeData, {
+          legend: "right" // Move the legend to the right side
+        });
 
-    // Refresh charts
-    document.getElementById("breachedResolvedTicketsAssigneeChart").innerHTML = "";
-    if (data.breached_tickets_resolved_per_assignee) {
-      let assigneeData = Object.entries(data.breached_tickets_resolved_per_assignee).map(([name, count]) => {
-        let formattedName = String(name).replace(/[\[\]"]/g, '');
-        return [`${formattedName} (${count})`, count];
-      });
-      new Chartkick.PieChart("breachedResolvedTicketsAssigneeChart", assigneeData, {
-        legend: "right"
-      });
-    }
+        document.getElementById("breachedResolvedTicketsAssigneeChart").innerHTML = "";
+        if (data.breached_tickets_resolved_per_assignee) {
+          let assigneeData = Object.entries(data.breached_tickets_resolved_per_assignee).map(([name, count]) => {
+            let formattedName = String(name).replace(/[\[\]"]/g, '');
+            return [`${formattedName} (${count})`, count];
+          });
+          new Chartkick.PieChart("breachedResolvedTicketsAssigneeChart", assigneeData, {
+            legend: "right"
+          });
+        }
 
-    document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
-    if (data.breached_resolution_tickets_per_project) {
-      let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_project).map(([name, count]) => {
-        let formattedName = String(name).replace(/[\[\]"]/g, '');
-        return [`${formattedName} (${count} ticket(s))`, count];
-      });
-      new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
-        legend: "right"
-      });
-    }
+        document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
+        if (data.breached_resolution_tickets_per_project) {
+          let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_project).map(([name, count]) => {
+            let formattedName = String(name).replace(/[\[\]"]/g, '');
+            return [`${formattedName} (${count} ticket(s))`, count];
+          });
+          new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
+            legend: "right"
+          });
+        }
 
-    document.getElementById("resolutionResolvedTimeChartAssignee").innerHTML = "";
-    if (data.breached_resolution_resolved_tickets_per_project) {
-      let assigneeResolvedData = Object.entries(data.breached_resolution_resolved_tickets_per_project).map(([name, count]) => {
-        let formattedName = String(name).replace(/[\[\]"]/g, '');
-        return [`${formattedName} (${count} ticket(s))`, count];
-      });
-      new Chartkick.PieChart("resolutionResolvedTimeChartAssignee", assigneeResolvedData, {
-        legend: "right"
-      });
-    }
-  })
-  .catch(error => console.error("Error fetching stats:", error));
-
+        document.getElementById("resolutionResolvedTimeChartAssignee").innerHTML = "";
+        if (data.breached_resolution_resolved_tickets_per_project) {
+          let assigneeResolvedData = Object.entries(data.breached_resolution_resolved_tickets_per_project).map(([name, count]) => {
+            let formattedName = String(name).replace(/[\[\]"]/g, '');
+            return [`${formattedName} (${count} ticket(s))`, count];
+          });
+          new Chartkick.PieChart("resolutionResolvedTimeChartAssignee", assigneeResolvedData, {
+            legend: "right"
+          });
+        }
+      })
+      .catch(error => console.error("Error fetching stats:", error));
   }
 
   document.addEventListener("click", function(event) {
