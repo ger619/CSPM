@@ -4,6 +4,7 @@ class DashboardsController < ApplicationController
   def index
     @teams = Team.all
     @stats = default_stats
+    @selected_team = params[:team_name]
   end
 
   def fetch_stats
@@ -120,8 +121,6 @@ class DashboardsController < ApplicationController
     team_name = params[:team_name]
     type = params[:type]
     team = Team.find_by(name: team_name)&.id
-    @selected_team = params[:team_name]
-
 
     if team
       user_ids = Team.find(team).users.pluck(:id)
@@ -143,6 +142,10 @@ class DashboardsController < ApplicationController
         @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: 'Breached' })
       when 'target_resolution_time_not_breached'
         @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
+      when 'total_tickets_last_30_days'
+        # No additional filtering needed
+      else
+        @tickets = []
       end
     else
       @tickets = []
