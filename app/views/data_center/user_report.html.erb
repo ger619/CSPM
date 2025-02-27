@@ -3,14 +3,6 @@
   <%= form_with url: user_report_path, method: :get, local: true do |f| %>
     <div class="flex justify-center gap-2">
       <div class="flex flex-col gap-2">
-        <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :start_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
-      </div>
-      <div class="flex flex-col gap-2">
-        <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :end_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black" %>
-      </div>
-      <div class="flex flex-col gap-2">
         <%= f.label :user_id, "User", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
 
         <div class="relative w-full">
@@ -77,13 +69,13 @@
     <table id="user_report" class="table-auto w-full">
       <thead>
       <tr>
-        <th class="px-4 py-2">User Name</th>
-        <th class="px-4 py-2">Project Name</th>
-        <th class="px-4 py-2">Ticket ID</th>
-        <th class="px-4 py-2">Ticket Subject</th>
-        <th class="px-4 py-2">Ticket Status</th>
-        <th class="px-4 py-2">SLA Target Response Deadline</th>
-        <th class="px-4 py-2">Created At</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">User Name</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Project Name</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Ticket ID</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Ticket Subject</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Ticket Status</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">SLA Target Response Deadline</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Created At</th>
       </tr>
       </thead>
       <tbody>
@@ -91,13 +83,13 @@
         <% user.tickets.each do |ticket| %>
           <% sla_ticket = SlaTicket.find_by(ticket_id: ticket.id) %>
           <tr>
-            <td class="border px-4 py-2"><%= user.name %></td>
-            <td class="border px-4 py-2"><%= ticket.project.title %></td>
-            <td class="border px-4 py-2"><%= ticket.unique_id %></td>
-            <td class="border px-4 py-2"><%= ticket.subject %></td>
-            <td class="border px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-            <td class="border px-4 py-2"><%= sla_ticket&.sla_target_response_deadline || "N/A" %></td>
-            <td class="border px-4 py-2"><%= ticket.created_at %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.project.title %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.subject %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= sla_ticket&.sla_target_response_deadline || "N/A" %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at %></td>
           </tr>
         <% end %>
       <% end %>

@@ -58,7 +58,8 @@ class DataCenterController < ApplicationController
 
       respond_to do |format|
         format.html # Default view
-        format.csv { send_data generate_breach_details_csv(@tickets), filename: "breach_details_report_#{Date.today}.csv" }
+        client_name = Client.find(params[:client_id]).name if params[:client_id].present?
+        format.csv { send_data generate_breach_details_csv(@tickets), filename: "breach__report_for_#{client_name}_#{Date.today}.csv" }
       end
     else
       @tickets = Ticket.none
@@ -70,13 +71,10 @@ class DataCenterController < ApplicationController
   # User activity report for the admin
   def user_report
     authorize! :generate, :report # Check if the user can generate reports
+    if params[:user_id].present?
 
-    if params[:start_date].present? && params[:end_date].present?
-      start_date = Date.parse(params[:start_date])
-      end_date = Date.parse(params[:end_date])
 
       @users = User.includes(tickets: :project)
-        .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
         .where(id: params[:user_id])
 
       @status_counts = @users.flat_map(&:tickets).group_by { |ticket| ticket.statuses.first&.name || 'N/A' }.transform_values(&:count)
