@@ -1,5 +1,5 @@
 <% if current_user.has_role?(:admin) or current_user.has_role?('project manager') %>
-  <h1 class="flex justify-center text-2xl font-bold mb-4">Cease Fire Report</h1>
+  <<h1 class="flex justify-center text-2xl font-bold mb-4">Cease Fire Report <span class="text-xs p-2 text-red">(Leave the lower part blank if you want*)</span> </h1>
 <% else %>
   <h1 class="flex justify-center text-2xl font-bold mb-4">Status Report</h1>
 <% end %>
