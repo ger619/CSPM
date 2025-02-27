@@ -43,15 +43,11 @@ class DataCenterController < ApplicationController
   def breach_report
     authorize! :generate, :report # Check if the user can generate reports
 
-    if params[:start_date].present? && params[:end_date].present?
-      start_date = Date.parse(params[:start_date])
-      end_date = Date.parse(params[:end_date])
-
+    if params[:client_id].present?
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                   Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+                   Ticket.joins(project: :client)
                  else
-                   Ticket.joins(project: :client).where(created_at: start_date.beginning_of_day..end_date.end_of_day,
-                                                        projects: { id: current_user.projects.ids })
+                   Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
                  end
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
