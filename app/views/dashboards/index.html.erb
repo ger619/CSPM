@@ -20,16 +20,16 @@
 
   <!-- Stats Section -->
   <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8 mt-6">
-    <%= link_to dashboards_tickets_path(team_name: @selected_team, type: 'initial_response_time_breached') do %>
+    <%= link_to dashboards_tickets_path(team_name: @team, type: 'initial_response_time_breached') do %>
       <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached", class: 'col-span-1' %>
     <% end %>
-    <%= link_to dashboards_tickets_path(team_name: @selected_team, type: 'initial_response_time_not_breached') do %>
+    <%= link_to dashboards_tickets_path(team_name: @team, type: 'initial_response_time_not_breached') do %>
       <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:not_breached_tickets_last_30_days], id: "initial_response_time_not_breached", class: 'col-span-1'  %>
     <% end %>
-    <%= link_to dashboards_tickets_path(team_name: @selected_team, type: 'target_repair_time_breached') do %>
+    <%= link_to dashboards_tickets_path(team_name: @team, type: 'target_repair_time_breached') do %>
       <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: @stats[:response_breached_tickets_last_30_days], id: "target_repair_time_breached", class: 'col-span-1'  %>
     <% end %>
-    <%= link_to dashboards_tickets_path(team_name: @selected_team, type: 'target_repair_time_not_breached') do %>
+    <%= link_to dashboards_tickets_path(team_name: @team, type: 'target_repair_time_not_breached') do %>
       <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached", class: 'col-span-1'  %>
     <% end %>
 
