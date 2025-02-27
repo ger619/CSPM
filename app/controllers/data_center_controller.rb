@@ -73,7 +73,6 @@ class DataCenterController < ApplicationController
     authorize! :generate, :report # Check if the user can generate reports
     if params[:user_id].present?
 
-
       @users = User.includes(tickets: :project)
         .where(id: params[:user_id])
 
