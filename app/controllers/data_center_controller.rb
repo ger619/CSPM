@@ -6,7 +6,6 @@ class DataCenterController < ApplicationController
     authorize! :generate, :report # Check if the user can generate reports
 
     if params[:client_id].present?
-
       @client_selected = params[:client_id].present?
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
@@ -16,6 +15,12 @@ class DataCenterController < ApplicationController
                  end
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if @client_selected
+
+      if params[:start_date].present? && params[:end_date].present?
+        start_date = Date.parse(params[:start_date])
+        end_date = Date.parse(params[:end_date])
+        @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+      end
 
       @tickets = if params[:status].blank?
                    @tickets.joins(:statuses)
