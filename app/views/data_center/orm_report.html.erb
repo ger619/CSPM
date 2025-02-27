@@ -4,14 +4,13 @@
 <div class="p-2 w-full">
   <%= form_with url: orm_report_path, method: :get, local: true do |f| %>
     <div class="flex flex-wrap justify-center gap-2">
-      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
-        <%= f.label :days, "Closed & Resolved for the last (days)" %>
+      <div class="flex flex-col gap-2">
+        <%= f.label :days, "Closed & Resolved for the last (days)", class: "capitalize text-sm font-bold w-full align-middle p-2" %>
         <%= f.number_field :days, value: params[:days], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" %>
       </div>
-      <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6">
-  <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
-
-  <div class="relative w-full">
+      <div class="flex flex-col gap-2">
+        <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle p-2" %>
+        <div class="relative w-full">
     <!-- Searchable Input -->
         <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
 
@@ -76,16 +75,16 @@
     <table id="orm_report" class="table-auto w-full">
       <thead>
       <tr>
-        <th class="border border-black px-4 py-2">Created at</th>
-        <th class="border border-black px-4 py-2">Project Name</th>
         <th class="border border-black px-4 py-2">Ticket ID</th>
-        <th class="border border-black px-4 py-2">Issue Type</th>
         <th class="border border-black px-4 py-2">Summary</th>
-        <th class="border border-black px-4 py-2">Status</th>
-        <th class="border border-black px-4 py-2">Severity</th>
+        <th class="border border-black px-4 py-2">Issue Type</th>
         <th class="border border-black px-4 py-2">Assignee</th>
         <th class="border border-black px-4 py-2">Reporter</th>
-        <th class="border border-black px-4 py-2">Details</th>
+        <th class="border border-black px-4 py-2">Severity</th>
+        <th class="border border-black px-4 py-2">Status</th>
+        <th class="border border-black px-4 py-2">Created at</th>
+        <th class="border border-black px-4 py-2">updated at</th>
+
       </tr>
       </thead>
       <tbody>
@@ -121,16 +120,19 @@
                          ''
                        end %>
         <tr class="<%= row_class %> text-white text-bold">
-          <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
-          <td class="capitalize border px-4 py-2"><%= ticket.project.title %></td>
           <td class="border px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border px-4 py-2"><%= ticket.issue %></td>
           <td class="border px-4 py-2"><%= ticket.subject %></td>
-          <td class="border px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
-          <td class="border px-4 py-2"><%= ticket.priority %></td>
+          <td class="border px-4 py-2"><%= ticket.issue %></td>
           <td class="border px-4 py-2"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
           <td class="border px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(800) %></td>
+          <td class="border px-4 py-2"><%= ticket.priority %></td>
+          <td class="border px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
+          <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
+          <td class="border px-4 py-2"><%= ticket.updated_at.strftime("%d-%b-%Y") %></td>
+
+
+
+
         </tr>
       <% end %>
       </tbody>

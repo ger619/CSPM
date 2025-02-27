@@ -50,6 +50,7 @@
           <input type="hidden" id="selectedClientId" name="client_id">
         </div>
 
+
       <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
         <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.date_field :start_date, value: params[:start_date], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full" %>
@@ -154,7 +155,7 @@
               <% end %>
             <% end %></td>
           <td class="border px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(800) %></td>
+          <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(3000) %></td>
         </tr>
       <% end %>
       </tbody>
