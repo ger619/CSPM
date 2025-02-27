@@ -124,9 +124,7 @@ class DataCenterController < ApplicationController
   def orm_report
     authorize! :generate, :report # Check if the user can generate reports
 
-    if params[:start_date].present? && params[:end_date].present?
-      start_date = Date.parse(params[:start_date]).beginning_of_day
-      end_date = Date.parse(params[:end_date]).end_of_day
+    if params[:client_id].present?
       days = params[:days].to_i
 
       outstanding_statuses = %w[Closed Resolved Declined]
@@ -134,12 +132,11 @@ class DataCenterController < ApplicationController
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(project: :client)
                      .joins(:statuses)
-                     .where(tickets: { created_at: start_date..end_date })
                      .where.not(statuses: { name: outstanding_statuses })
                  else
                    Ticket.joins(project: :client)
                      .joins(:statuses)
-                     .where(tickets: { created_at: start_date..end_date, projects: { id: current_user.projects.ids } })
+                     .where(projects: { id: current_user.projects.ids })
                      .where.not(statuses: { name: outstanding_statuses })
                  end
 
@@ -167,7 +164,7 @@ class DataCenterController < ApplicationController
         format.html # Default view
         client_name = Client.find(params[:client_id]).name if params[:client_id].present?
         filename = "orm_report_#{client_name}_#{Date.today}.csv"
-        format.csv { send_data generate_csv(@tickets), filename: filename }
+        format.csv { send_data generate_orm_report_csv(@tickets, @ticket_counts, @project_status_counts), filename: filename }
       end
     else
       @tickets = Ticket.none
@@ -179,21 +176,31 @@ class DataCenterController < ApplicationController
 
   private
 
-  def generate_orm_report_csv(tickets)
+  def generate_orm_report_csv(tickets, ticket_counts, project_status_counts)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Details']
+      csv << ['Project Name', 'Total Number of Tickets', 'Status', 'Count']
+      ticket_counts.each do |project_id, total_count|
+        project = Project.find(project_id)
+        csv << [project.title, total_count, '', '']
+        project_status_counts.select { |k, _| k.first == project_id }.each do |(_proj_id, status), count|
+          csv << ['', '', status, count]
+        end
+      end
+
+      csv << []
+      csv << ['Created at', 'Project Name', 'Ticket ID', 'Issue Type', 'Summary', 'Status', 'Severity', 'Assignee', 'Reporter', 'Details']
       tickets.each do |ticket|
         csv << [
-          ticket.subject,
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.project.title,
           ticket.unique_id,
           ticket.issue,
+          ticket.subject,
           ticket.statuses.first&.name || 'N/A',
-          ticket.project.title,
           ticket.priority,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
-          ticket.created_at,
-          ticket.content.to_plain_text.truncate(800)
+          ticket.content.to_plain_text.truncate(3000)
         ]
       end
     end
