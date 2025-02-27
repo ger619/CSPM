@@ -147,6 +147,8 @@ class DashboardsController < ApplicationController
     else
       @tickets = []
     end
+
+    render 'tickets'
   end
 
   private
