@@ -147,8 +147,6 @@ class DashboardsController < ApplicationController
     else
       render json: { error: 'Team not found' }, status: :not_found
     end
-
-    render 'tickets'
   end
 
   private
