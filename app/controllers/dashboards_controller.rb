@@ -8,93 +8,68 @@ class DashboardsController < ApplicationController
 
   def fetch_stats
     team_name = params[:team_name]
-
-    team = Team.find_by(name: team_name)&.id
+    team = Team.find_by(name: team_name)
 
     if team
-      user_ids = Team.find(team).users.pluck(:id)
-      total_tickets_last_30_days = Ticket.joins(:users)
+      session[:team_id] = team.id # Store the team ID in the session
+      user_ids = team.users.pluck(:id)
+      tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
-        .count
-      # Breached tickets per Team
-      breached_tickets_last_30_days = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+
+      total_tickets_last_30_days = tickets_last_30_days.count
+      breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_status: 'Breached' })
         .count
-      # Not Breached tickets per Team
-      not_breached_tickets_last_30_days = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      not_breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_status: ['Not Breached', nil] })
         .count
-      # Breached response deadline tickets per Team
-      response_breached_tickets_last_30_days = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      response_breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: 'Breached' })
         .count
-      # Not Breached response deadline tickets per Team
-      not_response_breached_tickets_last_30_days = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      not_response_breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
         .count
-      # Breached resolution deadline tickets per Team
-      resolution_breached_tickets_last_30_days = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      resolution_breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .count
-      # Not Breached resolution deadline tickets per Team
-      not_resolution_breached_tickets_last_30_days = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      not_resolution_breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
         .count
 
-      # Breached tickets per assignee to select per team working
-      breached_tickets_per_assignee = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      breached_tickets_per_assignee = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: 'Breached' })
         .group('users.first_name', 'users.last_name')
         .count
 
-      breached_resolution_tickets_per_project = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      breached_resolution_tickets_per_project = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: 'Breached' })
-        .joins(:project) # Join the projects table
-        .group('projects.title') # Group by project title
+        .joins(:project)
+        .group('projects.title')
         .count
 
-      # Breached tickets resolved per assignee (Working)
-      breached_tickets_resolved_per_assignee = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      breached_tickets_resolved_per_assignee = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .group('users.first_name', 'users.last_name')
         .count
 
-      breached_resolution_resolved_tickets_per_project = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where('tickets.created_at >= ?', 30.days.ago)
+      breached_resolution_resolved_tickets_per_project = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
-        .joins(:project) # Join the projects table
-        .group('projects.title') # Group by project title
+        .joins(:project)
+        .group('projects.title')
         .count
+
+      ticket_details = tickets_last_30_days.select(:issue, :subject, :created_at)
 
       stats = {
         total_tickets_last_30_days: total_tickets_last_30_days,
@@ -107,7 +82,8 @@ class DashboardsController < ApplicationController
         breached_tickets_per_assignee: breached_tickets_per_assignee,
         breached_resolution_tickets_per_project: breached_resolution_tickets_per_project,
         breached_tickets_resolved_per_assignee: breached_tickets_resolved_per_assignee,
-        breached_resolution_resolved_tickets_per_project: breached_resolution_resolved_tickets_per_project
+        breached_resolution_resolved_tickets_per_project: breached_resolution_resolved_tickets_per_project,
+        ticket_details: ticket_details
       }
 
       render json: stats
@@ -117,22 +93,22 @@ class DashboardsController < ApplicationController
   end
 
   def tickets
-    team_name = params[:team_name]
-    type = params[:type]
-    team = Team.find_by(name: team_name)&.id
+    team = Team.find_by(id: session[:team_id])
 
     if team
-      user_ids = Team.find(team).users.pluck(:id)
+      user_ids = team.users.pluck(:id)
       @tickets = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
         .joins(:sla_tickets)
 
+      type = params[:type]
+
       case type
       when 'initial_response_time_breached'
-        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
+        @tickets = @tickets.where(sla_tickets: { sla_status: 'Breached' })
       when 'initial_response_time_not_breached'
-        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
+        @tickets = @tickets.where(sla_tickets: { sla_status: ['Not Breached', nil] })
       when 'target_repair_time_breached'
         @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
       when 'target_repair_time_not_breached'
@@ -144,8 +120,10 @@ class DashboardsController < ApplicationController
       when 'total_tickets_last_30_days'
         # No additional filtering needed
       end
+
+      render json: @tickets.select(:unique_id, :issue, :subject, :created_at)
     else
-      @tickets = []
+      render json: { error: 'Team not found' }, status: :not_found
     end
   end
 
