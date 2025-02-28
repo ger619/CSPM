@@ -134,20 +134,20 @@ class DataCenterController < ApplicationController
 
     @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                  Ticket.joins(project: :client)
-                       .joins(:statuses)
-                       .where.not(statuses: { name: outstanding_statuses })
+                   .joins(:statuses)
+                   .where.not(statuses: { name: outstanding_statuses })
                else
                  Ticket.joins(project: :client)
-                       .joins(:statuses)
-                       .where(projects: { id: current_user.projects.ids })
-                       .where.not(statuses: { name: outstanding_statuses })
+                   .joins(:statuses)
+                   .where(projects: { id: current_user.projects.ids })
+                   .where.not(statuses: { name: outstanding_statuses })
                end
 
     if days.positive?
       closed_resolved_tickets = Ticket.joins(project: :client)
-                                      .joins(:statuses)
-                                      .where(statuses: { name: %w[Closed Resolved] })
-                                      .where('tickets.created_at >= ?', days.days.ago)
+        .joins(:statuses)
+        .where(statuses: { name: %w[Closed Resolved] })
+        .where('tickets.created_at >= ?', days.days.ago)
       @tickets = @tickets.or(closed_resolved_tickets)
     end
 
@@ -157,9 +157,7 @@ class DataCenterController < ApplicationController
                  Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
                end
 
-    if params[:client_id].present?
-      @tickets = @tickets.where(projects: { client_id: params[:client_id] })
-    end
+    @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
 
     @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
     @status_counts = @tickets.joins(:statuses).group('statuses.name').count
