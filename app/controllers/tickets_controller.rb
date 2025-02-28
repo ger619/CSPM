@@ -105,11 +105,6 @@ class TicketsController < ApplicationController
         elsif @ticket.users.empty?
           @ticket.users << @project.user
         end
-        # Assign the project manager if no agents are assigned
-
-        # Assign status to new ticket
-        # status = Status.find_by(name: 'New')
-        # @ticket.statuses << status if status
 
         if @ticket.issue == 'NEW FEATURE'
           # Set all SLAs to 'NO SLA' for new feature
