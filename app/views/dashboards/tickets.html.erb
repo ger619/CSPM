@@ -1,51 +1,7 @@
-<h1 class="text-2xl font-bold mb-4">Tickets</h1>
-<table class="table-auto w-full border-collapse border border-gray-300 mb-4">
-  <thead>
-  <tr class="bg-gray-200">
-    <th class="border px-4 py-2">Created</th>
-    <th class="border px-4 py-2">Ticket ID</th>
-    <th class="border px-4 py-2">Project Name</th>
-    <th class="border px-4 py-2">Severity</th>
-    <th class="border px-4 py-2">Summary</th>
-    <th class="border px-4 py-2">Issue Type</th>
-    <th class="border px-4 py-2">Status</th>
-    <th class="border px-4 py-2">Assigned To</th>
-    <th class="border px-4 py-2">Reporter</th>
-    <th class="border px-4 py-2">Details</th>
-    <th class="border px-4 py-2">VIEW</th>
 
-  </tr>
-  </thead>
-  <tbody>
-  <% if @tickets.present? %>
-    <% @tickets.each do |ticket| %>
-      <tr class="border">
-        <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") if ticket.created_at %></td>
-        <td class="border px-4 py-2"><%= ticket.unique_id || "N/A" %></td>
-        <td class="border px-4 py-2"><%= ticket.project&.title || "N/A" %></td>
-        <td class="border px-4 py-2"><%= ticket.priority || "N/A" %></td>
-        <td class="border px-4 py-2"><%= ticket.subject || "N/A" %></td>
-        <td class="border px-4 py-2"><%= ticket.issue || "N/A" %></td>
-        <td class="border px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-        <td class="border px-4 py-2">
-          <% if ticket.users.any? %>
-            <%= ticket.users.map(&:name).reject(&:blank?).join(", ") %>
-          <% else %>
-            N/A
-          <% end %>
-        </td>
-        <td class="border px-4 py-2"><%= ticket.user&.name || "N/A" %></td>
-        <td class="border px-4 py-2"><%= ticket.content&.to_plain_text&.truncate(800) || "N/A" %></td>
-        <td class="border px-4 py-2">
-          <%= link_to 'View', project_ticket_path(ticket.project_id, ticket), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
-        </td>
-
-      </tr>
-    <% end %>
-  <% else %>
-    <tr>
-      <td colspan="10" class="border px-4 py-2 text-center">No tickets available</td>
-    </tr>
+<h1>Tickets</h1>
+<ul>
+  <% @tickets.each do |ticket| %>
+    <li><%= ticket.issue %> - <%#= ticket.created_at %></li>
   <% end %>
-  </tbody>
-</table>
+</ul>
