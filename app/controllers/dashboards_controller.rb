@@ -123,16 +123,16 @@ class DashboardsController < ApplicationController
 
     if team
       user_ids = Team.find(team).users.pluck(:id)
-      @tickets = Ticket.includes(:users, :sla_tickets).joins(:users)
-                       .where(users: { id: user_ids })
-                       .where('tickets.created_at >= ?', 30.days.ago)
-      Rails.logger.debug "Tickets count: #{@tickets.count}" if @tickets.present?
+      @tickets = Ticket.joins(:users)
+        .where(users: { id: user_ids })
+        .where('tickets.created_at >= ?', 30.days.ago)
+        .joins(:sla_tickets)
 
       case type
       when 'initial_response_time_breached'
-        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
+        @tickets = @tickets.where(sla_tickets: { sla_status: 'Breached' })
       when 'initial_response_time_not_breached'
-        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
+        @tickets = @tickets.where(sla_tickets: { sla_status: ['Not Breached', nil] })
       when 'target_repair_time_breached'
         @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
       when 'target_repair_time_not_breached'
@@ -144,23 +144,11 @@ class DashboardsController < ApplicationController
       when 'total_tickets_last_30_days'
         # No additional filtering needed
       end
-
-      @stats = {
-        total_tickets_last_30_days: @tickets.count,
-        breached_tickets_last_30_days: @tickets.where(sla_tickets: { sla_status: 'Breached' }).count,
-        not_breached_tickets_last_30_days: @tickets.where(sla_tickets: { sla_status: ['Not Breached', nil] }).count,
-        response_breached_tickets_last_30_days: @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' }).count,
-        not_response_breached_tickets_last_30_days: @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] }).count,
-        resolution_breached_tickets_last_30_days: @tickets.where(sla_tickets: { sla_resolution_deadline: 'Breached' }).count,
-        not_resolution_breached_tickets_last_30_days: @tickets.where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] }).count
-      }
-
-      render 'tickets'
     else
       @tickets = []
-      @stats = {}
-      render 'tickets'
     end
+
+    render 'tickets'
   end
 
   private

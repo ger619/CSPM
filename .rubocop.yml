@@ -58,7 +58,7 @@ Lint/RaiseException:
 Lint/StructNewOverride:
   Enabled: false
 Lint/DuplicateBranch:
-  Enabled: false
+  Enabled: true
 Style/HashEachMethods:
   Enabled: false
 Style/HashTransformKeys:
