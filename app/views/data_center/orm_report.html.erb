@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6 pt-9">
-        <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+        <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto', data: { onclick: "initializeClientDropdown()" } %>
       </div>
     </div>
   <% end %>
@@ -75,6 +75,7 @@
     <table id="orm_report" class="table-auto w-full">
       <thead>
       <tr>
+        <th class="border border-black px-4 py-2">Client</th>
         <th class="border border-black px-4 py-2">Ticket ID</th>
         <th class="border border-black px-4 py-2">Summary</th>
         <th class="border border-black px-4 py-2">Issue Type</th>
@@ -119,15 +120,16 @@
                          ''
                        end %>
         <tr class="<%= row_class %> text-white text-bold">
-          <td class="border px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border px-4 py-2"><%= ticket.subject %></td>
-          <td class="border px-4 py-2"><%= ticket.issue %></td>
-          <td class="border px-4 py-2"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
-          <td class="border px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border px-4 py-2"><%= ticket.priority %></td>
-          <td class="border px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
-          <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
-          <td class="border px-4 py-2"><%= ticket.updated_at.strftime("%d-%b-%Y") %></td>
+          <td class="border border-black  dark:border-slate-100 px-4 py-2"><%= ticket.project.client.name %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.subject %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.issue %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.user.name %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.priority %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.updated_at.strftime("%d-%b-%Y") %></td>
         </tr>
       <% end %>
       </tbody>
@@ -136,48 +138,53 @@
 <% end %>
 
 <script>
-  function filterClientDropdown() {
-    let input = document.getElementById("searchClient").value.toLowerCase();
-    let dropdown = document.getElementById("clientDropdown");
-    let items = dropdown.getElementsByClassName("dropdown-item");
+  function initializeClientDropdown() {
+    function filterClientDropdown() {
+      let input = document.getElementById("searchClient").value.toLowerCase();
+      let dropdown = document.getElementById("clientDropdown");
+      let items = dropdown.getElementsByClassName("dropdown-item");
 
-    dropdown.classList.remove("hidden");
+      dropdown.classList.remove("hidden");
 
-    let hasMatch = false;
-    for (let item of items) {
-      let text = item.textContent.toLowerCase();
-      if (text.includes(input)) {
-        item.style.display = "block";
-        hasMatch = true;
-      } else {
-        item.style.display = "none";
+      let hasMatch = false;
+      for (let item of items) {
+        let text = item.textContent.toLowerCase();
+        if (text.includes(input)) {
+          item.style.display = "block";
+          hasMatch = true;
+        } else {
+          item.style.display = "none";
+        }
+      }
+
+      if (!hasMatch) {
+        dropdown.classList.add("hidden");
       }
     }
 
-    if (!hasMatch) {
-      dropdown.classList.add("hidden");
+    function selectClient(element) {
+      let clientName = element.textContent.trim();
+      let clientId = element.getAttribute("data-client-id");
+
+      let inputField = document.getElementById("searchClient");
+      inputField.value = clientName;
+      inputField.style.paddingRight = "12px";
+      inputField.style.overflow = "visible";
+
+      document.getElementById("selectedClientId").value = clientId;
+      document.getElementById("clientDropdown").classList.add("hidden");
     }
+
+    document.addEventListener("click", function(event) {
+      let dropdown = document.getElementById("clientDropdown");
+      let searchInput = document.getElementById("searchClient");
+
+      if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("hidden");
+      }
+    });
+
+    window.filterClientDropdown = filterClientDropdown;
+    window.selectClient = selectClient;
   }
-
-  function selectClient(element) {
-    let clientName = element.textContent.trim();
-    let clientId = element.getAttribute("data-client-id");
-
-    let inputField = document.getElementById("searchClient");
-    inputField.value = clientName;
-    inputField.style.paddingRight = "12px";
-    inputField.style.overflow = "visible";
-
-    document.getElementById("selectedClientId").value = clientId;
-    document.getElementById("clientDropdown").classList.add("hidden");
-  }
-
-  document.addEventListener("click", function(event) {
-    let dropdown = document.getElementById("clientDropdown");
-    let searchInput = document.getElementById("searchClient");
-
-    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
-      dropdown.classList.add("hidden");
-    }
-  });
 </script>

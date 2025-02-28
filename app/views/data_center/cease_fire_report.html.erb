@@ -37,7 +37,7 @@
           <input type="text" id="searchClient" class="h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
 
           <!-- Dropdown List -->
-          <div id="clientDropdown" class="absolute top-full left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
+          <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
             <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-client-id="" onclick="selectClient(this)">All Clients</div>
             <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
               <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-client-id="<%= client.id %>" onclick="selectClient(this)">
@@ -91,7 +91,7 @@
 
   </div>
 
-  <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end">
       <%= link_to "Download CSV",
                   cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
