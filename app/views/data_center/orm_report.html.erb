@@ -11,27 +11,27 @@
       <div class="flex flex-col gap-2">
         <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle p-2" %>
         <div class="relative w-full">
-    <!-- Searchable Input -->
-        <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
+          <!-- Searchable Input -->
+          <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
 
-        <!-- Dropdown List -->
-        <div id="clientDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
-          <% clients = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                        Client.all
-                      else
-                        Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
-                      end %>
-          <% clients.each do |client| %>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-client-id="<%= client.id %>" onclick="selectClient(this)">
-              <%= client.name %>
-            </div>
-          <% end %>
+          <!-- Dropdown List -->
+          <div id="clientDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+            <% clients = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                           Client.all
+                         else
+                           Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
+                         end %>
+            <% clients.each do |client| %>
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-client-id="<%= client.id %>" onclick="selectClient(this)">
+                <%= client.name %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Hidden Input to store selected client ID -->
+          <input type="hidden" id="selectedClientId" name="client_id">
         </div>
-
-        <!-- Hidden Input to store selected client ID -->
-        <input type="hidden" id="selectedClientId" name="client_id" required>
       </div>
-    </div>
       <div class="flex flex-col gap-2 w-full sm:w-1/6 md:w-1/6 pt-9">
         <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
       </div>
@@ -40,7 +40,7 @@
 </div>
 
 <% if @tickets.present? %>
-  <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end">
       <%= link_to "Download CSV",
                   orm_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status], days: params[:days]),
@@ -84,7 +84,6 @@
         <th class="border border-black px-4 py-2">Status</th>
         <th class="border border-black px-4 py-2">Created at</th>
         <th class="border border-black px-4 py-2">updated at</th>
-
       </tr>
       </thead>
       <tbody>
@@ -129,10 +128,6 @@
           <td class="border px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
           <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
           <td class="border px-4 py-2"><%= ticket.updated_at.strftime("%d-%b-%Y") %></td>
-
-
-
-
         </tr>
       <% end %>
       </tbody>
