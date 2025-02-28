@@ -3,7 +3,7 @@
   <div id="alert-additional-content-1" class="p-4" role="alert">
       <div class="scrollable-section mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
   <% @issue.each do |issue| %>
-    <% if issue.message_type == "external" || current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?(:observer) %>
+    <% if issue.message_type == "external" || current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?(:observer) || current_user.has_role?('project manager') %>
     <ol class="relative border-s border-gray-200 dark:border-gray-700 mt-10">
       <li class="mb-10 ms-6 p-2 <%= 'bg-yellow-100' if issue.message_type == 'internal' %>">
         <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
@@ -27,7 +27,7 @@
         <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
           Posted on <%= issue.created_at.strftime("%I:%M %p at %d %B %Y") %>
         </time>
-         
+
        <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
   <%= issue.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
   <% if issue.content.body.attachments.any? %>

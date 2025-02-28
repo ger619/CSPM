@@ -13,10 +13,26 @@
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
-        Active Clients(Clients who have login more than once)
+        Active Clients<br>(Clients who have login more than once)
       </p>
       <span class="text-lg sm:text-xl font-bold">
         <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        Active Project Manager<br>(Project Managers who have login more than once)
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= User.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count %>
+      </span>
+    </div>
+    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+      <p class="text-xs sm:text-sm truncate">
+        Active Agents<br>(Agents who have login more than once)
+      </p>
+      <span class="text-lg sm:text-xl font-bold">
+        <%= User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count %>
       </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
@@ -65,12 +81,14 @@
       </span>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-      <p class="text-xs sm:text-sm truncate">
-        My Open Tickets
-      </p>
-      <span class="text-lg sm:text-xl font-bold">
-        <%= current_user.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] }).distinct.pluck(:id).count %>
-      </span>
+      <%= link_to project_tickets_path(project_id: current_user.projects.first.id, status: 'open', user_id: current_user.id), class: 'flex items-center justify-between w-full' do %>
+        <p class="text-xs sm:text-sm truncate">
+          My Open Tickets
+        </p>
+        <span class="text-lg sm:text-xl font-bold">
+          <%= current_user.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.pluck(:id).count %>
+        </span>
+      <% end %>
     </div>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">

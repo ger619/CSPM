@@ -1,15 +1,11 @@
-<h1 class="flex justify-center text-2xl font-bold mb-4">Status Report</h1>
+<% if current_user.has_role?(:admin) or current_user.has_role?('project manager') %>
+  <h1 class="flex justify-center text-2xl font-bold mb-4">Cease Fire Report <span class="text-xs p-2 text-red">(Leave the date field blank if you want all the data from inception to date*)</span> </h1>
+<% else %>
+  <h1 class="flex justify-center text-2xl font-bold mb-4">Status Report <span class="text-xs p-2 text-red">(Leave the date field blank if you want all the data from inception to date*)</span> </h1>
+<% end %>
 <div class="p-2 w-full">
   <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
     <div class="flex flex-wrap justify-center gap-2">
-      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
-        <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :start_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full" %>
-      </div>
-      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
-        <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :end_date, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full" %>
-      </div>
       <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
         <%= f.label :status, "Status", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.select :status,
@@ -36,10 +32,10 @@
 
         <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3 relative">
           <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
-          
+
           <!-- Searchable Input -->
           <input type="text" id="searchClient" class="h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
-          
+
           <!-- Dropdown List -->
           <div id="clientDropdown" class="absolute top-full left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
             <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-client-id="" onclick="selectClient(this)">All Clients</div>
@@ -53,7 +49,19 @@
           <!-- Hidden Input to store selected client ID -->
           <input type="hidden" id="selectedClientId" name="client_id">
         </div>
-      
+
+
+      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
+        <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.date_field :start_date, value: params[:start_date], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full" %>
+      </div>
+
+      <div class="flex flex-col gap-2 w-full sm:w-1/2 md:w-1/3">
+        <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
+        <%= f.date_field :end_date, value: params[:end_date], class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full" %>
+      </div>
+
+
       <div class="w-full flex justify-center pt-10">
         <%= f.submit "Generate Report", class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
       </div>
@@ -65,7 +73,7 @@
 
   <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <h2 class="text-xl font-bold mb-4 text-center">
-      Ticket Status Report AS AT <%= params[:end_date].present? ? params[:end_date] : "N/A" %>
+      Ticket Status Report AS AT <%= Date.today %>
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
@@ -147,7 +155,7 @@
               <% end %>
             <% end %></td>
           <td class="border px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(800) %></td>
+          <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(3000) %></td>
         </tr>
       <% end %>
       </tbody>

@@ -1,103 +1,18 @@
-<div class="overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
-    <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-4 py-2">Logo</th>
-      <th scope="col" class="px-4 py-2">Name of Project</th>
-      <th scope="col" class="px-4 px-2">Project Description</th>
-      <th scope="col" class="px-4 px-2">Total Tickets</th>
-      <th scope="col" class="px-4 px-2">Assignee</th>
-      <th scope="col" class="px-4 px-2">Client</th>
-      <th scope="col" class="px-4 px-2">Product Category</th>
-      <th scope="col" class="px-4 px-2">VIEW</th>
-      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-        <% if can? :edit, @project %>
-          <th scope="col" class="px-4 px-2">EDIT</th>
-        <% end %>
-        <% if can? :delete, @project %>
-          <th scope="col" class="px-4 px-2">DELETE</th>
-        <% end %>
-      <% end %>
-    </tr>
-    </thead>
-    <tbody>
-    <% @project.each do |project| %>  <!-- Looping through each project -->
-      <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-          <td class="px-4 py-4 font-medium text-left">
-            <% if project.image.present? %>
-              <%= link_to project_path(project.id) do %>
-                <%= image_tag(project.image, class: 'w-16') %>
-              <% end %>
-            <% else %>
-              <%= link_to project_path(project.id) do %>
-                <%= image_tag 'default.png', class: 'w-16' %>
-              <% end %>
-            <% end %>
-          </td>
-          <td class="px-4 py-4 font-medium text-left">
-            <%= link_to project.title.truncate_words(3), project_path(project.id) %>
-          </td>
-          <td class="px-4 py-4 text-left">
-            <%= project.description.truncate(30) %>
-          </td>
-          <td class="px-4 py-4 text-center">
-            <%= project.tickets.count %>
-          </td>
-          <td class="px-4 py-4 text-left">
-            <%= project.user.name %>
-          </td>
-          <td class="px-4 py-4 text-left">
-            <% if project.present? && project.client.present? %>
-              <%= project.client.name %>
-            <% else %>
-              No Client Assigned
-            <% end %>
-          </td>
-          <td class="px-4 py-4 text-left">
-              <% project.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
-                <%= software.name %>
-              <% end %>
-          </td>
-          <td class="px-4 py-4 text-left">
-            <%= link_to "VIEW", project_path(project.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' %>
-          </td>
-          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-            <% if can? :edit, project %>
-              <td class="px-4 py-4 text-left">
-                <%= link_to 'Edit', edit_project_path(project), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' %>
-              </td>
-            <% end %>
-            <% if can? :delete, project %>
-              <td class="px-4 py-4 text-left">
-                <%= link_to 'delete', project, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
-              </td>
-            <% end %>
-          <% end %>
-        </tr>
-      <% end %>
-    <% end %>
-    </tbody>
-  </table>
-  <% if (current_user.has_role?(:'project manager') || current_user.has_role?(:agent)) && current_user.projects.count > 0 %>
-    <% @assigned_projects_count = current_user.projects.count %>
-    <p class="p-2">Number of Projects: <%= @assigned_projects_count %></p>
-  <% end %>
-</div>
+<table class="min-w-full bg-white dark:bg-gray-800">
+  <thead>
+  <tr>
+    <th class="py-2 px-4 border-b">ID</th>
+    <th class="py-2 px-4 border-b">Issue</th>
+    <th class="py-2 px-4 border-b">Priority</th>
+    <th class="py-2 px-4 border-b">Project</th>
+    <th class="py-2 px-4 border-b">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
 
-<script>
-  document.addEventListener('turbo:load', function() {
-    const button = document.getElementById('button');
-    button.addEventListener('click', function() {
-      button.style.backgroundColor = '#1F6DE0';
-    });
-  });
-</script>
+    <% current_user.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).each do |ticket| %>
 
-<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-
-<% if params[:query].present? && @tickets.any? %>
-    <% @tickets.each do |ticket| %>
+    <% if ticket.present? %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
 
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -240,25 +155,10 @@
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 '  %>
         </td>
 
-        <td class="px-2 py-2">
-          <% if can?(:edit, ticket) %>
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 ' %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2">
-          <% if can? :destroy, ticket %>
-            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-2 rounded-md font-bold rounded-lg text-slate-100'  %>
-          <% end %>
-        </td>
-        <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-          <td class="px-2 py-2 text-center hide-on-sidebar">
-            <%= ticket.update_count %>
-          </td>
-          <td class="px-2 py-2 text-center hide-on-sidebar">
-            <%= ticket.last_updated_at ? ticket.last_updated_at.strftime("%T") : 'Never' %>
-          </td>
-        <% end %>
       </tr>
+    <% end %>
+
   <% end %>
-    </table>
-<% end %>
+
+  </tbody>
+</table>

@@ -105,14 +105,18 @@ class TicketsController < ApplicationController
         elsif @ticket.users.empty?
           @ticket.users << @project.user
         end
-        # Assign the project manager if no agents are assigned
 
-        # Assign status to new ticket
-        # status = Status.find_by(name: 'New')
-        # @ticket.statuses << status if status
-
-        SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
-          sla_ticket.sla_status = @ticket.sla_status
+        if @ticket.issue == 'NEW FEATURE'
+          # Set all SLAs to 'NO SLA' for new feature
+          SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla|
+            sla.sla_status = 'NO SLA'
+            sla.sla_target_response_deadline = 'NO SLA'
+            sla.sla_resolution_deadline = 'NO SLA'
+          end
+        else
+          SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
+            sla_ticket.sla_status = @ticket.sla_status
+          end
         end
 
         assigned_user = @project.user
@@ -230,14 +234,14 @@ class TicketsController < ApplicationController
 
     if status.name == 'Client Confirmation Pending'
       sla_ticket = SlaTicket.find_or_initialize_by(ticket_id: @ticket.id)
-      assigned_user = @ticket.users.first # Pick the first assigned user on the ticket
-      sla_ticket.update(sla_target_response_deadline: @ticket.sla_target_response_deadline, user_id: assigned_user.id)
+      sla_ticket.update(sla_target_response_deadline: @ticket.sla_target_response_deadline)
     end
 
     if status.name == 'Resolved'
       sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
       if sla_ticket
-        sla_ticket.update(sla_resolution_deadline: @ticket.sla_resolution_deadline)
+        assigned_user = @ticket.users.first # Pick the first assigned user on the ticket
+        sla_ticket.update(sla_resolution_deadline: @ticket.sla_resolution_deadline, user_id: assigned_user.id)
       else
         Rails.logger.warn("SlaTicket not found for ticket_id: #{@ticket.id}")
       end
