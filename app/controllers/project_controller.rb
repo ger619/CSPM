@@ -36,7 +36,7 @@ class ProjectController < ApplicationController
     if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
       @ticket = @project.tickets.left_joins(:rich_text_content, :statuses, :users)
 
-      # Apply filters if params are present
+      # ✅ Apply filters while persisting selection
       if params[:start_date].present? && params[:end_date].present?
         @ticket = @ticket.where('tickets.created_at::date BETWEEN ? AND ?', params[:start_date], params[:end_date])
       elsif params[:start_date].present?
@@ -54,7 +54,7 @@ class ProjectController < ApplicationController
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
           'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
-         OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
+       OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
           query, query, query, query, query, query, query, query
         )
       end
@@ -73,16 +73,16 @@ class ProjectController < ApplicationController
                      .where.not(statuses: { name: %w[Closed Resolved] })
                  end
 
-      # Order by descending creation date
+      # ✅ Order by descending creation date
       @ticket = @ticket.order(created_at: :desc)
 
-      # Pagination
+      # ✅ Pagination (Fix offset calculation)
       @per_page = 10
-      @page = (params[:page] || 1).to_i
+      @page = params[:page].to_i.positive? ? params[:page].to_i : 1
       @total_pages = (@ticket.count / @per_page.to_f).ceil
       @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
 
-      # Ticket counts
+      # ✅ Ticket counts
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
 
