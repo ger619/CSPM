@@ -20,7 +20,7 @@
 
   <!-- Stats Section -->
   <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8 mt-6">
-    <% @teams.each do |team| %>
+    <% @teams.limit(1).each do |team| %>
       <%= link_to dashboards_tickets_path(team_name: team.name, type: 'initial_response_time_breached') do %>
         <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached", class: 'col-span-1' %>
       <% end %>
