@@ -96,20 +96,15 @@ class TicketsController < ApplicationController
           groupware = Groupware.find(@ticket.groupware_id)
           tagged_user = groupware.user
           # Assign the tagged user if present and part of the project
-          @ticket.users << if tagged_user.present? && @project.users.include?(tagged_user)
-                             tagged_user
-                           else
-                             # Assign the default user if tagged user is not part of the project
-                             @project.user
-                           end
+          if tagged_user.present? && @project.users.include?(tagged_user)
+            @ticket.users << tagged_user
+          else
+            # Assign the default user if tagged user is not part of the project
+            @ticket.users << @project.user
+          end
         elsif @ticket.users.empty?
           @ticket.users << @project.user
         end
-        # Assign the project manager if no agents are assigned
-
-        # Assign status to new ticket
-        # status = Status.find_by(name: 'New')
-        # @ticket.statuses << status if status
 
         if @ticket.issue == 'NEW FEATURE'
           # Set all SLAs to 'NO SLA' for new feature
