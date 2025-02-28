@@ -4,6 +4,7 @@ class DashboardsController < ApplicationController
   def index
     @teams = Team.all
     @stats = default_stats
+    @ticket = Ticket.all
   end
 
   def fetch_stats
@@ -121,7 +122,28 @@ class DashboardsController < ApplicationController
         # No additional filtering needed
       end
 
-      render json: @tickets.select(:unique_id, :issue, :subject, :created_at)
+      @tickets = @tickets
+        .joins(:taggings, :users)
+        .joins('LEFT JOIN add_statuses ON add_statuses.ticket_id = tickets.id')
+        .joins('LEFT JOIN statuses ON statuses.id = add_statuses.status_id')
+        .includes(:project)
+        .select(
+          'tickets.id', 'tickets.unique_id', 'tickets.priority', 'tickets.project_id',
+          'tickets.issue', 'tickets.subject', 'tickets.created_at',
+          'users.first_name', 'users.last_name',
+          'statuses.name AS status_name'
+        )
+
+      render json: @tickets.map { |ticket|
+        ticket.as_json
+          .merge(
+            project_id: ticket.project_id,
+            project_title: ticket.project&.title,
+            user_name: "#{ticket.first_name} #{ticket.last_name}",
+            status_name: ticket.status_name
+          )
+      }
+
     else
       render json: { error: 'Team not found' }, status: :not_found
     end
