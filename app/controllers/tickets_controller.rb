@@ -96,12 +96,12 @@ class TicketsController < ApplicationController
           groupware = Groupware.find(@ticket.groupware_id)
           tagged_user = groupware.user
           # Assign the tagged user if present and part of the project
-          if tagged_user.present? && @project.users.include?(tagged_user)
-            @ticket.users << tagged_user
-          else
-            # Assign the default user if tagged user is not part of the project
-            @ticket.users << @project.user
-          end
+          @ticket.users << if tagged_user.present? && @project.users.include?(tagged_user)
+                             tagged_user
+                           else
+                             # Assign the default user if tagged user is not part of the project
+                             @project.user
+                           end
         elsif @ticket.users.empty?
           @ticket.users << @project.user
         end
