@@ -130,9 +130,9 @@ class DashboardsController < ApplicationController
 
       case type
       when 'initial_response_time_breached'
-        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
+        @tickets = @tickets.where(sla_tickets: { sla_status: 'Breached' })
       when 'initial_response_time_not_breached'
-        @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
+        @tickets = @tickets.where(sla_tickets: { sla_status: ['Not Breached', nil] })
       when 'target_repair_time_breached'
         @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: 'Breached' })
       when 'target_repair_time_not_breached'
