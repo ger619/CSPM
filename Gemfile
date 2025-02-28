@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+bunsource 'https://rubygems.org'
 
 ruby '3.3.5'
 
@@ -92,7 +92,7 @@ gem 'mini_magick', '~> 4.13'
 gem 'ostruct'
 gem 'pagy', '~> 6.0'
 gem 'paper_trail'
-gem 'passenger', '>= 6.0.26', require: 'phusion_passenger/rack_handler'
+gem 'passenger', require: 'phusion_passenger/rack_handler'
 gem 'pundit'
 gem 'redis'
 gem 'rolify', '~> 6.0'
