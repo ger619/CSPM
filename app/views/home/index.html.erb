@@ -81,21 +81,23 @@
       </span>
     </div>
     <% if current_user.projects.any? %>
-      <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-
-        <%= link_to project_tickets_path(project_id: current_user.projects.first.id, status: 'open', user_id: current_user.id), class: 'flex items-center justify-between w-full' do %>
+      <%= link_to project_tickets_path(project_id: current_user.projects.first.id, status: 'open', user_id: current_user.id), class: 'flex items-center justify-between w-full' do %>
+        <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
           <p class="text-xs sm:text-sm truncate">
             My Open Tickets
           </p>
           <span class="text-lg sm:text-xl font-bold">
             <%= current_user.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.pluck(:id).count %>
           </span>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% else %>
+      <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+
       <p class="text-xs sm:text-sm truncate">
-        No projects available
+        No Tickets Available
       </p>
+      </div>
     <% end %>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
