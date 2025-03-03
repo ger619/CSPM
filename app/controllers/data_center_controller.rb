@@ -174,7 +174,6 @@ class DataCenterController < ApplicationController
     team = Team.find_by(name: params[:team_name])
 
     if team
-
       user_ids = team.users.pluck(:id)
       outstanding_statuses = %w[Closed Resolved Declined]
 
@@ -193,12 +192,15 @@ class DataCenterController < ApplicationController
     else
       @tickets = [] # Initialize @tickets as an empty array if the team is not found
       flash[:alert] = 'Team not found.'
-      redirect_to :sod_report and return
     end
 
     respond_to do |format|
       format.html # Default view
-      format.csv { send_data generate_start_of_day_csv(@tickets), filename: "start_of_day_report_#{Date.today}.csv" }
+      format.csv do
+        team_name = team&.name || 'unknown_team'
+        filename = "start_of_day_report_#{team_name}_#{Date.today}.csv"
+        send_data generate_start_of_day_csv(@tickets), filename: filename
+      end
     end
   end
 
