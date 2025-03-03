@@ -173,23 +173,27 @@ class DataCenterController < ApplicationController
     # Find the team based on the provided team name
     team = Team.find_by(name: params[:team_name])
 
-    return unless team
+    if team
 
-    user_ids = team.users.pluck(:id)
-    outstanding_statuses = %w[Closed Resolved Declined]
+      user_ids = team.users.pluck(:id)
+      outstanding_statuses = %w[Closed Resolved Declined]
 
-    @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                 Ticket.joins(:users, project: :client)
-                   .joins(:statuses)
-                   .where(users: { id: user_ids })
-                   .where.not(statuses: { name: outstanding_statuses })
-               else
-                 Ticket.joins(:users, project: :client)
-                   .joins(:statuses)
-                   .where(users: { id: user_ids })
-                   .where(projects: { id: current_user.projects.ids })
-                   .where.not(statuses: { name: outstanding_statuses })
-               end
+      @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                   Ticket.joins(:users, project: :client)
+                     .joins(:statuses)
+                     .where(users: { id: user_ids })
+                     .where.not(statuses: { name: outstanding_statuses })
+                 else
+                   Ticket.joins(:users, project: :client)
+                     .joins(:statuses)
+                     .where(users: { id: user_ids })
+                     .where(projects: { id: current_user.projects.ids })
+                     .where.not(statuses: { name: outstanding_statuses })
+                 end
+    else
+      @tickets = [] # Initialize @tickets as an empty array if the team is not found
+      flash[:alert] = 'Team not found.'
+    end
 
     respond_to do |format|
       format.html # Default view
