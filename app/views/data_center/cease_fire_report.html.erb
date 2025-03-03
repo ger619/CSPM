@@ -72,8 +72,8 @@
 <% if @tickets.any? %>
 
   <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-xl font-bold mb-4 text-center">
-      Ticket Status Report AS AT <%= Date.today %>
+    <h2 class="text-xl font-bold mb-4 text-center capitalize">
+      Ticket Status Report AS AT <%= Date.today %> for <%= @client_selected ? Client.find(params[:client_id]).name : 'All Clients' %>
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
@@ -92,10 +92,14 @@
   </div>
 
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2">
       <%= link_to "Download CSV",
                   cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
-                  class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
+                  class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
+
+      <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
+        <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
+      <% end %>
     </div>
     <table id="ceasefire" class="table-auto w-full">
       <thead>

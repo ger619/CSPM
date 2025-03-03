@@ -39,12 +39,20 @@
   <% end %>
 </div>
 
+
+
 <% if @tickets.present? %>
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2">
       <%= link_to "Download CSV",
                   orm_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status], days: params[:days]),
-                  class: "mb-4 mt-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100" %>
+                  class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
+      <%= form_with url: orm_report_path, method: :get, local: true do |f| %>
+                 <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
+      <% end %>
+    </div>
+    <div class="p-2 w-full col-span-1">
+
     </div>
     <table id="orm_report" class="table-auto w-full mb-4">
       <thead>
@@ -77,7 +85,6 @@
       <tr>
         <th class="border border-black px-4 py-2">Client</th>
         <th class="border border-black px-4 py-2">Ticket ID</th>
-        <th class="border border-black px-4 py-2">Summary</th>
         <th class="border border-black px-4 py-2">Issue Type</th>
         <th class="border border-black px-4 py-2">Assignee</th>
         <th class="border border-black px-4 py-2">Reporter</th>
@@ -85,6 +92,11 @@
         <th class="border border-black px-4 py-2">Status</th>
         <th class="border border-black px-4 py-2">Created at</th>
         <th class="border border-black px-4 py-2">updated at</th>
+        <th class="border border-black px-4 py-2">Summary</th>
+        <th class="border border-black px-4 py-2">Content</th>
+
+
+
       </tr>
       </thead>
       <tbody>
@@ -122,7 +134,6 @@
         <tr class="<%= row_class %> text-white text-bold">
           <td class="border border-black  dark:border-slate-100 px-4 py-2"><%= ticket.project.client.name %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.subject %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.issue %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.user.name %></td>
@@ -130,6 +141,10 @@
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%Y") %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.updated_at.strftime("%d-%b-%Y") %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.subject %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.content.to_plain_text.truncate(3000) %></td>
+
+
         </tr>
       <% end %>
       </tbody>
