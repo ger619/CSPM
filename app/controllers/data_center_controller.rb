@@ -167,27 +167,37 @@ class DataCenterController < ApplicationController
     end
   end
 
-  def start_of_day_report
+  def sod_report
     authorize! :generate, :report # Check if the user can generate reports
 
     # Find the team based on the provided team name
     team = Team.find_by(name: params[:team_name])
 
-    if team
-      user_ids = team.users.pluck(:id)
-      outstanding_statuses = %w[Closed Resolved Declined]
+    return unless team
 
-      @tickets = Ticket.joins(:users)
-        .where(users: { id: user_ids })
-        .where.not(statuses: { name: outstanding_statuses })
+    user_ids = team.users.pluck(:id)
+    outstanding_statuses = %w[Closed Resolved Declined]
 
-      respond_to do |format|
-        format.html # Default view
-        format.csv { send_data generate_start_of_day_csv(@tickets), filename: "start_of_day_report_#{Date.today}.csv" }
+    @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                 Ticket.joins(:users, project: :client)
+                   .joins(:statuses)
+                   .where(users: { id: user_ids })
+                   .where.not(statuses: { name: outstanding_statuses })
+               else
+                 Ticket.joins(:users, project: :client)
+                   .joins(:statuses)
+                   .where(users: { id: user_ids })
+                   .where(projects: { id: current_user.projects.ids })
+                   .where.not(statuses: { name: outstanding_statuses })
+               end
+
+    respond_to do |format|
+      format.html # Default view
+      if params[:team_id].present?
+        team_name = Team.find(params[:team_id]).name
+        filename = "start_of_day_report_#{team_name}_#{Date.today}.csv"
+        format.csv { send_data generate_start_of_day_csv(@tickets), filename: filename }
       end
-    else
-      flash[:alert] = 'Team not found.'
-      redirect_to root_path
     end
   end
 
