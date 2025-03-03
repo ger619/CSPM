@@ -4,34 +4,40 @@ class DataCenterController < ApplicationController
 
   def cease_fire_report
     authorize! :generate, :report # Check if the user can generate reports
+    if params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
 
-    @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                 Ticket.joins(project: :client)
-               else
-                 Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
-               end
+      @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                   Ticket.joins(project: :client)
+                 else
+                   Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
+                 end
 
-    @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
+      @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
 
-    if params[:start_date].present? && params[:end_date].present?
-      start_date = Date.parse(params[:start_date])
-      end_date = Date.parse(params[:end_date])
-      @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
-    end
+      if params[:start_date].present? && params[:end_date].present?
+        start_date = Date.parse(params[:start_date])
+        end_date = Date.parse(params[:end_date])
+        @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+      end
 
-    @tickets = if params[:status].blank?
-                 @tickets.joins(:statuses)
-               else
-                 @tickets.joins(:statuses).where(statuses: { name: params[:status] })
-               end
+      @tickets = if params[:status].blank?
+                   @tickets.joins(:statuses)
+                 else
+                   @tickets.joins(:statuses).where(statuses: { name: params[:status] })
+                 end
 
-    @status_counts = @tickets.joins(:statuses).group('statuses.name').count
+      @status_counts = @tickets.joins(:statuses).group('statuses.name').count
 
-    respond_to do |format|
-      format.html # Default view
-      client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
-      filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
-      format.csv { send_data generate_csv(@tickets), filename: filename }
+      respond_to do |format|
+        format.html # Default view
+        client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
+        filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
+        format.csv { send_data generate_csv(@tickets), filename: filename }
+      end
+    else
+      @tickets = Ticket.none
+      flash[:alert] = 'Please provide a valid client.'
+      render :cease_fire_report
     end
   end
 
