@@ -318,7 +318,7 @@ class DataCenterController < ApplicationController
 
   def generate_start_of_day_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Resolution', 'Created', 'Updated', 'Due Date']
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.unique_id,
