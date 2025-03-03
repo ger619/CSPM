@@ -51,7 +51,7 @@
   <% end %>
 </div>
 
-<div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+<div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8 container">
   <div class="flex justify-end">
     <%= link_to "Download CSV",
                 breach_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status], priority: params[:priority]),
