@@ -11,4 +11,3 @@ import '@rails/actiontext';
 //= require 'chart.js'
 import "trix"
 import "@rails/actiontext"
-

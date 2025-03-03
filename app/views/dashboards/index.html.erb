@@ -287,16 +287,6 @@
     document.getElementById("ticketModal").classList.add("hidden");
   }
 
-  $(document).ready(function() {
-    $('#ticketTable').DataTable({
-      "paging": false,     
-      "searching": false,   
-      "ordering": true,    
-      "info": false,   
-      "scrollCollapse": true 
-    });
-  });
-
   function fetchTicketDetails(teamName, type) {
     fetch(`/dashboards/tickets?team_name=${teamName}&type=${type}`)
       .then(response => response.json())
