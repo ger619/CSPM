@@ -23,8 +23,8 @@
   overflow: auto;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
-  }
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+}
 
 .cancel-button {
   cursor: pointer;
