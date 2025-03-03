@@ -5,43 +5,37 @@ class DataCenterController < ApplicationController
   def cease_fire_report
     authorize! :generate, :report # Check if the user can generate reports
 
-    if params[:client_id].present?
-      @client_selected = params[:client_id].present?
+    @client_selected = params[:client_id].present?
 
-      @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                   Ticket.joins(project: :client)
-                 else
-                   Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
-                 end
+    @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                 Ticket.joins(project: :client)
+               else
+                 Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
+               end
 
-      @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if @client_selected
+    @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if @client_selected
 
-      if params[:start_date].present? && params[:end_date].present?
-        start_date = Date.parse(params[:start_date])
-        end_date = Date.parse(params[:end_date])
-        @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+      @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+    end
+
+    @tickets = if params[:status].blank?
+                 @tickets.joins(:statuses)
+               else
+                 @tickets.joins(:statuses).where(statuses: { name: params[:status] })
+               end
+
+    @status_counts = @tickets.joins(:statuses).group('statuses.name').count
+
+    respond_to do |format|
+      format.html # Default view
+      if @client_selected || params[:client_id].blank?
+        client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
+        filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
+        format.csv { send_data generate_csv(@tickets), filename: filename }
       end
-
-      @tickets = if params[:status].blank?
-                   @tickets.joins(:statuses)
-                 else
-                   @tickets.joins(:statuses).where(statuses: { name: params[:status] })
-                 end
-
-      @status_counts = @tickets.joins(:statuses).group('statuses.name').count
-
-      respond_to do |format|
-        format.html # Default view
-        if @client_selected
-          client_name = Client.find(params[:client_id]).name
-          filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
-          format.csv { send_data generate_csv(@tickets), filename: filename }
-        end
-      end
-    else
-      @tickets = Ticket.none
-      flash[:alert] = 'Please Provide A Client.'
-      render :cease_fire_report
     end
   end
 
@@ -153,7 +147,7 @@ class DataCenterController < ApplicationController
       if days.positive?
         closed_resolved_tickets = Ticket.joins(project: :client)
           .joins(:statuses)
-          .where(statuses: { name: %w[Closed Resolved] })
+          .where(statuses: { name: %w[Closed Resolved Declined] })
           .where('tickets.created_at >= ?', days.days.ago)
         @tickets = @tickets.or(closed_resolved_tickets)
       end
@@ -191,19 +185,22 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Created at', 'Project Name', 'Ticket ID', 'Issue Type', 'Summary', 'Status', 'Severity', 'Assignee', 'Reporter', 'Details']
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
+              'Details']
       tickets.each do |ticket|
         csv << [
-          ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.project.title,
+          ticket.project.client.name,
           ticket.unique_id,
           ticket.issue,
-          ticket.subject,
-          ticket.statuses.first&.name || 'N/A',
-          ticket.priority,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
+          ticket.priority,
+          ticket.statuses.first&.name || 'N/A',
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.subject,
           ticket.content.to_plain_text.truncate(3000)
+
         ]
       end
     end
@@ -278,7 +275,8 @@ class DataCenterController < ApplicationController
             ticket.subject,
             ticket.statuses.first&.name || 'N/A',
             sla_ticket&.sla_target_response_deadline || 'N/A',
-            ticket.created_at
+            ticket.created_at('%d-%b-%Y'),
+            ticket.updated_at.strftime('%d-%b-%Y')
           ]
         end
       end
