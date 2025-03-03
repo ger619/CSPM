@@ -193,15 +193,12 @@ class DataCenterController < ApplicationController
     else
       @tickets = [] # Initialize @tickets as an empty array if the team is not found
       flash[:alert] = 'Team not found.'
+      redirect_to :sod_report and return
     end
 
     respond_to do |format|
       format.html # Default view
-      if params[:team_id].present?
-        team_name = Team.find(params[:team_id]).name
-        filename = "start_of_day_report_#{team_name}_#{Date.today}.csv"
-        format.csv { send_data generate_start_of_day_csv(@tickets), filename: filename }
-      end
+      format.csv { send_data generate_start_of_day_csv(@tickets), filename: "start_of_day_report_#{Date.today}.csv" }
     end
   end
 
@@ -329,10 +326,8 @@ class DataCenterController < ApplicationController
           ticket.user.name,
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
-          ticket.resolution || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.updated_at.strftime('%d-%b-%Y'),
-          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+          ticket.updated_at.strftime('%d-%b-%Y')
         ]
       end
     end
