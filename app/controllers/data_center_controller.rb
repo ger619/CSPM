@@ -186,7 +186,7 @@ class DataCenterController < ApplicationController
 
       csv << []
       csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
-              'Details']
+              'Content']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name,
