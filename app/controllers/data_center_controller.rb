@@ -167,6 +167,44 @@ class DataCenterController < ApplicationController
     end
   end
 
+  def sod_report
+    authorize! :generate, :report # Check if the user can generate reports
+
+    # Find the team based on the provided team name
+    team = Team.find_by(name: params[:team_name])
+
+    if team
+
+      user_ids = team.users.pluck(:id)
+      outstanding_statuses = %w[Closed Resolved Declined]
+
+      @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                   Ticket.joins(:users, project: :client)
+                     .joins(:statuses)
+                     .where(users: { id: user_ids })
+                     .where.not(statuses: { name: outstanding_statuses })
+                 else
+                   Ticket.joins(:users, project: :client)
+                     .joins(:statuses)
+                     .where(users: { id: user_ids })
+                     .where(projects: { id: current_user.projects.ids })
+                     .where.not(statuses: { name: outstanding_statuses })
+                 end
+    else
+      @tickets = [] # Initialize @tickets as an empty array if the team is not found
+      flash[:alert] = 'Team not found.'
+    end
+
+    respond_to do |format|
+      format.html # Default view
+      if params[:team_id].present?
+        team_name = Team.find(params[:team_id]).name
+        filename = "start_of_day_report_#{team_name}_#{Date.today}.csv"
+        format.csv { send_data generate_start_of_day_csv(@tickets), filename: filename }
+      end
+    end
+  end
+
   private
 
   def generate_orm_report_csv(tickets, ticket_counts, project_status_counts)
@@ -275,6 +313,27 @@ class DataCenterController < ApplicationController
             ticket.updated_at.strftime('%d-%b-%Y')
           ]
         end
+      end
+    end
+  end
+
+  def generate_start_of_day_csv(tickets)
+    CSV.generate(headers: true) do |csv|
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Resolution', 'Created', 'Updated', 'Due Date']
+      tickets.each do |ticket|
+        csv << [
+          ticket.unique_id,
+          ticket.subject,
+          ticket.issue,
+          ticket.users.map(&:name).select(&:present?).join(', '),
+          ticket.user.name,
+          ticket.priority,
+          ticket.statuses.first&.name || 'N/A',
+          ticket.resolution || 'N/A',
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+        ]
       end
     end
   end
