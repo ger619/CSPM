@@ -167,6 +167,30 @@ class DataCenterController < ApplicationController
     end
   end
 
+  def start_of_day_report
+    authorize! :generate, :report # Check if the user can generate reports
+
+    # Find the team based on the provided team name
+    team = Team.find_by(name: params[:team_name])
+
+    if team
+      user_ids = team.users.pluck(:id)
+      outstanding_statuses = %w[Closed Resolved Declined]
+
+      @tickets = Ticket.joins(:users)
+        .where(users: { id: user_ids })
+        .where.not(statuses: { name: outstanding_statuses })
+
+      respond_to do |format|
+        format.html # Default view
+        format.csv { send_data generate_start_of_day_csv(@tickets), filename: "start_of_day_report_#{Date.today}.csv" }
+      end
+    else
+      flash[:alert] = 'Team not found.'
+      redirect_to root_path
+    end
+  end
+
   private
 
   def generate_orm_report_csv(tickets, ticket_counts, project_status_counts)
@@ -275,6 +299,27 @@ class DataCenterController < ApplicationController
             ticket.updated_at.strftime('%d-%b-%Y')
           ]
         end
+      end
+    end
+  end
+
+  def generate_start_of_day_csv(tickets)
+    CSV.generate(headers: true) do |csv|
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Resolution', 'Created', 'Updated', 'Due Date']
+      tickets.each do |ticket|
+        csv << [
+          ticket.unique_id,
+          ticket.subject,
+          ticket.issue,
+          ticket.users.map(&:name).select(&:present?).join(', '),
+          ticket.user.name,
+          ticket.priority,
+          ticket.statuses.first&.name || 'N/A',
+          ticket.resolution || 'N/A',
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+        ]
       end
     end
   end
