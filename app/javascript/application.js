@@ -11,3 +11,11 @@ import '@rails/actiontext';
 //= require 'chart.js'
 import "trix"
 import "@rails/actiontext"
+import $ from "jquery";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net";
+
+$(document).ready(function () {
+    $("#yourTableId").DataTable();
+  });
+  
