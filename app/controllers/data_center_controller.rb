@@ -129,45 +129,51 @@ class DataCenterController < ApplicationController
   def orm_report
     authorize! :generate, :report # Check if the user can generate reports
 
-    days = params[:days].to_i
-    outstanding_statuses = %w[Closed Resolved Declined]
-
-    @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                 Ticket.joins(project: :client)
-                   .joins(:statuses)
-                   .where.not(statuses: { name: outstanding_statuses })
-               else
-                 Ticket.joins(project: :client)
-                   .joins(:statuses)
-                   .where(projects: { id: current_user.projects.ids })
-                   .where.not(statuses: { name: outstanding_statuses })
-               end
-
-    if days.positive?
-      closed_resolved_tickets = Ticket.joins(project: :client)
-        .joins(:statuses)
-        .where(statuses: { name: %w[Closed Resolved] })
-        .where('tickets.created_at >= ?', days.days.ago)
-      @tickets = @tickets.or(closed_resolved_tickets)
-    end
-
     @clients = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                  Client.all
                else
                  Client.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
                end
 
-    @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
-    @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
-    @status_counts = @tickets.joins(:statuses).group('statuses.name').count
-    @ticket_counts = @tickets.group(:project_id).count
-    @project_status_counts = @tickets.joins(:statuses).group(:project_id, 'statuses.name').count
+    if params[:days].present? || params[:client_id].present? || params[:status].present?
+      days = params[:days].to_i
+      outstanding_statuses = %w[Closed Resolved Declined]
+
+      @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                   Ticket.joins(project: :client)
+                     .joins(:statuses)
+                     .where.not(statuses: { name: outstanding_statuses })
+                 else
+                   Ticket.joins(project: :client)
+                     .joins(:statuses)
+                     .where(projects: { id: current_user.projects.ids })
+                     .where.not(statuses: { name: outstanding_statuses })
+                 end
+
+      if days.positive?
+        closed_resolved_tickets = Ticket.joins(project: :client)
+          .joins(:statuses)
+          .where(statuses: { name: %w[Closed Resolved] })
+          .where('tickets.created_at >= ?', days.days.ago)
+        @tickets = @tickets.or(closed_resolved_tickets)
+      end
+
+      @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
+      @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+      @status_counts = @tickets.joins(:statuses).group('statuses.name').count
+      @ticket_counts = @tickets.group(:project_id).count
+      @project_status_counts = @tickets.joins(:statuses).group(:project_id, 'statuses.name').count
+    else
+      @tickets = []
+    end
 
     respond_to do |format|
       format.html # Default view
-      client_name = Client.find(params[:client_id]).name if params[:client_id].present?
-      filename = "orm_report_#{client_name}_#{Date.today}.csv"
-      format.csv { send_data generate_orm_report_csv(@tickets, @ticket_counts, @project_status_counts), filename: filename }
+      if params[:client_id].present?
+        client_name = Client.find(params[:client_id]).name
+        filename = "orm_report_#{client_name}_#{Date.today}.csv"
+        format.csv { send_data generate_orm_report_csv(@tickets, @ticket_counts, @project_status_counts), filename: filename }
+      end
     end
   end
 
