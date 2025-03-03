@@ -5,15 +5,15 @@ class DataCenterController < ApplicationController
   def cease_fire_report
     authorize! :generate, :report # Check if the user can generate reports
 
-    @client_selected = params[:client_id].present?
-
     @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                  Ticket.joins(project: :client)
                else
                  Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
                end
 
-    @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if @client_selected
+    if params[:client_id].present?
+      @tickets = @tickets.where(projects: { client_id: params[:client_id] })
+    end
 
     if params[:start_date].present? && params[:end_date].present?
       start_date = Date.parse(params[:start_date])
@@ -31,11 +31,9 @@ class DataCenterController < ApplicationController
 
     respond_to do |format|
       format.html # Default view
-      if @client_selected || params[:client_id].blank?
-        client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
-        filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
-        format.csv { send_data generate_csv(@tickets), filename: filename }
-      end
+      client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
+      filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
+      format.csv { send_data generate_csv(@tickets), filename: filename }
     end
   end
 
