@@ -104,16 +104,16 @@
     <table id="ceasefire" class="table-auto w-full">
       <thead>
       <tr>
-        <th class="px-4 py-2">Created</th>
-        <th class="px-4 py-2">Ticket ID</th>
-        <th class="px-4 py-2">Project Name</th>
-        <th class="px-4 py-2">Severity</th>
-        <th class="px-4 py-2">Summary</th>
-        <th class="px-4 py-2">Issue Type</th>
-        <th class="px-4 py-2">Status</th>
-        <th class="px-4 py-2">Assigned To</th>
-        <th class="px-4 py-2">Reporter</th>
-        <th class="px-4 py-2">Details</th>
+        <th class="border border-black px-4 py-2">Created</th>
+        <th class="border border-black px-4 py-2">Ticket ID</th>
+        <th class="border border-black px-4 py-2">Project Name</th>
+        <th class="border border-black px-4 py-2">Severity</th>
+        <th class="border border-black px-4 py-2">Summary</th>
+        <th class="border border-black px-4 py-2">Issue Type</th>
+        <th class="border border-black px-4 py-2">Status</th>
+        <th class="border border-black px-4 py-2">Assigned To</th>
+        <th class="border border-black px-4 py-2">Reporter</th>
+        <th class="border border-black px-4 py-2">Details</th>
       </tr>
       </thead>
       <tbody>
@@ -145,21 +145,21 @@
                          ''
                        end %>
         <tr class="<%= row_class %>">
-          <td class="border px-4 py-2"><%= ticket.created_at.strftime("%d- %b -%y") %></td>
-          <td class="border px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border px-4 py-2"><%= ticket.project.title %></td>
-          <td class="border px-4 py-2"><%= ticket.priority %></td>
-          <td class="border px-4 py-2"><%= ticket.subject %></td>
-          <td class="border px-4 py-2"><%= ticket.issue %></td>
-          <td class="border px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-          <td class="border px-4 py-2">
+          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d- %b -%y") %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.unique_id %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.project.title %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.priority %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.subject %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.issue %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
+          <td class="border border border-black px-4 py-2">
             <% ticket.users.each do |user| %>
               <% if user.name.present? %>
                 <%= user.name %>
               <% end %>
             <% end %></td>
-          <td class="border px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border px-4 py-2"><%= ticket.content.to_plain_text.truncate(3000) %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.user.name %></td>
+          <td class="border border border-black px-4 py-2 "><%= ticket.content.to_plain_text.truncate(3000) %></td>
         </tr>
       <% end %>
       </tbody>
