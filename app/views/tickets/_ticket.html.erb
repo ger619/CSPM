@@ -35,7 +35,7 @@
           <%= f.select :issue, options_for_select(['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT'], params[:issue]),
                        { include_blank: 'All Issues' },
                        prompt: 'Select Issue',
-                       class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+                       class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
         </div>
         <% if current_user.has_role?(:agent) or current_user.has_role?('project manager') or current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
           <div class="flex flex-col">
@@ -43,7 +43,7 @@
             <%= f.select :user_id, options_from_collection_for_select(@project.users.with_assigned_role, :id, ->(u) { "#{u.first_name} #{u.last_name}" }, params[:user_id]),
                          { include_blank: 'All Users' },
                          prompt: 'Select User',
-                         class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+                         class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
           </div>
         <% end %>
 
