@@ -55,7 +55,8 @@ class TicketsController < ApplicationController
 
     # Check if the current user is a client and has 10 or more tickets pending confirmation
     if current_user.has_role?(:client) && @tickets_count >= 10
-      redirect_to project_path(@project), flash: { prompt: 'Please confirm past tickets requiring confirmation before creating a new one.' }
+      redirect_to project_path(@project),
+                  flash: { prompt: 'You can have a maximum of 10 pending tickets. Please resolve at least one ticket under "Client Pending Confirmation" to proceed.' } # rubocop:disable Layout/LineLength
       return
     end
 
