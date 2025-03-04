@@ -34,7 +34,7 @@
           <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
 
           <!-- Searchable Input -->
-          <input type="text" id="searchClient" class="h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
+          <input type="text" id="searchClient" class="h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full px-4 py-2" placeholder="Search Client..." onclick="showDropdown()" onkeyup="filterClientDropdown()">
 
           <!-- Dropdown List -->
           <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
@@ -168,6 +168,16 @@
 <% end %>
 
 <script>
+  function showDropdown() {
+    document.getElementById("clientDropdown").classList.remove("hidden");
+  }
+
+  function hideDropdown(event) {
+    if (!event.target.closest(".relative")) {
+      document.getElementById("clientDropdown").classList.add("hidden");
+    }
+  }
+
   function filterClientDropdown() {
     let input = document.getElementById("searchClient").value.toLowerCase();
     let dropdown = document.getElementById("clientDropdown");
