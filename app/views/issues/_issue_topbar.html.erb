@@ -1,7 +1,7 @@
 <div class="grid grid-cols-2 ">
   <div class="col-span-1">
     <div class="flex flex-wrap gap-1">
-    <%= button_to  project_path(@project), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100'  do %>
+      <%= button_to project_path(@project, page: params[:page], per_page: params[:per_page]), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
         &#8656; Back
       <% end %>
     </div>
