@@ -8,7 +8,6 @@ class CommentsController < ApplicationController
     @comment = @ticket.comments.new
   end
 
-  # app/controllers/comments_controller.rb
   def create
     @comment = @ticket.comments.new(comment_params.except(:user_ids))
     @comment.project = @project

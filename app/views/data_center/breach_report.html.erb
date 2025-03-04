@@ -1,5 +1,4 @@
 <h1 class="flex justify-center text-xl font-bold mb-4">Breach Report</h1>
-
 <div class="p-2 w-full mx-auto">
   <%= form_with url: breach_report_path, method: :get, local: true do |f| %>
     <div class="grid grid-cols-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 justify-center gap-2">
@@ -50,7 +49,6 @@
     </div>
   <% end %>
 </div>
-
 <div class="mx-auto mb-4 px-4 gap-2">
   <div class="flex justify-end">
     <%= link_to "Download CSV",
