@@ -24,7 +24,7 @@
 
         <div class="relative w-full">
           <!-- Searchable Input -->
-          <input type="text" id="searchClient" class="h-10 border border-gray-300 rounded-lg dark:text-black px-2 text-sm w-full" placeholder="Search Client..." onkeyup="filterClientDropdown()">
+          <input type="text" id="searchClient" class="h-10 border border-gray-300 rounded-lg dark:text-black px-2 text-sm w-full" placeholder="Search Client..." onclick="showDropdown()" onkeyup="filterClientDropdown()">
 
           <!-- Dropdown List -->
           <div id="clientDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
@@ -100,6 +100,16 @@
 </div>
 
 <script>
+   function showDropdown() {
+    document.getElementById("clientDropdown").classList.remove("hidden");
+  }
+
+  function hideDropdown(event) {
+    if (!event.target.closest(".relative")) {
+      document.getElementById("clientDropdown").classList.add("hidden");
+    }
+  }
+
   function filterClientDropdown() {
     let input = document.getElementById("searchClient").value.toLowerCase();
     let dropdown = document.getElementById("clientDropdown");
