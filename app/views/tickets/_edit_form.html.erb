@@ -3,10 +3,17 @@
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%] p-1">
     <h6>EDIT TICKET</h6>
     <div class="grid grid-cols-2 gap-2 h-[100%] w-[100%]">
+
       <div class="relative z-0 w-[100%] mb-6 group">
-        <%= f.label :issue, ('issue *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-        <%= f.select :issue, (['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
+        <%= f.label :issue, ('issue *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
+        <% if @project.special %>
+          <%= f.select :issue, options_for_select(['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT', 'CHANGE REQUEST']), {}, class: "border border-gray-300 The Issue', required: truerounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" %>
+        <% else %>
+          <%= f.select :issue, options_for_select(['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT']), {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white", placeholder: 'Select The Issue' %>
+        <% end %>
       </div>
+
+
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :priority, ('Priority *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
         <%= f.select :priority, ['SEVERITY 1','SEVERITY 2','SEVERITY 3','SEVERITY 4'], {}, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Issue' %>
