@@ -304,7 +304,7 @@ class DataCenterController < ApplicationController
   def generate_user_csv(users)
     CSV.generate(headers: true) do |csv|
       csv << ['User Name', 'Project Name', 'Ticket Subject', 'Ticket Status', 'SLA Status', 'SLA Target Response Deadline',
-              'SLA Resolution Deadline', 'Created At']
+              'SLA Repair Time Deadline', 'SLA Resolution Time Deadline', 'Created At']
       users.each do |user|
         user.tickets.each do |ticket|
           sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
@@ -315,6 +315,7 @@ class DataCenterController < ApplicationController
             ticket.subject,
             ticket.statuses.first&.name || 'N/A',
             sla_ticket&.sla_target_response_deadline || 'N/A',
+            sla_ticket&.sla_resolution_deadline || 'N/A',
             ticket.created_at('%d-%b-%Y'),
             ticket.updated_at.strftime('%d-%b-%Y')
           ]
