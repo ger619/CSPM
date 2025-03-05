@@ -301,6 +301,11 @@
   }
   
   function fetchTicketDetails(teamName, type) {
+    if (!selectedTeam) {
+      alert("Please select a team first.");
+      return;
+    }
+
     fetch(`/dashboards/tickets?team_name=${teamName}&type=${type}`)
       .then(response => response.json())
       .then(data => {
