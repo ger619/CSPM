@@ -1,7 +1,7 @@
 <%= form_with model: @team, url: team_path(@team), method: :patch, data: { turbo: false }, local: true do |f| %>
   <div class="mb-5">
     <%= f.label :name, 'Team Name', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-    <%= f.text_field :name, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", placeholder: 'Enter team name' %>
+    <%= f.text_field :name, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", placeholder: 'Enter team name', required: true %>
   </div>
 
   <div class="mb-5">
@@ -30,8 +30,15 @@
     <div id="hiddenUserInputs"></div>
 
     <!-- Dropdown List -->
-    <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
-      <% users = User.with_assigned_role.distinct %>
+    <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
+      <div class="flex justify-start px-4 py-2">
+        <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 text-left">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      <% users = User.with_assigned_role.distinct - @team.users %>
       <% users.each do |user| %>
         <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
           <%= user.name %>
@@ -49,6 +56,10 @@
 
   function showDropdown() {
     document.getElementById("userDropdown").classList.remove("hidden");
+  }
+
+  function hideDropdown() {
+    document.getElementById("userDropdown").classList.add("hidden");
   }
 
   function filterUserDropdown() {
@@ -81,10 +92,13 @@
       input.value = userId;
       input.classList.add(`user-input-${userId}`);
       document.getElementById("hiddenUserInputs").appendChild(input);
+
+      // Remove the selected user from the dropdown
+      element.remove();
     }
 
     // Hide Dropdown
-    document.getElementById("userDropdown").classList.add("hidden");
+    hideDropdown();
   }
 
   function removeUser(userId, element) {
@@ -96,5 +110,15 @@
     if (input) {
       input.remove();
     }
+
+    // Add the user back to the dropdown
+    let userDropdown = document.getElementById("userDropdown");
+    let userName = element.parentElement.textContent.trim().slice(0, -1); // Remove the × character
+    let dropdownItem = document.createElement("div");
+    dropdownItem.className = "dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer";
+    dropdownItem.setAttribute("data-user-id", userId);
+    dropdownItem.setAttribute("onclick", "selectUser(this)");
+    dropdownItem.textContent = userName;
+    userDropdown.appendChild(dropdownItem);
   }
 </script>
