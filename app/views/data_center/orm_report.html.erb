@@ -12,7 +12,7 @@
         <%= f.label :client_id, "Client", class: "capitalize text-sm font-bold w-full align-middle p-2" %>
         <div class="relative w-full">
           <!-- Searchable Input -->
-          <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" placeholder="Search Client..." onkeyup="filterClientDropdown()" autocomplete="new-password" onclick="showDropdown()">
+          <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg dark:text-black w-full p-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
 
           <!-- Dropdown List -->
           <div id="clientDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
@@ -42,7 +42,7 @@
 
 
 <% if @tickets.present? %>
-  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8 container">
+  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end gap-2">
       <%= link_to "Download CSV",
                   orm_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status], days: params[:days]),
@@ -153,16 +153,6 @@
 <% end %>
 
 <script>
-  function showDropdown() {
-    document.getElementById("clientDropdown").classList.remove("hidden");
-  }
-
-  function hideDropdown(event) {
-    if (!event.target.closest(".relative")) {
-      document.getElementById("clientDropdown").classList.add("hidden");
-    }
-  }
-
   function initializeClientDropdown() {
     function filterClientDropdown() {
       let input = document.getElementById("searchClient").value.toLowerCase();
