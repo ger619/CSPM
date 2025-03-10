@@ -238,7 +238,7 @@ class DataCenterController < ApplicationController
     else
       @tickets = Ticket.none
       flash[:alert] = 'Please provide a valid team and days range.'
-      render :orm_report
+      render :orm_team_report
     end
   end
 
