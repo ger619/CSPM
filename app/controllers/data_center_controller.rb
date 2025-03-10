@@ -252,27 +252,22 @@ class DataCenterController < ApplicationController
     if team
       user_ids = team.users.pluck(:id)
       outstanding_statuses = %w[Closed Resolved Declined]
-
       report_type = params[:report_type] # 'sod' for start of day, 'eod' for end of day
 
+      base_scope = Ticket.joins(:users, project: :client)
+        .joins(:statuses)
+        .where(users: { id: user_ids })
+
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                   Ticket.joins(:users, project: :client)
-                     .joins(:statuses)
-                     .where(users: { id: user_ids })
+                   base_scope
                  else
-                   Ticket.joins(:users, project: :client)
-                     .joins(:statuses)
-                     .where(users: { id: user_ids })
-                     .where(projects: { id: current_user.projects.ids })
+                   base_scope.where(projects: { id: current_user.projects.ids })
                  end
 
       @tickets = if report_type == 'eod'
                    @tickets.or(
-                     Ticket.joins(:users, project: :client)
-                           .joins(:statuses)
-                           .where(users: { id: user_ids })
-                           .where(statuses: { name: outstanding_statuses })
-                           .where('statuses_tickets.updated_at >= ?', 24.hours.ago)
+                     base_scope.where(statuses: { name: outstanding_statuses })
+                               .where('statuses_tickets.updated_at >= ?', 24.hours.ago)
                    )
                  else # Start of day report
                    @tickets.where.not(statuses: { name: outstanding_statuses })
@@ -287,7 +282,7 @@ class DataCenterController < ApplicationController
       format.csv do
         team_name = team&.name || 'unknown_team'
         filename = "#{report_type == 'sod' ? 'start_of_day' : 'end_of_day'}_report_#{team_name}_#{Date.today}.csv"
-        send_data report_type == 'sod' ? generate_start_of_day_csv(@tickets) : generate_start_of_day_csv(@tickets), filename: filename
+        send_data generate_start_of_day_csv(@tickets), filename: filename
       end
     end
   end
