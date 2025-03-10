@@ -5,149 +5,166 @@
 
   <!-- Ticket Information Section -->
   <div class="grid md:grid-cols-5 md:items-center ">
-  <div class="mb-4 font-bold capitalize">
-    <p>Ticket ID:
-      <span class="font-medium uppercase">
-        <%= @ticket.unique_id %>
-      </span>
-    </p>
-    <p>Created by:
-      <span class="font-medium">
-        <%= @ticket.user.name %>
-      </span>
-    </p>
-    <div class="mb-4 font-bold capitalize">Type of Issue:
-      <span class="font-medium">
-        <%= @ticket.issue %>
-      </span>
-    </div>
-    <% if @ticket.ticket_image.present? %>
-      <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
-    <% elsif @project.image.present? %>
-      <%= image_tag @project.image, class: 'w-16' %>
-    <% else %>
-      <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
-    <% end %>
-  </div>
-  <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
-    <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
-    <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
-  </div>
-
-  <div class="w-full col-span-3 h-full flex">
-    <div class="grid grid-cols-3">
-      <div class="col-span-1">
-        <div>
-          <%= render 'ticket_middle' %>
-        </div>
-        <div class="mb-2.5 font-bold capitalize flex">Status:
-          <span class="font-medium ml-1">
-            <%= render 'ticket_status' %>
-          </span>
-        </div>
-        <!-- SLA -->
-        <%= render 'sla' %>
+    <div class="mb-4 font-bold capitalize">
+      <p>Ticket ID:
+        <span class="font-medium uppercase">
+          <%= @ticket.unique_id %>
+        </span>
+      </p>
+      <p>Created by:
+        <span class="font-medium">
+          <%= @ticket.user.name %>
+        </span>
+      </p>
+      <div class="mb-4 font-bold capitalize">Type of Issue:
+        <span class="font-medium">
+          <%= @ticket.issue %>
+        </span>
       </div>
-      <div class="col-span-2">
-        <div class="mb-2.5 font-bold capitalize">Subject:
-          <span class="font-extralight">
-          <%= @ticket.subject %>
-         </span>
+      <% if @ticket.ticket_image.present? %>
+        <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
+      <% elsif @project.image.present? %>
+        <%= image_tag @project.image, class: 'w-16' %>
+      <% else %>
+        <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
+      <% end %>
+    </div>
+    <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
+      <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+      <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
+    </div>
+
+    <div class="w-full col-span-3 h-full flex">
+      <div class="grid grid-cols-3">
+        <div class="col-span-1">
+          <div>
+            <%= render 'ticket_middle' %>
+          </div>
+          <div class="mb-2.5 font-bold capitalize flex">Status:
+            <span class="font-medium ml-1">
+              <%= render 'ticket_status' %>
+            </span>
+          </div>
+          <!-- SLA -->
+          <%= render 'sla' %>
         </div>
-        <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
-          <% if @ticket.content.present? %>
+        <div class="col-span-2">
+          <div class="mb-2.5 font-bold capitalize">Subject:
+            <span class="font-extralight">
+              <%= @ticket.subject %>
+            </span>
+          </div>
+          <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
+            <% if @ticket.content.present? %>
           <span class="font-extralight pl-2 flex flex-wrap">
             <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
             <% if @ticket.content.body.attachments.any? %>
               <% @ticket.content.body.attachments.each do |attachment| %>
-                <div class="mb-2">
-                  <% if attachment.previewable? %>
-                    <%= link_to rails_blob_path(attachment, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" do %>
-                      Preview: <%= attachment.filename.to_s %>
-                    <% end %>
-                  <% else %>
-                    <%= link_to "Download: #{attachment.filename.to_s}", rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
-                  <% end %>
-                </div>
+  <div class="mb-2">
+    <% if attachment.attachable.is_a?(ActionText::Attachables::RemoteImage) %>
+      <a href="<%= attachment.attachable.url %>" download>
+        <img src="<%= attachment.attachable.url %>" alt="Remote Image" class="max-w-xs cursor-pointer">
+      </a>
+      <br>
+      <%= link_to "Download", attachment.attachable.url, target: "_blank", download: true, class: "text-blue-600 hover:underline" %>
+
+    <% elsif attachment.attachable.is_a?(ActiveStorage::Blob) %>
+      <% if attachment.attachable.previewable? %>
+        <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>
+          <img src="<%= rails_representation_url(attachment.attachable.variant(resize_to_limit: [300, 300])) %>" alt="Attachment Preview" class="max-w-xs cursor-pointer">
+        </a>
+        <br>
+        <%= link_to "Preview", rails_blob_path(attachment.attachable, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" %>
+      <% end %>
+      <br>
+      <%= link_to "Download", rails_blob_path(attachment.attachable, disposition: "attachment", only_path: true), class: "text-blue-600 hover:underline" %>
+
+    <% else %>
+      <p>Attachment: <%= attachment.filename.to_s %></p>
+      <%= link_to "Download", rails_blob_path(attachment.attachable, disposition: "attachment", only_path: true), class: "text-blue-600 hover:underline" %>
+    <% end %>
+  </div>
               <% end %>
+
+
             <% end %>
           </span>
             <% end %>
 
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="w-full col-span-1 h-full p-2">
-    <%= render 'tickets/assign_people_tickets' %>
-    <% if @ticket.attachments.any? %>
-      <h3 class="text-lg font-bold mt-4">Attachments:</h3>
-      <% @ticket.attachments.each do |attachment| %>
-        <div class="mb-2">
-          <%= link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: "inline"), target: "_blank", class: "text-blue-500 underline" %>
-          <%= link_to "Download", rails_blob_path(attachment, disposition: "attachment"), class: "ml-2 text-green-500 underline" %>
-        </div>
+    <div class="w-full col-span-1 h-full p-2">
+      <%= render 'tickets/assign_people_tickets' %>
+      <% if @ticket.attachments.any? %>
+        <h3 class="text-lg font-bold mt-4">Attachments:</h3>
+        <% @ticket.attachments.each do |attachment| %>
+          <div class="mb-2">
+            <%= link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: "inline"), target: "_blank", class: "text-blue-500 underline" %>
+            <%= link_to "Download", rails_blob_path(attachment, disposition: "attachment"), class: "ml-2 text-green-500 underline" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-gray-500 italic">No attachments available.</p>
       <% end %>
-    <% else %>
-      <p class="text-gray-500 italic">No attachments available.</p>
-    <% end %>
+    </div>
   </div>
-</div>
   <div class="grid grid-cols-4 mb-6">
-  <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">
-    <h1 class="text-3xl text-center mb-10">Communication Center</h1>
-    <!-- Tabs Section -->
-    <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
-      <div class="flex justify-center mb-10">
-        <div class="relative">
-          <!-- Navigation -->
-          <nav class="flex flex-wrap justify-center items-center space-x-4 pb-4">
-            <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
-                    id="tab-history"
-                    onclick="openCity(event, 'history')">
-              Ticket Comments
-              <!-- Underline -->
-              <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
-            </button>
-            <!-- Divider -->
-            <span class="border-l-2 border-gray-400 h-6"></span>
-            <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
-                    id="tab-club-records"
-                    onclick="openCity(event, 'club-records')">
-              Status Update Comments
-              <!-- Underline -->
-              <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
-            </button>
-          </nav>
-          <!-- Bottom Border Line -->
-          <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
-        </div>
-      </div>
-    <% end %>
-
-    <div id="history" class="tabcontent active">
-      <%= render partial: 'issues/issues_table' %>
-    </div>
-    <div id="club-records" class="tabcontent">
+    <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">
+      <h1 class="text-3xl text-center mb-10">Communication Center</h1>
+      <!-- Tabs Section -->
       <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
-        <%= render partial: 'comments/comment' %>
+        <div class="flex justify-center mb-10">
+          <div class="relative">
+            <!-- Navigation -->
+            <nav class="flex flex-wrap justify-center items-center space-x-4 pb-4">
+              <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
+                      id="tab-history"
+                      onclick="openCity(event, 'history')">
+                Ticket Comments
+                <!-- Underline -->
+                <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
+              </button>
+              <!-- Divider -->
+              <span class="border-l-2 border-gray-400 h-6"></span>
+              <button class="relative text-2xl tablinks font-bold hover:text-[#3F8CFF] focus:text-[#3F8CFF]"
+                      id="tab-club-records"
+                      onclick="openCity(event, 'club-records')">
+                Status Update Comments
+                <!-- Underline -->
+                <span class="absolute left-0 bottom-0 w-full h-1 bg-[#3F8CFF] scale-x-0 transition-transform origin-center duration-300 group-hover:scale-x-100"></span>
+              </button>
+            </nav>
+            <!-- Bottom Border Line -->
+            <div class="absolute left-0 bottom-0 w-full border-t-2 border-gray-400"></div>
+          </div>
+        </div>
       <% end %>
+
+      <div id="history" class="tabcontent active">
+        <%= render partial: 'issues/issues_table' %>
+      </div>
+      <div id="club-records" class="tabcontent">
+        <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
+          <%= render partial: 'comments/comment' %>
+        <% end %>
+      </div>
+    </div>
+    <div class="w-full col-span-1 h-full  place-content-center w-full">
+      <%= render 'tickets/ticket_action' %>
     </div>
   </div>
-  <div class="w-full col-span-1 h-full  place-content-center w-full">
-    <%= render 'tickets/ticket_action' %>
-  </div>
-</div>
-<% @ticket.statuses.each do |status| %>
-  <% if current_user.has_role?(:client) &&  status.name == 'Closed' %>
-    <%= render 'tickets/ratings' %>
+  <% @ticket.statuses.each do |status| %>
+    <% if current_user.has_role?(:client) &&  status.name == 'Closed' %>
+      <%= render 'tickets/ratings' %>
+    <% end %>
   <% end %>
-<% end %>
-<% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) || current_user.has_role?(:client)%>
-  <div class="w-full">
-    <%= render 'tickets/timeline' %>
-  </div>
-<% end %>
+  <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) || current_user.has_role?(:client)%>
+    <div class="w-full">
+      <%= render 'tickets/timeline' %>
+    </div>
+  <% end %>
 </div>
 <style>
     .zoomable-image {
