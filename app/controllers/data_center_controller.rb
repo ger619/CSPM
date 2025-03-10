@@ -253,17 +253,29 @@ class DataCenterController < ApplicationController
       user_ids = team.users.pluck(:id)
       outstanding_statuses = %w[Closed Resolved Declined]
 
+      report_type = params[:report_type] # 'sod' for start of day, 'eod' for end of day
+
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(:users, project: :client)
                      .joins(:statuses)
                      .where(users: { id: user_ids })
-                     .where.not(statuses: { name: outstanding_statuses })
                  else
                    Ticket.joins(:users, project: :client)
                      .joins(:statuses)
                      .where(users: { id: user_ids })
                      .where(projects: { id: current_user.projects.ids })
-                     .where.not(statuses: { name: outstanding_statuses })
+                 end
+
+      @tickets = if report_type == 'eod'
+                   @tickets.or(
+                     Ticket.joins(:users, project: :client)
+                           .joins(:statuses)
+                           .where(users: { id: user_ids })
+                           .where(statuses: { name: outstanding_statuses })
+                           .where('statuses_tickets.updated_at >= ?', 24.hours.ago)
+                   )
+                 else # Start of day report
+                   @tickets.where.not(statuses: { name: outstanding_statuses })
                  end
     else
       @tickets = [] # Initialize @tickets as an empty array if the team is not found
@@ -274,8 +286,8 @@ class DataCenterController < ApplicationController
       format.html # Default view
       format.csv do
         team_name = team&.name || 'unknown_team'
-        filename = "start_of_day_report_#{team_name}_#{Date.today}.csv"
-        send_data generate_start_of_day_csv(@tickets), filename: filename
+        filename = "#{report_type == 'sod' ? 'start_of_day' : 'end_of_day'}_report_#{team_name}_#{Date.today}.csv"
+        send_data report_type == 'sod' ? generate_start_of_day_csv(@tickets) : generate_start_of_day_csv(@tickets), filename: filename
       end
     end
   end
