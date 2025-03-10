@@ -125,6 +125,7 @@ class DataCenterController < ApplicationController
 
   def orm_report
     authorize! :generate, :report
+
     if params[:client_id].present? || params[:days].present?
       @clients = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Client.all
@@ -165,10 +166,10 @@ class DataCenterController < ApplicationController
 
       respond_to do |format|
         format.html
-        if params[:client_id].present?
-          client_name = Client.find(params[:client_id]).name
+        format.csv do
+          client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
           filename = "orm_report_#{client_name}_#{Date.today}.csv"
-          format.csv { send_data generate_orm_report_csv(@tickets, @ticket_counts, @project_status_counts), filename: filename }
+          send_data generate_orm_report_csv(@tickets, @ticket_counts, @project_status_counts), filename: filename
         end
       end
     else
