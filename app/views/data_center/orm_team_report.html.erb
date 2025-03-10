@@ -43,7 +43,7 @@
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end gap-2">
       <%= link_to "Download CSV",
-                  orm_team_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], team_id: params[:team_id], status: params[:status], days: params[:days]),
+                  orm_team_report_path(format: :csv, team_id: params[:team_id], status: params[:status], days: params[:days]),
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
       <%= form_with url: orm_team_report_path, method: :get, local: true do |f| %>
         <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
