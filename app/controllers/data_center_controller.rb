@@ -269,13 +269,13 @@ class DataCenterController < ApplicationController
       @tickets = if report_type == 'eod'
                    # EOD: Tickets that changed to "outstanding_statuses" within the last 24 hours
                    recently_updated_tickets = @tickets.where(statuses: { name: outstanding_statuses })
-                     .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                                                      .where('add_statuses.updated_at >= ?', 24.hours.ago)
                    # Combine with tickets that are not in the outstanding statuses
                    @tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated_tickets)
                  else
                    # SOD: Start of Day report shows tickets that are not in the outstanding statuses
                    @tickets.where.not(statuses: { name: outstanding_statuses })
-                 end
+                 end.order('add_statuses.updated_at DESC')
     else
       @tickets = [] # Initialize @tickets as an empty array if the team is not found
       flash[:alert] = 'Team not found.'
