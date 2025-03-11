@@ -256,6 +256,7 @@ class DataCenterController < ApplicationController
 
       base_scope = Ticket.joins(:users, project: :client)
         .joins(:statuses)
+        .joins(:add_statuses)
         .where(users: { id: user_ids })
 
       # Apply role-based filtering if not admin or observer
@@ -265,16 +266,16 @@ class DataCenterController < ApplicationController
                    base_scope.where(projects: { id: current_user.projects.ids })
                  end
 
-      if report_type == 'eod'
-        # EOD: Tickets that changed to "outstanding_statuses" within the last 24 hours OR tickets that are not in those statuses
-        recently_updated_tickets = base_scope.where(statuses: { name: outstanding_statuses })
-          .where('statuses_tickets.updated_at >= ?', 24.hours.ago)
-
-        # Combine tickets that are recently updated to the outstanding statuses and those that are not in those statuses
-        @tickets = @tickets.or(recently_updated_tickets)
-      else # SOD: Start of Day report shows tickets that are not in the outstanding statuses
-        @tickets = @tickets.where.not(statuses: { name: outstanding_statuses })
-      end
+      @tickets = if report_type == 'eod'
+                   # EOD: Tickets that changed to "outstanding_statuses" within the last 24 hours
+                   recently_updated_tickets = @tickets.where(statuses: { name: outstanding_statuses })
+                     .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                   # Combine with tickets that are not in the outstanding statuses
+                   @tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated_tickets)
+                 else
+                   # SOD: Start of Day report shows tickets that are not in the outstanding statuses
+                   @tickets.where.not(statuses: { name: outstanding_statuses })
+                 end
     else
       @tickets = [] # Initialize @tickets as an empty array if the team is not found
       flash[:alert] = 'Team not found.'
