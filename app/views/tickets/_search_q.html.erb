@@ -1,0 +1,60 @@
+<div class="flex p-2 items-center w-full justify-center">
+  <%= form_with url: project_path(@project), method: :get, class: 'flex gap-2' do |f| %>
+    <div class="flex-wrap flex items-center justify-around gap-2">
+
+      <div class="flex flex-col">
+        <%= label_tag :start_date, 'Start Date' %>
+        <%= f.date_field :start_date, class: "border py-2 px-4 git border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+      </div>
+
+      <div class="flex flex-col">
+        <%= label_tag :end_date, 'End Date' %>
+        <%= f.date_field :end_date, class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+      </div>
+
+      <div class="flex flex-col">
+        <%= label_tag :status, 'Status' %>
+        <%= f.select :status, options_for_select(@statuses, params[:status]),
+                     { include_blank: 'All Statuses' },
+                     prompt: 'Select Status',
+                     class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900"  %>
+      </div>
+
+
+
+      <div class="flex flex-col">
+        <%= label_tag :priority, 'Priority' %>
+        <%= f.select :priority, options_for_select(['SEVERITY 1', 'SEVERITY 2', 'SEVERITY 3', 'SEVERITY 4'], params[:priority]),
+                     { include_blank: 'All Severity' },
+                     prompt: 'Select Priority', class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+      </div>
+
+      <div class="flex flex-col">
+        <%= label_tag :issue, 'Issue' %>
+        <%= f.select :issue, options_for_select(['SUPPORT', 'NEW FEATURE', 'BUG', 'REQUEST', 'INCIDENT'], params[:issue]),
+                     { include_blank: 'All Issues' },
+                     prompt: 'Select Issue',
+                     class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+      </div>
+      <% if current_user.has_role?(:agent) or current_user.has_role?('project manager') or current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
+        <div class="flex flex-col">
+          <%= label_tag :users, 'Assignee' %>
+          <%= f.select :user_id, options_from_collection_for_select(@project.users.with_assigned_role, :id, ->(u) { "#{u.first_name} #{u.last_name}" }, params[:user_id]),
+                       { include_blank: 'All Users' },
+                       prompt: 'Select User',
+                       class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
+        </div>
+      <% end %>
+
+      <div class="flex flex-col mt-5">
+        <%= submit_tag 'Search', class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 mr-1' %>
+      </div>
+
+    </div>
+  <% end %>
+
+
+  <%= form_with url: project_path(@project), method: :get, class: 'gap-2 mt-2' do |f| %>
+    <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 mt-3' %>
+  <% end %>
+</div>
