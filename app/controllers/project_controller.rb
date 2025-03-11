@@ -54,7 +54,7 @@ class ProjectController < ApplicationController
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
           'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
-       OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
+     OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
           query, query, query, query, query, query, query, query
         )
       end
@@ -62,6 +62,7 @@ class ProjectController < ApplicationController
       @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
 
       @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
+      @ticket = @ticket.joins(:users).where.not(statuses: { name: %w[Closed Resolved Declined] }) if params[:filter] == 'Open'
 
       @tickets = if params[:filter] == 'closed_assigned'
                    @project.tickets.joins(:users, :statuses)

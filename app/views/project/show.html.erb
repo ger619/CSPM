@@ -62,12 +62,17 @@
             My Tickets: <%= @assigned_tickets_count %> <%= link_to 'View', project_path(@project, filter: 'Assigned'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
             <span class="font-light"><%= @assigned_tickets %></span>
           </h1>
-          <h1>
-            Assigned & Closed: <%= @closed_assigned_tickets %> <%= link_to 'View', project_path(@project, filter: 'closed_assigned'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
+          <h1 class="pt-1">
+            Assigned & Closed: <%= @closed_assigned_tickets %>
+          </h1>
+
+          <h1>Total Open Tickets:
+            <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).count %></span>
+            <%= link_to 'View', project_path(@project, filter: 'Open'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
           </h1>
         <% end %>
         <h1>Total Open Tickets:
-          <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: ['Closed', 'Resolved'] }).count %></span>
+          <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).count %></span>
         </h1>
 
         <!--
@@ -115,4 +120,3 @@
     <% end %>
   </div>
 </div>
-
