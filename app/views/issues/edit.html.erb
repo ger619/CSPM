@@ -1,16 +1,25 @@
 <%= render 'issues/new_back' %>
+
 <%= form_with(model: [@project, @ticket, @issue], method: :patch) do |f| %>
   <h3 class="pb-2 font-bold"> Edit Reply *</h3>
+  
   <div class="relative z-0 w-full mb-6 group">
     <div data-controller="text-limit" data-text-limit-limit-value="1200">
       <p id="char-count">0/1200</p>
       <%= f.rich_text_area :content, id: "content",
                            data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
-                           class: 'min-h-[300px]'%>
+                           class: 'min-h-[300px]' %>
     </div>
   </div>
-  <%= f.submit "Submit",  class: 'text-gray-900 dark:text-white border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+
+  <% unless current_user.has_role?(:client) %>
+    <div class="mb-4">
+      <%= f.label :message_type, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
+             { selected: @issue.message_type || "external" },
+             class: "mt-1 block w-full" %>
+    </div>
+  <% end %>
+
+  <%= f.submit "Submit", class: 'text-gray-900 dark:text-white border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold' %>
 <% end %>
-
-
-
