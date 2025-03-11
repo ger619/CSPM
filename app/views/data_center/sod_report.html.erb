@@ -35,7 +35,7 @@
         <th class="border border-black px-4 py-2">Priority</th>
         <th class="border border-black px-4 py-2">Status</th>
         <th class="border border-black px-4 py-2">Created</th>
-        <th class="border border-black px-4 py-2">Updated</th>
+        <th class="border border-black px-4 py-2">Status Updated At</th>
       </tr>
       </thead>
       <tbody>
@@ -49,8 +49,7 @@
           <td class="border border-black px-4 py-2"><%= ticket.priority %></td>
           <td class="border border-black px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
           <td class="border border-black px-4 py-2"><%= ticket.created_at.strftime('%d-%b-%Y') %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.updated_at.strftime('%d-%b-%Y') %></td>
-        </tr>
+          <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y') || 'N/A' %></td>        </tr>
       <% end %>
       </tbody>
     </table>
