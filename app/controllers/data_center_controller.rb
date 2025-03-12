@@ -184,11 +184,8 @@ class DataCenterController < ApplicationController
 
     return unless params[:team_id].present? || params[:days].present?
 
-    @teams = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-               Team.all
-             else
-               Team.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
-             end
+    @teams = Team.all if current_user.has_any_role?(:admin, :observer, :project_manager)
+    @teams ||= Team.none
 
     days = params[:days].to_i
     outstanding_statuses = %w[Closed Resolved Declined]
@@ -210,13 +207,13 @@ class DataCenterController < ApplicationController
         .where(taggings: { user_id: user_ids })
         .where(
           'statuses.name NOT IN (:outstanding_statuses) OR
-     (statuses.name IN (:outstanding_statuses) AND add_statuses.created_at >= :days_ago)',
+                          (statuses.name IN (:outstanding_statuses) AND add_statuses.created_at >= :days_ago)',
           outstanding_statuses: outstanding_statuses,
           days_ago: days.days.ago
         )
 
       # Ensure non-admin users can only see their own project tickets
-      @tickets = @tickets.where(projects: { id: current_user.projects.ids }) unless current_user.has_role?(:admin) || current_user.has_role?(:observer)
+      @tickets = @tickets.joins(:project).where(projects: { id: current_user.projects.ids }) unless current_user.has_any_role?(:admin, :observer, :project_manager)
 
       # Filter by status if provided
       @tickets = @tickets.where(statuses: { name: params[:status] }) if params[:status].present?
