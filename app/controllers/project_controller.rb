@@ -4,20 +4,29 @@ class ProjectController < ApplicationController
   load_and_authorize_resource
   # GET /projects
   def index
-    @project = if params[:query].present?
-                 Project.joins(:tickets)
-                   .where('projects.title ILIKE :query OR projects.description ILIKE :query OR tickets.unique_id ILIKE :query',
-                          query: "%#{params[:query]}%")
-                   .distinct
-               else
-                 Project.all.with_rich_text_content.order('projects.created_at ASC')
-               end
+    if params[:query].present?
+      query_str = params[:query].strip
+
+      # Replace only the first hyphen with an en dash if there are exactly two hyphens
+      formatted_query = query_str.count('-') == 2 ? query_str.sub('-', '–') : query_str
+
+      @project = Project.joins(:tickets)
+        .where('projects.title ILIKE :query
+                             OR projects.description ILIKE :query
+                             OR tickets.unique_id ILIKE :query',
+               query: "%#{formatted_query}%")
+        .distinct
+    else
+      @project = Project.all.with_rich_text_content.order('projects.created_at ASC')
+    end
 
     @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @tickets = if params[:query].present?
                  if current_user.has_any_role?(:admin, :observer) || @project.any? { |project| project.users.include?(current_user) }
-                   Ticket.joins(:project).where('unique_id ILIKE ?', "%#{params[:query]}%").where(projects: { id: @project.ids })
+                   Ticket.joins(:project)
+                     .where('unique_id ILIKE ?', "%#{formatted_query}%")
+                     .where(projects: { id: @project.ids })
                  else
                    Ticket.none
                  end
