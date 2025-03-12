@@ -186,49 +186,49 @@ class DataCenterController < ApplicationController
 
   def orm_team_report
     authorize! :generate, :report
-    if params[:team_id].present? || params[:days].present?
-      @teams = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                 Team.all
-               else
-                 Team.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
-               end
 
-      days = params[:days].to_i
-      outstanding_statuses = %w[Closed Resolved Declined]
+    return unless params[:team_id].present? || params[:days].present?
 
-      if params[:team_id].present?
-        team = Team.find_by(id: params[:team_id])
-        if team.nil?
-          @tickets = Ticket.none
-          flash[:alert] = 'Please provide a valid team.'
-          render :orm_report and return
-        end
-        user_ids = team.users.pluck(:id)
-      else
-        user_ids = []
+    @teams = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+               Team.all
+             else
+               Team.joins(:projects).where(projects: { id: current_user.projects.ids }).distinct
+             end
+
+    days = params[:days].to_i
+    outstanding_statuses = %w[Closed Resolved Declined]
+
+    if params[:team_id].present?
+      team = Team.find_by(id: params[:team_id])
+      if team.nil?
+        @tickets = Ticket.none
+        flash[:alert] = 'Please provide a valid team.'
+        render :orm_report and return
+      end
+      
+      # Get user IDs from the team
+      user_ids = team.users.pluck(:id)
+
+      # Retrieve tickets associated with the team's users via the taggings table
+      @tickets = Ticket.joins(:taggings, :statuses)
+        .joins('INNER JOIN add_statuses ON add_statuses.ticket_id = tickets.id') # Join add_statuses
+        .where(taggings: { user_id: user_ids })
+        .where(
+          'statuses.name NOT IN (:outstanding_statuses) OR
+     (statuses.name IN (:outstanding_statuses) AND add_statuses.created_at >= :days_ago)',
+          outstanding_statuses: outstanding_statuses,
+          days_ago: days.days.ago
+        )
+
+      # Ensure non-admin users can only see their own project tickets
+      unless current_user.has_role?(:admin) || current_user.has_role?(:observer)
+        @tickets = @tickets.where(projects: { id: current_user.projects.ids })
       end
 
-      base_tickets = Ticket.joins(:user, project: :client)
-        .joins(:statuses)
-        .where(users: { id: user_ids })
-        .where.not(statuses: { name: outstanding_statuses })
+      # Filter by status if provided
+      @tickets = @tickets.where(statuses: { name: params[:status] }) if params[:status].present?
 
-      @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                   base_tickets
-                 else
-                   base_tickets.where(projects: { id: current_user.projects.ids })
-                 end
-
-      # Handle days filter
-      if days.positive?
-        closed_resolved_tickets = Ticket.joins(project: :client)
-          .joins(:statuses)
-          .where(statuses: { name: %w[Closed Resolved Declined] })
-          .where('tickets.created_at >= ?', days.days.ago)
-        @tickets = @tickets.or(closed_resolved_tickets)
-      end
-
-      @tickets = @tickets.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
+      # Aggregate data
       @status_counts = @tickets.joins(:statuses).group('statuses.name').count
       @ticket_counts = @tickets.group(:project_id).count
       @project_status_counts = @tickets.joins(:statuses).group(:project_id, 'statuses.name').count
