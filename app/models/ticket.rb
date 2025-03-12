@@ -37,7 +37,7 @@ class Ticket < ApplicationRecord
   has_one :sla_ticket, dependent: :destroy
 
   after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline, :ticket_unique_id
-  after_update :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline
+  # after_update :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline
 
   def set_initial_response_time
     start_time = DateTime.now
