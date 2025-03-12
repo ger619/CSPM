@@ -78,7 +78,8 @@ class HomeController < ApplicationController
     @tickets = current_user.projects.joins(:tickets)
 
     if params[:start_date].present? && params[:end_date].present?
-      @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date], params[:end_date])
+      @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date],
+                                params[:end_date])
     end
 
     grouping_period = params[:grouping_period] || 'day'
@@ -100,7 +101,8 @@ class HomeController < ApplicationController
     @tickets_user = Ticket.all
 
     if params[:start_date].present? && params[:end_date].present?
-      @tickets_user = @tickets_user.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date], params[:end_date])
+      @tickets_user = @tickets_user.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date],
+                                          params[:end_date])
     end
 
     @tickets_user = if current_user.has_role?(:admin) && params[:user_id].present?
