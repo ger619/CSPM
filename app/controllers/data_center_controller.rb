@@ -23,9 +23,9 @@ class DataCenterController < ApplicationController
       end
 
       @tickets = if params[:status].blank?
-                   @tickets.joins(statuses: :add_statuses)
+                   @tickets.joins(:statuses)
                  else
-                   @tickets.joins(statuses: :add_statuses).where(statuses: { name: params[:status] })
+                   @tickets.joins(:statuses).where(statuses: { name: params[:status] })
                  end
 
       @status_counts = @tickets.joins(:statuses).group('statuses.name').count
@@ -310,8 +310,8 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Status Updated At', 'Summary',
-              'Content']
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At',
+              'Updated At', 'Status Updated At', 'Summary', 'Content']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name,

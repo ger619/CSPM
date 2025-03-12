@@ -77,7 +77,10 @@ class HomeController < ApplicationController
     # Count the number of tickets created per day
     @tickets = current_user.projects.joins(:tickets)
 
-    @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date], params[:end_date]) if params[:start_date].present? && params[:end_date].present?
+    if params[:start_date].present? && params[:end_date].present?
+      @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date],
+                                params[:end_date])
+    end
 
     grouping_period = params[:grouping_period] || 'day'
 
@@ -97,7 +100,10 @@ class HomeController < ApplicationController
 
     @tickets_user = Ticket.all
 
-    @tickets_user = @tickets_user.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date], params[:end_date]) if params[:start_date].present? && params[:end_date].present?
+    if params[:start_date].present? && params[:end_date].present?
+      @tickets_user = @tickets_user.where('tickets.created_at >= ? AND tickets.created_at <= ?', params[:start_date],
+                                          params[:end_date])
+    end
 
     @tickets_user = if current_user.has_role?(:admin) && params[:user_id].present?
                       @tickets_user.joins(:users).where(users: { id: params[:user_id] })
