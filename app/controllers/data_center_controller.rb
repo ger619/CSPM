@@ -230,7 +230,7 @@ class DataCenterController < ApplicationController
         format.html
         if params[:team_id].present?
           team_name = team.name
-          filename = "orm_report_#{team_name}_#{Date.today}.csv"
+          filename = "orm_team_report_#{team_name}_#{Date.today}.csv"
           format.csv { send_data generate_orm_team_report_csv(@tickets, @ticket_counts, @project_status_counts), filename: filename }
         end
       end
@@ -335,22 +335,21 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Status Updated At', 'Summary',
               'Content']
       tickets.each do |ticket|
         csv << [
-          ticket.project.client.name,
-          ticket.unique_id,
+          ticket.project.client.name.gsub('–', '-'),
+          ticket.unique_id.gsub('–', '-'),
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000)
-
         ]
       end
     end

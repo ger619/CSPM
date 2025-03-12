@@ -39,19 +39,19 @@
         <% end %>
       </div>
 
-      <% if @ticket.users.any? %>
+      <%# if @ticket.users.any? %>
         <div class="text-xs flex flex-wrap gap-2">
-          <%= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
-            <%= label_tag :user_id, "REMOVE USER" %>
+          <%#= form_with url: unassign_tag_project_ticket_path(@project, @ticket), method: :delete, local: true do %>
+            <%#= label_tag :user_id, "REMOVE USER" %>
             <div class="flex flex-wrap">
-              <%= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name),
+              <%#= select_tag :user_id, options_from_collection_for_select(@ticket.users, :id, :name),
                              class: "border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 block mr-2 px-1 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               %>
-              <%= submit_tag "REMOVE", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
+              <%#= submit_tag "REMOVE", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
             </div>
-          <% end %>
+          <%# end %>
         </div>
-      <% end %>
+      <%# end %>
     </div>
 
 </div>

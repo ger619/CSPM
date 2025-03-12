@@ -163,6 +163,19 @@ class TicketsController < ApplicationController
 
         # Assign the default user if no users are assigned
 
+        if @ticket.issue == 'NEW FEATURE'
+          # Set all SLAs to 'NO SLA' for new feature
+          SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla|
+            sla.sla_status = 'NO SLA'
+            sla.sla_target_response_deadline = 'NO SLA'
+            sla.sla_resolution_deadline = 'NO SLA'
+          end
+        else
+          SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
+            sla_ticket.sla_status = @ticket.sla_status
+          end
+        end
+
         log_event(@ticket, current_user, 'update', 'Ticket was updated.')
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }

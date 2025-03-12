@@ -128,7 +128,7 @@ class User < ApplicationRecord
   private
 
   def email_domain_must_be_certified
-    allowed_domains = %w[craftsilicon.com little.africa]
+    allowed_domains = %w[craftsilicon.com little.africa craftsilicon.co.tz]
     domain = email.split('@').last
     return if allowed_domains.include?(domain)
 
