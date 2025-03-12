@@ -7,9 +7,9 @@ class DataCenterController < ApplicationController
     if params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                   Ticket.joins(project: :client)
+                   Ticket.joins(project: %i[client issues]).distinct
                  else
-                   Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
+                   Ticket.joins(project: %i[client issues]).where(projects: { id: current_user.projects.ids }).distinct
                  end
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
@@ -25,7 +25,7 @@ class DataCenterController < ApplicationController
       @tickets = if params[:status].blank?
                    @tickets.joins(statuses: :add_statuses)
                  else
-                   @tickets.joins(:statuses).where(statuses: { name: params[:status] })
+                   @tickets.joins(statuses: :add_statuses).where(statuses: { name: params[:status] })
                  end
 
       @status_counts = @tickets.joins(:statuses).group('statuses.name').count
@@ -372,7 +372,8 @@ class DataCenterController < ApplicationController
 
   def generate_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Details']
+      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Status Updated at',
+              'Last Comment Updated At', 'Details']
       tickets.each do |ticket|
         csv << [
           ticket.subject,
@@ -383,8 +384,10 @@ class DataCenterController < ApplicationController
           ticket.priority,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
+          ticket.created_at,
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.content.to_plain_text.truncate(800)
+          ticket.issues.first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.content.to_plain_text.truncate(3000)
         ]
       end
     end

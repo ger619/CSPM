@@ -85,9 +85,9 @@
 
 <% if @tickets.any? %>
 
-  <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <h2 class="text-xl font-bold mb-4 text-center capitalize">
-      Ticket Status Report AS AT <%= Date.today %> for <%= @client_selected ? Client.find(params[:client_id]).name : 'All Clients' %>
+      Ticket Status Report AS AT <%= Date.today %> for <%= params[:client_id].present? ? Client.find(params[:client_id]).name : 'All Clients' %>
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
@@ -95,17 +95,18 @@
       </div>
 
       <div class="col-span-1">
-        <ul>
+        <div class="p-2">
+          <h1 class="font-semibold">Total Tickets</h1>
           <% @status_counts.each do |status, count| %>
             <li><%= status %>: <%= count %></li>
           <% end %>
-        </ul>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8 container">
+  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end gap-2">
       <%= link_to "Download CSV",
                   cease_fire_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
@@ -118,7 +119,6 @@
     <table id="ceasefire" class="table-auto w-full mt-2">
       <thead>
       <tr>
-        <th class="border border-black px-4 py-2">Created</th>
         <th class="border border-black px-4 py-2">Ticket ID</th>
         <th class="border border-black px-4 py-2">Project Name</th>
         <th class="border border-black px-4 py-2">Severity</th>
@@ -128,6 +128,13 @@
         <th class="border border-black px-4 py-2">Assigned To</th>
         <th class="border border-black px-4 py-2">Reporter</th>
         <th class="border border-black px-4 py-2">Details</th>
+        <th class="border border-black px-4 py-2">Created</th>
+        <th class="border border-black px-4 py-2">Status Updated At</th>
+        <th class="border border-black px-4 py-2">Last Comment Updated At</th>
+
+
+
+
       </tr>
       </thead>
       <tbody>
@@ -159,7 +166,6 @@
                          ''
                        end %>
         <tr class="<%= row_class %>">
-          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d- %b -%y") %></td>
           <td class="border border border-black px-4 py-2"><%= ticket.unique_id %></td>
           <td class="border border border-black px-4 py-2"><%= ticket.project.title %></td>
           <td class="border border border-black px-4 py-2"><%= ticket.priority %></td>
@@ -174,6 +180,10 @@
             <% end %></td>
           <td class="border border border-black px-4 py-2"><%= ticket.user.name %></td>
           <td class="border border border-black px-4 py-2 "><%= ticket.content.to_plain_text.truncate(3000) %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d- %b -%y") %></td>
+          <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y ') || 'N/A' %></td>
+          <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A' %></td>
+
         </tr>
       <% end %>
       </tbody>
