@@ -141,11 +141,14 @@ class DataCenterController < ApplicationController
                    Ticket.joins(project: :client)
                      .joins(:statuses)
                      .where.not(statuses: { name: outstanding_statuses })
+                     .joins(:add_statuses)
                  else
                    Ticket.joins(project: :client)
                      .joins(:statuses)
                      .where(projects: { id: current_user.projects.ids })
                      .where.not(statuses: { name: outstanding_statuses })
+                     .joins(:add_statuses)
+
                  end
 
       # Apply filtering if a specific client is selected
@@ -156,7 +159,8 @@ class DataCenterController < ApplicationController
         closed_resolved_tickets = Ticket.joins(project: :client)
           .joins(:statuses)
           .where(statuses: { name: %w[Closed Resolved Declined] })
-          .where('tickets.created_at >= ?', days.days.ago)
+          .joins(:add_statuses)
+          .where('add_statuses.updated_at >= ?', days.days.ago)
         @tickets = @tickets.or(closed_resolved_tickets)
       end
 
@@ -306,7 +310,7 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Status Updated At', 'Summary',
               'Content']
       tickets.each do |ticket|
         csv << [
@@ -319,6 +323,7 @@ class DataCenterController < ApplicationController
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000)
 
