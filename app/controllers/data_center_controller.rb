@@ -18,11 +18,12 @@ class DataCenterController < ApplicationController
       if params[:start_date].present? && params[:end_date].present?
         start_date = Date.parse(params[:start_date])
         end_date = Date.parse(params[:end_date])
-        @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+        @tickets = @tickets.joins(:add_statuses)
+          .where('tickets.created_at >= ? AND add_statuses.updated_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
       end
 
       @tickets = if params[:status].blank?
-                   @tickets.joins(:statuses)
+                   @tickets.joins(statuses: :add_statuses)
                  else
                    @tickets.joins(:statuses).where(statuses: { name: params[:status] })
                  end
@@ -382,7 +383,7 @@ class DataCenterController < ApplicationController
           ticket.priority,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
-          ticket.created_at,
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.content.to_plain_text.truncate(800)
         ]
       end
@@ -439,8 +440,8 @@ class DataCenterController < ApplicationController
 
   def generate_start_of_day_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated', 'Due Date',
-              'Status Updated At']
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated', 'Status Updated At',
+              'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.unique_id,
