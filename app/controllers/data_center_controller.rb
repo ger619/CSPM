@@ -205,7 +205,7 @@ class DataCenterController < ApplicationController
         flash[:alert] = 'Please provide a valid team.'
         render :orm_report and return
       end
-      
+
       # Get user IDs from the team
       user_ids = team.users.pluck(:id)
 
@@ -221,9 +221,7 @@ class DataCenterController < ApplicationController
         )
 
       # Ensure non-admin users can only see their own project tickets
-      unless current_user.has_role?(:admin) || current_user.has_role?(:observer)
-        @tickets = @tickets.where(projects: { id: current_user.projects.ids })
-      end
+      @tickets = @tickets.where(projects: { id: current_user.projects.ids }) unless current_user.has_role?(:admin) || current_user.has_role?(:observer)
 
       # Filter by status if provided
       @tickets = @tickets.where(statuses: { name: params[:status] }) if params[:status].present?
