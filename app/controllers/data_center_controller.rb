@@ -7,9 +7,9 @@ class DataCenterController < ApplicationController
     if params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
-                   Ticket.joins(project: %i[client issues]).distinct
+                   Ticket.joins(project: :client)
                  else
-                   Ticket.joins(project: %i[client issues]).where(projects: { id: current_user.projects.ids }).distinct
+                   Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
                  end
 
       @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
@@ -18,8 +18,7 @@ class DataCenterController < ApplicationController
       if params[:start_date].present? && params[:end_date].present?
         start_date = Date.parse(params[:start_date])
         end_date = Date.parse(params[:end_date])
-        @tickets = @tickets.joins(:add_statuses)
-          .where('tickets.created_at >= ? AND add_statuses.updated_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+        @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
       end
 
       @tickets = if params[:status].blank?
@@ -141,14 +140,11 @@ class DataCenterController < ApplicationController
                    Ticket.joins(project: :client)
                      .joins(:statuses)
                      .where.not(statuses: { name: outstanding_statuses })
-                     .joins(:add_statuses)
                  else
                    Ticket.joins(project: :client)
                      .joins(:statuses)
                      .where(projects: { id: current_user.projects.ids })
                      .where.not(statuses: { name: outstanding_statuses })
-                     .joins(:add_statuses)
-
                  end
 
       # Apply filtering if a specific client is selected
@@ -159,8 +155,7 @@ class DataCenterController < ApplicationController
         closed_resolved_tickets = Ticket.joins(project: :client)
           .joins(:statuses)
           .where(statuses: { name: %w[Closed Resolved Declined] })
-          .joins(:add_statuses)
-          .where('add_statuses.updated_at >= ?', days.days.ago)
+          .where('tickets.created_at >= ?', days.days.ago)
         @tickets = @tickets.or(closed_resolved_tickets)
       end
 
@@ -308,12 +303,12 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At',
-              'Updated At', 'Status Updated At', 'Summary', 'Content']
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
+              'Content']
       tickets.each do |ticket|
         csv << [
-          ticket.project.client.name.gsub('–', '-'),
-          ticket.unique_id.gsub('–', '-'),
+          ticket.project.client.name,
+          ticket.unique_id,
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
@@ -321,10 +316,8 @@ class DataCenterController < ApplicationController
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.updated_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000)
-
         ]
       end
     end
@@ -347,7 +340,7 @@ class DataCenterController < ApplicationController
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name,
-          ticket.unique_id.gsub('–', '-'),
+          ticket.unique_id,
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
@@ -375,12 +368,11 @@ class DataCenterController < ApplicationController
 
   def generate_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Status Updated at',
-              'Last Comment Updated At', 'Details']
+      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Details']
       tickets.each do |ticket|
         csv << [
           ticket.subject,
-          ticket.unique_id.gsub('–', '-'),
+          ticket.unique_id,
           ticket.issue,
           ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
@@ -388,9 +380,7 @@ class DataCenterController < ApplicationController
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
           ticket.created_at,
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.issues.first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.content.to_plain_text.truncate(3000)
+          ticket.content.to_plain_text.truncate(800)
         ]
       end
     end
@@ -404,7 +394,7 @@ class DataCenterController < ApplicationController
         sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
         csv << [
           ticket.subject,
-          ticket.unique_id.gsub('–', '-'),
+          ticket.unique_id,
           ticket.issue,
           ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
@@ -431,13 +421,12 @@ class DataCenterController < ApplicationController
           csv << [
             user.name,
             ticket.project.title,
-            ticket.unique_id.gsub('–', '-'),
+            ticket.unique_id,
             ticket.subject,
             ticket.statuses.first&.name || 'N/A',
             sla_ticket&.sla_target_response_deadline || 'N/A',
             sla_ticket&.sla_resolution_deadline || 'N/A',
-            ticket.created_at('%d-%b-%Y'),
-            ticket.updated_at.strftime('%d-%b-%Y')
+            ticket.created_at.strftime('%d-%b-%Y')
           ]
         end
       end
@@ -446,11 +435,11 @@ class DataCenterController < ApplicationController
 
   def generate_start_of_day_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated', 'Status Updated At',
-              'Due Date']
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated', 'Due Date',
+              'Status Updated At']
       tickets.each do |ticket|
         csv << [
-          ticket.unique_id.gsub('–', '-'),
+          ticket.unique_id,
           ticket.subject,
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
