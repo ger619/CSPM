@@ -308,8 +308,8 @@ class DataCenterController < ApplicationController
               'Content']
       tickets.each do |ticket|
         csv << [
-          ticket.project.client.name,
-          ticket.unique_id,
+          ticket.project.client.name.gsub('–', '-'),
+          ticket.unique_id.gsub('–', '-'),
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
@@ -362,7 +362,7 @@ class DataCenterController < ApplicationController
       tickets.each do |ticket|
         csv << [
           ticket.project.title,
-          ticket.unique_id,
+          ticket.unique_id.gsub('–', '-'),
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
@@ -383,7 +383,7 @@ class DataCenterController < ApplicationController
       tickets.each do |ticket|
         csv << [
           ticket.subject,
-          ticket.unique_id,
+          ticket.unique_id.gsub('–', '-'),
           ticket.issue,
           ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
@@ -405,7 +405,7 @@ class DataCenterController < ApplicationController
         sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
         csv << [
           ticket.subject,
-          ticket.unique_id,
+          ticket.unique_id.gsub('–', '-'),
           ticket.issue,
           ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
@@ -432,7 +432,7 @@ class DataCenterController < ApplicationController
           csv << [
             user.name,
             ticket.project.title,
-            ticket.unique_id,
+            ticket.unique_id.gsub('–', '-'),
             ticket.subject,
             ticket.statuses.first&.name || 'N/A',
             sla_ticket&.sla_target_response_deadline || 'N/A',
@@ -451,7 +451,7 @@ class DataCenterController < ApplicationController
       tickets.each do |ticket|
         latest_issue = Issue.where(ticket_id: ticket.id).order(updated_at: :desc).first
         csv << [
-          ticket.unique_id,
+          ticket.unique_id.gsub('–', '-'),
           ticket.subject,
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
