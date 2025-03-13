@@ -455,7 +455,9 @@ class DataCenterController < ApplicationController
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.updated_at.strftime('%d-%b-%Y'),
           latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          latest_issue&.content&.to_plain_text&.truncate(800) || 'N/A'
+          latest_issue # rubocop:disable Style/SafeNavigationChainLength
+            &.content
+            &.to_plain_text&.truncate(800) || 'N/A'
         ]
       end
     end
