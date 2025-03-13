@@ -103,7 +103,7 @@ class DataCenterController < ApplicationController
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(user_id: user_ids)
 
-      @tickets_by_user = @tickets.joins(:users).group('users.id').count
+      @tickets_by_user = @tickets.joins(:users).group('users.id').order('count_all DESC').count
 
       respond_to do |format|
         format.html # Default view

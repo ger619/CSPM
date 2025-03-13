@@ -37,26 +37,26 @@
         <canvas id="ticketsChart" width="100" height="100"></canvas>
       </div>
       <div class="flex justify-center w-1/2">
-      <% if @tickets_by_user.present? %>
-        <table>
-          <thead>
-          <tr>
-            <th>User Name</th>
-            <th>Ticket Count</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @team_members.each do |user| %>
+        <% if @tickets_by_user.present? %>
+          <table>
+            <thead>
             <tr>
-              <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
-              <td class="border border-black dark:border-slate-100 px-4 py-2"><%= @tickets_by_user[user.id] || 0 %></td>
+              <th>User Name</th>
+              <th>Ticket Count</th>
             </tr>
-          <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p>No tickets found for the selected date range.</p>
-      <% end %>
+            </thead>
+            <tbody>
+            <% @team_members.sort_by { |user| -(@tickets_by_user[user.id] || 0) }.each do |user| %>
+              <tr>
+                <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
+                <td class="border border-black dark:border-slate-100 px-4 py-2"><%= @tickets_by_user[user.id] || 0 %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p>No tickets found for the selected date range.</p>
+        <% end %>
     </div>
     </div>
   <% end %>
