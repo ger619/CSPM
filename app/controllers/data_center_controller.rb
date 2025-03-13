@@ -94,31 +94,27 @@ class DataCenterController < ApplicationController
   def project_report
     authorize! :generate, :report # Check if the user can generate reports
 
-    if params[:project_id].present? && params[:start_date].present? && params[:end_date].present?
-      start_date = Date.parse(params[:start_date]).beginning_of_day
-      end_date = Date.parse(params[:end_date]).end_of_day
+    if params[:team_id].present?
+      @team = Team.find(params[:team_id])
+      @team_members = @team.users
+      user_ids = @team_members.pluck(:id)
 
-      @project = Project.find(params[:project_id])
+      @tickets = Ticket.joins(:statuses, :project)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(user_id: user_ids)
 
-      if current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.projects.include?(@project)
-        @tickets = @project.tickets.joins(:statuses)
-          .where.not(statuses: { name: %w[Resolved Closed Denied] })
-          .where(created_at: start_date..end_date)
+      @tickets_by_user = @tickets.group(:user_id).count
 
-        @tickets_by_user = @tickets.group(:user_id).count
-
-        respond_to do |format|
-          format.html # Default view
-          format.csv { send_data generate_project_report_csv(@tickets_by_user), filename: "project_report_#{Date.today}.csv" }
-        end
-      else
-        flash[:alert] = 'You do not have access to this project.'
-        redirect_to root_path
+      respond_to do |format|
+        format.html # Default view
+        team_name = Team.find(params[:team_id]).name if params[:team_id].present?
+        format.csv { send_data generate_project_report_csv(@tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
       end
     else
-      @project = nil
+      @team = nil
+      @team_members = []
       @tickets_by_user = {}
-      flash[:alert] = 'Please provide a valid project and date range.'
+      flash[:alert] = 'Please provide a valid team and date range.'
       render :project_report
     end
   end
@@ -352,12 +348,23 @@ class DataCenterController < ApplicationController
     end
   end
 
-  def generate_project_report_csv(tickets_by_user)
+  def generate_project_report_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['User Name', 'Ticket Count']
-      tickets_by_user.each do |user_id, ticket_count|
-        user = User.find(user_id)
-        csv << [user.name, ticket_count]
+      csv << ['Project Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary', 'Content']
+      tickets.each do |ticket|
+        csv << [
+          ticket.project.title,
+          ticket.unique_id,
+          ticket.issue,
+          ticket.users.map(&:name).select(&:present?).join(', '),
+          ticket.user.name,
+          ticket.priority,
+          ticket.statuses.first&.name || 'N/A',
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.subject,
+          ticket.content.to_plain_text.truncate(3000)
+        ]
       end
     end
   end
