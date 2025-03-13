@@ -263,8 +263,16 @@ class DataCenterController < ApplicationController
 
       @tickets = if report_type == 'eod'
                    # EOD: Tickets that changed to "outstanding_statuses" within the last 24 hours
-                   recently_updated_tickets = @tickets.where(statuses: { name: outstanding_statuses })
+                   recently_updated_tickets = @tickets
+                     .where(statuses: { name: outstanding_statuses })
                      .where('add_statuses.updated_at >= ?', 24.hours.ago)
+
+                   # Get latest issues separately
+                   Issue
+                     .where(ticket_id: recently_updated_tickets.select(:id))
+                     .order(updated_at: :desc)
+                     .distinct(:ticket_id)
+
                    # Combine with tickets that are not in the outstanding statuses
                    @tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated_tickets)
                  else
@@ -432,8 +440,9 @@ class DataCenterController < ApplicationController
   def generate_start_of_day_csv(tickets)
     CSV.generate(headers: true) do |csv|
       csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated',
-              'Status Updated At', 'Due Date']
+              'Status Updated At', 'Comment Added At', 'Content', 'Due Date']
       tickets.each do |ticket|
+        latest_issue = Issue.where(ticket_id: ticket.id).order(updated_at: :desc).first
         csv << [
           ticket.unique_id,
           ticket.subject,
@@ -444,7 +453,9 @@ class DataCenterController < ApplicationController
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.updated_at.strftime('%d-%b-%Y')
+          ticket.updated_at.strftime('%d-%b-%Y'),
+          latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          latest_issue&.content&.to_plain_text&.truncate(800) || 'N/A'
         ]
       end
     end
