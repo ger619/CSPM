@@ -33,10 +33,10 @@
     </div>
     <div class="flex">
       <div class="flex justify-center w-1/2">
-        <%= pie_chart @tickets_by_user.transform_keys { |id| User.find(id).name }, height: "400px", library: { title: { text: "Tickets by User" } } %>
+        <%= pie_chart @tickets.transform_keys { |id| User.find(id).name }, height: "400px", library: { title: { text: "Tickets by User" } } %>
       </div>
       <div class="flex justify-center w-1/2">
-        <% if @tickets_by_user.present? %>
+        <% if @tickets.present? %>
           <table>
             <thead>
             <tr>
@@ -45,10 +45,10 @@
             </tr>
             </thead>
             <tbody>
-            <% @team_members.sort_by { |user| -(@tickets_by_user[user.id] || 0) }.each do |user| %>
+            <% @team_members.sort_by { |user| -(@tickets[user.id] || 0) }.each do |user| %>
               <tr>
                 <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
-                <td class="border border-black dark:border-slate-100 px-4 py-2"><%= @tickets_by_user[user.id] || 0 %></td>
+                <td class="border border-black dark:border-slate-100 px-4 py-2"><%= @tickets[user.id] || 0 %></td>
               </tr>
             <% end %>
             </tbody>

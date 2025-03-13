@@ -9,8 +9,9 @@ class UsersController < ApplicationController
     @users = if params[:query].present?
                User.left_joins(:client, :roles)
                  .where('users.email ILIKE :query OR users.first_name ILIKE :query OR
-                         users.last_name ILIKE :query OR clients.name ILIKE :query OR roles.name ILIKE :query',
+            users.last_name ILIKE :query OR clients.name ILIKE :query OR roles.name ILIKE :query',
                         query: "%#{params[:query]}%")
+                 .distinct
              else
                User.order('created_at DESC')
              end
