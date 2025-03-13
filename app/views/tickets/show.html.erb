@@ -56,41 +56,36 @@
           </div>
           <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
             <% if @ticket.content.present? %>
-          <span class="font-extralight pl-2 flex flex-wrap">
-            <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
-            <% if @ticket.content.body.attachments.any? %>
-              <% @ticket.content.body.attachments.each do |attachment| %>
-  <div class="mb-2">
-    <% if attachment.attachable.is_a?(ActionText::Attachables::RemoteImage) %>
-      <a href="<%= attachment.attachable.url %>" download>
-        <img src="<%= attachment.attachable.url %>" alt="Remote Image" class="max-w-xs cursor-pointer">
-      </a>
-      <br>
-      <%= link_to "Download", attachment.attachable.url, target: "_blank", download: true, class: "text-blue-600 hover:underline" %>
-
-    <% elsif attachment.attachable.is_a?(ActiveStorage::Blob) %>
-      <% if attachment.attachable.previewable? %>
-        <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>
-          <img src="<%= rails_representation_url(attachment.attachable.variant(resize_to_limit: [300, 300])) %>" alt="Attachment Preview" class="max-w-xs cursor-pointer">
-        </a>
-        <br>
-        <%= link_to "Preview", rails_blob_path(attachment.attachable, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" %>
-      <% end %>
-      <br>
-      <%= link_to "Download", rails_blob_path(attachment.attachable, disposition: "attachment", only_path: true), class: "text-blue-600 hover:underline" %>
-
-    <% else %>
-      <p>Attachment: <%= attachment.filename.to_s %></p>
-      <%= link_to "Download", rails_blob_path(attachment.attachable, disposition: "attachment", only_path: true), class: "text-blue-600 hover:underline" %>
-    <% end %>
-  </div>
-              <% end %>
-
-
+              <span class="font-extralight pl-2 flex flex-wrap">
+                <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
+                <% if @ticket.content.body.attachments.any? %>
+                  <% @ticket.content.body.attachments.each do |attachment| %>
+                    <div class="mb-2">
+                      <% if attachment.attachable.is_a?(ActionText::Attachables::RemoteImage) %>
+                        <a href="<%= attachment.attachable.url %>" download>
+                          <img src="<%= attachment.attachable.url %>" alt="Remote Image" class="max-w-xs cursor-pointer">
+                        </a>
+                        <br>
+                        <%= link_to "Download", attachment.attachable.url, target: "_blank", download: true, class: "text-blue-600 hover:underline" %>
+                      <% elsif attachment.attachable.is_a?(ActiveStorage::Blob) %>
+                        <% if attachment.attachable.previewable? %>
+                          <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>
+                            <img src="<%= rails_representation_url(attachment.attachable.variant(resize_to_limit: [300, 300])) %>" alt="Attachment Preview" class="max-w-xs cursor-pointer">
+                          </a>
+                          <br>
+                          <%= link_to "Preview", rails_blob_path(attachment.attachable, only_path: true), target: "_blank", class: "text-blue-600 hover:underline" %>
+                        <% end %>
+                        <br>
+                        <%= link_to "Download", rails_blob_path(attachment.attachable, disposition: "attachment", only_path: true), class: "text-blue-600 hover:underline" %>
+                      <% else %>
+                        <p>Attachment: <%= attachment.filename.to_s %></p>
+                        <%= link_to "Download", rails_blob_path(attachment.attachable, disposition: "attachment", only_path: true), class: "text-blue-600 hover:underline" %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </span>
             <% end %>
-          </span>
-            <% end %>
-
           </div>
         </div>
       </div>
