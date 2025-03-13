@@ -431,8 +431,8 @@ class DataCenterController < ApplicationController
 
   def generate_start_of_day_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated', 'Due Date',
-              'Status Updated At']
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated',
+              'Status Updated At', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.unique_id,
@@ -443,8 +443,8 @@ class DataCenterController < ApplicationController
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.updated_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.updated_at.strftime('%d-%b-%Y')
         ]
       end
     end
