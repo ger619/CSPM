@@ -65,10 +65,8 @@
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['QA Testing'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Awaiting Build'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2 font-bold">
-           <%= link_to "View All", class: 'hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+            <%= link_to "View All", assigned_tickets_path(team_id: @team.id, user_id: user.id), class: 'bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
           </td>
-
-        </tr>
       <% end %>
       </tbody>
     </table>

@@ -101,13 +101,13 @@ class DataCenterController < ApplicationController
 
       # Fetch tickets excluding specific statuses
       @tickets = Ticket.joins(:statuses, :project)
-                       .where.not(statuses: { name: %w[Resolved Closed Declined] })
-                       .where(user_id: user_ids)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(user_id: user_ids)
 
       # Group tickets by user and status
       @tickets_by_user = @tickets.joins(:users, :statuses)
-                                 .group('users.id', 'statuses.name')
-                                 .count
+        .group('users.id', 'statuses.name')
+        .count
 
       # Organize data into a hash for easier display in the view
       @organized_tickets = @tickets_by_user.each_with_object({}) do |((user_id, status), count), hash|
@@ -135,11 +135,18 @@ class DataCenterController < ApplicationController
 
   def assigned_tickets
     @team = Team.find(params[:team_id])
-    @tickets = Ticket.joins(:statuses)
-                     .where.not(statuses: { name: %w[Resolved Closed Declined] })
-                     .where(user_id: @team.users.pluck(:id))
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @tickets = Ticket.joins(:statuses)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(user_id: @user.id)
+    else
+      @tickets_by_user = Ticket.joins(:statuses)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(user_id: @team.users.pluck(:id))
+        .group_by(&:user)
+    end
   end
-
 
   def orm_report
     authorize! :generate, :report
