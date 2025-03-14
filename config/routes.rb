@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboards#index'
   get 'dashboards/fetch_stats', to: 'dashboards#fetch_stats'
   get 'dashboards/tickets', to: 'dashboards#tickets'
+  get 'dashboards/assigned_tickets', to: 'dashboards#assigned_tickets'
+
 
 
   root "home#index"
