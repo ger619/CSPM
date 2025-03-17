@@ -24,9 +24,12 @@ Rails.application.routes.draw do
   get 'orm_team_report', to: 'data_center#orm_team_report', as: 'orm_team_report'
 
   get 'sod_report', to: 'data_center#sod_report', as: 'sod_report'
+  get 'assigned_tickets', to: 'data_center#assigned_tickets', as: 'assigned_tickets'
+
   get 'dashboard', to: 'dashboards#index'
   get 'dashboards/fetch_stats', to: 'dashboards#fetch_stats'
   get 'dashboards/tickets', to: 'dashboards#tickets'
+
 
 
   root "home#index"

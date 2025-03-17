@@ -99,15 +99,30 @@ class DataCenterController < ApplicationController
       @team_members = @team.users
       user_ids = @team_members.pluck(:id)
 
-      @tickets = Ticket.joins(:statuses, :project)
+      # Fetch tickets excluding specific statuses
+      @tickets = Ticket.joins(:statuses, :project, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(user_id: user_ids)
+        .where(taggings: { user_id: user_ids })
 
-      @tickets_by_user = @tickets.joins(:users).group('users.id').order('count_all DESC').count
+      # Group tickets by user and status and show the counts of users and the tickets assigned
+      @tickets_by_user = @tickets.joins(:statuses)
+        .group('taggings.user_id', 'statuses.name')
+        .count
+
+      # Organize data into a hash for easier display in the view
+      @organized_tickets = @tickets_by_user.each_with_object({}) do |((user_id, status), count), hash|
+        hash[user_id] ||= { total: 0 }
+        hash[user_id][:total] += count
+        hash[user_id][status] = count
+      end
+
+      # Prepare data for the pie chart
+      @tickets_chart_data = @organized_tickets.transform_keys { |id| User.find(id).name }
+      @tickets_chart_data = @tickets_chart_data.transform_values { |data| data[:total] }
 
       respond_to do |format|
         format.html # Default view
-        team_name = Team.find(params[:team_id]).name if params[:team_id].present?
+        team_name = @team.name
         format.csv { send_data generate_project_report_csv(@tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
       end
     else
@@ -116,6 +131,21 @@ class DataCenterController < ApplicationController
       @tickets_by_user = {}
       flash[:alert] = 'Please provide a valid team and date range.'
       render :project_report
+    end
+  end
+
+  def assigned_tickets
+    @team = Team.find(params[:team_id])
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @tickets = Ticket.joins(:statuses, :taggings)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(taggings: { user_id: @user.id })
+    else
+      @tickets_by_user = Ticket.joins(:statuses, :taggings)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(taggings: { user_id: @team.users.pluck(:id) })
+        .group_by(&:user)
     end
   end
 
@@ -379,19 +409,24 @@ class DataCenterController < ApplicationController
 
   def generate_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Details']
+      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
+              'Last Comment Updated At']
       tickets.each do |ticket|
         csv << [
-          ticket.subject,
+
           ticket.unique_id.gsub('–', '-'),
-          ticket.issue,
-          ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
           ticket.priority,
+          ticket.subject,
+          ticket.issue,
+          ticket.statuses.first&.name || 'N/A',
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
+          ticket.content.to_plain_text.truncate(3000),
           ticket.created_at,
-          ticket.content.to_plain_text.truncate(800)
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
+
         ]
       end
     end
