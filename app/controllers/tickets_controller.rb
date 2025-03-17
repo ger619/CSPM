@@ -261,8 +261,24 @@ class TicketsController < ApplicationController
       end
     end
 
-    @ticket.users.each do |ticket_user|
-      UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+    if status.name != 'Reopened'
+      @ticket.users.each do |ticket_user|
+        UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
+      end
+    end
+
+    if status.name == 'Reopened'
+      @project.users.each do |project_user|
+        UserMailer.status_update_email(project_user, @ticket, current_user).deliver_later
+      end
+
+      # Send email to the person assigned to the project
+      project_assigned_user = @project.user
+      UserMailer.status_update_email(project_assigned_user, @ticket, current_user).deliver_later if project_assigned_user
+
+      # Send email to the person assigned to the ticket
+      ticket_assigned_user = @ticket.users.first
+      UserMailer.status_update_email(ticket_assigned_user, @ticket, current_user).deliver_later if ticket_assigned_user
     end
 
     log_event(@ticket, current_user, 'status_change', "Status was changed to #{status.name}")
