@@ -1,60 +1,35 @@
 <h1 class="flex justify-center text-2xl font-bold mb-4">Assigned Tickets for <%= @user.name %></h1>
 
 <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-  <% if @user %>
-    <h2 class="text-xl font-semibold mt-4"><%= @user.name %></h2>
     <table class="border-collapse border border-gray-300 w-full mb-4">
       <thead>
       <tr>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Date of Creation
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Ticket ID
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Issue
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Priority
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Summary
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Assigned To
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          STATUS
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          PROGRESS BAR
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">
-          Reported By
-        </th>
-        <th scope="col" class="border border-gray-300 px-4 py-2 ">
-          VIEW
-        </th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Date of Creation</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Ticket ID</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Issue</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Priority</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Summary</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Assigned To</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">STATUS</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">PROGRESS BAR</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Reported By</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">VIEW</th>
       </tr>
       </thead>
       <tbody>
       <% @tickets.each do |ticket| %>
-        <% if ticket.present? %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
-
+        <%# if ticket.users.any? { |u| u.name == @user.name } %>
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket)   %>
+              <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
             </th>
             <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
-              <% if ticket.unique_id.present? %>
-                <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket)  %>
-              <% end %>
+              <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) if ticket.unique_id.present? %>
             </th>
             <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
+              <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
             </th>
-            <td class="px-2 py-2 ">
+            <td class="px-2 py-2">
               <% if ticket.priority == 'SEVERITY 1' %>
                 <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
               <% elsif ticket.priority == 'SEVERITY 2' %>
@@ -65,20 +40,13 @@
                 <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
               <% end %>
             </td>
-
-            <td class="px-2 py-2 truncate w-64 ">
-              <% if ticket.subject.present? %>
-                <%= ticket.subject.truncate(50) %>
-              <% end %>
+            <td class="px-2 py-2 truncate w-64">
+              <%= ticket.subject.truncate(50) if ticket.subject.present? %>
             </td>
             <td class="px-2 py-2 font-bold">
-              <% ticket.users.each do |user| %>
-                <% if user.name.present? %>
-                  <%= user.name %>
-                <% end %>
-              <% end %>
+              <%= @user.name %>
             </td>
-            <td class="px-2 py-2 ">
+            <td class="px-2 py-2">
               <% ticket.statuses.each do |status| %>
                 <% case status.name %>
               <% when 'Resolved' %>
@@ -175,39 +143,14 @@
               </div>
             </td>
             <td class="px-2 py-2 capitalize">
-              <% if ticket.user.name.present? %>
-                <%= ticket.user.name %>
-              <% end %>
+              <%= ticket.user.name if ticket.user.name.present? %>
             </td>
             <td class="px-2 py-2">
               <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
             </td>
           </tr>
         <% end %>
-      <% end %>
+      <%# end %>
       </tbody>
     </table>
-  <% else %>
-    <% @tickets_by_user.each do |user, tickets| %>
-      <h2 class="text-xl font-semibold mt-4"><%= user.name %></h2>
-      <table class="border-collapse border border-gray-300 w-full mb-4">
-        <thead>
-        <tr>
-          <th class="border border-gray-300 px-4 py-2">Ticket ID</th>
-          <th class="border border-gray-300 px-4 py-2">Subject</th>
-          <th class="border border-gray-300 px-4 py-2">Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% tickets.each do |ticket| %>
-          <tr>
-            <td class="border border-gray-300 px-4 py-2"><%= ticket.unique_id %></td>
-            <td class="border border-gray-300 px-4 py-2"><%= ticket.subject %></td>
-            <td class="border border-gray-300 px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    <% end %>
-  <% end %>
 </div>

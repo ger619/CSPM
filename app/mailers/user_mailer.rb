@@ -44,7 +44,7 @@ class UserMailer < ApplicationMailer
     @ticket = ticket
     @current_user = current_user
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @user.email, subject: "Status update for Ticket #{@ticket.unique_id}.")
+    mail(to: @user.email, subject: "Status update for Ticket ID #{@ticket.unique_id}.")
   end
 
   # From Product Controller
@@ -76,12 +76,14 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Task State Updated')
   end
 
-  def new_comment_email(user, comment, current_user)
+  def new_comment_email(user, comment, current_user, project, ticket)
     @user = user
     @comment = comment
     @current_user = current_user
+    @project = project
+    @ticket = ticket
     @url = project_ticket_url(@comment.ticket.project, @comment.ticket)
-    mail(to: @user.email, subject: 'Root Cause Analysis ')
+    mail(to: @user.email, subject: "Root Cause Analysis for Ticket ID #{@ticket.unique_id}.")
   end
 
   def bug_mailer(user, bug, current_user, assigned_user)

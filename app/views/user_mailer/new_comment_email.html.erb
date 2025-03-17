@@ -6,9 +6,13 @@
 <body>
 <h1>Hello, <%= @user.name %></h1>
 
-<p><strong>Issue:</strong> <%= @comment.what %></p>
+<p><strong>Issue:</strong> <%= @comment.what %></p> for service desk <%= @project.title %></p>
+
+<p><strong>Issue:</strong> <%= @ticket.unique_id %></p>
+
 
 <p><strong>Reason for the Issue and Our Solution:</strong></p>
+
 
 <div>
   <%= @comment.content %>
