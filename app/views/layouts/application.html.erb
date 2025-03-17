@@ -30,23 +30,15 @@
 <main class="flex">
   <!-- Sidebar -->
   <% if current_user && user_signed_in?  %>
-  <div id="sidebar" class="transparent h-screen transition-all duration-300 w-64">
-    <%= render 'layouts/sidebar' %>
-  </div>
-
-  <!-- Main Content -->
-  <div id="mainContent" class="p-4 flex-1 transition-all duration-300">
-    <%= render 'layouts/topbar' %>
-    <%= yield %>
-  </div>
-  <% else %>
-    <main class="mx-auto">
+    <div id="sidebar" class="transparent transition-all duration-300 w-64">
       <%= render 'layouts/sidebar' %>
-      <div class="p-8 ml-16">
-        <%= render 'layouts/topbar' %>
-        <%= yield %>
-      </div>
-    </main>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="p-4 flex-1 transition-all duration-300">
+      <%= render 'layouts/topbar' %>
+      <%= yield %>
+    </div>
   <%end%>
 
 </main>
