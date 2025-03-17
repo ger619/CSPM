@@ -11,7 +11,7 @@ class Ability
       can %i[generate report cease_fire_report breach_report user_report], :report
 
     elsif user.has_role?('project manager')
-      can %i[read assign_user unassign_user], Project
+      can %i[read assign_user unassign_user add_team], Project
       can %i[create read assign_tag unassign_tag add_status], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
