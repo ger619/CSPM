@@ -118,6 +118,7 @@ class DataCenterController < ApplicationController
 
       # Prepare data for the pie chart
       @tickets_chart_data = @organized_tickets.transform_keys { |id| User.find(id).name }
+      @tickets_chart_data = @tickets_chart_data.transform_values { |data| data[:total] }
 
       respond_to do |format|
         format.html # Default view
