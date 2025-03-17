@@ -409,19 +409,24 @@ class DataCenterController < ApplicationController
 
   def generate_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'Details']
+      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
+              'Last Comment Updated At']
       tickets.each do |ticket|
         csv << [
-          ticket.subject,
+
           ticket.unique_id.gsub('–', '-'),
-          ticket.issue,
-          ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
           ticket.priority,
+          ticket.subject,
+          ticket.issue,
+          ticket.statuses.first&.name || 'N/A',
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
+          ticket.content.to_plain_text.truncate(3000),
           ticket.created_at,
-          ticket.content.to_plain_text.truncate(800)
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
+
         ]
       end
     end
