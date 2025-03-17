@@ -100,13 +100,13 @@ class DataCenterController < ApplicationController
       user_ids = @team_members.pluck(:id)
 
       # Fetch tickets excluding specific statuses
-      @tickets = Ticket.joins(:statuses, :project)
+      @tickets = Ticket.joins(:statuses, :project, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(user_id: user_ids)
+        .where(taggings: { user_id: user_ids })
 
-      # Group tickets by user and status
-      @tickets_by_user = @tickets.joins(:users, :statuses)
-        .group('users.id', 'statuses.name')
+      # Group tickets by user and status and show the counts of users and the tickets assigned
+      @tickets_by_user = @tickets.joins(:statuses)
+        .group('taggings.user_id', 'statuses.name')
         .count
 
       # Organize data into a hash for easier display in the view
@@ -121,7 +121,7 @@ class DataCenterController < ApplicationController
 
       respond_to do |format|
         format.html # Default view
-        team_name = Team.find(params[:team_id]).name
+        team_name = @team.name
         format.csv { send_data generate_project_report_csv(@tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
       end
     else
@@ -137,13 +137,13 @@ class DataCenterController < ApplicationController
     @team = Team.find(params[:team_id])
     if params[:user_id]
       @user = User.find(params[:user_id])
-      @tickets = Ticket.joins(:statuses)
+      @tickets = Ticket.joins(:statuses, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(user_id: @user.id)
+        .where(taggings: { user_id: @user.id })
     else
-      @tickets_by_user = Ticket.joins(:statuses)
+      @tickets_by_user = Ticket.joins(:statuses, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(user_id: @team.users.pluck(:id))
+        .where(taggings: { user_id: @team.users.pluck(:id) })
         .group_by(&:user)
     end
   end
