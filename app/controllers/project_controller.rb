@@ -12,8 +12,9 @@ class ProjectController < ApplicationController
 
       @project = Project.joins(:tickets)
         .where('projects.title ILIKE :query
-                             OR projects.description ILIKE :query
-                             OR tickets.unique_id ILIKE :query',
+              OR projects.description ILIKE :query
+              OR tickets.unique_id ILIKE :query
+              OR tickets.subject ILIKE :query',
                query: "%#{formatted_query}%")
         .distinct
     else
@@ -25,7 +26,7 @@ class ProjectController < ApplicationController
     @tickets = if params[:query].present?
                  if current_user.has_any_role?(:admin, :observer) || @project.any? { |project| project.users.include?(current_user) }
                    Ticket.joins(:project)
-                     .where('unique_id ILIKE ?', "%#{formatted_query}%")
+                     .where('unique_id ILIKE :query OR subject ILIKE :query', query: "%#{formatted_query}%")
                      .where(projects: { id: @project.ids })
                  else
                    Ticket.none
