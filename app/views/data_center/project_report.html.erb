@@ -1,5 +1,4 @@
-<!-- app/views/data_center/team_report.html.erb -->
-<h1 class="flex justify-center text-2xl font-bold mb-4">Team Report</h1>
+<h1 class="flex justify-center text-2xl font-bold mb-4">Project Report</h1>
 <div class="p-2 w-full">
   <%= form_with url: project_report_path, method: :get, local: true do %>
     <div class="flex flex-wrap justify-center gap-2">
@@ -25,57 +24,61 @@
   <% end %>
 </div>
 
-<div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+<div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
   <% if @team %>
     <div class="flex justify-center gap-2">
       <h2 class="p-2 font-bold">Team Report for <span class="capitalize"><%= @team.name %> </span></h2>
-      <%= link_to 'Download CSV Report', project_report_path(format: :csv, team_id: @team.id, start_date: params[:start_date], end_date: params[:end_date]), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+      <%= link_to 'Download CSV Report', project_report_path(format: :csv, team_id: @team.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
     </div>
-    <div class="flex">
-      <div class="flex justify-center w-1/2">
-        <%= pie_chart @tickets.transform_keys { |id| User.find(id).name }, height: "400px", library: { title: { text: "Tickets by User" } } %>
-      </div>
-      <div class="flex justify-center w-1/2">
-        <% if @tickets.present? %>
-          <table>
-            <thead>
-            <tr>
-              <th>User Name</th>
-              <th>Ticket Count</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% @team_members.sort_by { |user| -(@tickets[user.id] || 0) }.each do |user| %>
-              <tr>
-                <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
-                <td class="border border-black dark:border-slate-100 px-4 py-2">
-                  <%= @tickets[user.id] || 0 %>
-                  <ul>
-                    <% user.tickets.each do |ticket| %>
-                      <li>
-                        <%#= link_to ticket.subject, ticket_path(ticket) %> - <%= ticket.statuses.first&.name || 'N/A' %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </td>
-              </tr>
-            <% end %>
-            </tbody>
-          </table>
-        <% else %>
-          <p>No tickets found for the selected date range.</p>
-        <% end %>
-      </div>
+
+    <div class="flex justify-center w-full my-6">
+      <%= pie_chart @tickets_chart_data, height: "400px", library: { title: { text: "Tickets by User" } } %>
     </div>
+
+    <table class="table-auto w-full border-collapse border border-gray-300">
+      <thead>
+      <tr>
+        <th class="border border-gray-300 px-4 py-2">User Name</th>
+        <th class="border border-gray-300 px-4 py-2">Total Tickets</th>
+        <th class="border border-gray-300 px-4 py-2">Assigned</th>
+        <th class="border border-gray-300 px-4 py-2">Work in Progress</th>
+        <th class="border border-gray-300 px-4 py-2">Under Development</th>
+        <th class="border border-gray-300 px-4 py-2">On Hold</th>
+        <th class="border border-gray-300 px-4 py-2">Client Confirmation Pending</th>
+        <th class="border border-gray-300 px-4 py-2">QA Testing</th>
+        <th class="border border-gray-300 px-4 py-2">Awaiting Build</th>
+        <th class="border border-gray-300 px-4 py-2">View</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <% @team_members.each do |user| %>
+        <% ticket_data = @organized_tickets[user.id] || {} %>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2"><%= user.name %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data[:total] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Assigned'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Work in Progress'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Under Development'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['On-Hold'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Client Confirmation Pending'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['QA Testing'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Awaiting Build'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2 font-bold">
+            <%= link_to "View All", assigned_tickets_path(team_id: @team.id, user_id: user.id), class: 'bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+          </td>
+      <% end %>
+      </tbody>
+    </table>
   <% end %>
 </div>
 
-  <script>
-    function showDropdown() {
+<script>
+  function showDropdown() {
     document.getElementById("teamDropdown").classList.remove("hidden");
   }
 
-    function filterTeamDropdown() {
+  function filterTeamDropdown() {
     let input = document.getElementById("searchTeam").value.toLowerCase();
     let dropdown = document.getElementById("teamDropdown");
     let items = dropdown.getElementsByClassName("dropdown-item");
@@ -84,21 +87,21 @@
 
     let hasMatch = false;
     for (let item of items) {
-    let text = item.textContent.toLowerCase();
-    if (text.includes(input)) {
-    item.style.display = "block";
-    hasMatch = true;
-  } else {
-    item.style.display = "none";
-  }
-  }
+      let text = item.textContent.toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = "block";
+        hasMatch = true;
+      } else {
+        item.style.display = "none";
+      }
+    }
 
     if (!hasMatch) {
-    dropdown.classList.add("hidden");
-  }
+      dropdown.classList.add("hidden");
+    }
   }
 
-    function selectTeam(element) {
+  function selectTeam(element) {
     let teamName = element.textContent.trim();
     let teamId = element.getAttribute("data-team-id");
 
@@ -111,13 +114,12 @@
     document.getElementById("teamDropdown").classList.add("hidden");
   }
 
-    document.addEventListener("click", function(event) {
+  document.addEventListener("click", function(event) {
     let dropdown = document.getElementById("teamDropdown");
     let searchInput = document.getElementById("searchTeam");
 
     if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
-    dropdown.classList.add("hidden");
-  }
+      dropdown.classList.add("hidden");
+    }
   });
-
 </script>

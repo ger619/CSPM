@@ -20,7 +20,7 @@ class CommentsController < ApplicationController
         # Send email to the selected users
         selected_users = User.where(id: comment_params[:user_ids])
         selected_users.each do |comment_user|
-          UserMailer.new_comment_email(comment_user, @comment, current_user).deliver_later
+          UserMailer.new_comment_email(comment_user, @comment, current_user, @project, @ticket).deliver_later
         end
 
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Comment was successfully created.' }

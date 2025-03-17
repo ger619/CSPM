@@ -99,15 +99,29 @@ class DataCenterController < ApplicationController
       @team_members = @team.users
       user_ids = @team_members.pluck(:id)
 
+      # Fetch tickets excluding specific statuses
       @tickets = Ticket.joins(:statuses, :project)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(user_id: user_ids)
 
-      @tickets_by_user = @tickets.joins(:users).group('users.id').order('count_all DESC').count
+      # Group tickets by user and status
+      @tickets_by_user = @tickets.joins(:users, :statuses)
+        .group('users.id', 'statuses.name')
+        .count
+
+      # Organize data into a hash for easier display in the view
+      @organized_tickets = @tickets_by_user.each_with_object({}) do |((user_id, status), count), hash|
+        hash[user_id] ||= { total: 0 }
+        hash[user_id][:total] += count
+        hash[user_id][status] = count
+      end
+
+      # Prepare data for the pie chart
+      @tickets_chart_data = @organized_tickets.transform_keys { |id| User.find(id).name }
 
       respond_to do |format|
         format.html # Default view
-        team_name = Team.find(params[:team_id]).name if params[:team_id].present?
+        team_name = Team.find(params[:team_id]).name
         format.csv { send_data generate_project_report_csv(@tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
       end
     else
@@ -116,6 +130,21 @@ class DataCenterController < ApplicationController
       @tickets_by_user = {}
       flash[:alert] = 'Please provide a valid team and date range.'
       render :project_report
+    end
+  end
+
+  def assigned_tickets
+    @team = Team.find(params[:team_id])
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @tickets = Ticket.joins(:statuses)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(user_id: @user.id)
+    else
+      @tickets_by_user = Ticket.joins(:statuses)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(user_id: @team.users.pluck(:id))
+        .group_by(&:user)
     end
   end
 
