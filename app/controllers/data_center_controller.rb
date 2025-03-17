@@ -95,9 +95,11 @@ class DataCenterController < ApplicationController
   def user_report_view
     if params[:user_id]
       @user = User.find(params[:user_id])
-      @tickets = Ticket.joins(:statuses, :taggings)
+      @tickets_by_user = Ticket.joins(:statuses, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: @user.id })
+        .group_by(&:user)
+      @tickets = @tickets_by_user.values.flatten
     else
       @tickets_by_user = Ticket.joins(:statuses, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
