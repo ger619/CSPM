@@ -99,13 +99,12 @@ class DataCenterController < ApplicationController
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: @user.id })
         .group_by(&:user)
-      @tickets = @tickets_by_user.values.flatten
     else
       @tickets_by_user = Ticket.joins(:statuses, :taggings)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .group_by(&:user)
-      @tickets = @tickets_by_user.values.flatten
     end
+    @tickets = @tickets_by_user.values.flatten
   end
 
   def project_report
