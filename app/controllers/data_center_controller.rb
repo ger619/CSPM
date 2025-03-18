@@ -362,7 +362,7 @@ class DataCenterController < ApplicationController
 
       csv << []
       csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
-              'Due Date', 'Last Comment Updated At']
+              'Content', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name.gsub('–', '-'),
@@ -375,7 +375,9 @@ class DataCenterController < ApplicationController
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.updated_at.strftime('%d-%b-%Y'),
           ticket.subject,
-          ticket.content.to_plain_text.truncate(3000)
+          ticket.content.to_plain_text.truncate(3000),
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+
         ]
       end
     end
@@ -394,7 +396,7 @@ class DataCenterController < ApplicationController
 
       csv << []
       csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Status Updated At', 'Summary',
-              'Content']
+              'Content', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name.gsub('–', '-'),
@@ -407,7 +409,8 @@ class DataCenterController < ApplicationController
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
-          ticket.content.to_plain_text.truncate(3000)
+          ticket.content.to_plain_text.truncate(3000),
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
     end
@@ -456,7 +459,7 @@ class DataCenterController < ApplicationController
 
     workbook.add_worksheet(name: 'Tickets') do |sheet|
       sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
-                     'Last Comment Updated At']
+                     'Last Comment Updated At', 'Due Date']
       tickets.each do |ticket|
         status = ticket.statuses.first&.name || 'N/A'
         row_style = styles[status] || nil
@@ -473,7 +476,9 @@ class DataCenterController < ApplicationController
           ticket.content.to_plain_text.truncate(3000),
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+
         ], style: row_style
       end
     end
@@ -548,7 +553,8 @@ class DataCenterController < ApplicationController
           latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
             &.content
-            &.to_plain_text&.truncate(800) || 'N/A'
+            &.to_plain_text&.truncate(800) || 'N/A',
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
     end

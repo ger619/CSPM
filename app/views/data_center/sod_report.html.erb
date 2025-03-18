@@ -38,7 +38,7 @@
           <th class="border border-black px-4 py-2">Status Updated At</th>
           <th class="border border-black px-4 py-2">Comment Added At</th> <!-- New Column -->
           <th class="border border-black px-4 py-2">Comment</th>
-          <th class="border border-black px-4 py-2">Due Date</th> 
+          <th class="border border-black px-4 py-2">Due Date</th>
         </tr>
       </thead>
       <tbody>
@@ -57,7 +57,7 @@
             <td class="border border-black px-4 py-2">
               <%= Issue.where(ticket_id: ticket.id).order(created_at: :desc).first&.content&.to_plain_text&.truncate(800) || 'N/A' %>
             </td>
-            <td class="border border-black px-4 py-2">N/A</td>
+            <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d-%b-%Y') || 'N/A' %></td>
           </tr>
         <% end %>
       </tbody>
