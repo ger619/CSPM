@@ -30,8 +30,6 @@ Rails.application.routes.draw do
   get 'dashboards/fetch_stats', to: 'dashboards#fetch_stats'
   get 'dashboards/tickets', to: 'dashboards#tickets'
 
-
-
   root "home#index"
   get "home/index"
 
@@ -47,6 +45,8 @@ Rails.application.routes.draw do
         post :assign_tag
         delete :unassign_tag
         post :add_status
+        patch :update_due_date
+        patch :update_priority
       end
       resources :issues
       resources :comments
