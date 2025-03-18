@@ -93,18 +93,15 @@ class DataCenterController < ApplicationController
   end
 
   def user_report_view
-    if params[:user_id]
+    if params[:user_id] && params[:client_name]
       @user = User.find(params[:user_id])
-      @tickets_by_user = Ticket.joins(:statuses, :taggings)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(taggings: { user_id: @user.id })
-        .group_by(&:user)
+      @tickets = @user.tickets.joins(project: :client)
+        .where(clients: { name: params[:client_name] })
     else
-      @tickets_by_user = Ticket.joins(:statuses, :taggings)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .group_by(&:user)
+      @tickets = Ticket.none
+      flash[:alert] = 'Please provide a valid user and client.'
+      render :user_report_view
     end
-    @tickets = @tickets_by_user.values.flatten
   end
 
   def project_report
