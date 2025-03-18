@@ -1,8 +1,8 @@
 require 'csv'
+require 'axlsx'
 
 class DataCenterController < ApplicationController
   before_action :authenticate_user!
-
   def cease_fire_report
     authorize! :generate, :report # Check if the user can generate reports
     if params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
@@ -33,8 +33,8 @@ class DataCenterController < ApplicationController
       respond_to do |format|
         format.html # Default view
         client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
-        filename = "ticket_status_report_#{client_name}_#{Date.today}.csv"
-        format.csv { send_data generate_csv(@tickets), filename: filename }
+        filename = "ticket_status_report_#{client_name}_#{Date.today}.xlsx"
+        format.xlsx { send_data generate_xlsx(@tickets), filename: filename }
       end
     else
       @tickets = Ticket.none
@@ -434,29 +434,51 @@ class DataCenterController < ApplicationController
     end
   end
 
-  def generate_csv(tickets)
-    CSV.generate(headers: true) do |csv|
-      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
-              'Last Comment Updated At']
-      tickets.each do |ticket|
-        csv << [
+  def generate_xlsx(tickets)
+    package = Axlsx::Package.new
+    workbook = package.workbook
 
+    # Define styles for each status
+    styles = {
+      'New' => workbook.styles.add_style(bg_color: 'EF4444'), # Red
+      'Closed' => workbook.styles.add_style(bg_color: '22C55E'), # Green
+      'Resolved' => workbook.styles.add_style(bg_color: '22C55E'), # Green
+      'Reopened' => workbook.styles.add_style(bg_color: '87F1D1D'), # Dark Red with White text
+      'Under Development' => workbook.styles.add_style(bg_color: '93C5FD'), # Light Blue
+      'Work in Progress' => workbook.styles.add_style(bg_color: '6B7280'), # Gray with White text
+      'QA Testing' => workbook.styles.add_style(bg_color: 'EC4899'), # Pink
+      'Awaiting Build' => workbook.styles.add_style(bg_color: '1F2937'), # Dark Slate Gray
+      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: 'A855F7'), # Purple with White text
+      'On-Hold' => workbook.styles.add_style(bg_color: 'FDE047'), # Yellow
+      'Assigned' => workbook.styles.add_style(bg_color: '1E40AF', fg_color: 'FFFFFF'), # Navy with White text
+      'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF') # Dark Slate Gray with White text
+    }
+
+    workbook.add_worksheet(name: 'Tickets') do |sheet|
+      sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
+                     'Last Comment Updated At']
+      tickets.each do |ticket|
+        status = ticket.statuses.first&.name || 'N/A'
+        row_style = styles[status] || nil
+
+        sheet.add_row [
           ticket.unique_id.gsub('–', '-'),
           ticket.project.title,
           ticket.priority,
           ticket.subject,
           ticket.issue,
-          ticket.statuses.first&.name || 'N/A',
+          status,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
           ticket.content.to_plain_text.truncate(3000),
-          ticket.created_at,
+          ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
-
-        ]
+        ], style: row_style
       end
     end
+
+    package.to_stream.read
   end
 
   def generate_breach_details_csv(tickets)
