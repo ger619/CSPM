@@ -74,13 +74,21 @@ class DataCenterController < ApplicationController
   # User activity report for the admin
   def user_report
     authorize! :generate, :report # Check if the user can generate reports
-    if params[:user_id].present?
+    if params[:user_id].present? || params[:start_date].present? || params[:end_date].present?
       @users = User.includes(tickets: { project: :client })
         .where(id: params[:user_id])
 
-      @status_counts = @users.flat_map(&:tickets).group_by { |ticket| ticket.statuses.first&.name || 'N/A' }.transform_values(&:count)
+      start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : nil
+      end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
 
-      @tickets_by_client = @users.flat_map(&:tickets).group_by { |ticket| ticket.project.client.name }
+      @status_counts = @users.flat_map(&:tickets)
+        .select { |ticket| (start_date.nil? || ticket.created_at >= start_date) && (end_date.nil? || ticket.created_at <= end_date) }
+        .group_by { |ticket| ticket.statuses.first&.name || 'N/A' }
+        .transform_values(&:count)
+
+      @tickets_by_client = @users.flat_map(&:tickets)
+        .select { |ticket| (start_date.nil? || ticket.created_at >= start_date) && (end_date.nil? || ticket.created_at <= end_date) }
+        .group_by { |ticket| ticket.project.client.name }
 
       respond_to do |format|
         format.html # Default view
@@ -96,8 +104,13 @@ class DataCenterController < ApplicationController
   def user_report_view
     if params[:user_id] && params[:client_name]
       @user = User.find(params[:user_id])
+      start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : nil
+      end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
+
       @tickets = @user.tickets.joins(project: :client)
         .where(clients: { name: params[:client_name] })
+      @tickets = @tickets.where('tickets.created_at >= ?', start_date) if start_date
+      @tickets = @tickets.where('tickets.created_at <= ?', end_date) if end_date
     else
       @tickets = Ticket.none
       flash[:alert] = 'Please provide a valid user and client.'
