@@ -3,25 +3,25 @@
     <p class="font-bold">
       Time Created:
       <span class="font-extralight">
-        <%= @ticket.created_at.strftime("%I:%M %p at %d %b %Y") %>
+        <%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %>
       </span>
     </p>
     <p class="font-bold">
       Target Response Time:
       <span class="font-extralight">
-        <%= @ticket.initial_response_deadline.strftime("%I:%M %p at %d %b %Y") %>
+        <%= @ticket.initial_response_deadline.strftime("%d %b %Y at %I:%M %p") %>
       </span>
     </p>
     <p class="font-bold">
       Target Repair Time:
       <span class="font-extralight">
-        <%= @ticket.target_repair_deadline.strftime("%I:%M %p at %d %b %Y") %>
+        <%= @ticket.target_repair_deadline.strftime("%d %b %Y at %I:%M %p") %>
       </span>
     </p>
     <p class="font-bold">
       Target Resolution Time:
       <span class="font-extralight">
-        <%= @ticket.resolution_deadline.strftime("%I:%M %p at %d %b %Y") %>
+        <%= @ticket.resolution_deadline.strftime("%d %b %Y at %I:%M %p") %>
       </span>
     </p>
 <!--

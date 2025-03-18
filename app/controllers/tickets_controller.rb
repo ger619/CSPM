@@ -308,13 +308,16 @@ class TicketsController < ApplicationController
   def update_priority
     @ticket = Ticket.find(params[:id])
 
-    if @ticket.update(due_date: params[:ticket][:due_date])
+    if @ticket.update(priority: params[:ticket][:priority])
       respond_to do |format|
         format.js
-        format.html { redirect_to @ticket, notice: 'Priority updated successfully.' }
+        format.html { redirect_to project_ticket_path(@ticket.project, @ticket), notice: 'Priority updated successfully.' }
       end
     else
-      render :edit
+      respond_to do |format|
+        format.js
+        format.html { render :edit, alert: 'Failed to update priority.' }
+      end
     end
   end
 
