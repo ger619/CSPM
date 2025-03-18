@@ -72,6 +72,8 @@
                           ["Pending", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
                         ] %>
         </div>
+
+
       </div>
     </div>
   </div>
