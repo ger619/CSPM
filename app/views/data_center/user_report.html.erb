@@ -39,7 +39,9 @@
 <% if @users.any? %>
   <div class="flex justify-between gap-2">
     <div class="mb-4 px-4 sm:px-6 lg:px-8 py-8">
-      <h2 class="text-xl font-bold mb-4 text-center">User Breach Report</h2>
+      <h2 class="text-xl font-bold mb-4 text-center">
+        User Report for <%= @users.first.name %> from <%= params[:start_date] %> to <%= params[:end_date] %>
+      </h2>
       <div class="grid grid-cols-5">
         <div class="mb-4 px-4 sm:px-6 lg:px-8 py-8 col-span-4">
           <h2 class="text-xl font-bold mb-4 text-center">Ticket Status Summary</h2>
@@ -70,6 +72,8 @@
                           ["Pending", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
                         ] %>
         </div>
+
+
       </div>
     </div>
   </div>
