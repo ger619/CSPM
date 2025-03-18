@@ -321,6 +321,22 @@ class TicketsController < ApplicationController
     end
   end
 
+  def update_issue_type
+    @ticket = Ticket.find(params[:id])
+
+    if @ticket.update(issue: params[:ticket][:issue])
+      respond_to do |format|
+        format.js
+        format.html { redirect_to project_ticket_path(@ticket.project, @ticket), notice: 'Issue type updated successfully.' }
+      end
+    else
+      respond_to do |format|
+        format.js
+        format.html { render :edit, alert: 'Failed to update issue type.' }
+      end
+    end
+  end
+
   private
 
   def set_project

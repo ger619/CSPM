@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         post :add_status
         patch :update_due_date
         patch :update_priority
+        patch :update_issue_type
       end
       resources :issues
       resources :comments
