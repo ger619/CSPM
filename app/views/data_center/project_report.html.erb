@@ -53,7 +53,8 @@
       </tr>
       </thead>
       <tbody>
-      <% @team_members.each do |user| %>
+      <% sorted_team_members = @team_members.sort_by { |user| -(@organized_tickets[user.id]&.dig(:total) || 0) } %>
+      <% sorted_team_members.each do |user| %>
         <% ticket_data = @organized_tickets[user.id] || {} %>
         <tr>
           <td class="border border-gray-300 px-4 py-2"><%= user.name %></td>
@@ -68,6 +69,7 @@
           <td class="border border-gray-300 px-4 py-2 font-bold">
             <%= link_to "View All", assigned_tickets_path(team_id: @team.id, user_id: user.id), class: 'bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
           </td>
+        </tr>
       <% end %>
       </tbody>
     </table>
