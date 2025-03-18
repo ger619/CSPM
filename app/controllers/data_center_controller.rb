@@ -74,11 +74,12 @@ class DataCenterController < ApplicationController
   def user_report
     authorize! :generate, :report # Check if the user can generate reports
     if params[:user_id].present?
-
-      @users = User.includes(tickets: :project)
+      @users = User.includes(tickets: { project: :client })
         .where(id: params[:user_id])
 
       @status_counts = @users.flat_map(&:tickets).group_by { |ticket| ticket.statuses.first&.name || 'N/A' }.transform_values(&:count)
+
+      @tickets_by_client = @users.flat_map(&:tickets).group_by { |ticket| ticket.project.client.name }
 
       respond_to do |format|
         format.html # Default view
@@ -89,6 +90,21 @@ class DataCenterController < ApplicationController
       flash[:alert] = 'Please provide a valid date range.'
       render :user_report
     end
+  end
+
+  def user_report_view
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @tickets_by_user = Ticket.joins(:statuses, :taggings)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(taggings: { user_id: @user.id })
+        .group_by(&:user)
+    else
+      @tickets_by_user = Ticket.joins(:statuses, :taggings)
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .group_by(&:user)
+    end
+    @tickets = @tickets_by_user.values.flatten
   end
 
   def project_report
@@ -335,7 +351,7 @@ class DataCenterController < ApplicationController
 
       csv << []
       csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
-              'Content']
+              'Due Date', 'Last Comment Updated At']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name.gsub('–', '-'),

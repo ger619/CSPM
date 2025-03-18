@@ -29,36 +29,44 @@
 </div>
 
 <% if @users.any? %>
-  <div class=" flex justify-center gap-2 container">
+  <div class="flex justify-between gap-2">
     <div class="mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-xl font-bold mb-4 text-center">User Breach Report</h2>
-    <%= pie_chart [
-                  ["Met Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Not Breached" } }],
-                  ["Missed Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Breached" } }],
-                  ["Pending", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
-                ] %>
-    </div>
-<div>
-  <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-xl font-bold mb-4 text-center">Ticket Status Summary</h2>
-    <div class="grid grid-cols-3">
-      <div class="col-span-2">
-        <%= pie_chart @status_counts, height: "300px", library: { title: { text: "Ticket Status Distribution" } } %>
+      <h2 class="text-xl font-bold mb-4 text-center">User Breach Report</h2>
+      <div class="grid grid-cols-5">
+        <div class="mb-4 px-4 sm:px-6 lg:px-8 py-8 col-span-4">
+          <h2 class="text-xl font-bold mb-4 text-center">Ticket Status Summary</h2>
+          <div class="grid grid-cols-4">
+            <div class="col-span-3">
+              <%= column_chart @status_counts, height: "300px", library: {
+                title: { text: "Ticket Status Distribution" },
+                plotOptions: {
+                  series: {
+                    colors: @status_counts.keys.map { |status| status == "Closed" ? "black" : nil }
+                  }
+                }
+              } %>
+            </div>
+            <div class="col-span-1 ml-4">
+              <ul>
+                <% @status_counts.each do |status, count| %>
+                  <li><%= status %>: <%= count %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-1">
+          <%= pie_chart [
+                          ["Met Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Not Breached" } }],
+                          ["Missed Deadline", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline == "Breached" } }],
+                          ["Pending", @users.sum { |user| user.tickets.count { |ticket| SlaTicket.find_by(ticket_id: ticket.id)&.sla_target_response_deadline.nil? } }]
+                        ] %>
+        </div>
       </div>
-
-      <div class="col-span-1">
-        <ul>
-          <% @status_counts.each do |status, count| %>
-            <li><%= status %>: <%= count %></li>
-          <% end %>
-        </ul>
-      </div>
     </div>
+  </div>
 
-  </div>
-  </div>
-  </div>
-  <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end">
       <%= link_to "Download CSV",
                   user_report_path(format: :csv, start_date: params[:start_date], end_date: params[:end_date], user_id: params[:user_id]),
@@ -67,41 +75,28 @@
     <table id="user_report" class="table-auto w-full">
       <thead>
       <tr>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">User Name</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">Project Name</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">Ticket ID</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">Ticket Subject</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">Ticket Status</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">SLA Target Response Deadline</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">SLA Target Resolution Deadline</th>
-        <th class="border border-black dark:border-slate-100 px-4 py-2">Created At</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Client Name</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">Number of Tickets</th>
+        <th class="border border-black dark:border-slate-100 px-4 py-2">View Tickets</th>
       </tr>
       </thead>
       <tbody>
-      <% @users.each do |user| %>
-        <% user.tickets.each do |ticket| %>
-          <% sla_ticket = SlaTicket.find_by(ticket_id: ticket.id) %>
-          <tr>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= user.name %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.project.title %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.subject %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= sla_ticket&.sla_target_response_deadline || "N/A" %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= sla_ticket&.sla_resolution_deadline || "N/A" %></td>
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at %></td>
-
-          </tr>
-        <% end %>
+      <% @tickets_by_client.each do |client_name, tickets| %>
+        <tr>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= client_name %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= tickets.count %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2">
+            <%= link_to "View Tickets", user_report_view_path(client_name: client_name), class: 'bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
+          </td>
+        </tr>
       <% end %>
       </tbody>
     </table>
   </div>
-
 <% end %>
 
 <script>
-   function showDropdown() {
+  function showDropdown() {
     document.getElementById("userDropdown").classList.remove("hidden");
   }
 
