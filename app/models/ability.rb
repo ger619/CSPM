@@ -38,6 +38,7 @@ class Ability
       can %i[create read assign_tag unassign_tag update_status add_status], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
+      can :update_due_date, Ticket
       cannot %i[create delete edit], Product
       cannot %i[create delete edit], Board
       can :read, Product

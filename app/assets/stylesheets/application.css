@@ -199,3 +199,22 @@
 #ticketModal .max-height-60vh {
   overflow-y: auto;
 }
+
+/* Custom Scrollbar Styling */
+#sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+
+#sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.7);
+}
