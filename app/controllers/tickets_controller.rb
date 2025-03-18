@@ -290,6 +290,34 @@ class TicketsController < ApplicationController
     end
   end
 
+  def update_due_date
+    @ticket = Ticket.find(params[:id])
+    if @ticket.update(due_date: params[:ticket][:due_date])
+      respond_to do |format|
+        format.js # To update via AJAX
+        format.html { redirect_back fallback_location: project_ticket_path(@project, @ticket), notice: 'Due date updated successfully.' }
+      end
+    else
+      respond_to do |format|
+        format.js # To handle errors via AJAX
+        format.html { render :edit, alert: 'Failed to update due date.' }
+      end
+    end
+  end
+
+  def update_priority
+    @ticket = Ticket.find(params[:id])
+
+    if @ticket.update(due_date: params[:ticket][:due_date])
+      respond_to do |format|
+        format.js
+        format.html { redirect_to @ticket, notice: 'Priority updated successfully.' }
+      end
+    else
+      render :edit
+    end
+  end
+
   private
 
   def set_project
