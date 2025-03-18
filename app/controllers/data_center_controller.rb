@@ -440,18 +440,18 @@ class DataCenterController < ApplicationController
 
     # Define styles for each status
     styles = {
-      'New' => workbook.styles.add_style(bg_color: 'FF0000'), # Red
-      'Closed' => workbook.styles.add_style(bg_color: '00FF00'), # Green
-      'Resolved' => workbook.styles.add_style(bg_color: '00FF00'), # Green
-      'Reopened' => workbook.styles.add_style(bg_color: '8B0000', fg_color: 'FFFFFF'), # Dark Red with White text
-      'Under Development' => workbook.styles.add_style(bg_color: 'ADD8E6'), # Light Blue
-      'Work in Progress' => workbook.styles.add_style(bg_color: '808080', fg_color: 'FFFFFF'), # Gray with White text
-      'QA Testing' => workbook.styles.add_style(bg_color: 'FFC0CB'), # Pink
-      'Awaiting Build' => workbook.styles.add_style(bg_color: '2F4F4F', fg_color: 'FFFFFF'), # Dark Slate Gray with White text
-      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: '800080', fg_color: 'FFFFFF'), # Purple with White text
-      'On-Hold' => workbook.styles.add_style(bg_color: 'FFFF00'), # Yellow
-      'Assigned' => workbook.styles.add_style(bg_color: '000080', fg_color: 'FFFFFF'), # Navy with White text
-      'Declined' => workbook.styles.add_style(bg_color: '2F4F4F', fg_color: 'FFFFFF') # Dark Slate Gray with White text
+      'New' => workbook.styles.add_style(bg_color: 'EF4444'), # Red
+      'Closed' => workbook.styles.add_style(bg_color: '22C55E'), # Green
+      'Resolved' => workbook.styles.add_style(bg_color: '22C55E'), # Green
+      'Reopened' => workbook.styles.add_style(bg_color: '87F1D1D'), # Dark Red with White text
+      'Under Development' => workbook.styles.add_style(bg_color: '93C5FD'), # Light Blue
+      'Work in Progress' => workbook.styles.add_style(bg_color: '6B7280'), # Gray with White text
+      'QA Testing' => workbook.styles.add_style(bg_color: 'EC4899'), # Pink
+      'Awaiting Build' => workbook.styles.add_style(bg_color: '1F2937'), # Dark Slate Gray
+      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: 'A855F7'), # Purple with White text
+      'On-Hold' => workbook.styles.add_style(bg_color: 'FDE047'), # Yellow
+      'Assigned' => workbook.styles.add_style(bg_color: '1E40AF', fg_color: 'FFFFFF'), # Navy with White text
+      'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF') # Dark Slate Gray with White text
     }
 
     workbook.add_worksheet(name: 'Tickets') do |sheet|
