@@ -60,12 +60,12 @@ class ProjectController < ApplicationController
       @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
       @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
       order_direction = params[:order] == 'asc' ? 'ASC' : 'DESC'
-      @ticket = @ticket.joins(:add_statuses).order("add_statuses.updated_at #{order_direction}")
+      @ticket = @ticket.joins(:add_statuses).order("add_statuses.updated_at #{order_direction}") if params[:order].present?
       if params[:query].present?
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
           'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
-        OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
+      OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
           query, query, query, query, query, query, query, query
         )
       end
@@ -86,9 +86,7 @@ class ProjectController < ApplicationController
                  end
 
       # ✅ Order by descending creation date
-      # ✅ Order by descending creation date
-      @ticket = @ticket.order('tickets.created_at DESC')
-      # @ticket = @ticket.joins(:add_statuses).order('add_statuses.updated_at DESC')
+      @ticket = @ticket.order(created_at: :desc)
 
       # ✅ Pagination (Fix offset calculation)
       @per_page = 10
@@ -105,23 +103,6 @@ class ProjectController < ApplicationController
         .where(statuses: { name: %w[Closed Resolved] })
         .count
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
-    else
-      redirect_to root_path, alert: 'You are not authorized to view this content.'
-    end
-  end
-
-  def change_order
-    @project = Project.find(params[:id])
-    if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
-      @ticket = @project.tickets.joins(:add_statuses).order('add_statuses.updated_at DESC')
-
-      # Pagination (Fix offset calculation)
-      @per_page = 10
-      @page = params[:page].to_i.positive? ? params[:page].to_i : 1
-      @total_pages = (@ticket.count / @per_page.to_f).ceil
-      @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
-
-      render :show
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
