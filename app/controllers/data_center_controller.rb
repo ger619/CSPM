@@ -552,8 +552,7 @@ class DataCenterController < ApplicationController
           ticket.updated_at.strftime('%d-%b-%Y'),
           latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
-            &.content
-            &.to_plain_text&.truncate(800) || 'N/A',
+            &.content&.to_plain_text&.truncate(800)&.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')&.gsub(/[^\p{Print}]/, '') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
