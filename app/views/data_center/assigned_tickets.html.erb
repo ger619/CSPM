@@ -5,6 +5,7 @@
       <thead>
       <tr>
         <th scope="col" class="border border-gray-300 px-4 py-2">Date of Creation</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Name of the Project</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Ticket ID</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Issue</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Priority</th>
@@ -22,6 +23,9 @@
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
+            </th>
+            <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white capitalize">
+              <%= link_to ticket.project.title, project_ticket_path(ticket.project, ticket) if ticket.unique_id.present? %>
             </th>
             <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
               <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) if ticket.unique_id.present? %>
