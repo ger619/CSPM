@@ -534,7 +534,7 @@ class DataCenterController < ApplicationController
   end
 
   def generate_start_of_day_csv(tickets)
-    CSV.generate(headers: true) do |csv|
+    CSV.generate(bom: "\uFEFF", headers: true) do |csv|
       csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated',
               'Status Updated At', 'Comment Added At', 'Content', 'Due Date']
       tickets.each do |ticket|
@@ -553,8 +553,8 @@ class DataCenterController < ApplicationController
           latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
             &.content&.to_plain_text&.truncate(800)
-            &.encode('UTF-8', 'ISO-8859-1', invalid: :replace, undef: :replace, replace: '')
-            &.gsub("\u00A0", ' ') # Replaces non-breaking spaces with normal spaces
+            &.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+            &.gsub("\u00A0", ' ') # Replace non-breaking spaces
             &.gsub(/[^\p{Print}]/, '') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
