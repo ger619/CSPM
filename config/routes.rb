@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboards#index'
   get 'dashboards/fetch_stats', to: 'dashboards#fetch_stats'
   get 'dashboards/tickets', to: 'dashboards#tickets'
+  get 'projects/:id/change_order', to: 'project#change_order', as: 'change_order'
 
   root "home#index"
   get "home/index"
