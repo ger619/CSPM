@@ -534,9 +534,12 @@ class DataCenterController < ApplicationController
   end
 
   def generate_start_of_day_csv(tickets)
-    CSV.generate(bom: "\uFEFF", headers: true) do |csv|
+    bom = "\uFEFF" # Add BOM to ensure UTF-8 compatibility in Excel
+
+    csv_data = CSV.generate(headers: true) do |csv|
       csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated',
               'Status Updated At', 'Comment Added At', 'Content', 'Due Date']
+
       tickets.each do |ticket|
         latest_issue = Issue.where(ticket_id: ticket.id).order(updated_at: :desc).first
         csv << [
@@ -560,5 +563,7 @@ class DataCenterController < ApplicationController
         ]
       end
     end
+
+    bom + csv_data # Prepend BOM to the CSV output
   end
 end
