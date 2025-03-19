@@ -66,7 +66,9 @@
                           <img src="<%= attachment.attachable.url %>" alt="Remote Image" class="max-w-xs cursor-pointer pl-2">
                         </a>
                         <br>
-                        <%= link_to attachment.filename.to_s, attachment.attachable.url, target: "_blank", download: true, class: "text-blue-600 hover:underline pl-2" %>
+                        <% if attachment.attachable.is_a?(ActiveStorage::Blob) %>
+                          <%= link_to attachment.attachable.filename.to_s, rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), target: "_blank", download: true, class: "text-blue-600 hover:underline pl-2" %>
+                        <% end %>
                       <% elsif attachment.attachable.is_a?(ActiveStorage::Blob) %>
                         <% if attachment.attachable.previewable? %>
                           <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>

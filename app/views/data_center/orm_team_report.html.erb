@@ -87,6 +87,7 @@
         <th class="border border-black px-4 py-2">updated at</th>
         <th class="border border-black px-4 py-2">Summary</th>
         <th class="border border-black px-4 py-2">Content</th>
+        <th class="border border-black px-4 py-2">Due Date</th>
       </tr>
       </thead>
       <tbody>
@@ -132,6 +133,7 @@
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A' %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.subject %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.content.to_plain_text.truncate(3000) %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.due_date&.strftime("%d-%b-%Y") || 'N/A' %></td>
         </tr>
       <% end %>
       </tbody>
