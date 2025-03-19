@@ -59,7 +59,8 @@ class ProjectController < ApplicationController
       @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
       @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
       @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
-
+      order_direction = params[:order] == 'asc' ? 'ASC' : 'DESC'
+      @ticket = @ticket.joins(:add_statuses).order("add_statuses.updated_at #{order_direction}")
       if params[:query].present?
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
