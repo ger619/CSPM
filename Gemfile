@@ -75,6 +75,7 @@ end
 
 # gems to be used
 gem 'active_storage_validations'
+gem 'axlsx'
 gem 'cancancan', '~> 3.5'
 gem 'capistrano'
 gem 'capistrano-passenger'
