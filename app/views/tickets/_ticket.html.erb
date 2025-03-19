@@ -35,6 +35,9 @@
       <th scope="col" class="px-2 ">
         VIEW
       </th>
+      <th scope="col" class="px-2 ">
+        Status Updated At
+      </th>
 
         <th scope="col" class="px-2 ">
           EDIT
@@ -43,6 +46,7 @@
       <th scope="col" class="px-2">
         DELETE
       </th>
+
 
       <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
         <th scope="col" class="px-2 hide-on-sidebar">
@@ -199,6 +203,9 @@
         </td>
         <td class="px-2 py-2">
           <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
+        </td>
+        <td class="px-2 py-2">
+          <%= ticket.add_statuses.first.updated_at.strftime('%d-%b-%Y %H:%M:%S') %>
         </td>
 
         <td class="px-2 py-2">
