@@ -64,7 +64,7 @@ class ProjectController < ApplicationController
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
           'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
-     OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
+        OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
           query, query, query, query, query, query, query, query
         )
       end
@@ -85,7 +85,8 @@ class ProjectController < ApplicationController
                  end
 
       # ✅ Order by descending creation date
-      @ticket = @ticket.order(created_at: :desc)
+      # ✅ Order by descending creation date
+      @ticket = @ticket.joins(:add_statuses).order('add_statuses.updated_at DESC')
 
       # ✅ Pagination (Fix offset calculation)
       @per_page = 10
