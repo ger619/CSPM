@@ -265,6 +265,7 @@ class TicketsController < ApplicationController
       @ticket.users.each do |ticket_user|
         UserMailer.status_update_email(ticket_user, @ticket, current_user).deliver_later
       end
+      UserMailer.status_update_email(@ticket.user, @ticket, current_user).deliver_later unless @ticket.users.include?(@ticket.user)
     end
 
     if status.name == 'Reopened'
