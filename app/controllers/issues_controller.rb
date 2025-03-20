@@ -33,6 +33,15 @@ class IssuesController < ApplicationController
       if @issue.save
         notify_mentioned_users(@issue)
         current_user.add_role :creator, @issue
+
+        if @issue.message_type == 'external'
+          recipients = @ticket.users.to_a
+          recipients << @ticket.user unless recipients.include?(@ticket.user)
+          recipients.each do |recipient|
+            UserMailer.issue_created_email(recipient, @issue, @project, @ticket).deliver_later
+          end
+        end
+
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
       else
         format.html { render :new, alert: 'Issue was not created.' }

@@ -94,4 +94,13 @@ class UserMailer < ApplicationMailer
     @url = product_bug_url(@bug.product, @bug)
     mail(to: @user.email, subject: 'Bug Assignment')
   end
+
+  def issue_created_email(user, issue, project, ticket)
+    @user = user
+    @issue = issue
+    @project = project
+    @ticket = ticket
+    @url = project_ticket_url(@issue.project, @issue.ticket)
+    mail(to: @user.email, subject: "New Messsage Created for Ticket ID #{@issue.ticket.unique_id}")
+  end
 end
