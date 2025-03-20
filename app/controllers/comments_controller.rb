@@ -19,6 +19,7 @@ class CommentsController < ApplicationController
       if @comment.save
         # Send email to the selected users
         selected_users = User.where(id: comment_params[:user_ids])
+        selected_users << current_user unless selected_users.include?(current_user)
         selected_users.each do |comment_user|
           UserMailer.new_comment_email(comment_user, @comment, current_user, @project, @ticket).deliver_later
         end
