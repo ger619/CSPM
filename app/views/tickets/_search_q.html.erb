@@ -4,7 +4,7 @@
 
       <div class="flex flex-col">
         <%= label_tag :order, 'Last Updated At' %>
-        <%= f.select :order, options_for_select([%w[Ascending asc], %w[Descending desc]], params[:order]),
+        <%= f.select :order, options_for_select([%w[Oldest asc], %w[Latest desc]], params[:order]),
                        { include_blank: 'Select Order' },
                        prompt: 'Select Order',
                        class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
