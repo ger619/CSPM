@@ -88,11 +88,16 @@ class ProjectController < ApplicationController
       # ✅ Order by descending creation date
       @ticket = @ticket.order(created_at: :desc)
 
+      # Store the count of the filtered tickets
+      @ticket_count = @ticket.count
+
       # ✅ Pagination (Fix offset calculation)
       @per_page = 10
       @page = params[:page].to_i.positive? ? params[:page].to_i : 1
       @total_pages = (@ticket.count / @per_page.to_f).ceil
       @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
+      #@ticket = @project.tickets.page(@page).per(10) # Adjust the per page value as needed
+      #@total_pages = @ticket.total_pages
 
       # ✅ Ticket counts
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
