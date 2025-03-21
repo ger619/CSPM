@@ -6,14 +6,15 @@
 <body>
 <h1>Hello, <%= @user.name %></h1>
 
-<p><strong>Ticket ID:</strong> <%= @ticket.unique_id %></p>
 
-<p>The status of the ticket "<%= @ticket.issue %>" has been updated to:
+<p>
+  The status of the ticket  <%= @ticket.unique_id %> has been updated to:
   <% @ticket.statuses.each do |status| %>
     <%= status.name %>
   <% end %>
   by <%= @current_user.name %>.
 </p>
+
 
 <p><strong>Ticket Description:</strong> <%= @ticket.content %></p>
 

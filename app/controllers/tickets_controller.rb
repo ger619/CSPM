@@ -122,7 +122,7 @@ class TicketsController < ApplicationController
 
         assigned_user = @project.user
         if assigned_user.present?
-          UserMailer.create_ticket_email(@ticket, current_user, assigned_user).deliver_later
+          UserMailer.create_ticket_email(@ticket, current_user, assigned_user, @project).deliver_later
         else
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end

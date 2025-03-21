@@ -18,10 +18,11 @@ class UserMailer < ApplicationMailer
   end
   # From Ticket Controller create
 
-  def create_ticket_email(ticket, current_user, assigned_user)
+  def create_ticket_email(ticket, current_user, assigned_user, project)
     @ticket = ticket
     @current_user = current_user
     @assigned_user = assigned_user
+    @project = project
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @assigned_user.email, subject: "A new ticket has been created with Ticket ID #{@ticket.unique_id}.")
   end
