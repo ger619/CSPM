@@ -15,6 +15,7 @@
       <% end %>
     </div>
   </div>
+  <% unless current_user.has_role?(:client) %>
   <div class="mb-2">
     <%= f.label :user_ids, 'Notify Users', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
   </div>
@@ -47,7 +48,7 @@
     </div>
   </div>
 
-  <% unless current_user.has_role?(:client) %>
+  
     <div class="mb-4">
       <%= f.label :message_type, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
       <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
