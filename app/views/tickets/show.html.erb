@@ -152,9 +152,9 @@
       </div>
     </div>
     <div class="w-full col-span-1 h-full  place-content-center w-full">
-      <% unless @ticket.statuses.first&.name == 'Closed' %>
-      <%= render 'tickets/ticket_action' %>
-        <% end %>
+      <% unless @ticket.statuses.first&.name == 'Closed' && !current_user.has_role?(:admin) %>
+        <%= render 'tickets/ticket_action' %>
+      <% end %>
     </div>
   </div>
   <% @ticket.statuses.each do |status| %>
