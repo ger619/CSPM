@@ -104,7 +104,7 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: "New Messsage Created for Ticket ID #{@issue.ticket.unique_id}")
   end
 
-  def comment_added(user, issue, sender, project, ticket)
+  def mention_user_in_issue(user, issue, sender, project, ticket)
     @user = user
     @issue = issue
     @sender = sender # This is the current_user passed from the controller

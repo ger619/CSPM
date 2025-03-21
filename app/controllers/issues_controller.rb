@@ -31,8 +31,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
-        send_email_notifications(@issue, current_user) # Pass current_user here
-        notify_mentioned_users(@issue)
+        send_email_notifications(@issue, current_user)
         current_user.add_role :creator, @issue
 
         if @issue.message_type == 'external'
@@ -68,13 +67,6 @@ class IssuesController < ApplicationController
 
   private
 
-  def notify_mentioned_users(comment)
-    mentioned_users = extract_mentioned_users(comment.content)
-    mentioned_users.each do |user|
-      UserMailer.mention_notification(user, comment).deliver_later
-    end
-  end
-
   def extract_mentioned_users(content)
     usernames = content.to_plain_text.scan(/@([\w\s]+)/).flatten # Convert to plain text
     User.where("CONCAT(first_name, ' ', last_name) IN (?)", usernames)
@@ -96,7 +88,7 @@ class IssuesController < ApplicationController
     selected_users = User.where(id: params.dig(:team, :user_ids)) # Safely fetch user IDs
 
     selected_users.each do |user|
-      UserMailer.comment_added(user, issue, sender, @project, @ticket).deliver_later
+      UserMailer.mention_user_in_issue(user, issue, sender, @project, @ticket).deliver_later
     end
   end
 
