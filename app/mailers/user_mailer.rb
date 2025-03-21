@@ -103,4 +103,18 @@ class UserMailer < ApplicationMailer
     @url = project_ticket_url(@issue.project, @issue.ticket)
     mail(to: @user.email, subject: "New Messsage Created for Ticket ID #{@issue.ticket.unique_id}")
   end
+
+  def comment_added(user, issue, sender, project, ticket)
+    @user = user
+    @issue = issue
+    @sender = sender # This is the current_user passed from the controller
+    @project = project
+    @ticket = ticket
+    @url = project_ticket_url(@project, @ticket) # Generate the URL for the ticket
+
+    mail(
+      to: @user.email,
+      subject: "New Comment on Ticket ##{@ticket.unique_id} With Subject #{@ticket.subject}"
+    )
+  end
 end
