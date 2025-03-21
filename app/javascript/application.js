@@ -9,5 +9,3 @@ import '@rails/actiontext';
 //= require_tree .
 //= require 'chartkick'
 //= require 'chart.js'
-import "trix"
-import "@rails/actiontext"

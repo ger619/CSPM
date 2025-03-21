@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+<h1>Hello, <%= @user.name %></h1>,
+
+<p><strong><%= @sender.name %></strong> added a new comment on <%= @issue.created_at.in_time_zone(Time.zone).strftime('%-d %B %Y at %I.%M %P (%Z)') %></p>
+
+<p><strong> Service Desk <%= @project.title %></p>
+
+<p><strong>Issue:</strong> <%= @ticket.unique_id %></p>
+
+
+<blockquote>
+  <%= @issue.content %>
+</blockquote>
+
+
+
+<p>Click <a href="<%= @url %>">here</a> to view the comment.</p>
+
+<p>Best regards,</p>
+<%= @sender.name %>
+</body>
+</html>
