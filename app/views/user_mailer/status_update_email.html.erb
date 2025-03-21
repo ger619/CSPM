@@ -15,8 +15,14 @@
   by <%= @current_user.name %>.
 </p>
 
-
-<p><strong>Ticket Description:</strong> <%= @ticket.content %></p>
+<p><strong>Ticket Details:</strong></p>
+<ul>
+  <li><strong>Service Desk:</strong> <%= @project.title %></li>
+  <li><strong>Ticket ID:</strong> <%= @ticket.unique_id %></li>
+  <li><strong>Priority:</strong> <%= @ticket.priority %></li>
+  <li><strong>Subject:</strong> <%= @ticket.subject %></li>
+  <li><strong>Description:</strong> <%= @ticket.content.to_plain_text.truncate(3000) %></li>
+</ul>
 
 <p>Click <a href="<%= @url %>">here</a> to view the ticket.</p>
 

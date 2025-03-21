@@ -40,10 +40,11 @@ class UserMailer < ApplicationMailer
 
   # From Ticket Controller
 
-  def status_update_email(user, ticket, current_user)
+  def status_update_email(user, ticket, current_user, project)
     @user = user
     @ticket = ticket
     @current_user = current_user
+    @project = project
     @url = project_ticket_url(@ticket.project, @ticket)
     mail(to: @user.email, subject: "Status update for Ticket ID #{@ticket.unique_id}.")
   end
