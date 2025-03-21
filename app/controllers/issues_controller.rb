@@ -31,6 +31,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
+        send_email_notifications(@issue, current_user) # Pass current_user here
         notify_mentioned_users(@issue)
         current_user.add_role :creator, @issue
 
@@ -89,6 +90,14 @@ class IssuesController < ApplicationController
 
   def set_issue
     @issue = @ticket.issues.find(params[:id])
+  end
+
+  def send_email_notifications(issue, sender)
+    selected_users = User.where(id: params.dig(:team, :user_ids)) # Safely fetch user IDs
+
+    selected_users.each do |user|
+      UserMailer.comment_added(user, issue, sender, @project, @ticket).deliver_later
+    end
   end
 
   # Permit content and attachments to be handled in the params
