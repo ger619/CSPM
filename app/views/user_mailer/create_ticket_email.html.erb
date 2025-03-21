@@ -6,7 +6,6 @@
 <ul>
   <li><strong>Service Desk:</strong> <%= @project.title %></li>
   <li><strong>Ticket ID:</strong> <%= @ticket.unique_id %></li>
-  <li><strong>Ticket ID:</strong> <%= @ticket.unique_id %></li>
   <li><strong>Priority:</strong> <%= @ticket.priority %></li>
   <li><strong>Subject:</strong> <%= @ticket.subject %></li>
   <li><strong>Description:</strong> <%= @ticket.content.to_plain_text.truncate(3000) %></li>
