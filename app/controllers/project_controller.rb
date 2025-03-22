@@ -18,7 +18,7 @@ class ProjectController < ApplicationController
                query: "%#{formatted_query}%")
         .distinct
     else
-      @project = Project.all.with_rich_text_content.order('projects.created_at ASC')
+      @project = Project.all.with_rich_text_content.order('projects.title ASC')
     end
 
     @project = @project.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
