@@ -146,6 +146,7 @@ class DataCenterController < ApplicationController
       # Prepare data for the pie chart
       @tickets_chart_data = @organized_tickets.transform_keys { |id| User.find(id).name }
       @tickets_chart_data = @tickets_chart_data.transform_values { |data| data[:total] }
+      @tickets_per_project = @tickets.group('projects.title').count
 
       respond_to do |format|
         format.html # Default view
@@ -165,13 +166,15 @@ class DataCenterController < ApplicationController
     @team = Team.find(params[:team_id])
     if params[:user_id]
       @user = User.find(params[:user_id])
-      @tickets = Ticket.joins(:statuses, :taggings)
+      @tickets = Ticket.joins(:statuses, :taggings, :project)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: @user.id })
+        .order('projects.title')
     else
-      @tickets_by_user = Ticket.joins(:statuses, :taggings)
+      @tickets_by_user = Ticket.joins(:statuses, :taggings, :project)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: @team.users.pluck(:id) })
+        .order('projects.title')
         .group_by(&:user)
     end
   end
