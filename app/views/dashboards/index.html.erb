@@ -268,10 +268,13 @@
 
         document.getElementById("resolutionTimeChartAssignee").innerHTML = "";
         if (data.breached_resolution_tickets_per_project) {
-          let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_project).map(([name, count]) => {
-            let formattedName = String(name).replace(/[\[\]"]/g, '');
-            return [`${formattedName} (${count} ticket(s))`, count];
-          });
+          let assigneeResolutionData = Object.entries(data.breached_resolution_tickets_per_project)
+            .map(([name, count]) => {
+              let formattedName = String(name).replace(/[\[\]"]/g, '');
+              return [`${formattedName} (${count} ticket(s))`, count];
+            })
+            .sort((a, b) => b[1] - a[1]); // Sort by count in descending order
+
           new Chartkick.PieChart("resolutionTimeChartAssignee", assigneeResolutionData, {
             legend: "right"
           });
@@ -279,10 +282,13 @@
 
         document.getElementById("resolutionResolvedTimeChartAssignee").innerHTML = "";
         if (data.breached_resolution_resolved_tickets_per_project) {
-          let assigneeResolvedData = Object.entries(data.breached_resolution_resolved_tickets_per_project).map(([name, count]) => {
-            let formattedName = String(name).replace(/[\[\]"]/g, '');
-            return [`${formattedName} (${count} ticket(s))`, count];
-          });
+          let assigneeResolvedData = Object.entries(data.breached_resolution_resolved_tickets_per_project)
+            .map(([name, count]) => {
+              let formattedName = String(name).replace(/[\[\]"]/g, '');
+              return [`${formattedName} (${count} ticket(s))`, count];
+            })
+            .sort((a, b) => b[1] - a[1]); // Sort by count in descending order
+
           new Chartkick.PieChart("resolutionResolvedTimeChartAssignee", assigneeResolvedData, {
             legend: "right"
           });
