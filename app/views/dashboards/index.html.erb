@@ -37,7 +37,7 @@
     </a>
     <a href="#" class="stat-card-link" data-type="target_resolution_time_not_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_not_breached')">
       <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: @stats[:not_resolution_breached_tickets_last_30_days], id: "target_resolution_time_not_breached", class: 'col-span-1'  %>
-    </a>    
+    </a>
       <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
           <a href="#" class="stat-card-link" data-type="total_tickets_last_30_days" onclick="fetchTicketDetails('<%= @selected_team %>', 'total_tickets_last_30_days')">
             <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days"%>
@@ -154,7 +154,7 @@
                 </tr>
               </thead>
               <tbody id="ticketDetails" class="max-h-9/10">
-                
+
               </tbody>
             </table>
         </div>
@@ -213,7 +213,7 @@
   }
 
   function fetchStats(teamName) {
-    
+
     fetch(`/dashboards/fetch_stats?team_name=${teamName}`)
       .then(response => response.json())
       .then(data => {
@@ -239,21 +239,28 @@
         ], { colors: ["#ff0000", "#36a2eb"] });
 
         // Generate Assignee Breached Tickets Pie Chart
+        // Generate Assignee Breached Tickets Pie Chart
         document.getElementById("breachedTicketsAssigneeChart").innerHTML = "";
-        let assigneeData = Object.entries(data.breached_tickets_per_assignee).map(([name, count]) => {
-          let formattedName = String(name).replace(/[\[\]"]/g, ''); // Remove brackets and quotes
-          return [`${formattedName} (${count})`, count];
-        });
+        let assigneeData = Object.entries(data.breached_tickets_per_assignee)
+          .map(([name, count]) => {
+            let formattedName = String(name).replace(/[\[\]"]/g, ''); // Remove brackets and quotes
+            return [`${formattedName} (${count})`, count];
+          })
+          .sort((a, b) => b[1] - a[1]); // Sort by count in descending order
+
         new Chartkick.PieChart("breachedTicketsAssigneeChart", assigneeData, {
           legend: "right" // Move the legend to the right side
         });
 
         document.getElementById("breachedResolvedTicketsAssigneeChart").innerHTML = "";
         if (data.breached_tickets_resolved_per_assignee) {
-          let assigneeData = Object.entries(data.breached_tickets_resolved_per_assignee).map(([name, count]) => {
-            let formattedName = String(name).replace(/[\[\]"]/g, '');
-            return [`${formattedName} (${count})`, count];
-          });
+          let assigneeData = Object.entries(data.breached_tickets_resolved_per_assignee)
+            .map(([name, count]) => {
+              let formattedName = String(name).replace(/[\[\]"]/g, '');
+              return [`${formattedName} (${count})`, count];
+            })
+            .sort((a, b) => b[1] - a[1]); // Sort by count in descending order
+
           new Chartkick.PieChart("breachedResolvedTicketsAssigneeChart", assigneeData, {
             legend: "right"
           });
@@ -299,7 +306,7 @@
   function closeModal() {
     document.getElementById("ticketModal").classList.add("hidden");
   }
-  
+
   function fetchTicketDetails(teamName, type) {
     if (!selectedTeam) {
       alert("Please select a team first.");
@@ -314,8 +321,8 @@
 
         if (data.length > 0) {
           let count = 0;
-          data.forEach(ticket => {  
-            count++;         
+          data.forEach(ticket => {
+            count++;
             const ticketElement = document.createElement("tr");
             ticketElement.classList.add("mb-4", "p-4", "rounded-lg", "bg-white", "border-b", "dark:bg-gray-800", "dark:border-gray-700", "hover:bg-gray-50", "dark:hover:bg-gray-600");
             const ticketURL = `/project/${ticket.project_id}/tickets/${ticket.id}`;
