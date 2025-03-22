@@ -148,7 +148,6 @@ class DataCenterController < ApplicationController
       @tickets_chart_data = @tickets_chart_data.transform_values { |data| data[:total] }
       @tickets_per_project = @tickets.group('projects.title').count
 
-
       respond_to do |format|
         format.html # Default view
         team_name = @team.name
