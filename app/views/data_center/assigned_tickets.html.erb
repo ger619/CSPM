@@ -1,12 +1,40 @@
 <h1 class="flex justify-center text-2xl font-bold mb-4">Assigned Tickets for <%= @user.name %></h1>
 
+
+
 <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- New table to show project names and ticket counts -->
+  <table class="border-collapse border border-gray-300 w-full mb-4">
+    <thead>
+    <tr>
+      <th scope="col" class="border border-gray-300 px-4 py-2">Project Name</th>
+      <th scope="col" class="border border-gray-300 px-4 py-2">Number of Tickets</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @tickets.group_by { |ticket| ticket.project.title }
+               .sort_by { |_, tickets| -tickets.count }
+               .each do |project_title, tickets| %>
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white capitalize">
+          <%= project_title %>
+        </td>
+        <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <%= tickets.count %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+
     <table class="border-collapse border border-gray-300 w-full mb-4">
       <thead>
       <tr>
         <th scope="col" class="border border-gray-300 px-4 py-2">Date of Creation</th>
-        <th scope="col" class="border border-gray-300 px-4 py-2">Ticket ID</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Name of the Project</th>
+        <th scope="col" class="border border-gray-300 px-4 py-2">Ticket ID</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Issue</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Priority</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Summary</th>
