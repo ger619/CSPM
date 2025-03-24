@@ -63,6 +63,23 @@
   </div>
 
   <!-- Charts Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white p-4 shadow-md rounded-lg">
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Breached (Closed vs Open)</h2>
+      <div id="responseOpenClosedTimeChart">
+        <%= pie_chart [["Closed", @stats[:response_breached_tickets_closed_last_30_days]], ["Open", @stats[:response_breached_tickets_open_last_30_days]]], colors: %w[#ff0000 #0000ff] %>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 shadow-md rounded-lg">
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time (Not Breached)</h2>
+      <div id="resolutionTimeChart">
+        <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff]%>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
     <div class="bg-white p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Assignees (Breached)</h2>
@@ -230,6 +247,13 @@
         new Chartkick.PieChart("responseTimeChart", [
           [`Breached (${data.response_breached_tickets_last_30_days})`, data.response_breached_tickets_last_30_days],
           [`Not Breached (${data.not_response_breached_tickets_last_30_days})`, data.not_response_breached_tickets_last_30_days]
+        ], { colors: ["#ff0000", "#36a2eb"] });
+
+        // Refresh charts
+        document.getElementById("responseOpenClosedTimeChart").innerHTML = "";
+        new Chartkick.PieChart("responseOpenClosedTimeChart", [
+          [`Closed (${data.response_breached_tickets_closed_last_30_days})`, data.response_breached_tickets_closed_last_30_days],
+          [`Open (${data.response_breached_tickets_open_last_30_days})`, data.response_breached_tickets_open_last_30_days]
         ], { colors: ["#ff0000", "#36a2eb"] });
 
         document.getElementById("resolutionTimeChart").innerHTML = "";
