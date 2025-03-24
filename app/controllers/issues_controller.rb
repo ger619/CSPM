@@ -38,7 +38,7 @@ class IssuesController < ApplicationController
           recipients = @ticket.users.to_a
           recipients << @ticket.user unless recipients.include?(@ticket.user)
           recipients.each do |recipient|
-            UserMailer.issue_created_email(recipient, @issue, @project, @ticket).deliver_later
+            UserMailer.issue_created_email(recipient, @issue, @project, @ticket, current_user).deliver_later
           end
         end
 
