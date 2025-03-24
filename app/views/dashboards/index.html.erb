@@ -20,36 +20,50 @@
 
   <!-- Stats Section -->
   <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8 mt-6">
-     <a href="#" class="stat-card-link" data-type="initial_response_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'initial_response_time_breached')">
+    <!-- initial Breach -->
+    <a href="#" class="stat-card-link" data-type="initial_response_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'initial_response_time_breached')">
       <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached", class: 'col-span-1' %>
      </a>
+    <!-- initial Not Breach -->
     <a href="#" class="stat-card-link" data-type="initial_response_time_not_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'initial_response_time_not_breached')">
       <%= render 'dashboards/stat_card', title: "Initial Response Time - Not Breached", value: @stats[:not_breached_tickets_last_30_days], id: "initial_response_time_not_breached", class: 'col-span-1'  %>
     </a>
-    <a href="#" class="stat-card-link" data-type="target_repair_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached')">
-      <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: @stats[:response_breached_tickets_last_30_days], id: "target_repair_time_breached", class: 'col-span-1'  %>
-    </a>
-    <a href="#" class="stat-card-link" data-type="target_repair_time_not_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_not_breached')">
-      <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached", class: 'col-span-1'  %>
-    </a>
+    <!-- target repair time breach -->
+    <div>
+      <a href="#" class="stat-card-link" data-type="target_repair_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached')">
+        <%= render 'dashboards/stat_card', title: "Target Repair Time - Breached", value: @stats[:response_breached_tickets_last_30_days], id: "target_repair_time_breached", class: 'col-span-1'  %>
+      </a>
+      <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+        <a href="#" class="stat-card-link" data-type="target_repair_time_breached_open" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached_open')">
+          <%= render 'dashboards/stat_card', title: "Target Repair Time Breached - (Open)", value: @stats[:response_breached_tickets_open_last_30_days], id: "target_repair_time_breached_open", class: 'col-span-1'  %>
+        </a>
+        <a href="#" class="stat-card-link" data-type="target_repair_time_breached_closed" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached_closed')">
+          <%= render 'dashboards/stat_card', title: "Target Repair Time Breached - (Closed)", value: @stats[:response_breached_tickets_closed_last_30_days], id: "target_repair_time_breached_closed", class: 'col-span-1'  %>
+        </a>
+      </div>
+    </div>
+    <div>
     <a href="#" class="stat-card-link" data-type="target_resolution_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached')">
       <%= render 'dashboards/stat_card', title: "Target Resolution Time - Breached", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached", class: 'col-span-1'  %>
+    </a>
+      <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+        <a href="#" class="stat-card-link" data-type="target_resolution_time_breached_open" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached_open')">
+          <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Open)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached_open", class: 'col-span-1'  %>
+        </a>
+        <a href="#" class="stat-card-link" data-type="target_resolution_time_breached_closed" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached_open')">
+          <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Closed)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached_closed", class: 'col-span-1'  %>
+        </a>
+      </div>
+
+    </div>
+    <!-- target repair time not breach -->
+    <a href="#" class="stat-card-link" data-type="target_repair_time_not_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_not_breached')">
+      <%= render 'dashboards/stat_card', title: "Target Repair Time - Not Breached", value: @stats[:not_response_breached_tickets_last_30_days], id: "target_repair_time_not_breached", class: 'col-span-1'  %>
     </a>
     <a href="#" class="stat-card-link" data-type="target_resolution_time_not_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_not_breached')">
       <%= render 'dashboards/stat_card', title: "Target Resolution Time - Not Breached", value: @stats[:not_resolution_breached_tickets_last_30_days], id: "target_resolution_time_not_breached", class: 'col-span-1'  %>
     </a>
-     <a href="#" class="stat-card-link" data-type="target_repair_time_breached_open" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached_open')">
-      <%= render 'dashboards/stat_card', title: "Target Repair Time Breached - (Open)", value: @stats[:response_breached_tickets_open_last_30_days], id: "target_repair_time_breached_open", class: 'col-span-1'  %>
-    </a>
-    <a href="#" class="stat-card-link" data-type="target_repair_time_breached_closed" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached_closed')">
-      <%= render 'dashboards/stat_card', title: "Target Repair Time Breached - (Closed)", value: @stats[:response_breached_tickets_closed_last_30_days], id: "target_repair_time_breached_closed", class: 'col-span-1'  %>
-    </a>
-    <a href="#" class="stat-card-link" data-type="target_resolution_time_breached_open" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached_open')">
-      <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Open)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached_open", class: 'col-span-1'  %>
-    </a>
-    <a href="#" class="stat-card-link" data-type="target_resolution_time_breached_closed" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached_open')">
-      <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Closed)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached_closed", class: 'col-span-1'  %>
-    </a>
+
       <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
           <a href="#" class="stat-card-link" data-type="total_tickets_last_30_days" onclick="fetchTicketDetails('<%= @selected_team %>', 'total_tickets_last_30_days')">
             <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days"%>
@@ -67,7 +81,7 @@
     </div>
 
     <div class="bg-white p-4 shadow-md rounded-lg">
-      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time (Not Breached)</h2>
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time (Breached vs Not Breached)</h2>
       <div id="resolutionTimeChart">
         <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff]%>
       </div>
