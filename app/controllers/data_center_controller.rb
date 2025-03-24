@@ -13,7 +13,9 @@ class DataCenterController < ApplicationController
                    Ticket.joins(project: :client).where(projects: { id: current_user.projects.ids })
                  end
 
-      @tickets = @tickets.where(projects: { client_id: params[:client_id] }) if params[:client_id].present?
+      if params[:client_ids].present?
+        @tickets = @tickets.where(projects: { client_id: params[:client_ids] })
+      end
       @tickets = @tickets.where(priority: params[:priority]) if params[:priority].present?
 
       if params[:start_date].present? && params[:end_date].present?
