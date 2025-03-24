@@ -75,7 +75,7 @@
   </div>
 
   <!-- Charts Section -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
     <div class="bg-white p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Breached (Closed vs Open)</h2>
       <div id="responseOpenClosedTimeChart">
@@ -273,10 +273,10 @@
         ], { colors: ["#36a2eb", "#ff0000"] });
 
         document.getElementById("resolutionOpenClosedTimeChart").innerHTML = "";
-        new Chartkick.PieChart("rresolutionOpenClosedTimeChart", [
+        new Chartkick.PieChart("resolutionOpenClosedTimeChart", [
           [`Closed (${data.resolution_breached_closed_last_30_days})`, data.resolution_breached_closed_last_30_days],
           [`Open (${data.resolution_breached_open_last_30_days})`, data.resolution_breached_open_last_30_days]
-        ], { colors: ["#ff0000", "#36a2eb"] });
+        ], { colors: ["#36a2eb", "#ff0000"] });
 
         document.getElementById("resolutionTimeChart").innerHTML = "";
         new Chartkick.PieChart("resolutionTimeChart", [
