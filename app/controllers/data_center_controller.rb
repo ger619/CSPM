@@ -208,7 +208,7 @@ class DataCenterController < ApplicationController
 
       # Handle days filter
       if days.positive?
-        closed_resolved_tickets = @tickets.joins(project: :client)
+        closed_resolved_tickets = Ticket.joins(project: :client)
           .joins(:statuses)
           .where(statuses: { name: %w[Closed Resolved Declined] })
           .where('tickets.created_at >= ?', days.days.ago)
