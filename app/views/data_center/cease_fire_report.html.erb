@@ -31,22 +31,36 @@
           });
         });
       </script>
+
       <div class="flex flex-col relative gap-2">
           <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
           <!-- Searchable Input -->
           <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
           <!-- Dropdown List -->
-        <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
-          <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100" data-client-id="" onclick="selectClient(this)">All Clients</div>
+        <!-- Dropdown List with Checkboxes -->
+        <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
+          <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+            <label>
+              <input type="checkbox" value="" data-client-name="All Clients" class="client-checkbox mr-2">
+              All Clients
+            </label>
+          </div>
           <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100" data-client-id="<%= client.id %>" onclick="selectClient(this)">
-              <%= client.name %>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+              <label>
+                <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox mr-2">
+                <%= client.name %>
+              </label>
             </div>
           <% end %>
         </div>
-        <!-- Hidden Input to store selected client ID -->
-        <input type="hidden" id="selectedClientId" name="client_id">
+
+        <!-- Hidden Input to store multiple selected client IDs -->
+        <div id="selectedClientsWrapper"></div>
+
       </div>
+
+
       <div class="flex flex-col gap-2">
         <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
         <%= f.date_field :start_date, value: params[:start_date], class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
@@ -95,7 +109,14 @@
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-end gap-2">
       <%= link_to "Download CSV",
-                  cease_fire_report_path(format: :xlsx, start_date: params[:start_date], end_date: params[:end_date], client_id: params[:client_id], status: params[:status]),
+                  cease_fire_report_path(
+                    format: :xlsx,
+                    start_date: params[:start_date],
+                    end_date: params[:end_date],
+                    priority: params[:priority],
+                    status: params[:status],
+                    client_ids: params[:client_ids]
+                  ),
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
 
       <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
@@ -180,58 +201,59 @@
   </div>
 <% end %>
 
-<script>
-  function showDropdown() {
-    document.getElementById("clientDropdown").classList.remove("hidden");
-  }
+  <script>
+    document.addEventListener("turbo:load", () => {
+      const searchInput = document.getElementById("searchClient");
+      const dropdown = document.getElementById("clientDropdown");
+      const selectedWrapper = document.getElementById("selectedClientsWrapper");
 
-  function hideDropdown(event) {
-    if (!event.target.closest(".relative")) {
-      document.getElementById("clientDropdown").classList.add("hidden");
-    }
-  }
+      function updateSelections() {
+        let selectedNames = [];
+        selectedWrapper.innerHTML = ""; // Clear previous hidden fields
 
-  function filterClientDropdown() {
-    let input = document.getElementById("searchClient").value.toLowerCase();
-    let dropdown = document.getElementById("clientDropdown");
-    let items = dropdown.getElementsByClassName("dropdown-item");
+        document.querySelectorAll(".client-checkbox:checked").forEach((checkbox) => {
+          const clientName = checkbox.dataset.clientName;
+          const clientId = checkbox.value;
 
-    dropdown.classList.remove("hidden");
+          if (clientName) selectedNames.push(clientName);
+          if (clientId) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "client_ids[]";
+            input.value = clientId;
+            selectedWrapper.appendChild(input);
+          }
+        });
 
-    let hasMatch = false;
-    for (let item of items) {
-      let text = item.textContent.toLowerCase();
-      if (text.includes(input)) {
-        item.style.display = "block";
-        hasMatch = true;
-      } else {
-        item.style.display = "none";
+        searchInput.value = selectedNames.join(", ");
       }
-    }
 
-    if (!hasMatch) {
-      dropdown.classList.add("hidden");
-    }
-  }
+      // Show dropdown on click
+      searchInput.addEventListener("click", () => {
+        dropdown.classList.remove("hidden");
+      });
 
-  function selectClient(element) {
-    let clientName = element.textContent.trim();
-    let clientId = element.getAttribute("data-client-id");
+      // Filter dropdown based on search input
+      searchInput.addEventListener("keyup", () => {
+        const searchValue = searchInput.value.toLowerCase();
+        const items = dropdown.querySelectorAll(".dropdown-item");
 
-    let inputField = document.getElementById("searchClient");
-    inputField.value = clientName;
-    inputField.style.overflow = "visible";
+        items.forEach((item) => {
+          const label = item.textContent.toLowerCase();
+          item.style.display = label.includes(searchValue) ? "block" : "none";
+        });
+      });
 
-    document.getElementById("selectedClientId").value = clientId;
-    document.getElementById("clientDropdown").classList.add("hidden");
-  }
+      // Apply selection logic to all checkboxes
+      document.querySelectorAll(".client-checkbox").forEach((cb) => {
+        cb.addEventListener("change", updateSelections);
+      });
 
-  document.addEventListener("click", function(event) {
-    let dropdown = document.getElementById("clientDropdown");
-    let searchInput = document.getElementById("searchClient");
-
-    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
-      dropdown.classList.add("hidden");
-    }
-  });
-</script>
+      // Hide dropdown when clicking outside
+      document.addEventListener("click", function (event) {
+        if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+    });
+  </script>
