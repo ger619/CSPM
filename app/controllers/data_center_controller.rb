@@ -365,8 +365,8 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary',
-              'Content', 'Due Date']
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At',
+              'Status Updated At', 'Last Comment Updated At', 'Summary', 'Content', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name.gsub('–', '-'),
@@ -378,6 +378,8 @@ class DataCenterController < ApplicationController
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000),
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
@@ -399,8 +401,8 @@ class DataCenterController < ApplicationController
       end
 
       csv << []
-      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Status Updated At', 'Summary',
-              'Content', 'Due Date']
+      csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At',
+              'Status Updated At', 'Summary', 'Last Comment Updated At', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name.gsub('–', '-'),
@@ -413,7 +415,7 @@ class DataCenterController < ApplicationController
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
-          ticket.content.to_plain_text.truncate(3000),
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
