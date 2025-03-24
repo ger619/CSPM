@@ -44,11 +44,11 @@
     <a href="#" class="stat-card-link" data-type="target_repair_time_breached_closed" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_repair_time_breached_closed')">
       <%= render 'dashboards/stat_card', title: "Target Repair Time Breached - (Closed)", value: @stats[:response_breached_tickets_closed_last_30_days], id: "target_repair_time_breached_closed", class: 'col-span-1'  %>
     </a>
-    <a href="#" class="stat-card-link" data-type="target_resolution_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached')">
-      <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Open)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached", class: 'col-span-1'  %>
+    <a href="#" class="stat-card-link" data-type="target_resolution_time_breached_open" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached_open')">
+      <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Open)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached_open", class: 'col-span-1'  %>
     </a>
-    <a href="#" class="stat-card-link" data-type="target_resolution_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached')">
-      <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Closed)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached", class: 'col-span-1'  %>
+    <a href="#" class="stat-card-link" data-type="target_resolution_time_breached_closed" onclick="fetchTicketDetails('<%= @selected_team %>', 'target_resolution_time_breached_open')">
+      <%= render 'dashboards/stat_card', title: "Target Resolution Time Breached - (Closed)", value: @stats[:resolution_breached_tickets_last_30_days], id: "target_resolution_time_breached_closed", class: 'col-span-1'  %>
     </a>
       <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
           <a href="#" class="stat-card-link" data-type="total_tickets_last_30_days" onclick="fetchTicketDetails('<%= @selected_team %>', 'total_tickets_last_30_days')">
@@ -255,8 +255,8 @@
         document.getElementById("target_resolution_time_not_breached").innerText = data.not_resolution_breached_tickets_last_30_days;
         document.getElementById("target_repair_time_breached_open").innerText = data.response_breached_tickets_open_last_30_days;
         document.getElementById("target_repair_time_breached_closed").innerText = data.response_breached_tickets_closed_last_30_days;
-        document.getElementById("target_resolution_time_breached").innerText = data.resolution_breached_tickets_last_30_days;
-        document.getElementById("target_resolution_time_breached").innerText = data.resolution_breached_tickets_last_30_days;
+        document.getElementById("target_resolution_time_breached_open").innerText = data.resolution_breached_open_last_30_days;
+        document.getElementById("target_resolution_time_breached_closed").innerText = data.resolution_breached_closed_last_30_days;
 
         // Refresh charts
         document.getElementById("responseTimeChart").innerHTML = "";
