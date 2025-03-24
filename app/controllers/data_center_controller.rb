@@ -473,20 +473,20 @@ class DataCenterController < ApplicationController
           row_style = styles[status] || nil
 
           sheet.add_row [
-                          ticket.unique_id.gsub('–', '-'),
-                          ticket.project.title,
-                          ticket.priority,
-                          ticket.subject,
-                          ticket.issue,
-                          status,
-                          ticket.users.map(&:name).select(&:present?).join(', '),
-                          ticket.user.name,
-                          ticket.content.to_plain_text.truncate(3000),
-                          ticket.created_at.strftime('%d-%b-%Y'),
-                          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-                          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-                          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
-                        ], style: row_style
+            ticket.unique_id.gsub('–', '-'),
+            ticket.project.title,
+            ticket.priority,
+            ticket.subject,
+            ticket.issue,
+            status,
+            ticket.users.map(&:name).select(&:present?).join(', '),
+            ticket.user.name,
+            ticket.content.to_plain_text.truncate(3000),
+            ticket.created_at.strftime('%d-%b-%Y'),
+            ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+            ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+            ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+          ], style: row_style
         end
       end
     end
