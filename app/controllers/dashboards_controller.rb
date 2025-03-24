@@ -53,6 +53,20 @@ class DashboardsController < ApplicationController
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .count
+      resolution_breached_open_last_30_days = tickets_last_30_days
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
+        .joins('LEFT JOIN add_statuses ON add_statuses.ticket_id = tickets.id')
+        .joins('LEFT JOIN statuses ON statuses.id = add_statuses.status_id')
+        .where.not(statuses: { name: %w[Closed Resolved] })
+        .count
+      resolution_breached_closed_last_30_days = tickets_last_30_days
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
+        .joins('LEFT JOIN add_statuses ON add_statuses.ticket_id = tickets.id')
+        .joins('LEFT JOIN statuses ON statuses.id = add_statuses.status_id')
+        .where(statuses: { name: %w[Closed Resolved] })
+        .count
       not_resolution_breached_tickets_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
@@ -95,6 +109,8 @@ class DashboardsController < ApplicationController
         response_breached_tickets_open_last_30_days: response_breached_tickets_open_last_30_days,
         not_response_breached_tickets_last_30_days: not_response_breached_tickets_last_30_days,
         resolution_breached_tickets_last_30_days: resolution_breached_tickets_last_30_days,
+        resolution_breached_open_last_30_days: resolution_breached_open_last_30_days,
+        resolution_breached_closed_last_30_days: resolution_breached_closed_last_30_days,
         not_resolution_breached_tickets_last_30_days: not_resolution_breached_tickets_last_30_days,
         breached_tickets_per_assignee: breached_tickets_per_assignee,
         breached_resolution_tickets_per_project: breached_resolution_tickets_per_project,

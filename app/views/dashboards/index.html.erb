@@ -72,9 +72,9 @@
     </div>
 
     <div class="bg-white p-4 shadow-md rounded-lg">
-      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time (Not Breached)</h2>
-      <div id="resolutionTimeChart">
-        <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff]%>
+      <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Breached (Closed vs Open)</h2>
+      <div id="resolutionOpenClosedTimeChart">
+        <%= pie_chart [["Closed", @stats[:resolution_breached_tickets_last_30_days]], ["Open", @stats[:not_resolution_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff]%>
       </div>
     </div>
   </div>
@@ -254,6 +254,12 @@
         new Chartkick.PieChart("responseOpenClosedTimeChart", [
           [`Closed (${data.response_breached_tickets_closed_last_30_days})`, data.response_breached_tickets_closed_last_30_days],
           [`Open (${data.response_breached_tickets_open_last_30_days})`, data.response_breached_tickets_open_last_30_days]
+        ], { colors: ["#36a2eb", "#ff0000"] });
+
+        document.getElementById("resolutionOpenClosedTimeChart").innerHTML = "";
+        new Chartkick.PieChart("rresolutionOpenClosedTimeChart", [
+          [`Closed (${data.resolution_breached_closed_last_30_days})`, data.resolution_breached_closed_last_30_days],
+          [`Open (${data.resolution_breached_open_last_30_days})`, data.resolution_breached_open_last_30_days]
         ], { colors: ["#ff0000", "#36a2eb"] });
 
         document.getElementById("resolutionTimeChart").innerHTML = "";
