@@ -463,29 +463,31 @@ class DataCenterController < ApplicationController
       'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF') # Dark Slate Gray with White text
     }
 
-    workbook.add_worksheet(name: 'Tickets') do |sheet|
-      sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
-                     'Last Comment Updated At', 'Due Date']
-      tickets.each do |ticket|
-        status = ticket.statuses.first&.name || 'N/A'
-        row_style = styles[status] || nil
+    # Group tickets by project
+    tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
+      workbook.add_worksheet(name: project_title) do |sheet|
+        sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
+                       'Last Comment Updated At', 'Due Date']
+        project_tickets.each do |ticket|
+          status = ticket.statuses.first&.name || 'N/A'
+          row_style = styles[status] || nil
 
-        sheet.add_row [
-          ticket.unique_id.gsub('–', '-'),
-          ticket.project.title,
-          ticket.priority,
-          ticket.subject,
-          ticket.issue,
-          status,
-          ticket.users.map(&:name).select(&:present?).join(', '),
-          ticket.user.name,
-          ticket.content.to_plain_text.truncate(3000),
-          ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
-
-        ], style: row_style
+          sheet.add_row [
+            ticket.unique_id.gsub('–', '-'),
+            ticket.project.title,
+            ticket.priority,
+            ticket.subject,
+            ticket.issue,
+            status,
+            ticket.users.map(&:name).select(&:present?).join(', '),
+            ticket.user.name,
+            ticket.content.to_plain_text.truncate(3000),
+            ticket.created_at.strftime('%d-%b-%Y'),
+            ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+            ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+            ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+          ], style: row_style
+        end
       end
     end
 

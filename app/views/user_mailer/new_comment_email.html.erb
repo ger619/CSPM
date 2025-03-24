@@ -8,7 +8,13 @@
 
 <p><strong>Issue:</strong> <%= @comment.what %></p> for service desk <%= @project.title %></p>
 
-<p><strong>Issue:</strong> <%= @ticket.unique_id %></p>
+<ul>
+  <li><strong>Ticket ID:</strong> <%= @ticket.unique_id %></li>
+  <li><strong>Subject:</strong> <%= @ticket.subject %></li>
+  <li><strong>Ticket Type:</strong> <%= @ticket.issue %></li>
+  <li><strong>Priority:</strong> <%= @ticket.priority %></li>
+  <li><strong>Description:</strong> <%= @ticket.content.to_plain_text.truncate(3000) %></li>
+</ul>
 
 
 <p><strong>Reason for the Issue and Our Solution:</strong></p>
