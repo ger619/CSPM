@@ -366,7 +366,7 @@ class DataCenterController < ApplicationController
 
       csv << []
       csv << ['Client Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At',
-              'Status Updated At', 'Last Comment Updated At', 'Summary', 'Content', 'Due Date']
+              'Status Updated At', 'Last Comment Updated At', 'Summary', 'Resolution', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.project.client.name.gsub('–', '-'),
