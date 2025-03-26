@@ -15,10 +15,6 @@ class TicketsController < ApplicationController
 
     # Handling comments with pagination
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
-    @per_page2 = 5
-    @page2 = (params[:comment_page] || 1).to_i # Use `comment_page` for comments pagination to differentiate from issues
-    @total_pages2 = (@comment.count / @per_page2.to_f).ceil
-    @comment = @comment.offset((@page2 - 1) * @per_page2).limit(@per_page2)
 
     # Other variables
     @assigned_users = @ticket.users.any?
