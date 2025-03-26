@@ -13,6 +13,39 @@
   </div>
 
   <% unless current_user.has_role?(:client) %>
+  <div class="mb-2">
+    <%= f.label :user_ids, 'Notify Users', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+  </div>
+  <div class="relative w-full mb-4">
+    <!-- Searchable Input -->
+    <input type="text" id="searchUser" class="h-10 border border-gray-300 rounded-lg dark:text-black px-2 text-sm w-full"
+           placeholder="Search User..." onclick="showDropdown()"  onkeyup="filterUserDropdown()" autocomplete="off">
+
+    <!-- Selected Items Container -->
+    <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
+
+    <!-- Hidden Inputs for Rails Form (Updated Name) -->
+    <div id="hiddenUserInputs"></div>
+
+    <!-- Dropdown List -->
+    <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
+      <div class="flex justify-start p-2">
+        <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 text-left">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      <% users = User.with_assigned_role.distinct %>
+      <% users.each do |user| %>
+        <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
+          <%= user.name %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  
     <div class="mb-4">
       <%= f.label :message_type, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
       <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
@@ -23,3 +56,75 @@
 
   <%= f.submit "Submit", class: 'text-gray-900 dark:text-white border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold' %>
 <% end %>
+
+<script>
+  let selectedUsers = [];
+
+  function showDropdown() {
+    document.getElementById("userDropdown").classList.remove("hidden");
+  }
+
+  function hideDropdown() {
+    document.getElementById("userDropdown").classList.add("hidden");
+  }
+
+  function filterUserDropdown() {
+    let input = document.getElementById("searchUser").value.toLowerCase();
+    let items = document.querySelectorAll("#userDropdown .dropdown-item");
+
+    items.forEach(item => {
+      let text = item.textContent.toLowerCase();
+      item.style.display = text.includes(input) ? "block" : "none";
+    });
+  }
+
+  function selectUser(element) {
+    let userId = element.getAttribute("data-user-id");
+    let userName = element.textContent;
+
+    if (!selectedUsers.some(user => user.id === userId)) {
+      selectedUsers.push({ id: userId, name: userName });
+
+      // Update Selected UI
+      let tag = document.createElement("div");
+      tag.className = "bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-2";
+      tag.innerHTML = `${userName} <span onclick="removeUser('${userId}', this)" class="cursor-pointer text-red-500">×</span>`;
+      document.getElementById("selectedUsers").appendChild(tag);
+
+      // Add a new hidden input for each selected user
+      let input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "team[user_ids][]"; // Ensure it's an array
+      input.value = userId;
+      input.classList.add(`user-input-${userId}`);
+      document.getElementById("hiddenUserInputs").appendChild(input);
+
+      // Remove the selected user from the dropdown
+      element.remove();
+    }
+
+    // Hide Dropdown
+    hideDropdown();
+  }
+
+  function removeUser(userId, element) {
+    selectedUsers = selectedUsers.filter(user => user.id !== userId);
+    element.parentElement.remove();
+
+    // Remove hidden input
+    let input = document.querySelector(`.user-input-${userId}`);
+    if (input) {
+      input.remove();
+    }
+
+    // Add the user back to the dropdown
+    let userDropdown = document.getElementById("userDropdown");
+    let userName = element.parentElement.textContent.trim().slice(0, -1); // Remove the × character
+    let dropdownItem = document.createElement("div");
+    dropdownItem.className = "dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer";
+    dropdownItem.setAttribute("data-user-id", userId);
+    dropdownItem.setAttribute("onclick", "selectUser(this)");
+    dropdownItem.textContent = userName;
+    userDropdown.appendChild(dropdownItem);
+  }
+</script>
