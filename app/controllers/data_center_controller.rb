@@ -544,34 +544,40 @@ class DataCenterController < ApplicationController
   def generate_start_of_day_csv(tickets)
     bom = "\uFEFF" # Add BOM to ensure UTF-8 compatibility in Excel
 
+    tickets = tickets.includes(
+      :user,
+      :users,
+      :statuses,
+      :add_statuses,
+      issues: :rich_text_content
+    )
+
     csv_data = CSV.generate(headers: true) do |csv|
       csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated',
               'Status Updated At', 'Comment Added At', 'Content', 'Due Date']
 
       tickets.each do |ticket|
-        latest_issue = Issue.where(ticket_id: ticket.id).order(updated_at: :desc).first
+        latest_issue = ticket.issues.max_by(&:updated_at) # Using in-memory sorting after eager loading
+
         csv << [
           ticket.unique_id.gsub('–', '-'),
           ticket.subject,
           ticket.issue,
           ticket.users.map(&:name).select(&:present?).join(', '),
-          ticket.user.name,
+          ticket.user&.name || 'N/A',
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.add_statuses.max_by(&:updated_at) || 'N/A',
           ticket.updated_at.strftime('%d-%b-%Y'),
           latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
-            &.content&.to_plain_text&.truncate(800)
-            &.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
-            &.gsub("\u00A0", ' ') # Replace non-breaking spaces
-            &.gsub(/[^\p{Print}]/, '') || 'N/A',
+            &.content&.to_plain_text&.truncate(800)&.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')&.gsub("\u00A0", ' ')&.gsub(/[^\p{Print}]/, '') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
     end
 
-    bom + csv_data # Prepend BOM to the CSV output
+    bom + csv_data
   end
 end
