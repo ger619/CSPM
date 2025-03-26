@@ -90,7 +90,6 @@ gem 'devise', '~> 4.9'
 gem 'devise_invitable', '~> 2.0'
 gem 'dotenv-rails', groups: %i[development test]
 gem 'groupdate'
-gem 'kaminari', '~> 1.2'
 gem 'mini_magick', '~> 4.13'
 gem 'ostruct'
 gem 'pagy', '~> 6.0'

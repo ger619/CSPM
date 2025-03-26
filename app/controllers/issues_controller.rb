@@ -58,6 +58,7 @@ class IssuesController < ApplicationController
 
   def update
     if @issue.update(issue_params)
+      send_email_notifications(@issue, current_user)
       redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
