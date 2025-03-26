@@ -21,7 +21,13 @@ class TicketsController < ApplicationController
     @sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
     @events = @ticket.events.order(created_at: :asc)
 
-    @ticket_items = (@ticket.issues + @ticket.comments).sort_by(&:created_at).reverse
+    # Combine issues and comments, then paginate
+    ticket_items = (@ticket.issues + @ticket.comments).sort_by(&:created_at).reverse
+
+    @page = (params[:ticket_items_page] || 1).to_i
+    per_page = 10
+    @total_pages = (ticket_items.size / per_page.to_f).ceil
+    @ticket_items = ticket_items.slice((@page - 1) * per_page, per_page) || []
 
     # Respond to HTML and JS requests
     respond_to do |format|

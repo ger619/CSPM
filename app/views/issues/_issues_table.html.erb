@@ -105,4 +105,18 @@
 
     </div>
   </div>
+  <div class="flex gap-10 mt-5">
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <% if @page > 1 %>
+      <%= link_to 'Previous', project_ticket_path(@project, @ticket, ticket_items_page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+    <% end %>
+    <% if @total_pages > 1 %>
+      <span>Page <%= @page %> of <%= @total_pages %></span>
+      <% if @page < @total_pages %>
+        <%= link_to 'Next', project_ticket_path(@project, @ticket, ticket_items_page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
 </div>
