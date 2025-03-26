@@ -13,23 +13,21 @@ class TicketsController < ApplicationController
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
 
-    # Pagination for issues
-    @per_page = 5
-    @page = (params[:issue_page] || 1).to_i
-    @total_pages = (@issue.count / @per_page.to_f).ceil
-    @issue = @issue.offset((@page - 1) * @per_page).limit(@per_page)
-
     # Handling comments with pagination
     @comment = @ticket.comments.with_rich_text_content.order('created_at DESC')
-    @per_page2 = 5
-    @page2 = (params[:comment_page] || 1).to_i # Use `comment_page` for comments pagination to differentiate from issues
-    @total_pages2 = (@comment.count / @per_page2.to_f).ceil
-    @comment = @comment.offset((@page2 - 1) * @per_page2).limit(@per_page2)
 
     # Other variables
     @assigned_users = @ticket.users.any?
     @sla_ticket = SlaTicket.find_by(ticket_id: @ticket.id)
     @events = @ticket.events.order(created_at: :asc)
+
+    # Combine issues and comments, then paginate
+    ticket_items = (@ticket.issues + @ticket.comments).sort_by(&:created_at).reverse
+
+    @page = (params[:ticket_items_page] || 1).to_i
+    per_page = 10
+    @total_pages = (ticket_items.size / per_page.to_f).ceil
+    @ticket_items = ticket_items.slice((@page - 1) * per_page, per_page) || []
 
     # Respond to HTML and JS requests
     respond_to do |format|
