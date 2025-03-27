@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'sod_report', to: 'data_center#sod_report', as: 'sod_report'
   get 'assigned_tickets', to: 'data_center#assigned_tickets', as: 'assigned_tickets'
   get 'user_report_view', to: 'data_center#user_report_view', as: 'user_report_view'
+  get 'cbk_groupware_report', to: 'data_center#cbk_groupware_report', as: 'cbk_groupware_report'
 
   get 'dashboard', to: 'dashboards#index'
   get 'dashboards/fetch_stats', to: 'dashboards#fetch_stats'
