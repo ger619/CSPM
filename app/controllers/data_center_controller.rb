@@ -351,6 +351,32 @@ class DataCenterController < ApplicationController
     end
   end
 
+  # CBK Report for Groupware/Elma
+
+  def cbk_groupware_report
+    # groupware Report
+
+    if params[:groupware_id].present?
+      @groupware = Groupware.find(params[:groupware_id])
+      @tickets = Ticket.joins(software: :groupwares)
+        .where(groupwares: { id: @groupware.id })
+        .joins(:sla_tickets)
+
+      if params[:start_date].present? && params[:end_date].present?
+        start_date = Date.parse(params[:start_date])
+        end_date = Date.parse(params[:end_date])
+        @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+      end
+    else
+      @tickets = Ticket.none
+    end
+
+    respond_to do |format|
+      format.html { render :cbk_groupware_report }
+      format.csv { send_data generate_cbk_groupware_report_csv(@tickets), filename: "groupware_report_#{Date.today}.csv" }
+    end
+  end
+
   private
 
   def generate_orm_report_csv(tickets, ticket_counts, project_status_counts)
@@ -579,5 +605,28 @@ class DataCenterController < ApplicationController
     end
 
     bom + csv_data
+  end
+
+  def generate_cbk_groupware_report_csv(tickets)
+    CSV.generate(headers: true) do |csv|
+      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
+              'Last Comment Updated At', 'Due Date']
+      tickets.each do |ticket|
+        csv << [
+          ticket.unique_id,
+          ticket.project.title,
+          ticket.priority,
+          ticket.subject,
+          ticket.issue,
+          ticket.statuses.first&.name || 'N/A',
+          ticket.users.map(&:name).select(&:present?).join(', '),
+          ticket.user.name,
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+        ]
+      end
+    end
   end
 end
