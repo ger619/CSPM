@@ -53,6 +53,10 @@ class DashboardsController < ApplicationController
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .count
+      no_sla_tickets_last_30_days = tickets_last_30_days
+        .joins(:sla_tickets)
+        .where(sla_tickets: { sla_resolution_deadline: 'NO SLA' })
+        .count
       resolution_breached_open_last_30_days = tickets_last_30_days
         .joins(:sla_tickets)
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
@@ -102,6 +106,7 @@ class DashboardsController < ApplicationController
 
       stats = {
         total_tickets_last_30_days: total_tickets_last_30_days,
+        no_sla_tickets_last_30_days: no_sla_tickets_last_30_days,
         breached_tickets_last_30_days: breached_tickets_last_30_days,
         not_breached_tickets_last_30_days: not_breached_tickets_last_30_days,
         response_breached_tickets_last_30_days: response_breached_tickets_last_30_days,
@@ -158,6 +163,8 @@ class DashboardsController < ApplicationController
         @tickets = @tickets.where(sla_tickets: { sla_target_response_deadline: ['Not Breached', nil] })
       when 'target_resolution_time_breached'
         @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: 'Breached' })
+      when 'no_sla_population'
+        @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: 'NO SLA' })
       when 'target_resolution_time_breached_open'
         @tickets = @tickets.joins('LEFT JOIN add_statuses ON add_statuses.ticket_id = tickets.id')
           .joins('LEFT JOIN statuses ON statuses.id = add_statuses.status_id')
