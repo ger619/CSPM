@@ -322,4 +322,38 @@
     const observer = new MutationObserver(toggleColumns);
     observer.observe(sidebar, { attributes: true });
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+      const table = document.querySelector("table");
+      const headers = table.querySelectorAll("th div a");
+      
+      headers.forEach((header, index) => {
+          header.addEventListener("click", function (event) {
+              event.preventDefault();
+              sortTableByColumn(table, index);
+          });
+      });
+  });
+
+  function sortTableByColumn(table, columnIndex) {
+      const tbody = table.querySelector("tbody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const isAscending = table.dataset.sortOrder !== "asc";
+      
+      rows.sort((rowA, rowB) => {
+          const cellA = rowA.cells[columnIndex].textContent.trim();
+          const cellB = rowB.cells[columnIndex].textContent.trim();
+          
+          const isNumeric = !isNaN(cellA) && !isNaN(cellB);
+          if (isNumeric) {
+              return isAscending ? cellA - cellB : cellB - cellA;
+          }
+          return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+      });
+      
+      tbody.innerHTML = "";
+      rows.forEach(row => tbody.appendChild(row));
+      
+      table.dataset.sortOrder = isAscending ? "asc" : "desc";
+  }
 </script>
