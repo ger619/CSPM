@@ -58,7 +58,7 @@
     <div class="relative mx-auto text-gray-600">
       <%= form_with url: project_index_path, method: :get, class: 'relative flex items-center' do |f| %>
         <%= f.text_field :query, placeholder: "Search", class: "border border-gray-300 h-10 w-96 px-5 pr-10 rounded-lg text-sm placeholder-current focus:outline-none dark:bg-gray-500 dark:border-gray-50 dark:text-gray-200", id: "searchInput" %>
-        
+
         <!-- Clear Button (X) -->
         <button type="button" id="clearSearch" class="absolute right-10 top-0 mt-2 mr-4 text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-white hidden">
           &times;

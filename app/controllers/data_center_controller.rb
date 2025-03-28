@@ -494,7 +494,7 @@ class DataCenterController < ApplicationController
       workbook.add_worksheet(name: project_title) do |sheet|
         sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
                        'Last Comment Updated At', 'Due Date']
-        project_tickets.each do |ticket|
+        project_tickets.sort_by { |ticket| -ticket.created_at.to_i }.each do |ticket|
           status = ticket.statuses.first&.name || 'N/A'
           row_style = styles[status] || nil
 
