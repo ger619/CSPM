@@ -367,6 +367,8 @@ class DataCenterController < ApplicationController
         end_date = Date.parse(params[:end_date])
         @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
       end
+
+      @tickets = @tickets.joins(project: :client).where(clients: { country_code: params[:country_code] }) if params[:country_code].present?
     else
       @tickets = Ticket.none
     end
