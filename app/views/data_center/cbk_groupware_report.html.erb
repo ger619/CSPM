@@ -7,7 +7,12 @@
 
     <div class="field">
       <%= label_tag :country_code, 'Select Country', class: "block text-sm font-medium text-gray-700" %>
-      <%= select_tag :country_code, options_from_collection_for_select(Client.distinct.pluck(:country_code).compact, :to_s, :to_s), include_blank: true, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+      <%= select_tag :country_code,
+                     options_for_select(
+                       Client.distinct.pluck(:country_code).compact.map { |code| [ISO3166::Country[code]&.translations[I18n.locale.to_s] || code, code] }
+                     ),
+                     include_blank: true,
+                     class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
     </div>
 
 
@@ -29,7 +34,12 @@
 <% end %>
 
 <% if @tickets.present? %>
-  <h2 class="text-xl font-semibold text-gray-900 mt-6"><%= @groupware.name.capitalize %> Report</h2>
+  <div class="mb-4 px-4 sm:px-6 lg:px-8 py-8 flex gap-2">
+    <h2 class="text-xl font-semibold text-gray-900 mt-6"><%= @groupware.name.capitalize %> Report</h2>
+    <div class="mt-4">
+      <%= link_to 'Download Report', cbk_groupware_report_path(format: :csv, groupware_id: params[:groupware_id], start_date: params[:start_date], end_date: params[:end_date], country_code: params[:country_code]), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+    </div>
+  </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200 mt-4">
       <thead class="bg-gray-50">
@@ -62,9 +72,6 @@
       <% end %>
       </tbody>
     </table>
-  </div>
-  <div class="mt-4">
-    <%= link_to 'Download Report', cbk_groupware_report_path(format: :csv, groupware_id: params[:groupware_id], start_date: params[:start_date], end_date: params[:end_date], country_code: params[:country_code]), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
   </div>
 <% else %>
   <p class="mt-4 text-gray-500">No tickets available for the selected groupware and date range.</p>
