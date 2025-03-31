@@ -10,10 +10,6 @@ production:
   service: Disk
   root: /var/www/uploads
 
-
-
-
-
 # Use the credentials file for the production environment
 
 
