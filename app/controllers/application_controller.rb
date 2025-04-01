@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
     return unless user_signed_in? && controller_name == 'registrations' && action_name == 'update'
 
     current_user.update(first_login: true, first_name: params[:user][:first_name],
-                        last_name: params[:user][:last_name])
+                        last_name: params[:user][:last_name], profile_picture: params[:user][:profile_picture])
     redirect_to root_path, alert: 'Profile is Updated.'
   end
 
