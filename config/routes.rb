@@ -43,6 +43,10 @@ Rails.application.routes.draw do
       delete :remove_team
     end
     resources :tickets do
+      collection do
+        get 'all_tickets'
+        get 'index_home'
+      end
       member do
         post :assign_tag
         delete :unassign_tag

@@ -146,6 +146,27 @@ class TicketsController < ApplicationController
 
   def edit; end
 
+  def all_tickets
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
+    # Paginate the tickets
+    @per_page = 20
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
+  def index_home
+    @tickets = @project.tickets.joins(:statuses, :users)
+      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .where(users: { id: current_user.id })
+    # Paginate the tickets    # Paginate the tickets
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
   def update
     respond_to do |format|
       if @ticket.update(ticket_params)
