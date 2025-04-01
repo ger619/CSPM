@@ -9,4 +9,4 @@ import '@rails/actiontext';
 //= require_tree .
 //= require 'chartkick'
 //= require 'chart.js'
-import "./channels"
+// import "./channels"
