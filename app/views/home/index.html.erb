@@ -79,7 +79,9 @@
   <% end %>
 
   <!-- First Grid Section -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4 w-full">
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4 w-full">
+  <%= link_to project_index_path do %>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
         Number of Service Desks
@@ -88,6 +90,7 @@
         <%= current_user.projects.distinct.pluck(:id).count %>
       </span>
     </div>
+  <% end %>
     <% if current_user.projects.any? %>
       <%= link_to project_tickets_path(project_id: current_user.projects.first.id, status: 'open', user_id: current_user.id), class: 'flex items-center justify-between w-full' do %>
         <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
