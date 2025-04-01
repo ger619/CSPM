@@ -121,14 +121,12 @@
     <% end %>
   </div>
 
-
   <!-- Table Section -->
   <div class="flex flex-wrap items-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
     <p class="text-base sm:text-2xl text-gray-400 dark:text-gray-500">
       <%= render 'home/table_ticket_per_project' %>
     </p>
   </div>
-
   <!-- Conditional Admin Section -->
   <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
     <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
