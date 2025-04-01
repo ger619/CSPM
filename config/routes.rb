@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :tickets do
       collection do
         get 'all_tickets'
+        get 'index_home'
       end
       member do
         post :assign_tag
