@@ -1,5 +1,4 @@
 <div class="p-4 border-2 border-white rounded-lg flex flex-col items-center">
-
   <!-- Topbar Section  for admin and observer-->
   <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6 w-full ">
@@ -116,12 +115,11 @@
           Total Number of Open Tickets
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
         </span>
       </div>
     <% end %>
   </div>
-
 
   <!-- Table Section -->
   <div class="flex flex-wrap items-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
@@ -129,7 +127,6 @@
       <%= render 'home/table_ticket_per_project' %>
     </p>
   </div>
-
   <!-- Conditional Admin Section -->
   <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
     <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
@@ -157,7 +154,6 @@
       <%= render 'home/list_project' %>
     </div>
   </div>
-
   <!-- Chart Data Section -->
   <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
     <%= render 'home/chart_data_per_user' %>
