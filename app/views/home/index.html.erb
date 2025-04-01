@@ -37,7 +37,7 @@
       </div>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
-          Active Agents<br>(Agents who have login more than once)
+          Active Internal Users<br>(Agents who have login more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
           <%= User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count %>
@@ -107,15 +107,16 @@
       </p>
       </div>
     <% end %>
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-      <p class="text-xs sm:text-sm truncate">
-        Total Number of of Open Tickets
-      </p>
-      <span class="text-lg sm:text-xl font-bold">
-        <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
-      </span>
-
-    </div>
+    <%= link_to all_tickets_project_tickets_path(project_id: current_user.projects.first.id, status: 'open'), class: 'flex items-center justify-between w-full' do %>
+      <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+        <p class="text-xs sm:text-sm truncate">
+          Total Number of Open Tickets
+        </p>
+        <span class="text-lg sm:text-xl font-bold">
+          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+        </span>
+      </div>
+    <% end %>
   </div>
 
 

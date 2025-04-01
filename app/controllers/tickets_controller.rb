@@ -140,6 +140,11 @@ class TicketsController < ApplicationController
 
   def edit; end
 
+  def all_tickets
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved] })
+  end
+
   def update
     respond_to do |format|
       if @ticket.update(ticket_params)
