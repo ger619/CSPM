@@ -128,33 +128,49 @@
 <% end %>
 
 <script>
-   document.addEventListener("turbo:load", function() {
+  document.addEventListener("turbo:load", function() {
     const searchInput = document.getElementById("searchInput");
     const clearSearch = document.getElementById("clearSearch");
+    const dropdownNotificationButton = document.querySelector('#dropdownNotificationButton');
+    const dropdownProfile = document.getElementById("dropdownProfile");
+    const dropdownNavbarLink = document.getElementById("dropdownNavbarLink");
 
-    searchInput.addEventListener("input", function() {
-      clearSearch.style.display = searchInput.value ? "block" : "none";
-    });
+    if (searchInput && clearSearch) {
+      searchInput.addEventListener("input", function() {
+        clearSearch.style.display = searchInput.value ? "block" : "none";
+      });
 
-    clearSearch.addEventListener("click", function() {
-      searchInput.value = "";
-      clearSearch.style.display = "none";
-    });
-  });
+      clearSearch.addEventListener("click", function() {
+        searchInput.value = "";
+        clearSearch.style.display = "none";
+      });
+    }
 
-  document.querySelector('#dropdownNotificationButton').addEventListener('click', function() {
-    const dropdown = document.querySelector('#dropdownNotification');
-    dropdown.classList.toggle('hidden');
-  });
+    if (dropdownNotificationButton) {
+      dropdownNotificationButton.addEventListener('click', function() {
+        const dropdown = document.querySelector('#dropdownNotification');
+        if (dropdown) {
+          dropdown.classList.toggle('hidden');
+        }
+      });
+    }
 
-  // Toggle the profile dropdown
-  document.getElementById("dropdownProfile").addEventListener("click", function() {
-      const dropdownMenu = document.getElementById("dropdownItem");
-      dropdownMenu.classList.toggle("hidden");
-  });
+    if (dropdownProfile) {
+      dropdownProfile.addEventListener("click", function() {
+        const dropdownMenu = document.getElementById("dropdownItem");
+        if (dropdownMenu) {
+          dropdownMenu.classList.toggle("hidden");
+        }
+      });
+    }
 
-  document.getElementById("dropdownNavbarLink").addEventListener("click", function() {
-      const dropdownMenu = document.getElementById("dropdownNavbar");
-      dropdownMenu.classList.toggle("hidden");
+    if (dropdownNavbarLink) {
+      dropdownNavbarLink.addEventListener("click", function() {
+        const dropdownMenu = document.getElementById("dropdownNavbar");
+        if (dropdownMenu) {
+          dropdownMenu.classList.toggle("hidden");
+        }
+      });
+    }
   });
 </script>
