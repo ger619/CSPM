@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   before_action :update_allowed_parameters, if: :devise_controller?
   before_action :check_profile_completion
   before_action :check_active_status
-  before_action :load_notifications
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
 
@@ -22,12 +21,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def load_notifications
-    return unless user_signed_in?
-
-    @notifications = current_user.notifications.order(created_at: :desc)
-  end
 
   def check_profile_completion
     if user_signed_in? && !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
