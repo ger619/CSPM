@@ -116,7 +116,7 @@
           Total Number of Open Tickets
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
+          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
         </span>
       </div>
     <% end %>
