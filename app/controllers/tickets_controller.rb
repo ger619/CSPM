@@ -150,7 +150,7 @@ class TicketsController < ApplicationController
     @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def index
+  def index_home
     @tickets = @project.tickets.joins(:statuses, :users)
       .where.not(statuses: { name: %w[Closed Resolved Declined] })
       .where(users: { id: current_user.id })
