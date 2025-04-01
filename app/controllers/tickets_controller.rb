@@ -90,6 +90,8 @@ class TicketsController < ApplicationController
       # Handle validation errors or proceed with save
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
+        # error logs for  a ticket
+        Rails.logger.error("Ticket creation failed: #{@ticket.errors.full_messages.join(', ')}")
       else
         if @ticket.groupware_id.present?
           groupware = Groupware.find(@ticket.groupware_id)
