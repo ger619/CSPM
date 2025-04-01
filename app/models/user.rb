@@ -31,6 +31,7 @@ class User < ApplicationRecord
 
   has_many :assignees
   has_many :projects, through: :assignees
+  has_many :notifications, dependent: :destroy
 
   after_initialize :set_default_profile_completed, if: :new_record?
   validate :email_domain_must_be_certified, on: %i[create invitation_create]
