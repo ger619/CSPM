@@ -271,7 +271,13 @@ class Ticket < ApplicationRecord
                     1
                   end
 
-    self.unique_id = "#{initials}-#{next_number.to_s.rjust(4, '0')}"
+    loop do
+      self.unique_id = "#{initials}-#{next_number.to_s.rjust(4, '0')}"
+      break unless Ticket.exists?(unique_id: unique_id)
+
+      next_number += 1
+    end
+
     save
   end
 
