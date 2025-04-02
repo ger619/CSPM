@@ -1,5 +1,4 @@
 <div class="p-4 border-2 border-white rounded-lg flex flex-col items-center">
-
   <!-- Topbar Section  for admin and observer-->
   <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6 w-full ">
@@ -37,7 +36,7 @@
       </div>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
-          Active Agents<br>(Agents who have login more than once)
+          Active Internal Users<br>(Agents who have login more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
           <%= User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count %>
@@ -79,7 +78,9 @@
   <% end %>
 
   <!-- First Grid Section -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4 w-full">
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4 w-full">
+  <%= link_to project_index_path do %>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
         Number of Service Desks
@@ -88,8 +89,9 @@
         <%= current_user.projects.distinct.pluck(:id).count %>
       </span>
     </div>
+  <% end %>
     <% if current_user.projects.any? %>
-      <%= link_to project_tickets_path(project_id: current_user.projects.first.id, status: 'open', user_id: current_user.id), class: 'flex items-center justify-between w-full' do %>
+      <%= link_to index_home_project_tickets_path(project_id: current_user.projects.first.id, status: 'open', user_id: current_user.id), class: 'flex items-center justify-between w-full' do %>
         <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
           <p class="text-xs sm:text-sm truncate">
             My Open Tickets
@@ -107,17 +109,26 @@
       </p>
       </div>
     <% end %>
+
+  <% if current_user.projects.any? %>
+    <%= link_to all_tickets_project_tickets_path(project_id: current_user.projects.first.id, status: 'open'), class: 'flex items-center justify-between w-full' do %>
+      <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+        <p class="text-xs sm:text-sm truncate">
+          Total Number of Open Tickets
+        </p>
+        <span class="text-lg sm:text-xl font-bold">
+          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
+        </span>
+      </div>
+    <% end %>
+  <% else %>
     <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
       <p class="text-xs sm:text-sm truncate">
-        Total Number of of Open Tickets
+        No Open Tickets Available
       </p>
-      <span class="text-lg sm:text-xl font-bold">
-        <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved] }).distinct.count %>
-      </span>
-
     </div>
+  <% end %>
   </div>
-
 
   <!-- Table Section -->
   <div class="flex flex-wrap items-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
@@ -125,7 +136,6 @@
       <%= render 'home/table_ticket_per_project' %>
     </p>
   </div>
-
   <!-- Conditional Admin Section -->
   <% if current_user.has_role?('admin') or current_user.has_role?('project manager') or current_user.has_role?('agent') %>
     <div class="grid gap-4 mb-4 bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
@@ -153,7 +163,6 @@
       <%= render 'home/list_project' %>
     </div>
   </div>
-
   <!-- Chart Data Section -->
   <div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800 p-2 sm:p-4 w-full">
     <%= render 'home/chart_data_per_user' %>

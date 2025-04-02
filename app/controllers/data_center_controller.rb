@@ -493,6 +493,8 @@ class DataCenterController < ApplicationController
 
     # Group tickets by project
     tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
+
+      # Ensure the project title doesn't exceed 31 characters
       truncated_title = project_title[0, 31] # Truncate to 31 characters
       workbook.add_worksheet(name: truncated_title) do |sheet|
         sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',

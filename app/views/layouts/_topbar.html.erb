@@ -84,9 +84,9 @@
     </div>
     <div class="Relative">
       <ul id="dropdownProfile" class="flex items-center space-x-4">
-          <li class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+        <li class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
             <% if current_user.profile_picture.attached? %>
-              <%= image_tag current_user.profile_picture, class: 'w-10 h-10 rounded-full' %>
+              <%= image_tag current_user.profile_picture, class: 'w-10 h-10 rounded-md' %>
             <% elsif current_user.name_initials.present? %>
               <p class="w-10 h-10 flex items-center justify-center bg-gray-300 dark:bg-gray-600 rounded-full text-white"><%= current_user.name_initials %></p>
             <% else %>

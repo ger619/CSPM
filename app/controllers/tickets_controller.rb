@@ -84,12 +84,18 @@ class TicketsController < ApplicationController
     respond_to do |format|
       # Custom validations
       %i[content issue priority software_id groupware_id].each do |attribute|
-        @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.") if @ticket.public_send(attribute).blank?
+        if @ticket.public_send(attribute).blank?
+          @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.")
+          Rails.logger.error("Validation failed: #{attribute.to_s.humanize} cannot be blank.")
+        end
       end
 
       # Handle validation errors or proceed with save
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
+        # Detailed error logs for a ticket
+        Rails.logger.error("Ticket creation failed: #{@ticket.errors.full_messages.join(', ')}")
+        Sentry.capture_message("Ticket creation failed: #{@ticket.errors.full_messages.join(', ')}")
       else
         if @ticket.groupware_id.present?
           groupware = Groupware.find(@ticket.groupware_id)
@@ -139,6 +145,27 @@ class TicketsController < ApplicationController
   end
 
   def edit; end
+
+  def all_tickets
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
+    # Paginate the tickets
+    @per_page = 20
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
+  def index_home
+    @tickets = @project.tickets.joins(:statuses, :users)
+      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .where(users: { id: current_user.id })
+    # Paginate the tickets    # Paginate the tickets
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
 
   def update
     respond_to do |format|
