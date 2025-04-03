@@ -12,12 +12,12 @@ class Ability
 
     elsif user.has_role?('project manager')
       can %i[read assign_user unassign_user add_team], Project
-      can %i[create read assign_tag unassign_tag add_status update_issue_type update_due_date update_priority], Ticket
+      can %i[create read assign_tag unassign_tag add_status update_issue_type update_due_date update_priority index_home all_tickets], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       can %i[create read add_user remove_user edit update], Product
       cannot %i[delete], Product
-      can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
+      can %i[create edit read], User, roles: { name: ['agent', 'client', 'project manager'] }
       cannot :manage, User, roles: { name: 'admin' }
       can :manage, Board
       can :manage, Task
@@ -25,7 +25,7 @@ class Ability
       can :manage, Team
     elsif user.has_role? :client
       can :read, Project
-      can %i[create read assign_tag unassign_tag update_status add_status], Ticket
+      can %i[create read assign_tag unassign_tag update_status add_status index_home all_tickets], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       cannot %i[create delete edit], Product
@@ -35,7 +35,7 @@ class Ability
       can :generate, :report
     elsif user.has_role? :agent
       can %i[read assign_user unassign_user], Project
-      can %i[create read assign_tag unassign_tag update_status add_status], Ticket
+      can %i[create read assign_tag unassign_tag update_status add_status index_home all_tickets], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
       can :update_due_date, Ticket
