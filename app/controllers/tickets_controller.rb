@@ -357,6 +357,11 @@ class TicketsController < ApplicationController
     end
   end
 
+  def non_breached_sla_tickets
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.joins(:sla_tickets).where("sla_tickets.sla_status = 'Not Breached'")
+  end
+
   private
 
   def set_project
