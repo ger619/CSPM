@@ -23,7 +23,6 @@
       <% end %>
     </div>
   <% end %>
-
   <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
   <!-- Issue Type Field -->
   <div class="relative z-0 w-full mt-6 mb-6 group">
