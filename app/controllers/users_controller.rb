@@ -50,6 +50,11 @@ class UsersController < ApplicationController
       .order(:first_name, :last_name)
   end
 
+  def client_active
+    @active_users_clients = User.joins(:roles).where(roles: { name: 'client' })
+      .where('sign_in_count > ?', 0)
+  end
+
   private
 
   def set_user
