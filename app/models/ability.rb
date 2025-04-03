@@ -17,7 +17,7 @@ class Ability
       can :manage, Issue, user_id: user.id
       can %i[create read add_user remove_user edit update], Product
       cannot %i[delete], Product
-      can %i[create edit read], User, roles: { name: %w[agent client project_manager] }
+      can %i[create edit read], User, roles: { name: ['agent', 'client', 'project manager'] }
       cannot :manage, User, roles: { name: 'admin' }
       can :manage, Board
       can :manage, Task
