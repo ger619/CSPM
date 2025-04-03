@@ -39,7 +39,7 @@
           </svg>
         </button>
       </div>
-      <% users = User.with_assigned_role.distinct %>
+      <% users = User.with_assigned_role.distinct.order(:first_name, :last_name) %>
       <% users.each do |user| %>
         <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
           <%= user.name %>
