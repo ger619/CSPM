@@ -8,7 +8,7 @@ class TicketsController < ApplicationController
     # Handling issues with rich text content and search query
     @issue = if params[:query].present?
                @ticket.issues.left_joins(:rich_text_content)
-                 .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+                      .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
              else
                @ticket.issues.with_rich_text_content.order('created_at DESC')
              end
@@ -43,10 +43,10 @@ class TicketsController < ApplicationController
     # Count tickets created by the current user with 'Client Confirmation Pending' status
     @tickets_count = if confirmation_pending_status
                        @project.tickets
-                         .where(user: current_user)
-                         .joins(:statuses)
-                         .where(statuses: { id: confirmation_pending_status.id })
-                         .count
+                               .where(user: current_user)
+                               .joins(:statuses)
+                               .where(statuses: { id: confirmation_pending_status.id })
+                               .count
                      else
                        0
                      end
@@ -67,13 +67,13 @@ class TicketsController < ApplicationController
     # If a software_id is already selected, filter groupwares accordingly
     @groupwares = if @ticket.software_id.present?
                     @project.groupwares
-                      .joins(:softwares)
-                      .where(softwares: { id: @ticket.software_id })
-                      .distinct
+                            .joins(:softwares)
+                            .where(softwares: { id: @ticket.software_id })
+                            .distinct
                   else
                     # If no software is selected, load all groupwares for the project
                     @project.groupwares
-                      .distinct
+                            .distinct
                   end
   end
 
@@ -84,18 +84,12 @@ class TicketsController < ApplicationController
     respond_to do |format|
       # Custom validations
       %i[content issue priority software_id groupware_id].each do |attribute|
-        if @ticket.public_send(attribute).blank?
-          @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.")
-          Rails.logger.error("Validation failed: #{attribute.to_s.humanize} cannot be blank.")
-        end
+        @ticket.errors.add(attribute, "#{attribute.to_s.humanize} cannot be blank.") if @ticket.public_send(attribute).blank?
       end
 
       # Handle validation errors or proceed with save
       if @ticket.errors.any? || !@ticket.save
         format.html { render :new, status: :unprocessable_entity }
-        # Detailed error logs for a ticket
-        Rails.logger.error("Ticket creation failed: #{@ticket.errors.full_messages.join(', ')}")
-        Sentry.capture_message("Ticket creation failed: #{@ticket.errors.full_messages.join(', ')}")
       else
         if @ticket.groupware_id.present?
           groupware = Groupware.find(@ticket.groupware_id)
@@ -145,42 +139,6 @@ class TicketsController < ApplicationController
   end
 
   def edit; end
-
-  def all_tickets
-    @project = Project.find(params[:project_id])
-    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
-    # Paginate the tickets
-    @per_page = 20
-    @page = (params[:page] || 1).to_i
-    @total_pages = (@tickets.count / @per_page.to_f).ceil
-    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
-  end
-
-  def index
-    @tickets = @project.tickets.joins(:statuses, :users)
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
-      .where(users: { id: current_user.id })
-
-    # Debugging: Log the count of tickets
-    Rails.logger.debug("Total tickets count: #{@tickets.count}")
-
-    # Paginate the tickets
-    @per_page = 10
-    @page = (params[:page] || 1).to_i
-    @total_pages = (@tickets.count / @per_page.to_f).ceil
-
-    # Debugging: Log the pagination details
-    Rails.logger.debug("Page: #{@page}, Per Page: #{@per_page}, Total Pages: #{@total_pages}")
-
-    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
-
-    # Debugging: Log the tickets being displayed on the current page
-    Rails.logger.debug("Tickets on current page: #{@tickets.map(&:id)}")
-  rescue StandardError => e
-    Rails.logger.error("Error in index_home: #{e.message}")
-    Sentry.capture_exception(e)
-    redirect_to project_path(@project), alert: 'An error occurred while loading tickets.'
-  end
 
   def update
     respond_to do |format|
@@ -360,6 +318,27 @@ class TicketsController < ApplicationController
         format.html { render :edit, alert: 'Failed to update priority.' }
       end
     end
+  end
+
+  def index
+    @tickets = current_user.tickets.joins(:statuses)
+                           .where.not(statuses: { name: %w[Closed Resolved Declined] })
+                           .distinct
+
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
+  def all_tickets
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
+    # Paginate the tickets
+    @per_page = 20
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def update_issue_type
