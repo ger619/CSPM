@@ -320,27 +320,7 @@ class TicketsController < ApplicationController
     end
   end
 
-  def index
-    @tickets = current_user.tickets.joins(:statuses)
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
-      .distinct
-
-    @per_page = 10
-    @page = (params[:page] || 1).to_i
-    @total_pages = (@tickets.count / @per_page.to_f).ceil
-    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
-  end
-
-  def all_tickets
-    @project = Project.find(params[:project_id])
-    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
-    # Paginate the tickets
-    @per_page = 20
-    @page = (params[:page] || 1).to_i
-    @total_pages = (@tickets.count / @per_page.to_f).ceil
-    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
-  end
-
+  # For admin and internal users only
   def closed_tickets_one_week
     @project = Project.find(params[:project_id])
     @tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' })
@@ -361,6 +341,43 @@ class TicketsController < ApplicationController
     @page = (params[:page] || 1).to_i
     @total_pages = (@tickets.count / @per_page.to_f).ceil
     @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
+  def all_open_tickets
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .distinct
+    # Paginate the tickets
+    @per_page = 20
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
+  # For current user Open Tickets and Total Open Tickets
+  def index
+    @tickets = current_user.tickets.joins(:statuses)
+      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .distinct
+
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
+  def all_tickets
+    @project = Project.find(params[:project_id])
+    if @project.users.include?(current_user)
+      @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
+      # Paginate the tickets
+      @per_page = 20
+      @page = (params[:page] || 1).to_i
+      @total_pages = (@tickets.count / @per_page.to_f).ceil
+      @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+    else
+      @tickets = []
+    end
   end
 
   def update_issue_type
