@@ -353,6 +353,16 @@ class TicketsController < ApplicationController
     @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
+  def created_tickets_one_week
+    @project = Project.find(params[:project_id])
+    @tickets = @project.tickets.where('created_at >= ?', 1.week.ago)
+    # Paginate the tickets
+    @per_page = 20
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+  end
+
   def update_issue_type
     @ticket = Ticket.find(params[:id])
 
