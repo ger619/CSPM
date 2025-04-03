@@ -10,6 +10,7 @@
           <%= Project.distinct.count %>
         </span>
       </div>
+      <%= link_to active_users_path, class: 'flex items-center justify-between w-full' do %>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
           Active Users<br>(User who have login more than once)
@@ -18,6 +19,7 @@
           <%= User.joins(:roles).where(roles: { name: ['client','project manager','admin','agent','observer'] }).where('sign_in_count > ?', 0).count %>
         </span>
       </div>
+      <% end %>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
           Active Clients<br>(Clients who have login more than once)

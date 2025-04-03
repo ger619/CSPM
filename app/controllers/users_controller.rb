@@ -43,6 +43,13 @@ class UsersController < ApplicationController
     redirect_to users_path, notice: 'User status was successfully updated.'
   end
 
+  def active
+    @active_users = User.joins(:roles)
+      .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
+      .where('sign_in_count > ?', 0)
+      .order(:first_name, :last_name)
+  end
+
   private
 
   def set_user
