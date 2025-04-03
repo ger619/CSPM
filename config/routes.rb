@@ -45,7 +45,7 @@ Rails.application.routes.draw do
     resources :tickets do
       collection do
         get 'all_tickets'
-        get 'index_home'
+        get 'non_breached_sla_tickets'
       end
       member do
         post :assign_tag

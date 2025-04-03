@@ -67,18 +67,17 @@
         <% project = Project.find(project_id) %>
         <tr>
           <td class="capitalize border border-black px-4 py-2" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= project.title %></td>
-          <td class="border border-black px-4 py-2" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= total_count %></td>
+          <td class="border border-black px-4 py-2 text-center" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= total_count %></td>
         </tr>
         <% @project_status_counts.select { |k, _| k.first == project_id }.each do |(proj_id, status), count| %>
           <tr>
-            <td class="border border-black px-4 py-2"><%= status %></td>
-            <td class="border border-black px-4 py-2"><%= count %></td>
+            <td class="border border-black px-4 py-2 text-center"><%= status %></td>
+            <td class="border border-black px-4 py-2 text-center"><%= count %></td>
           </tr>
         <% end %>
       <% end %>
       </tbody>
     </table>
-
     <table id="orm_report" class="table-auto w-full">
       <thead>
       <tr>
