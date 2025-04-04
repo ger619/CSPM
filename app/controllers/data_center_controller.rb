@@ -407,7 +407,7 @@ class DataCenterController < ApplicationController
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.updated_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000),
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
@@ -443,7 +443,7 @@ class DataCenterController < ApplicationController
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.subject,
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
@@ -493,7 +493,6 @@ class DataCenterController < ApplicationController
 
     # Group tickets by project
     tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
-      # Ensure the project title doesn't exceed 31 characters
       truncated_title = project_title[0, 31] # Truncate to 31 characters
       workbook.add_worksheet(name: truncated_title) do |sheet|
         sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
@@ -598,7 +597,7 @@ class DataCenterController < ApplicationController
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.max_by(&:updated_at) || 'N/A',
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.updated_at.strftime('%d-%b-%Y'),
           latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
@@ -626,8 +625,8 @@ class DataCenterController < ApplicationController
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
           ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
