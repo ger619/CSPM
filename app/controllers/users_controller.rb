@@ -10,9 +10,9 @@ class UsersController < ApplicationController
                User.left_joins(:client, :roles)
                  .where('users.email ILIKE :query OR users.first_name ILIKE :query OR
                          users.last_name ILIKE :query OR clients.name ILIKE :query OR roles.name ILIKE :query',
-                        query: "%#{params[:query]}%")
+                        query: "%#{params[:query]}%").distinct
              else
-               User.order('created_at DESC')
+               User.order('created_at DESC').distinct
              end
     @total_pages = (@users.count / @per_page.to_f).ceil
     @users = @users.offset((@page - 1) * @per_page).limit(@per_page)
@@ -47,11 +47,13 @@ class UsersController < ApplicationController
     @active_users = User.joins(:roles)
       .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
       .where('sign_in_count > ?', 0)
+      .distinct
       .order(:first_name, :last_name)
   end
 
   def client_active
     @active_users_clients = User.joins(:roles).where(roles: { name: 'client' })
+      .distinct
       .where('sign_in_count > ?', 0)
   end
 
