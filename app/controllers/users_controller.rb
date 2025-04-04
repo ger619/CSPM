@@ -57,6 +57,12 @@ class UsersController < ApplicationController
       .where('sign_in_count > ?', 0)
   end
 
+  def manager_active
+    @active_users_manager = User.joins(:roles).where(roles: { name: 'project manager' })
+      .distinct
+      .where('sign_in_count > ?', 0)
+  end
+
   private
 
   def set_user
