@@ -23,7 +23,7 @@
       <%= link_to active_client_users_path, class: 'flex items-center justify-between w-full' do %>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
-          Active Clients<br>(Clients who have login more than once)
+          Active Clients<br>(Clients who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
           <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
@@ -32,7 +32,7 @@
       <% end %>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
-          Active Project Manager<br>(Project Managers who have login more than once)
+          Active Project Manager<br>(Project Managers who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
           <%= User.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count %>
@@ -40,7 +40,7 @@
       </div>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
-          Active Internal Users<br>(Agents who have login more than once)
+          Active Internal Users<br>(Agents who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
           <%= User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count %>
