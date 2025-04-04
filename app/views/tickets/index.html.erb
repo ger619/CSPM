@@ -2,20 +2,29 @@
   <thead>
   <tr>
     <th class="py-2 px-4 border-b">ID</th>
-    <th class="py-2 px-4 border-b">Issue</th>
-    <th class="py-2 px-4 border-b">Prioritize</th>
-    <th class="py-2 px-4 border-b">Project</th>
-    <th class="py-2 px-4 border-b">Actions</th>
+    <th class="py-2 px-4 border-b">Date</th>
+    <th class="py-2 px-4 border-b">SERVICE DESK NAME</th>
+    <th class="py-2 px-4 border-b">ISSUE</th>
+    <th class="py-2 px-4 border-b">PRIORITY</th>
+    <th class="py-2 px-4 border-b">SUBJECT</th>
+    <th class="py-2 px-4 border-b">ASSIGNEE</th>
+    <th class="py-2 px-4 border-b">STATUS</th>
+    <th class="py-2 px-4 border-b">PROGRESS</th>
+    <th class="py-2 px-4 border-b">REPORTER</th>
+    <th class="py-2 px-4 border-b">VIEW</th>
   </tr>
   </thead>
   <tbody>
   <% @tickets.each do |ticket| %>
     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
+        <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) if ticket.unique_id.present? %>
+      </th>
       <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
       </th>
-      <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
-        <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) if ticket.unique_id.present? %>
+      <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <%= link_to ticket.project.title, project_ticket_path(ticket.project, ticket) %>
       </th>
       <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>

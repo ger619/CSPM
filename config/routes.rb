@@ -47,7 +47,12 @@ Rails.application.routes.draw do
     end
     resources :tickets do
       collection do
+        # all tickets special for home page
         get 'all_tickets'
+        get 'closed_tickets_one_week'
+        get 'created_tickets_one_week'
+        get 'all_open_tickets'
+
         get 'non_breached_sla_tickets'
       end
       member do
