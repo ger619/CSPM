@@ -43,15 +43,14 @@
         </span>
       </div>
       <%= link_to closed_tickets_one_week_project_tickets_path(project_id: current_user.projects.first.id) do %>
-
-    <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-        <p class="text-xs sm:text-sm truncate">
-          Tickets Closed in the last one week
-        </p>
-        <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] }).where('tickets.updated_at >= ?', 1.week.ago).count %>
-        </span>
-      </div>
+        <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+          <p class="text-xs sm:text-sm truncate">
+            Tickets Closed in the last one week
+          </p>
+          <span class="text-lg sm:text-xl font-bold">
+            <%= Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] }).where('tickets.updated_at >= ?', 1.week.ago).count %>
+          </span>
+        </div>
         <% end %>
       <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
         <p class="text-xs sm:text-sm truncate">
@@ -61,14 +60,16 @@
           <%= Ticket.distinct.count %>
         </span>
       </div>
-      <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
-        <p class="text-xs sm:text-sm truncate">
-          All Open Tickets
-        </p>
-        <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
-        </span>
-      </div>
+      <%= link_to all_open_tickets_project_tickets_path(project_id: current_user.projects.first.id) do %>
+        <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
+          <p class="text-xs sm:text-sm truncate">
+            All Open Tickets
+          </p>
+          <span class="text-lg sm:text-xl font-bold">
+            <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
+          </span>
+        </div>
+      <% end %>
       <%= link_to created_tickets_one_week_project_tickets_path(project_id: current_user.projects.first.id) do %>
         <div class="col-span-1 flex items-center dark:bg-gray-700 justify-between p-3 sm:p-4 h-20 sm:h-24 rounded shadow hover:shadow-lg w-full">
           <p class="text-xs sm:text-sm truncate">

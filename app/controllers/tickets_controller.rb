@@ -324,6 +324,7 @@ class TicketsController < ApplicationController
   def closed_tickets_one_week
     @project = Project.find(params[:project_id])
     @tickets = @project.tickets.joins(:statuses).where(statuses: { name: 'Closed' })
+      # Filter tickets updated within the last week
       .where('tickets.updated_at >= ?', 1.week.ago)
       .distinct
     # Paginate the tickets
@@ -348,7 +349,7 @@ class TicketsController < ApplicationController
     @tickets = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
       .distinct
     # Paginate the tickets
-    @per_page = 20
+    @per_page = 50
     @page = (params[:page] || 1).to_i
     @total_pages = (@tickets.count / @per_page.to_f).ceil
     @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
