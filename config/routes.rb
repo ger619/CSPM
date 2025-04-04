@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'users/active', to: 'users#active', as: 'active_users'
+  get 'users/client_active', to: 'users#client_active', as: 'active_client_users'
+
   devise_for :users, controllers: { invitations: 'invitations' }
   resources :users do
     collection do
