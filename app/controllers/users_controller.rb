@@ -44,11 +44,21 @@ class UsersController < ApplicationController
   end
 
   def active
+    per_page = 50
+    page = params[:page].to_i.positive? ? params[:page].to_i : 1 # Default to page 1 if no page is provided
+
     @active_users = User.joins(:roles)
       .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
       .where('sign_in_count > ?', 0)
-      .distinct
-      .order(:first_name, :last_name)
+      .order(sign_in_count: :desc)
+      .limit(per_page)
+      .offset((page - 1) * per_page)
+
+    @total_pages = (User.joins(:roles)
+                        .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
+                        .where('sign_in_count > ?', 0)
+                        .count / per_page.to_f).ceil
+    @current_page = page
   end
 
   def client_active
