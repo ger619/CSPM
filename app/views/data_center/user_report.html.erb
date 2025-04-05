@@ -11,7 +11,7 @@
           <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
             <% users = User.with_role(:agent).or(User.with_role(:project_manager)).or(User.with_role(:admin)) %>
             <% users.each do |user| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer capitalize" data-user-id="<%= user.id %>" onclick="selectUser(this)">
                 <%= user.name || user.email %>
               </div>
             <% end %>
