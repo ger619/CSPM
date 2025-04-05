@@ -48,7 +48,7 @@
           <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
             <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
               <label>
-                <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox mr-2">
+                <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox mr-2 capitalize">
                 <%= client.name %>
               </label>
             </div>

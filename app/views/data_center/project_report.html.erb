@@ -9,7 +9,7 @@
           <div id="teamDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
             <% teams = Team.all %>
             <% teams.each do |team| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-team-id="<%= team.id %>" onclick="selectTeam(this)">
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer capitalize" data-team-id="<%= team.id %>" onclick="selectTeam(this)">
                 <%= team.name %>
               </div>
             <% end %>
