@@ -76,19 +76,19 @@ class DataCenterController < ApplicationController
     authorize! :generate, :report # Check if the user can generate reports
     if params[:user_id].present? || params[:start_date].present? || params[:end_date].present?
       @users = User.includes(tickets: { project: :client })
-        .where(id: params[:user_id])
+                   .where(id: params[:user_id])
 
       start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : nil
       end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
 
       @status_counts = @users.flat_map(&:tickets)
-        .select { |ticket| (start_date.nil? || ticket.created_at >= start_date) && (end_date.nil? || ticket.created_at <= end_date) }
-        .group_by { |ticket| ticket.statuses.first&.name || 'N/A' }
-        .transform_values(&:count)
+                             .select { |ticket| (start_date.nil? || ticket.created_at >= start_date) && (end_date.nil? || ticket.created_at <= end_date) }
+                             .group_by { |ticket| ticket.statuses.first&.name || 'N/A' }
+                             .transform_values(&:count)
 
       @tickets_by_client = @users.flat_map(&:tickets)
-        .select { |ticket| (start_date.nil? || ticket.created_at >= start_date) && (end_date.nil? || ticket.created_at <= end_date) }
-        .group_by { |ticket| ticket.project.client.name }
+                                 .select { |ticket| (start_date.nil? || ticket.created_at >= start_date) && (end_date.nil? || ticket.created_at <= end_date) }
+                                 .group_by { |ticket| ticket.project.client.name }
 
       respond_to do |format|
         format.html # Default view
@@ -108,7 +108,7 @@ class DataCenterController < ApplicationController
       end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
 
       @tickets = @user.tickets.joins(project: :client)
-        .where(clients: { name: params[:client_name] })
+                      .where(clients: { name: params[:client_name] })
       @tickets = @tickets.where('tickets.created_at >= ?', start_date) if start_date
       @tickets = @tickets.where('tickets.created_at <= ?', end_date) if end_date
     else
@@ -128,13 +128,13 @@ class DataCenterController < ApplicationController
 
       # Fetch tickets excluding specific statuses
       @tickets = Ticket.joins(:statuses, :project, :taggings)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(taggings: { user_id: user_ids })
+                       .where.not(statuses: { name: %w[Resolved Closed Declined] })
+                       .where(taggings: { user_id: user_ids })
 
       # Group tickets by user and status and show the counts of users and the tickets assigned
       @tickets_by_user = @tickets.joins(:statuses)
-        .group('taggings.user_id', 'statuses.name')
-        .count
+                                 .group('taggings.user_id', 'statuses.name')
+                                 .count
 
       # Organize data into a hash for easier display in the view
       @organized_tickets = @tickets_by_user.each_with_object({}) do |((user_id, status), count), hash|
@@ -167,15 +167,15 @@ class DataCenterController < ApplicationController
     if params[:user_id]
       @user = User.find(params[:user_id])
       @tickets = Ticket.joins(:statuses, :taggings, :project)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(taggings: { user_id: @user.id })
-        .order('projects.title')
+                       .where.not(statuses: { name: %w[Resolved Closed Declined] })
+                       .where(taggings: { user_id: @user.id })
+                       .order('projects.title')
     else
       @tickets_by_user = Ticket.joins(:statuses, :taggings, :project)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(taggings: { user_id: @team.users.pluck(:id) })
-        .order('projects.title')
-        .group_by(&:user)
+                               .where.not(statuses: { name: %w[Resolved Closed Declined] })
+                               .where(taggings: { user_id: @team.users.pluck(:id) })
+                               .order('projects.title')
+                               .group_by(&:user)
     end
   end
 
@@ -194,13 +194,13 @@ class DataCenterController < ApplicationController
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(project: :client)
-                     .joins(:statuses)
-                     .where.not(statuses: { name: outstanding_statuses })
+                         .joins(:statuses)
+                         .where.not(statuses: { name: outstanding_statuses })
                  else
                    Ticket.joins(project: :client)
-                     .joins(:statuses)
-                     .where(projects: { id: current_user.projects.ids })
-                     .where.not(statuses: { name: outstanding_statuses })
+                         .joins(:statuses)
+                         .where(projects: { id: current_user.projects.ids })
+                         .where.not(statuses: { name: outstanding_statuses })
                  end
 
       # Apply filtering if a specific client is selected
@@ -209,10 +209,10 @@ class DataCenterController < ApplicationController
       # Handle days filter
       if days.positive?
         closed_resolved_tickets = Ticket.joins(project: :client)
-          .joins(:statuses)
-          .where(statuses: { name: %w[Closed Resolved Declined] })
-          .where('tickets.created_at >= ?', days.days.ago)
-          .where(projects: { client_id: params[:client_id] })
+                                        .joins(:statuses)
+                                        .where(statuses: { name: %w[Closed Resolved Declined] })
+                                        .where('tickets.created_at >= ?', days.days.ago)
+                                        .where(projects: { client_id: params[:client_id] })
         @tickets = @tickets.or(closed_resolved_tickets)
       end
 
@@ -260,14 +260,14 @@ class DataCenterController < ApplicationController
 
       # Retrieve tickets associated with the team's users via the taggings table
       @tickets = Ticket.joins(:taggings, :statuses)
-        .joins('INNER JOIN add_statuses ON add_statuses.ticket_id = tickets.id') # Join add_statuses
-        .where(taggings: { user_id: user_ids })
-        .where(
-          'statuses.name NOT IN (:outstanding_statuses) OR
+                       .joins('INNER JOIN add_statuses ON add_statuses.ticket_id = tickets.id') # Join add_statuses
+                       .where(taggings: { user_id: user_ids })
+                       .where(
+                         'statuses.name NOT IN (:outstanding_statuses) OR
                           (statuses.name IN (:outstanding_statuses) AND add_statuses.created_at >= :days_ago)',
-          outstanding_statuses: outstanding_statuses,
-          days_ago: days.days.ago
-        )
+                         outstanding_statuses: outstanding_statuses,
+                         days_ago: days.days.ago
+                       )
 
       # Ensure non-admin users can only see their own project tickets
       @tickets = @tickets.joins(:project).where(projects: { id: current_user.projects.ids }) unless current_user.has_any_role?(:admin, :observer, :project_manager)
@@ -307,9 +307,9 @@ class DataCenterController < ApplicationController
       report_type = params[:report_type] # 'sod' for start of day, 'eod' for end of day
 
       base_scope = Ticket.joins(:users, project: :client)
-        .joins(:statuses)
-        .joins(:add_statuses)
-        .where(users: { id: user_ids })
+                         .joins(:statuses)
+                         .joins(:add_statuses)
+                         .where(users: { id: user_ids })
 
       # Apply role-based filtering if not admin or observer
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
@@ -321,8 +321,8 @@ class DataCenterController < ApplicationController
       @tickets = if report_type == 'eod'
                    # EOD: Tickets that changed to "outstanding_statuses" within the last 24 hours
                    recently_updated_tickets = @tickets
-                     .where(statuses: { name: outstanding_statuses })
-                     .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                                                .where(statuses: { name: outstanding_statuses })
+                                                .where('add_statuses.updated_at >= ?', 24.hours.ago)
 
                    # Get latest issues separately
                    Issue
@@ -359,8 +359,8 @@ class DataCenterController < ApplicationController
     if params[:groupware_id].present?
       @groupware = Groupware.find(params[:groupware_id])
       @tickets = Ticket.joins(software: :groupwares)
-        .where(groupwares: { id: @groupware.id })
-        .joins(:sla_tickets)
+                       .where(groupwares: { id: @groupware.id })
+                       .joins(:sla_tickets)
 
       if params[:start_date].present? && params[:end_date].present?
         start_date = Date.parse(params[:start_date])
@@ -372,10 +372,12 @@ class DataCenterController < ApplicationController
     else
       @tickets = Ticket.none
     end
+    start_date = Date.parse(params[:start_date]) if params[:start_date].present?
+    month_name = start_date ? Date::MONTHNAMES[start_date.month] : Date::MONTHNAMES[Date.today.month]
 
     respond_to do |format|
       format.html { render :cbk_groupware_report }
-      format.csv { send_data generate_cbk_groupware_report_csv(@tickets), filename: "groupware_report_#{Date.today}.csv" }
+      format.csv { send_data generate_cbk_groupware_report_csv(@tickets), filename: "cbk_report_for #{month_name} and #{Date.today}.csv" }
     end
   end
 
@@ -502,20 +504,20 @@ class DataCenterController < ApplicationController
           row_style = styles[status] || nil
 
           sheet.add_row [
-            ticket.unique_id.gsub('–', '-'),
-            ticket.project.title,
-            ticket.priority,
-            ticket.subject,
-            ticket.issue,
-            status,
-            ticket.users.map(&:name).select(&:present?).join(', '),
-            ticket.user.name,
-            ticket.content.to_plain_text.truncate(3000),
-            ticket.created_at.strftime('%d-%b-%Y'),
-            ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-            ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-            ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
-          ], style: row_style
+                          ticket.unique_id.gsub('–', '-'),
+                          ticket.project.title,
+                          ticket.priority,
+                          ticket.subject,
+                          ticket.issue,
+                          status,
+                          ticket.users.map(&:name).select(&:present?).join(', '),
+                          ticket.user.name,
+                          ticket.content.to_plain_text.truncate(3000),
+                          ticket.created_at.strftime('%d-%b-%Y'),
+                          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+                          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+                          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+                        ], style: row_style
         end
       end
     end
@@ -612,8 +614,9 @@ class DataCenterController < ApplicationController
 
   def generate_cbk_groupware_report_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
-              'Last Comment Updated At', 'Due Date']
+      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Status Updated At',
+              'Assignee', 'Created At', 'Status Last Updated At', 'Comment Last Updated At', 'Due Date']
+
       tickets.each do |ticket|
         csv << [
           ticket.unique_id,
@@ -627,7 +630,7 @@ class DataCenterController < ApplicationController
           ticket.created_at.strftime('%d-%b-%Y'),
           ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A',
         ]
       end
     end
