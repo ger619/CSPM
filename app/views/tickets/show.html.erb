@@ -56,8 +56,9 @@
           </div>
           <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
             <% if @ticket.content.present? %>
-              <span class="font-extralight pl-2 flex flex-wrap">
-                <%= @ticket.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
+              <div class="font-extralight pl-2 flex flex-wrap">
+                <%= @ticket.content.to_s.gsub(/\[.*?\]/, '').html_safe %>
+
                 <% if @ticket.content.body.attachments.any? %>
                   <% @ticket.content.body.attachments.each do |attachment| %>
                     <div class="mb-2">
@@ -86,7 +87,7 @@
                     </div>
                   <% end %>
                 <% end %>
-              </span>
+              </div>
             <% end %>
           </div>
         </div>

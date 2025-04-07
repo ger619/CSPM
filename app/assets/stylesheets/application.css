@@ -218,3 +218,12 @@
 #sidebar:hover::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.7);
 }
+
+.trix-content .text-red { color: red; }
+.trix-content .text-blue { color: blue; }
+.trix-content .text-green { color: green; }
+.trix-content .text-yellow { color: goldenrod; }
+.trix-content .text-underline { text-decoration: underline; }
+.trix-content .text-highlight { background-color: yellow; }
+.trix-content .text-large { font-size: 1.5em; }
+.trix-content .text-small { font-size: 0.75em; }

@@ -19,4 +19,9 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
   ],
+  safelist: [
+    'text-red', 'text-blue', 'text-green', 'text-yellow',
+    'text-underline', 'text-highlight', 'text-large', 'text-small',
+  ],
+
 };
