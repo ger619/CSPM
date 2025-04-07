@@ -61,9 +61,8 @@
           <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
             Posted on <%= item.created_at.strftime("%I:%M %p at %d %B %Y") %>
           </time>
-          <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
+          <div class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400 trix-content">
             <%= item.content.to_plain_text.gsub(/\[.*?\]/, '').strip %>
-            
             <% if item.content.body.attachments.any? %>
               <% item.content.body.attachments.each do |attachment| %>
                 <div class="mb-2">
@@ -92,7 +91,7 @@
                 </div>
               <% end %>
             <% end %>
-          </p>
+          </div>
         </li>
       </ol>
     <% end %>
