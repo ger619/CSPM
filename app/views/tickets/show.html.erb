@@ -57,7 +57,7 @@
           <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
             <% if @ticket.content.present? %>
               <div class="font-extralight pl-2 flex flex-wrap">
-                <%= @ticket.content.to_s.gsub(/\[.*?\]/, '').html_safe %>
+                <%= sanitize(@ticket.content.to_s.gsub(/\[.*?\]/, '')) %>
 
                 <% if @ticket.content.body.attachments.any? %>
                   <% @ticket.content.body.attachments.each do |attachment| %>
