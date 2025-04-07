@@ -612,9 +612,8 @@ class DataCenterController < ApplicationController
 
   def generate_cbk_groupware_report_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Status Updated At',
-              'Assignee', 'Created At', 'Status Last Updated At', 'Comment Last Updated At', 'Due Date']
-
+      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
+              'Last Comment Updated At', 'Due Date']
       tickets.each do |ticket|
         csv << [
           ticket.unique_id,
@@ -625,10 +624,10 @@ class DataCenterController < ApplicationController
           ticket.statuses.first&.name || 'N/A',
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
-          ticket.created_at.strftime('%d-%b-%Y %H:%M'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M') || 'N/A',
-          ticket.due_date&.strftime('%d-%b-%Y %H:%M') || 'N/A'
+          ticket.created_at.strftime('%d-%b-%Y'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
     end
