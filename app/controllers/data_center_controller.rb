@@ -372,10 +372,12 @@ class DataCenterController < ApplicationController
     else
       @tickets = Ticket.none
     end
+    start_date = Date.parse(params[:start_date]) if params[:start_date].present?
+    month_name = start_date ? Date::MONTHNAMES[start_date.month] : Date::MONTHNAMES[Date.today.month]
 
     respond_to do |format|
       format.html { render :cbk_groupware_report }
-      format.csv { send_data generate_cbk_groupware_report_csv(@tickets), filename: "groupware_report_#{Date.today}.csv" }
+      format.csv { send_data generate_cbk_groupware_report_csv(@tickets), filename: "cbk_report_for #{month_name} and #{Date.today}.csv" }
     end
   end
 
