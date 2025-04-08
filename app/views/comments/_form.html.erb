@@ -147,7 +147,7 @@
 
     // Add the user back to the dropdown
     let userDropdown = document.getElementById("userDropdown");
-    let userName = element.parentElement.textContent.trim().slice(0, -1); // Remove the × character
+    let userName = element.parentElement.getAttributeNames("data-user-name"); // Remove the × character
     let dropdownItem = document.createElement("div");
     dropdownItem.className = "dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer";
     dropdownItem.setAttribute("data-user-id", userId);
