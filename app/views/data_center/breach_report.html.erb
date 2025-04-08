@@ -78,7 +78,33 @@
       </thead>
       <tbody>
         <% @tickets.each do |ticket| %>
-          <tr>
+        <% row_class = case ticket.statuses.first&.name
+                       when 'New'
+                         'bg-red-500'
+                       when 'Closed', 'Resolved'
+                         'bg-emerald-100 text-black'
+                       when 'Reopened'
+                         'bg-red-900 text-slate-100'
+                       when 'Under Development'
+                         'bg-blue-300'
+                       when 'Work in Progress'
+                         'bg-[#CCCCCC] text-black'
+                       when 'QA Testing'
+                         'bg-pink-500'
+                       when 'Awaiting Build'
+                         'bg-gray-800 text-slate-100'
+                       when 'Client Confirmation Pending'
+                         'bg-yellow-100 text-black'
+                       when 'On-Hold'
+                         'bg-red-600 text-slate-100'
+                       when 'Assigned'
+                         'bg-blue-800 text-slate-100'
+                       when 'Declined'
+                         'bg-gray-800 text-slate-100'
+                       else
+                         ''
+                       end %>
+        <tr class="<%= row_class %>">
             <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%y") %></td>
             <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
             <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.project.title %></td>
