@@ -135,25 +135,6 @@
     hideDropdown();
   }
 
-  document.addEventListener("turbo:load", function () {
-    const messageTypeSelect = document.querySelector("select[name='issue[message_type]']");
-    const externalUsers = document.getElementById("externalUsers");
-    const internalUsers = document.getElementById("internalUsers");
-
-    // Event listener for message type changes
-    messageTypeSelect.addEventListener("change", function () {
-      if (this.value === "external") {
-        // Show external users and hide internal users
-        externalUsers.classList.remove("hidden");
-        internalUsers.classList.add("hidden");
-      } else if (this.value === "internal") {
-        // Show internal users and hide external users
-        internalUsers.classList.remove("hidden");
-        externalUsers.classList.add("hidden");
-      }
-    });
-  });
-
   function removeUser(userId, element) {
     selectedUsers = selectedUsers.filter(user => user.id !== userId);
     element.parentElement.remove();
