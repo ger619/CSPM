@@ -87,15 +87,12 @@
 <% end %>
 <script>
   let selectedUsers = [];
-
   function showDropdown() {
     document.getElementById("userDropdown").classList.remove("hidden");
   }
-
   function hideDropdown() {
     document.getElementById("userDropdown").classList.add("hidden");
   }
-
   function filterUserDropdown() {
     let input = document.getElementById("searchUser").value.toLowerCase();
     let items = document.querySelectorAll("#userDropdown .dropdown-item");
@@ -105,20 +102,16 @@
       item.style.display = text.includes(input) ? "block" : "none";
     });
   }
-
   function selectUser(element) {
     let userId = element.getAttribute("data-user-id");
     let userName = element.textContent;
-
     if (!selectedUsers.some(user => user.id === userId)) {
       selectedUsers.push({ id: userId, name: userName });
-
       // Update Selected UI
       let tag = document.createElement("div");
       tag.className = "bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-2";
       tag.innerHTML = `${userName} <span onclick="removeUser('${userId}', this)" class="cursor-pointer text-red-500">×</span>`;
       document.getElementById("selectedUsers").appendChild(tag);
-
       // Add a new hidden input for each selected user
       let input = document.createElement("input");
       input.type = "hidden";
@@ -126,28 +119,23 @@
       input.value = userId;
       input.classList.add(`user-input-${userId}`);
       document.getElementById("hiddenUserInputs").appendChild(input);
-
       // Remove the selected user from the dropdown
       element.remove();
     }
-
     // Hide Dropdown
     hideDropdown();
   }
-
   function removeUser(userId, element) {
     selectedUsers = selectedUsers.filter(user => user.id !== userId);
     element.parentElement.remove();
-
     // Remove hidden input
     let input = document.querySelector(`.user-input-${userId}`);
     if (input) {
       input.remove();
     }
-
     // Add the user back to the dropdown
     let userDropdown = document.getElementById("userDropdown");
-    let userName = element.parentElement.getAttributeNames("data-user-name"); // Remove the × character
+    let userName = element.parentElement.getAttribute("data-user-name"); // Remove the × character
     let dropdownItem = document.createElement("div");
     dropdownItem.className = "dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer";
     dropdownItem.setAttribute("data-user-id", userId);
