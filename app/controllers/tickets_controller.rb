@@ -292,8 +292,12 @@ class TicketsController < ApplicationController
 
   def update_due_date
     @ticket = Ticket.find(params[:id])
-    @ticket.skip_sla_callbacks = true
+    @ticket.skip_history_logging = false
     if @ticket.update(due_date: params[:ticket][:due_date])
+      if request.patch? && !@ticket.skip_history_logging
+        change_details = @ticket.saved_changes.except(:updated_at)
+        UpdateHistory.record_update(@ticket, current_user, change_details)
+      end
       respond_to do |format|
         format.js # To update via AJAX
         format.html { redirect_back fallback_location: project_ticket_path(@project, @ticket), notice: 'Due date updated successfully.' }
@@ -308,7 +312,7 @@ class TicketsController < ApplicationController
 
   def update_priority
     @ticket = Ticket.find(params[:id])
-    @ticket.skip_history_logging = false
+    @ticket.skip_history_logging = true
 
     if @ticket.update(priority: params[:ticket][:priority])
       respond_to do |format|

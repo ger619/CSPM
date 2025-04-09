@@ -39,7 +39,8 @@ class Ticket < ApplicationRecord
   after_create :set_initial_response_time, :set_target_repair_deadline, :set_resolution_deadline, :ticket_unique_id
   attr_accessor :skip_sla_callbacks, :skip_history_logging
 
-  after_update :set_target_repair_deadline, :set_resolution_deadline, :set_resolution_deadline, unless: :skip_sla_callbacks
+  after_update :set_target_repair_deadline, :set_resolution_deadline, :set_resolution_deadline, unless: :skip_callbacks
+
 
   def set_initial_response_time
     start_time = DateTime.now
@@ -137,10 +138,11 @@ class Ticket < ApplicationRecord
     joins(:sla_tickets).where(sla_tickets: { sla_resolution_deadline: 'Breached' }).count
   end
 
+
   private
 
-  def updating_due_date?
-    saved_changes.keys == ['due_date']
+  def skip_callbacks
+    skip_sla_callbacks || skip_history_logging
   end
 
   # Assign status to new ticket
