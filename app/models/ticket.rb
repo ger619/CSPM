@@ -40,8 +40,6 @@ class Ticket < ApplicationRecord
   attr_accessor :skip_sla_callbacks, :skip_history_logging
 
   after_update :set_target_repair_deadline, :set_resolution_deadline, :set_resolution_deadline, unless: :skip_callbacks
-
-
   def set_initial_response_time
     start_time = DateTime.now
     start_time = adjust_start_time(start_time)
@@ -137,7 +135,6 @@ class Ticket < ApplicationRecord
   def self.count_resolution_breached_sla
     joins(:sla_tickets).where(sla_tickets: { sla_resolution_deadline: 'Breached' }).count
   end
-
 
   private
 
