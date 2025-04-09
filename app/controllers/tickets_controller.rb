@@ -125,8 +125,7 @@ class TicketsController < ApplicationController
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
 
-        log_event(@ticket, current_user, 'created and assign', "Ticket was created and assigned to #{assigned_user.name}")
-
+        log_event(@ticket, current_user, 'created and assign', "Ticket was created and assigned to #{assigned_user.name} at #{Time.now.strftime('%H:%M of  %d-%m-%Y')}")
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
@@ -144,8 +143,10 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
-        change_details = @ticket.saved_changes.except(:updated_at)
-        UpdateHistory.record_update(@ticket, current_user, change_details)
+        if request.patch?
+          change_details = @ticket.saved_changes.except(:updated_at)
+          UpdateHistory.record_update(@ticket, current_user, change_details)
+        end
 
         # Assign the project manager if no agents are assigned
         # Check if groupware_id is present
@@ -174,7 +175,7 @@ class TicketsController < ApplicationController
           end
         end
 
-        log_event(@ticket, current_user, 'update', 'Ticket was updated.')
+        log_event(@ticket, current_user, 'update', "Ticket was updated. at #{Time.now.strftime('%H:%M of  %d-%m-%Y')}")
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
@@ -291,6 +292,7 @@ class TicketsController < ApplicationController
 
   def update_due_date
     @ticket = Ticket.find(params[:id])
+    @ticket.skip_sla_callbacks = true
     if @ticket.update(due_date: params[:ticket][:due_date])
       respond_to do |format|
         format.js # To update via AJAX
@@ -306,7 +308,6 @@ class TicketsController < ApplicationController
 
   def update_priority
     @ticket = Ticket.find(params[:id])
-
     if @ticket.update(priority: params[:ticket][:priority])
       respond_to do |format|
         format.js
@@ -383,6 +384,7 @@ class TicketsController < ApplicationController
 
   def update_issue_type
     @ticket = Ticket.find(params[:id])
+    @ticket.skip_sla_callbacks = true
 
     if @ticket.update(issue: params[:ticket][:issue])
       respond_to do |format|
