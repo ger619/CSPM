@@ -143,7 +143,7 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
-        if request.patch?
+        if request.patch? && !@ticket.skip_history_logging
           change_details = @ticket.saved_changes.except(:updated_at)
           UpdateHistory.record_update(@ticket, current_user, change_details)
         end
@@ -308,6 +308,8 @@ class TicketsController < ApplicationController
 
   def update_priority
     @ticket = Ticket.find(params[:id])
+    @ticket.skip_history_logging = false
+
     if @ticket.update(priority: params[:ticket][:priority])
       respond_to do |format|
         format.js
