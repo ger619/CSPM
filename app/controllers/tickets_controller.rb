@@ -312,7 +312,6 @@ class TicketsController < ApplicationController
 
   def update_priority
     @ticket = Ticket.find(params[:id])
-    @ticket.skip_history_logging = true
 
     if @ticket.update(priority: params[:ticket][:priority])
       respond_to do |format|
