@@ -125,8 +125,7 @@ class TicketsController < ApplicationController
           Rails.logger.warn('Assigned user is nil, email not sent.')
         end
 
-        log_event(@ticket, current_user, 'created and assign', "Ticket was created and assigned to #{assigned_user.name}")
-
+        log_event(@ticket, current_user, 'created and assign', "Ticket was created and assigned to #{assigned_user.name} at #{Time.now.strftime('%H:%M of  %d-%m-%Y')}")
         format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully created.' }
       end
     end
@@ -144,8 +143,10 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if @ticket.update(ticket_params)
         current_user.add_role :editor, @ticket
-        change_details = @ticket.saved_changes.except(:updated_at)
-        UpdateHistory.record_update(@ticket, current_user, change_details)
+        if request.patch? && !@ticket.skip_history_logging
+          change_details = @ticket.saved_changes.except(:updated_at)
+          UpdateHistory.record_update(@ticket, current_user, change_details)
+        end
 
         # Assign the project manager if no agents are assigned
         # Check if groupware_id is present
@@ -174,7 +175,7 @@ class TicketsController < ApplicationController
           end
         end
 
-        log_event(@ticket, current_user, 'update', 'Ticket was updated.')
+        log_event(@ticket, current_user, 'update', "Ticket was updated. at #{Time.now.strftime('%H:%M of  %d-%m-%Y')}")
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
       else
@@ -291,7 +292,12 @@ class TicketsController < ApplicationController
 
   def update_due_date
     @ticket = Ticket.find(params[:id])
+    @ticket.skip_history_logging = false
     if @ticket.update(due_date: params[:ticket][:due_date])
+      if request.patch? && !@ticket.skip_history_logging
+        change_details = @ticket.saved_changes.except(:updated_at)
+        UpdateHistory.record_update(@ticket, current_user, change_details)
+      end
       respond_to do |format|
         format.js # To update via AJAX
         format.html { redirect_back fallback_location: project_ticket_path(@project, @ticket), notice: 'Due date updated successfully.' }
@@ -306,6 +312,7 @@ class TicketsController < ApplicationController
 
   def update_priority
     @ticket = Ticket.find(params[:id])
+    @ticket.skip_history_logging = true
 
     if @ticket.update(priority: params[:ticket][:priority])
       respond_to do |format|
@@ -383,6 +390,7 @@ class TicketsController < ApplicationController
 
   def update_issue_type
     @ticket = Ticket.find(params[:id])
+    @ticket.skip_sla_callbacks = true
 
     if @ticket.update(issue: params[:ticket][:issue])
       respond_to do |format|

@@ -54,7 +54,6 @@ Rails.application.routes.draw do
         get 'closed_tickets_one_week'
         get 'created_tickets_one_week'
         get 'all_open_tickets'
-
         get 'non_breached_sla_tickets'
       end
       member do

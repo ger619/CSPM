@@ -584,7 +584,7 @@ class DataCenterController < ApplicationController
     )
 
     csv_data = CSV.generate(headers: true) do |csv|
-      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created', 'Updated',
+      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created At',
               'Status Updated At', 'Comment Added At', 'Content', 'Due Date']
 
       tickets.each do |ticket|
@@ -598,13 +598,12 @@ class DataCenterController < ApplicationController
           ticket.user&.name || 'N/A',
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
-          ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.updated_at.strftime('%d-%b-%Y'),
-          latest_issue&.created_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.created_at.strftime('%H:%M of %d-%b-%Y'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          latest_issue&.created_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
             &.content&.to_plain_text&.truncate(800)&.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')&.gsub("\u00A0", ' ')&.gsub(/[^\p{Print}]/, '') || 'N/A',
-          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+          ticket.due_date&.strftime('%H:%M of %d-%b-%Y') || 'N/A'
         ]
       end
     end
