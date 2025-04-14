@@ -187,10 +187,10 @@
           </td>
           <td class="border border border-black px-4 py-2"><%= ticket.user.name %></td>
           <td class="border border border-black px-4 py-2 "><%= ticket.content.to_plain_text.truncate(3000) %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d- %b -%y") %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y ') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d-%b-%Y') || 'N/A' %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d/%b/%Y %I:%M:%S %p") %></td>
+          <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
+          <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
+          <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
           <td class="border border-black px-4 py-2">
             <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
           </td>
