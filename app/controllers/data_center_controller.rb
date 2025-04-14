@@ -406,13 +406,13 @@ class DataCenterController < ApplicationController
           ticket.user.name,
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
-          ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.updated_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+          ticket.updated_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000),
-          ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+          ticket.due_date&.strftime('%d/%b/%Y') || 'N/A'
 
         ]
       end
@@ -442,10 +442,10 @@ class DataCenterController < ApplicationController
           ticket.user.name,
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
-          ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
           ticket.subject,
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
         ]
       end
@@ -464,8 +464,8 @@ class DataCenterController < ApplicationController
           ticket.user.name,
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
-          ticket.created_at.strftime('%d-%b-%Y'),
-          ticket.updated_at.strftime('%d-%b-%Y'),
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+          ticket.updated_at.strftime('%d/%b/%Y %I:%M:%S %p'),
           ticket.subject,
           ticket.content.to_plain_text.truncate(3000)
         ]
@@ -513,10 +513,10 @@ class DataCenterController < ApplicationController
             ticket.users.map(&:name).select(&:present?).join(', '),
             ticket.user.name,
             ticket.content.to_plain_text.truncate(3000),
-            ticket.created_at.strftime('%d-%b-%Y'),
-            ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-            ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-            ticket.due_date&.strftime('%d-%b-%Y') || 'N/A'
+            ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+            ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
+            ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
+            ticket.due_date&.strftime('%d/%b/%Y') || 'N/A'
           ], style: row_style
         end
       end
@@ -540,7 +540,7 @@ class DataCenterController < ApplicationController
           ticket.priority,
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
-          ticket.created_at,
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
           sla_ticket&.sla_status || 'N/A',
           sla_ticket&.sla_target_response_deadline.presence || 'not breached',
           sla_ticket&.sla_resolution_deadline.presence || 'not breached'
@@ -565,7 +565,7 @@ class DataCenterController < ApplicationController
             ticket.statuses.first&.name || 'N/A',
             sla_ticket&.sla_target_response_deadline || 'N/A',
             sla_ticket&.sla_resolution_deadline || 'N/A',
-            ticket.created_at.strftime('%d-%b-%Y')
+            ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p')
           ]
         end
       end
@@ -598,12 +598,12 @@ class DataCenterController < ApplicationController
           ticket.user&.name || 'N/A',
           ticket.priority,
           ticket.statuses.first&.name || 'N/A',
-          ticket.created_at.strftime('%H:%M of %d-%b-%Y'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
-          latest_issue&.created_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A',
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
+          latest_issue&.created_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A',
           latest_issue # rubocop:disable Style/SafeNavigationChainLength
             &.content&.to_plain_text&.truncate(800)&.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')&.gsub("\u00A0", ' ')&.gsub(/[^\p{Print}]/, '') || 'N/A',
-          ticket.due_date&.strftime('%H:%M of %d-%b-%Y') || 'N/A'
+          ticket.due_date&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A'
         ]
       end
     end
@@ -626,8 +626,8 @@ class DataCenterController < ApplicationController
           ticket.statuses.first&.name || 'N/A',
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
-          ticket.created_at.strftime('%d-%b-%Y %H:%M:%S'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %H:%M:%S') || 'N/A',
           ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
           ticket.due_date&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
         ]
