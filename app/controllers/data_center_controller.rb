@@ -628,9 +628,9 @@ class DataCenterController < ApplicationController
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
           ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
-          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %H:%M:%S') || 'N/A',
-          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A',
-          ticket.due_date&.strftime('%d-%b-%Y %H:%M:%S') || 'N/A'
+          ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A',
+          ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A',
+          ticket.due_date&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A'
         ]
       end
     end
