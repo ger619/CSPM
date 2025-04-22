@@ -454,7 +454,8 @@ class DataCenterController < ApplicationController
 
   def generate_project_report_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Project Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At', 'Updated At', 'Summary', 'Content']
+      csv << ['Project Name', 'Ticket ID', 'Issue Type', 'Assignee', 'Reporter', 'Severity', 'Status', 'Created At',
+              'Updated At', 'Summary', 'Content']
       tickets.each do |ticket|
         csv << [
           ticket.project.title,
@@ -497,8 +498,8 @@ class DataCenterController < ApplicationController
     tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
       truncated_title = project_title[0, 31] # Truncate to 31 characters
       workbook.add_worksheet(name: truncated_title) do |sheet|
-        sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter', 'Details', 'Created', 'Status Updated At',
-                       'Last Comment Updated At', 'Due Date']
+        sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To',
+                       'Reporter', 'Details', 'Created', 'Status Updated At', 'Last Comment Updated At', 'Due Date']
         project_tickets.sort_by { |ticket| -ticket.created_at.to_i }.each do |ticket|
           status = ticket.statuses.first&.name || 'N/A'
           row_style = styles[status] || nil
@@ -527,8 +528,8 @@ class DataCenterController < ApplicationController
 
   def generate_breach_details_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter', 'Created', 'SLA Status',
-              'Target Response Deadline', 'Resolution Deadline']
+      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter',
+              'Created at', 'SLA Status', 'Target Response Deadline', 'Resolution Deadline']
       tickets.each do |ticket|
         sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
         csv << [
