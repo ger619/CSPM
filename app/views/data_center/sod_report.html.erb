@@ -39,6 +39,8 @@
           <th class="border border-black px-4 py-2">Comment Added At</th> <!-- New Column -->
           <th class="border border-black px-4 py-2">Comment</th>
           <th class="border border-black px-4 py-2">Due Date</th>
+          <th class="border border-black px-4 py-2">View</th>
+
         </tr>
       </thead>
       <tbody>
@@ -77,14 +79,15 @@
             <td class="border border-black px-4 py-2 capitalize"><%= ticket.user.name %></td>
             <td class="border border-black px-4 py-2"><%= ticket.priority %></td>
             <td class="border border-black px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
-            <td class="border border-black px-4 py-2"><%= ticket.created_at.strftime('%d/%b/%Y %H:%M:%S %p') %></td>
-            <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A' %></td>
-            <td class="border border-black px-4 py-2"><%= Issue.where(ticket_id: ticket.id).order(created_at: :desc).first&.created_at&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A' %></td> <!-- New Field -->
+            <td class="border border-black px-4 py-2"><%= ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p') %></td>
+            <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
+            <td class="border border-black px-4 py-2"><%= ticket.issues.order(created_at: :desc).first&.created_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
+            <td class="border border-black px-4 py-2"><%= ticket.issues.order(created_at: :desc).first&.content&.to_plain_text&.truncate(800) || 'N/A' %></td>
+            <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
             <td class="border border-black px-4 py-2">
-              <%= Issue.where(ticket_id: ticket.id).order(created_at: :desc).first&.content&.to_plain_text&.truncate(800) || 'N/A' %>
+              <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
             </td>
-            <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d %b %Y') || 'N/A' %></td>
-          </tr>
+        </tr>
         <% end %>
       </tbody>
     </table>
