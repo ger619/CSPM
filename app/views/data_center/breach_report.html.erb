@@ -105,7 +105,7 @@
                          ''
                        end %>
         <tr class="<%= row_class %>">
-            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at.strftime("%d-%b-%y") %></td>
+            <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.created_at.strftime('%d/%b/%Y %H:%M:%S %p') %></td>
             <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
             <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.project.title %></td>
             <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.priority %></td>

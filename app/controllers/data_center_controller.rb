@@ -528,20 +528,20 @@ class DataCenterController < ApplicationController
 
   def generate_breach_details_csv(tickets)
     CSV.generate(headers: true) do |csv|
-      csv << ['Summary', 'Issue Key', 'Issue Type', 'Status', 'Project Name', 'Priority', 'Assignee', 'Reporter',
-              'Created at', 'SLA Status', 'Target Response Deadline', 'Resolution Deadline']
+      csv << ['Created At', 'Ticket ID', 'Support Desk', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To', 'Reporter',
+              'SLA Status', 'Target Response Deadline', 'Resolution Deadline']
       tickets.each do |ticket|
         sla_ticket = SlaTicket.find_by(ticket_id: ticket.id)
         csv << [
-          ticket.subject,
+          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
           ticket.unique_id.gsub('–', '-'),
-          ticket.issue,
-          ticket.statuses.first&.name || 'N/A',
           ticket.project.title,
           ticket.priority,
+          ticket.subject,
+          ticket.issue,
+          ticket.statuses.first&.name || 'N/A',
           ticket.users.map(&:name).select(&:present?).join(', '),
           ticket.user.name,
-          ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
           sla_ticket&.sla_status || 'N/A',
           sla_ticket&.sla_target_response_deadline.presence || 'not breached',
           sla_ticket&.sla_resolution_deadline.presence || 'not breached'

@@ -77,9 +77,9 @@
             <td class="border border-black px-4 py-2 capitalize"><%= ticket.user.name %></td>
             <td class="border border-black px-4 py-2"><%= ticket.priority %></td>
             <td class="border border-black px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
-            <td class="border border-black px-4 py-2"><%= ticket.created_at.strftime('%H:%M of %d %b %Y') %></td>
-            <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y ') || 'N/A' %></td>
-            <td class="border border-black px-4 py-2"><%= Issue.where(ticket_id: ticket.id).order(created_at: :desc).first&.created_at&.strftime('%H:%M of %d-%b-%Y ') || 'N/A' %></td> <!-- New Field -->
+            <td class="border border-black px-4 py-2"><%= ticket.created_at.strftime('%d/%b/%Y %H:%M:%S %p') %></td>
+            <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A' %></td>
+            <td class="border border-black px-4 py-2"><%= Issue.where(ticket_id: ticket.id).order(created_at: :desc).first&.created_at&.strftime('%d/%b/%Y %H:%M:%S %p') || 'N/A' %></td> <!-- New Field -->
             <td class="border border-black px-4 py-2">
               <%= Issue.where(ticket_id: ticket.id).order(created_at: :desc).first&.content&.to_plain_text&.truncate(800) || 'N/A' %>
             </td>
