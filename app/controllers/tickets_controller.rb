@@ -175,6 +175,29 @@ class TicketsController < ApplicationController
           end
         end
 
+        assigned_user = @project.user
+        ticket_user = @ticket.user
+        user = @ticket.users.first # Assigned user
+
+        if assigned_user.present?
+          UserMailer.edit_ticket_email(user, @ticket, current_user, assigned_user, @project).deliver_later
+        else
+          Rails.logger.warn('Assigned project user is nil, email not sent.')
+        end
+
+        if ticket_user.present? && ticket_user != assigned_user && ticket_user != user
+          UserMailer.edit_ticket_email(user, @ticket, current_user, ticket_user, @project).deliver_later
+        else
+          Rails.logger.warn('Assigned ticket user is nil or already notified, email not sent.')
+        end
+
+        # Send email to the user if they are not the same as @ticket.user or @project.user
+        if user.present? && user != ticket_user && user != assigned_user
+          UserMailer.edit_ticket_email(user, @ticket, current_user, user, @project).deliver_later
+        else
+          Rails.logger.warn('User is nil or already notified, email not sent.')
+        end
+
         log_event(@ticket, current_user, 'update', "Ticket was updated. at #{Time.now.strftime('%H:%M of  %d-%m-%Y')}")
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
