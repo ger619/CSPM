@@ -175,6 +175,13 @@ class TicketsController < ApplicationController
           end
         end
 
+        assigned_user = @project.user
+        if assigned_user.present?
+          UserMailer.edit_ticket_email(@ticket, current_user, assigned_user, @project).deliver_later
+        else
+          Rails.logger.warn('Assigned user is nil, email not sent.')
+        end
+
         log_event(@ticket, current_user, 'update', "Ticket was updated. at #{Time.now.strftime('%H:%M of  %d-%m-%Y')}")
 
         format.html { redirect_to project_path(@project.id), notice: 'Ticket was successfully updated.' }
