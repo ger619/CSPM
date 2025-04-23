@@ -27,7 +27,8 @@ class UserMailer < ApplicationMailer
     mail(to: @assigned_user.email, subject: "A new ticket has been created with Ticket ID #{@ticket.unique_id}.")
   end
 
-  def edit_ticket_email(ticket, current_user, assigned_user, project)
+  def edit_ticket_email(user, ticket, current_user, assigned_user, project)
+    @user = user
     @ticket = ticket
     @current_user = current_user
     @assigned_user = assigned_user

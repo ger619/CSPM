@@ -1,6 +1,7 @@
 <p>Hello <%= @assigned_user.first_name %> <%= @assigned_user.last_name %>,</p>
 
 <p>We would like to inform you that the ticket: <%= @ticket.unique_id %> has been updated by <%= @current_user.name %>.</p>
+<p>which is currently assigned to <%= @user.first_name %> <%= @user.last_name %></p>
 
 <p><strong>Updated Ticket Details:</strong></p>
 <ul>
