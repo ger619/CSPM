@@ -1,60 +1,65 @@
 <%= render 'issues/new_back' %>
 
 <%= form_with(model: [@project, @ticket, @issue], method: :patch) do |f| %>
-  <h3 class="pb-2 font-bold"> Edit Reply *</h3>
-  
+  <h3 class="pb-4 font-bold">Message *</h3>
+
   <div class="relative z-0 w-full mb-6 group">
-    <div data-controller="text-limit" data-text-limit-limit-value="1200">
-      <p id="char-count">0/1200</p>
+    <div data-controller="text-limit" data-text-limit-limit-value="3000">
+      <p id="char-count">0/3000</p>
+
       <%= f.rich_text_area :content, id: "content",
-                           data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
-                           class: 'min-h-[300px]' %>
-    </div>
-  </div>
+                           data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent')},
+                           class: "min-h-[300px] #{'border-red-500' if @issue&.errors[:content].any?}" %>
 
-  <% unless current_user.has_role?(:client) %>
-  <div class="mb-2">
-    <%= f.label :user_ids, 'Notify Users', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-  </div>
-  <div class="relative w-full mb-4">
-    <!-- Searchable Input -->
-    <input type="text" id="searchUser" class="h-10 border border-gray-300 rounded-lg dark:text-black px-2 text-sm w-full"
-           placeholder="Search User..." onclick="showDropdown()"  onkeyup="filterUserDropdown()" autocomplete="off">
-
-    <!-- Selected Items Container -->
-    <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
-
-    <!-- Hidden Inputs for Rails Form (Updated Name) -->
-    <div id="hiddenUserInputs"></div>
-
-    <!-- Dropdown List -->
-    <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
-      <div class="flex justify-start p-2">
-        <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 text-left">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-      </div>
-      <% users = User.with_assigned_role.distinct %>
-      <% users.each do |user| %>
-        <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
-          <%= user.name %>
-        </div>
+      <% if @issue&.errors[:content].any? %>
+        <span id="content-error" class="text-red-500 text-sm"><%= @issue.errors[:content].join(', ') %></span>
       <% end %>
     </div>
   </div>
+  <% unless current_user.has_role?(:client) %>
+    <div class="mb-2">
+      <%= f.label :user_ids, 'Notify Users', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+    </div>
+    <!-- filepath: /home/robert/Desktop/use_csmp/CSPM/app/views/issues/_form.html.erb -->
+    <div class="relative w-full mb-4">
+      <!-- Searchable Input -->
+      <input type="text" id="searchUser" class="h-10 border border-gray-300 rounded-lg dark:text-black px-2 text-sm w-full"
+             placeholder="Search User..." onclick="showDropdown()" onkeyup="filterUserDropdown()" autocomplete="off">
+      <!-- Selected Items Container -->
+      <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2">
+      </div>
+      <!-- Hidden Inputs for Rails Form (Updated Name) -->
+      <div id="hiddenUserInputs"></div>
+      <!-- Dropdown List -->
+      <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
+        <div class="flex justify-start p-2">
+          <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 text-left">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <!-- Users for External Messages -->
+        <div id="externalUsers" class="user-list">
+          <% users = @project.users.distinct.order(:first_name) %>
+          <% users.each do |user| %>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
+              <%= user.name %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-  
     <div class="mb-4">
       <%= f.label :message_type, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
       <%= f.select :message_type, [["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
-             { selected: @issue.message_type || "external" },
-             class: "mt-1 block w-full" %>
+                   { selected: @issue.message_type || "external" },
+                   class: "mt-1 block w-full" %>
     </div>
   <% end %>
 
-  <%= f.submit "Submit", class: 'text-gray-900 dark:text-white border border-black dark:border-slate-100 border-b-4 border-r-2 p-3 rounded font-semibold' %>
+  <%= f.submit "Post Message", class: "px-4 py-2 bg-blue-500 text-white rounded" %>
 <% end %>
 
 <script>
