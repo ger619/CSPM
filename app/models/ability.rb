@@ -10,7 +10,7 @@ class Ability
     elsif user.has_role? :observer
       can :read, :all
       can %i[generate report cease_fire_report breach_report user_report], :report
-      can :add_status, Ticket
+      can %i[add_status add_status update_issue_type update_due_date update_priority index_home all_tickets], Ticket
       can :manage, Issue, user_id: user.id
 
     elsif user.has_role?('project manager')
