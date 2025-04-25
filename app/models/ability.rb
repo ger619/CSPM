@@ -6,9 +6,12 @@ class Ability
     if user.has_role? :admin
       can :manage, :all # allow super admins to do anything
       can :generate, :report
+
     elsif user.has_role? :observer
       can :read, :all
       can %i[generate report cease_fire_report breach_report user_report], :report
+      can :add_status, Ticket
+      can :manage, Issue, user_id: user.id
 
     elsif user.has_role?('project manager')
       can %i[read assign_user unassign_user add_team], Project
@@ -23,16 +26,7 @@ class Ability
       can :manage, Task
       can :generate, :report
       can :manage, Team
-    elsif user.has_role? :client
-      can :read, Project
-      can %i[create read assign_tag unassign_tag update_status add_status index_home all_tickets], Ticket
-      can %i[edit destroy update], Ticket, user_id: user.id
-      can :manage, Issue, user_id: user.id
-      cannot %i[create delete edit], Product
-      can :read, Product
-      cannot %i[create delete edit], Board
-      cannot :manage, Task
-      can :generate, :report
+
     elsif user.has_role? :agent
       can %i[read assign_user unassign_user], Project
       can %i[create read assign_tag unassign_tag update_status add_status index_home all_tickets], Ticket
@@ -45,6 +39,18 @@ class Ability
       can :read, Board
       can :read, Task
       can :generate, :report
+
+    elsif user.has_role? :client
+      can :read, Project
+      can %i[create read assign_tag unassign_tag update_status add_status index_home all_tickets], Ticket
+      can %i[edit destroy update], Ticket, user_id: user.id
+      can :manage, Issue, user_id: user.id
+      cannot %i[create delete edit], Product
+      can :read, Product
+      cannot %i[create delete edit], Board
+      cannot :manage, Task
+      can :generate, :report
+
     else
       can :read, Project
       can :read, Ticket
