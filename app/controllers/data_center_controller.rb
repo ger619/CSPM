@@ -499,7 +499,8 @@ class DataCenterController < ApplicationController
       truncated_title = project_title[0, 31] # Truncate to 31 characters
       workbook.add_worksheet(name: truncated_title) do |sheet|
         sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To',
-                       'Reporter', 'Details', 'Created', 'Status Updated At', 'Last Comment Updated At', 'Due Date']
+                       'Reporter', 'Details', 'Created', 'Status Updated At', 'Last Comment Updated At', 'Due Date',
+                       "Comments #{Date.today.strftime('%d/%b/%Y')}"]
         project_tickets.sort_by { |ticket| -ticket.created_at.to_i }.each do |ticket|
           status = ticket.statuses.first&.name || 'N/A'
           row_style = styles[status] || nil
