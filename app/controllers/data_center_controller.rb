@@ -108,9 +108,18 @@ class DataCenterController < ApplicationController
       end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
 
       @tickets = @user.tickets.joins(project: :client)
-        .where(clients: { name: params[:client_name] })
+                      .where(clients: { name: params[:client_name] })
       @tickets = @tickets.where('tickets.created_at >= ?', start_date) if start_date
       @tickets = @tickets.where('tickets.created_at <= ?', end_date) if end_date
+
+      if params[:status].present?
+        case params[:status].downcase
+        when 'open'
+          @tickets = @tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
+        when 'closed'
+          @tickets = @tickets.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] })
+        end
+      end
     else
       @tickets = Ticket.none
       flash[:alert] = 'Please provide a valid user and client.'
