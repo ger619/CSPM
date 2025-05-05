@@ -108,7 +108,7 @@ class DataCenterController < ApplicationController
       end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
 
       @tickets = @user.tickets.joins(project: :client)
-                      .where(clients: { name: params[:client_name] })
+        .where(clients: { name: params[:client_name] })
       @tickets = @tickets.where('tickets.created_at >= ?', start_date) if start_date
       @tickets = @tickets.where('tickets.created_at <= ?', end_date) if end_date
 
