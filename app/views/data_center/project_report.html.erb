@@ -54,7 +54,7 @@
           <h3 class="text-lg font-bold mb-2">Project Ticket Counts</h3>
           <ul>
             <% @tickets_per_project.sort_by { |_, count| -count }.each do |project, count| %>
-              <li class="mb-1 capitalize"><%= project %>: <%= count %></li>
+              <li class="mb-1 capitalize"><%= project %>: <%= count %> <%= link_to "View", project_path(Project.find_by(title: project)), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" %>
             <% end %>
           </ul>
         </div>

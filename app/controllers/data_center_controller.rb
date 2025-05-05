@@ -117,7 +117,7 @@ class DataCenterController < ApplicationController
         when 'open'
           @tickets = @tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] })
         when 'closed'
-          @tickets = @tickets.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] })
+          @tickets = @tickets.joins(:statuses).where(statuses: { name: %w[Closed Resolved] })
         end
       end
     else
