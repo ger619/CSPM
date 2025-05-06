@@ -10,13 +10,13 @@
       <!-- Start Date Field -->
       <div class="flex flex-col gap-2 w-full sm:w-1/3">
         <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-bold" %>
-        <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
 
       <!-- End Date Field -->
       <div class="flex flex-col gap-2 w-full sm:w-1/3">
         <%= label_tag :end_date, 'End Date', class: "capitalize text-sm font-bold" %>
-        <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </div>
 
       <!-- Grouping Period Field -->
@@ -27,7 +27,7 @@
 
       <!-- Search Button -->
       <div class="w-full sm:w-auto mt-2 sm:mt-0">
-        <%= submit_tag 'Search', class: 'border border-black dark:border-white border-b-4 border-r-2 p-2.5 rounded font-semibold w-full sm:w-auto' %>
+        <%= submit_tag 'Search', class: 'mt-6 border border-black dark:border-white border-b-4 border-r-2 p-2 rounded font-semibold w-full sm:w-auto' %>
       </div>
     </div>
   <% end %>
