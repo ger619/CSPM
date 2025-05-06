@@ -53,10 +53,7 @@
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignee</th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reporter</th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Created</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status last Updated</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comment Last Created</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Closed</th>
       </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -96,10 +93,12 @@
           <td class="px-6 py-4 whitespace-nowrap"><%= ticket.statuses.first&.name || 'N/A' %></td>
           <td class="px-6 py-4 whitespace-nowrap"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
           <td class="px-6 py-4 whitespace-nowrap"><%= ticket.user.name %></td>
-          <td class="px-6 py-4 whitespace-nowrap"><%= ticket.created_at.strftime('%H:%M of %d-%b-%Y') %></td>
-          <td class="px-6 py-4 whitespace-nowrap"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A' %></td>
-          <td class="px-6 py-4 whitespace-nowrap"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%H:%M of %d-%b-%Y') || 'N/A' %></td>
-          <td class="px-6 py-4 whitespace-nowrap"><%= ticket.due_date&.strftime('%d-%b-%Y') || 'N/A' %></td>
+          <td class="px-6 py-4 whitespace-nowrap"><%= ticket.created_at.strftime('%m/%d/%Y %H:%M') %></td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <% if %w[Closed Resolved].include?(ticket.statuses.first&.name) %>
+                <%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%m/%d/%Y %H:%M') || 'N/A' %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
       </tbody>
