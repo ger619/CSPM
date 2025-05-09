@@ -104,15 +104,16 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'secure.emailsrvr.com',
-    port: 465, # Use 587 for STARTTLS or 465 for SSL/TLS
-    domain: 'https://taskbridge.craftsilicon.com', # Replace with your domain
-    user_name: ENV['SMTP_USERNAME'], # Use environment variable
-    password: ENV['SMTP_PASSWORD'], # Use
-    ssl: true, # Use SSL encryption
-    tls: true, # Enforce TLS
-    enable_starttls_auto: true, # Automatically start TLS if available
-    openssl_verify_mode: 'none', # To avoid certificate verification issues (use cautiously)
-    open_timeout: 30, # Increase open timeout to 30 seconds
-    read_timeout: 30  # Increase read timeout to 30 seconds
+    port: 465,
+    domain: 'craftsilicon.com', # Remove https:// and just use the domain name
+    user_name: ENV['SMTP_USERNAME'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: :login, # Add authentication method
+    ssl: true,
+    tls: false, # Remove conflicting TLS when using SSL
+    enable_starttls_auto: false, # Disable STARTTLS when using SSL on port 465
+    openssl_verify_mode: 'none',
+    open_timeout: 30,
+    read_timeout: 30
   }
 end
