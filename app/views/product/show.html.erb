@@ -34,17 +34,30 @@
       <span class="font-light">
         <% if @product.end_date.present? %>
           <% if @product.end_date <= Date.today %>
-            <p class="bg-red-900  rounded p-1">
+            <p class="bg-red-900  rounded pr-1 font-bold">
               <%= @product.end_date.strftime("%d-%b-%y") %>
             </p>
           <% else %>
-            <p class="bg-red-green  rounded">
+            <p class="bg-red-green  rounded pr-1 font-bold">
               <%= @product.end_date.strftime("%d-%b-%y") %>
             </p>
           <% end %>
         <% end %>
       </span>
     </h1>
+    <!-- show added documents name and download button -->
+    <div class="flex">
+      <h1 class="pt-1 pr-2">Documents:</h1>
+    <% @product.documents.each_with_index do |document, index| %>
+      <div class="pt-1 flex gap-4 items-center">
+        <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold">
+          <%= @product.document_name.present? ? @product.document_name : document.filename.to_s %> -
+          <%= link_to 'View Document', rails_blob_path(document, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
+        </span>
+      </div>
+    <% end %>
+    </div>
+    <!-- end show added documents name and download button -->
     <h1 class="pt-1">Plan:
       <% if @product.plan.attached? %>
         <span class="font-light text-sm text-slate-900 hover:text-blue-500 hover:font-bold border border-black dark:border-slate-100 border-b-4 border-r-2 rounded font-semibold cursor-pointer p-1 ">

@@ -43,6 +43,22 @@
           <%= f.collection_select :client_id, Client.all, :id, :name, { prompt: "Select Client" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         </div>
       </div>
+      <div id="documents-container">
+        <% @product.documents.each_with_index do |document, index| %>
+          <div class="document-field">
+            <p>Uploaded Document: <%= link_to (@product.document_name.present? ? @product.document_name : document.filename.to_s), rails_blob_path(document, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
+          </div>
+        <% end %>
+        <div class="document-field">
+          <%= f.label :documents, 'Document Name', class: "block mb-1 text-sm font-medium" %>
+          <%= f.text_field :document_name, name: "document_name[]", class: "border rounded-lg p-2.5 mb-2" %>
+          <%= f.file_field :documents, name: "documents[]", class: "border rounded-lg p-2.5" %>
+        </div>
+      </div>
+      <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document</button>
+
+
+
       <h4 class="text-gray-900 dark:text-white">
         Upload Documents
       </h4>
@@ -94,5 +110,20 @@
         </div>
       </div>
     </div>
+
+
   <%= f.submit  class: 'mb-4 h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
 <% end %>
+<script>
+  document.getElementById('add-document-button').addEventListener('click', function () {
+    const container = document.getElementById('documents-container');
+    const newField = document.createElement('div');
+    newField.classList.add('document-field');
+    newField.innerHTML = `
+      <label class="block mb-1 text-sm font-medium">Document Name</label>
+      <input type="text" name="document_name[]" class="border rounded-lg p-2.5 mb-2">
+      <input type="file" name="documents[]" class="border rounded-lg p-2.5">
+    `;
+    container.appendChild(newField);
+  });
+</script>

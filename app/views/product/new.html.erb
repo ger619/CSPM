@@ -77,6 +77,21 @@
       </div>
     </div>
 
+    <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
+    <div id="documents-container">
+      <div class="document-field">
+        <%= f.label :documents, 'Upload Documents saSasa', class: "block mb-1 text-sm font-medium" %>
+        <%= f.text_field :document_name, class: "border rounded-lg p-2.5 mb-2", placeholder: 'Document Name' %>
+        <%= f.file_field :documents, multiple: true, class: "border rounded-lg p-2.5" %>
+        <% if @product.errors[:documents].any? %>
+          <div class="text-red-500 text-sm"><%= @product.errors[:documents].join(', ') %></div>
+        <% end %>
+      </div>
+    </div>
+    <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document</button>
+    <!-- Dates Fields -->
+
+
     <!-- Dates Fields -->
     <div class="grid grid-cols-2 gap-2">
       <div class="relative z-0 w-full mb-6 group">
@@ -108,3 +123,17 @@
   <%= f.submit  class: 'mb-4 h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
 
 <% end %>
+
+<script>
+  document.getElementById('add-document-button').addEventListener('click', function () {
+    const container = document.getElementById('documents-container');
+    const newField = document.createElement('div');
+    newField.classList.add('document-field');
+    newField.innerHTML = `
+      <label class="block mb-1 text-sm font-medium">Document Name</label>
+      <input type="text" name="document_name[]" class="border rounded-lg p-2.5 mb-2">
+      <input type="file" name="documents[]" class="border rounded-lg p-2.5">
+    `;
+    container.appendChild(newField);
+  });
+</script>
