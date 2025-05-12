@@ -46,7 +46,7 @@
       <div id="documents-container">
         <% @product.documents.each_with_index do |document, index| %>
           <div class="document-field">
-            <p>Uploaded Document: <%= link_to document.filename.to_s, rails_blob_path(document, disposition: "attachment"), class: "text-blue-600 hover:underline" %></p>
+            <p>Uploaded Document: <%= link_to (@product.document_name.present? ? @product.document_name : document.filename.to_s), rails_blob_path(document, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
           </div>
         <% end %>
         <div class="document-field">
