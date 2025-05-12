@@ -34,11 +34,11 @@
       <span class="font-light">
         <% if @product.end_date.present? %>
           <% if @product.end_date <= Date.today %>
-            <p class="bg-red-900  rounded p-1 font-bold">
+            <p class="bg-red-900  rounded pr-1 font-bold">
               <%= @product.end_date.strftime("%d-%b-%y") %>
             </p>
           <% else %>
-            <p class="bg-red-green  rounded p-1 font-bold">
+            <p class="bg-red-green  rounded pr-1 font-bold">
               <%= @product.end_date.strftime("%d-%b-%y") %>
             </p>
           <% end %>
