@@ -249,7 +249,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_12_100642) do
     t.uuid "client_id"
     t.uuid "groupware_id"
     t.uuid "script_id"
-    t.text "document_names"
+    t.text "document_name"
     t.index ["client_id"], name: "index_products_on_client_id"
     t.index ["groupware_id"], name: "index_products_on_groupware_id"
     t.index ["name"], name: "index_products_on_name", unique: true

@@ -44,20 +44,19 @@
         </div>
       </div>
       <div id="documents-container">
-          <% @product.documents.each_with_index do |document, index| %>
-            <div class="document-field">
-              <p>Uploaded Document: <%= link_to document.filename.to_s, rails_blob_path(document, disposition: "attachment"), class: "text-blue-600 hover:underline" %></p>
-            </div>
-          <% end %>
-
+        <% @product.documents.each_with_index do |document, index| %>
           <div class="document-field">
-            <%= f.label :documents, 'Document Name', class: "block mb-1 text-sm font-medium" %>
-            <%= f.text_field :document_names, name: "document_names[]", class: "border rounded-lg p-2.5 mb-2" %>
-            <%= f.file_field :documents, name: "documents[]", class: "border rounded-lg p-2.5" %>
+            <p>Uploaded Document: <%= link_to document.filename.to_s, rails_blob_path(document, disposition: "attachment"), class: "text-blue-600 hover:underline" %></p>
           </div>
+        <% end %>
+        <div class="document-field">
+          <%= f.label :documents, 'Document Name', class: "block mb-1 text-sm font-medium" %>
+          <%= f.text_field :document_name, name: "document_name[]", class: "border rounded-lg p-2.5 mb-2" %>
+          <%= f.file_field :documents, name: "documents[]", class: "border rounded-lg p-2.5" %>
         </div>
+      </div>
+      <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document</button>
 
-        <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document</button>
 
 
       <h4 class="text-gray-900 dark:text-white">
@@ -122,7 +121,7 @@
     newField.classList.add('document-field');
     newField.innerHTML = `
       <label class="block mb-1 text-sm font-medium">Document Name</label>
-      <input type="text" name="document_names[]" class="border rounded-lg p-2.5 mb-2">
+      <input type="text" name="document_name[]" class="border rounded-lg p-2.5 mb-2">
       <input type="file" name="documents[]" class="border rounded-lg p-2.5">
     `;
     container.appendChild(newField);
