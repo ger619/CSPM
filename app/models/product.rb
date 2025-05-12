@@ -14,8 +14,7 @@ class Product < ApplicationRecord
   has_one_attached :fod
   has_one_attached :brd
   has_one_attached :plan
-
-  # Tagging users to a projec
+  has_many_attached :documents
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 100 }
 

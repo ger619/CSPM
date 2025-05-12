@@ -45,6 +45,19 @@
         <% end %>
       </span>
     </h1>
+    <!-- show added documents name and download button -->
+    <h1 class="pt-1">Documents:</h1>
+    <% @product.documents.each_with_index do |document, index| %>
+      <div class="pt-1">
+    <span class="font-light text-sm text-slate-900">
+      <strong>Document Name:</strong> <%= @product.document_names[index] %>
+    </span>
+        <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold">
+          <%= link_to document.filename.to_s, rails_blob_path(document, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
+        </span>
+      </div>
+    <% end %>
+    <!-- end show added documents name and download button -->
     <h1 class="pt-1">Plan:
       <% if @product.plan.attached? %>
         <span class="font-light text-sm text-slate-900 hover:text-blue-500 hover:font-bold border border-black dark:border-slate-100 border-b-4 border-r-2 rounded font-semibold cursor-pointer p-1 ">
