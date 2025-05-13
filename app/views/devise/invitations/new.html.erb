@@ -46,7 +46,7 @@
       <div class="flex flex-wrap">
         <div class="field flex gap-2 m-2">
           <%= f.label :role, class: "flex items-center" %>
-          <%= select_tag :role, options_for_select(Role.where.not(name: %w[creator editor admin]).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300  shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
+          <%= select_tag :role, options_for_select(Role.where.not(name: %w[creator editor admin observer sales]).distinct.pluck(:name, :name)), class: "form-select mt-1 block rounded-md border-gray-300  shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" %>
         </div>
         <div class="field flex gap-2 m-2 capitalize">
           <%= f.label ('Select Location'), class: "flex items-center" %>

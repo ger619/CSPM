@@ -31,7 +31,7 @@
               </div>
             <% end %>
               <% else %>
-            <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator admin observer]), :id, :name do |b| %>
+            <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator admin observer sales]), :id, :name do |b| %>
               <div class="mb-2">
                 <%= b.check_box(class: "mr-2") %>
                 <%= b.label(class: "ml-2") %>
