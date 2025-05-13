@@ -16,6 +16,6 @@ Role.find_or_create_by!(name: 'admin')
 Role.find_or_create_by!(name: 'project manager')
 Role.find_or_create_by!(name: 'client')
 Role.find_or_create_by!(name: 'observer')
-Role.find_or_create_by!(name: 'business manager')
+Role.find_or_create_by!(name: 'sales')
 
 
