@@ -489,25 +489,25 @@ class DataCenterController < ApplicationController
 
     # Define styles for each status
     styles = {
-      'New' => workbook.styles.add_style(bg_color: 'EF4444', sz: 9), # Red
-      'Closed' => workbook.styles.add_style(bg_color: 'D9EAD3', sz: 9), # Green
-      'Resolved' => workbook.styles.add_style(bg_color: 'D9EAD3', sz: 9), # Green
-      'Reopened' => workbook.styles.add_style(bg_color: '87F1D1D', sz: 9), # Dark Red with White text
-      'Under Development' => workbook.styles.add_style(bg_color: '93C5FD', sz: 9), # Light Blue
-      'Work in Progress' => workbook.styles.add_style(bg_color: 'cccccc', sz: 9), # Gray with White text
-      'QA Testing' => workbook.styles.add_style(bg_color: 'EC4899', sz: 9), # Pink
-      'Awaiting Build' => workbook.styles.add_style(bg_color: '1F2937', sz: 9), # Dark Slate Gray
-      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: 'FFF2CC', sz: 9), # Purple with White text
-      'On-Hold' => workbook.styles.add_style(bg_color: 'FF0000', sz: 9), # Yellow
-      'Assigned' => workbook.styles.add_style(bg_color: '1E40AF', fg_color: 'FFFFFF', sz: 9), # Navy with White text
-      'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF', sz: 9) # Dark Slate Gray with White text
+      'New' => workbook.styles.add_style(bg_color: 'EF4444', sz: 9, border: { style: :thin, color: '000000' }), # Red
+      'Closed' => workbook.styles.add_style(bg_color: 'D9EAD3', sz: 9, border: { style: :thin, color: '000000' }), # Green
+      'Resolved' => workbook.styles.add_style(bg_color: 'D9EAD3', sz: 9, border: { style: :thin, color: '000000' }), # Green
+      'Reopened' => workbook.styles.add_style(bg_color: '87F1D1D', sz: 9, border: { style: :thin, color: '000000' }), # Dark Red
+      'Under Development' => workbook.styles.add_style(bg_color: '93C5FD', sz: 9, border: { style: :thin, color: '000000' }), # Light Blue
+      'Work in Progress' => workbook.styles.add_style(bg_color: 'cccccc', sz: 9, border: { style: :thin, color: '000000' }), # Gray
+      'QA Testing' => workbook.styles.add_style(bg_color: 'EC4899', sz: 9, border: { style: :thin, color: '000000' }), # Pink
+      'Awaiting Build' => workbook.styles.add_style(bg_color: '1F2937', sz: 9, border: { style: :thin, color: '000000' }), # Dark Slate Gray
+      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: 'FFF2CC', sz: 9, border: { style: :thin, color: '000000' }), # Purple
+      'On-Hold' => workbook.styles.add_style(bg_color: 'FF0000', sz: 9, border: { style: :thin, color: '000000' }), # Yellow
+      'Assigned' => workbook.styles.add_style(bg_color: '1E40AF', fg_color: 'FFFFFF', sz: 9, border: { style: :thin, color: '000000' }), # Navy
+      'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF', sz: 9, border: { style: :thin, color: '000000' }) # Dark Slate Gray
     }
 
-    # Define header style
-    header_style = workbook.styles.add_style(b: true, sz: 9)
+    # Define header style with borders
+    header_style = workbook.styles.add_style(b: true, sz: 9, border: { style: :thin, color: '000000' })
 
-    # Default row style
-    default_row_style = workbook.styles.add_style(sz: 9)
+    # Default row style with borders
+    default_row_style = workbook.styles.add_style(sz: 9, border: { style: :thin, color: '000000' })
 
     # Group tickets by project
     tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
