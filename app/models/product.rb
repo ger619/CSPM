@@ -7,6 +7,8 @@ class Product < ApplicationRecord
   has_many :bugs
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
+  has_many :documents, dependent: :destroy
+  accepts_nested_attributes_for :documents, allow_destroy: true
 
   has_rich_text :content
   has_many_attached :images
@@ -14,7 +16,6 @@ class Product < ApplicationRecord
   has_one_attached :fod
   has_one_attached :brd
   has_one_attached :plan
-  has_many_attached :documents
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 100 }
 

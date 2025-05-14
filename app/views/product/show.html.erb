@@ -47,48 +47,17 @@
     </h1>
     <!-- show added documents name and download button -->
     <div class="flex">
-      <h1 class="pt-1 pr-2">Documents:</h1>
-    <% @product.documents.each_with_index do |document, index| %>
-      <div class="pt-1 flex gap-4 items-center">
-        <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold">
-          <%= @product.document_name.present? ? @product.document_name : document.filename.to_s %> -
-          <%= link_to 'View Document', rails_blob_path(document, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
-        </span>
-      </div>
-    <% end %>
+      <% if @product.documents.any? %>
+        <ul>
+          <% @product.documents.each do |document| %>
+            <li class="flex gap-2">
+              <h1><%= document.name %></h1> -
+              <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "text-blue-500" %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     </div>
-    <!-- end show added documents name and download button -->
-    <h1 class="pt-1">Plan:
-      <% if @product.plan.attached? %>
-        <span class="font-light text-sm text-slate-900 hover:text-blue-500 hover:font-bold border border-black dark:border-slate-100 border-b-4 border-r-2 rounded font-semibold cursor-pointer p-1 ">
-          <%= link_to 'View Plan', rails_blob_path(@product.plan, disposition: "inline"), target: "_blank" %>
-        </span>
-      <% end %>
-    </h1>
-
-    <h1 class="pt-1">FSD:
-      <% if @product.fod.attached? %>
-        <span class="font-light text-sm text-slate-900 hover:text-blue-500 hover:font-bold border border-black dark:border-slate-100 border-b-4 border-r-2 rounded font-semibold cursor-pointer p-1 ">
-          <%= link_to 'Functional Specification Document', rails_blob_path(@product.fod, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
-        </span>
-      <% end %>
-    </h1>
-    <h1 class="pt-1">Scope:
-      <% if @product.scope.attached? %>
-        <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold ">
-          <%= link_to 'Scope', rails_blob_path(@product.scope, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
-        </span>
-      <% end %>
-    </h1>
-
-    <h1 class="pt-1">BRD:
-      <% if @product.brd.attached? %>
-        <span class="font-light text-sm text-slate-900 hover:underline hover:text-blue-500 hover:font-bold ">
-          <%= link_to 'Business Requirement Document', rails_blob_path(@product.brd, disposition: "inline"), target: "_blank", class: 'hover:underline' %>
-        </span>
-      <% end %>
-    </h1>
-
   </div>
   <div class="col-span-1">
     <%= render 'product/added_users' %>
