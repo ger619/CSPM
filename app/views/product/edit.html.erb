@@ -1,108 +1,136 @@
-<%= form_with  model: @product, url: product_index_path, method: :patch do |f| %>
-  <div class="md:gap-6">
+<%= form_with model: @product, url: product_path(@product), method: :patch, local: true, data: { turbo: false } do |f| %>
+  <% if @product.errors.any? %>
+    <div class="mb-4 text-red-600">
+      <%= pluralize(@product.errors.count, "error") %> prevented this product from being saved:
+      <ul>
+        <% @product.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Name -->
+  <%= f.label :name, 'Name*', class: "block font-medium mb-1" %>
+  <%= f.text_field :name, required: true, class: "w-full mb-4 p-2 border rounded" %>
+  <div class="grid grid-cols-2 gap-2">
+  <!-- Description -->
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :name, ('Name*'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-      <%= f.text_field :name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
-    </div>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :description, ('Product Description*'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-        <%= f.text_field :description, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-      </div>
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :Assignee, ('Assignee*'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-        <%= f.select :user_id, User.with_agent_project_manager_role.order(:first_name, :last_name).map { |user| [user.name, user.id] }, {},class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Assign User' %>
-      </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2">
-      <!-- Categories and Client Fields -->
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :categories, ('Product Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :software_ids, Software.all, :id, :name,
-                                { prompt: "Select Product", include_hidden: false },
-                                class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                data: { action: "change->form#updateGroupwareOptions" },
-                                multiple: true %>
-      </div>
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :categories, ('Sub Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :groupware_ids, @product.groupwares.where(software_id: @product.software_ids), :id, :name,
-                                { prompt: "Select Sub Product", include_hidden: false },
-                                class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                id: "groupware-select",
-                                multiple: true %>
-      </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :image, ('Product Image'), class: "capitalize block mb-1 text-sm font-medium" %>
-      <%= f.file_field :image,  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
-      </div>
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :software, ('Client Available*'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :client_id, Client.all, :id, :name, { prompt: "Select Client" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-      </div>
+  <%= f.label :description, 'Product Description*', class: "block font-medium mb-1" %>
+  <%= f.text_field :description, required: true, class: "w-full mb-4 p-2 border rounded" %>
     </div>
 
-    <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
-
-        <div id="documents-container">
-          <%= f.fields_for :documents do |doc| %>
-            <div class="document-field flex flex-row mb-4">
-              <%= doc.label :name, "Document Name", class: "block mb-1 text-sm font-medium" %>
-              <%= doc.text_field :name, class: "border rounded-lg p-2.5 mb-2", placeholder: "Document Name" %>
-
-              <% if doc.object.file.attached? %>
-                <div class="flex items-center gap-2">
-                  <span class="text-sm text-gray-600">Current File:</span>
-                  <%= link_to doc.object.file.filename, rails_blob_path(doc.object.file, disposition: "attachment"), class: "text-blue-500 underline" %>
-                </div>
-              <% end %>
-
-              <%= doc.label :file, "Upload File", class: "block mb-1 text-sm font-medium" %>
-              <%= doc.file_field :file, class: "border rounded-lg p-2.5" %>
-              <%= doc.hidden_field :_destroy %>
-              <%= link_to "Remove", "#", class: "remove-document text-red-500", data: { action: "click->form#removeDocument" } %>
-            </div>
-          <% end %>
-    </div>
-    <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document</button>
-
-    <!-- Dates Fields -->
-    <div class="grid grid-cols-2 gap-2">
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :start_date, 'Start Date*', class: "capitalize block mb-1 text-sm font-medium"  %><br />
-        <%= f.date_field :start_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-      </div>
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :end_date, 'End Date*', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-        <%= f.date_field :end_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-      </div>
-    </div>
+  <!-- Assignee -->
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :title, ('Subject*'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-      <div data-controller="text-limit" data-text-limit-limit-value="3000">
-        <p id="char-count">0/3000</p>
-        <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]'%>
-      </div>
-    </div>
-    <%= f.submit  class: 'mb-4 h-12 border border-black dark:border-white border-b-4 border-r-2 p-3 rounded font-semibold rounded'  %>
+  <%= f.label :user_id, 'Assignee*', class: "block font-medium mb-1" %>
+  <%= f.select :user_id,
+               User.with_agent_project_manager_role.order(:first_name, :last_name).map { |u| [u.name, u.id] },
+               { prompt: 'Assign User' },
+               class: "w-full mb-4 p-2 border rounded" %>
   </div>
-<% end %>
+  </div>
 
+
+  <div class="grid grid-cols-2 gap-2">
+    <div class="relative z-0 w-full mb-6 group">
+      <!-- Image -->
+      <%= f.label :image, 'Product Image', class: "block font-medium mb-1" %>
+      <%= f.file_field :image, class: "w-full mb-4 p-2 border rounded" %>
+    </div>
+    <!-- Description -->
+    <div class="relative z-0 w-full mb-6 group">
+      <!-- Client -->
+      <%= f.label :client_id, 'Client Available*', class: "block font-medium mb-1" %>
+      <%= f.collection_select :client_id, Client.all, :id, :name,
+                              { prompt: "Select Client" },
+                              class: "w-full mb-4 p-2 border rounded" %>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-2">
+    <!-- Description -->
+    <div class="relative z-0 w-full mb-6 group">
+      <!-- Software Categories -->
+      <%= f.label :software_ids, 'Product Categories *', class: "block font-medium mb-1" %>
+      <%= f.collection_select :software_ids, Software.all, :id, :name,
+                              { prompt: "Select Product" },
+                              { multiple: true, class: "w-full mb-4 p-2 border rounded" } %>
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+      <!-- Groupware Subcategories -->
+      <%= f.label :groupware_ids, 'Sub Categories *', class: "block font-medium mb-1" %>
+      <%= f.collection_select :groupware_ids, Groupware.all, :id, :name,
+                              { prompt: "Select Sub Product" },
+                              { multiple: true, class: "w-full mb-4 p-2 border rounded" } %>
+    </div>
+  </div>
+
+  <!-- Script Modules -->
+  <%= f.label :script_ids, 'Sub Modules *', class: "block font-medium mb-1" %>
+  <%= f.collection_select :script_ids, Script.all, :id, :name,
+                          { prompt: "Select Script" },
+                          { multiple: true, class: "w-full mb-4 p-2 border rounded" } %>
+  <!-- Documents -->
+  <h3 class="mt-6 mb-2 font-semibold">Attached Documents</h3>
+  <div id="documents-container">
+    <%= f.fields_for :documents do |doc| %>
+      <div class="document-field mb-4">
+        <%= doc.label :name, "Document Name", class: "block mb-1" %>
+        <%= doc.text_field :name, class: "border rounded p-2 w-full mb-2" %>
+
+        <% if doc.object.file.attached? %>
+          <p class="text-sm text-gray-600">Current File:
+            <%= link_to doc.object.file.filename.to_s, rails_blob_path(doc.object.file, disposition: "attachment"), class: "text-blue-500 underline" %>
+          </p>
+        <% end %>
+
+        <%= doc.label :file, "Upload File", class: "block mb-1" %>
+        <%= doc.file_field :file, class: "border rounded p-2 w-full" %>
+        <%= doc.hidden_field :_destroy %>
+        <%= link_to "Remove", "#", class: "remove-document text-red-500", data: { action: "click->form#removeDocument" } %>
+      </div>
+    <% end %>
+  </div>
+  <button type="button" id="add-document-button" class="p-2 bg-blue-500 text-white rounded mb-4">Add Document</button>
+
+  <!-- Start/End Dates -->
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :start_date, 'Start Date*', class: "block font-medium mb-1" %>
+      <%= f.date_field :start_date, required: true, class: "w-full p-2 border rounded mb-4" %>
+    </div>
+    <div>
+      <%= f.label :end_date, 'End Date*', class: "block font-medium mb-1" %>
+      <%= f.date_field :end_date, required: true, class: "w-full p-2 border rounded mb-4" %>
+    </div>
+  </div>
+
+
+  <!-- Content -->
+  <%= f.label :content, 'Subject*', class: "block font-medium mb-1" %>
+  <div data-controller="text-limit" data-text-limit-limit-value="3000">
+    <p id="char-count">0/3000</p>
+    <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]' %>
+  </div>
+
+
+
+  <!-- Submit -->
+  <%= f.submit "Update Product", class: "bg-green-600 text-white p-3 rounded font-semibold" %>
+<% end %>
 <script>
   document.getElementById('add-document-button').addEventListener('click', function () {
     const container = document.getElementById('documents-container');
+    const index = Date.now(); // unique index
     const newField = document.createElement('div');
-    newField.classList.add('document-field', 'flex', 'flex-row', 'mb-4');
+    newField.classList.add('document-field', 'mb-4');
     newField.innerHTML = `
-    <label class="block mb-1 text-sm font-medium">Document Name</label>
-    <input type="text" name="product[documents_attributes][][name]" class="border rounded-lg p-2.5 mb-2" placeholder="Document Name">
-    <label class="block mb-1 text-sm font-medium">Upload File</label>
-    <input type="file" name="product[documents_attributes][][file]" class="border rounded-lg p-2.5">
-    <input type="hidden" name="product[documents_attributes][][_destroy]" value="false">
-    <a href="#" class="remove-document text-red-500">Remove</a>
-  `;
+      <label class="block mb-1">Document Name</label>
+      <input type="text" name="product[documents_attributes][${index}][name]" class="border rounded p-2 w-full mb-2" placeholder="Document Name">
+      <label class="block mb-1">Upload File</label>
+      <input type="file" name="product[documents_attributes][${index}][file]" class="border rounded p-2 w-full">
+      <input type="hidden" name="product[documents_attributes][${index}][_destroy]" value="false">
+      <a href="#" class="remove-document text-red-500">Remove</a>
+    `;
     container.appendChild(newField);
   });
 
@@ -112,7 +140,7 @@
       const field = e.target.closest('.document-field');
       const destroyField = field.querySelector('input[name*="[_destroy]"]');
       if (destroyField) {
-        destroyField.value = 'true';
+        destroyField.value = '1';
         field.style.display = 'none';
       } else {
         field.remove();
