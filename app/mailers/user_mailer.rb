@@ -98,7 +98,7 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: "Root Cause Analysis for Ticket ID #{@comment.ticket.unique_id}.")
   end
 
-  def bug_mailer(user, bug, current_user, assigned_user)
+  def bug_mailer_email(user, bug, current_user, assigned_user)
     @user = user
     @bug = bug
     @current_user = current_user
