@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_12_100642) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_14_075416) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -154,6 +154,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_12_100642) do
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_documents_on_product_id"
   end
 
   create_table "events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -534,6 +542,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_12_100642) do
   add_foreign_key "comments", "projects"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
+  add_foreign_key "documents", "products"
   add_foreign_key "events", "tickets"
   add_foreign_key "events", "users"
   add_foreign_key "groupwares", "softwares"

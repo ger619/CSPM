@@ -41,7 +41,7 @@
       <!-- Image Field -->
       <div class="relative z-0 w-full mb-6 group">
         <%= f.label :image, ('Product Image'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.file_field :images, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
+        <%= f.file_field :image, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
       </div>
 
       <div class="relative z-0 w-full mb-6 group">
@@ -79,16 +79,18 @@
 
     <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
     <div id="documents-container">
-      <div class="document-field">
-        <%= f.label :documents, 'Upload Documents saSasa', class: "block mb-1 text-sm font-medium" %>
-        <%= f.text_field :document_name, class: "border rounded-lg p-2.5 mb-2", placeholder: 'Document Name' %>
-        <%= f.file_field :documents, multiple: true, class: "border rounded-lg p-2.5" %>
-        <% if @product.errors[:documents].any? %>
-          <div class="text-red-500 text-sm"><%= @product.errors[:documents].join(', ') %></div>
-        <% end %>
-      </div>
+      <%= f.fields_for :documents do |doc| %>
+        <div class="document-field flex flex-row mb-4">
+          <%= doc.label :name, "Document Name", class: "block mb-1 text-sm font-medium" %>
+          <%= doc.text_field :name, class: "border rounded-lg p-2.5 mb-2", placeholder: "Document Name" %>
+          <%= doc.label :file, "Upload File", class: "block mb-1 text-sm font-medium" %>
+          <%= doc.file_field :file, class: "border rounded-lg p-2.5" %>
+          <%= link_to "Remove", "#", class: "remove-document text-red-500" %>
+        </div>
+      <% end %>
     </div>
     <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document</button>
+
     <!-- Dates Fields -->
 
 
@@ -124,6 +126,7 @@
 
 <% end %>
 
+
 <script>
   document.getElementById('add-document-button').addEventListener('click', function () {
     const container = document.getElementById('documents-container');
@@ -131,9 +134,18 @@
     newField.classList.add('document-field');
     newField.innerHTML = `
       <label class="block mb-1 text-sm font-medium">Document Name</label>
-      <input type="text" name="document_name[]" class="border rounded-lg p-2.5 mb-2">
-      <input type="file" name="documents[]" class="border rounded-lg p-2.5">
+      <input type="text" name="product[documents_attributes][][name]" class="border rounded-lg p-2.5 mb-2" placeholder="Document Name">
+      <label class="block mb-1 text-sm font-medium">Upload File</label>
+      <input type="file" name="product[documents_attributes][][file]" class="border rounded-lg p-2.5">
+      <a href="#" class="remove-document text-red-500">Remove</a>
     `;
     container.appendChild(newField);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-document')) {
+      e.preventDefault();
+      e.target.closest('.document-field').remove();
+    }
   });
 </script>
