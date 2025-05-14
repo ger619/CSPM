@@ -87,16 +87,18 @@ class ProductController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @product.documents.build if @product.documents.empty?
+  end
 
   def update
-    respond_to do |format|
-      if @product.update(product_params)
-        current_user.add_role :editor, @product
-        format.html { redirect_to product_path(@product), notice: 'Product was successfully updated.' }
-      else
-        format.html { render 'edit', status: :unprocessable_entity }
-      end
+    Rails.logger.debug "Params: #{params.inspect}"
+    @product = Product.find(params[:id])
+    if @product.update(product_params)
+      redirect_to product_path(@product), notice: 'Product was successfully updated.'
+    else
+      Sentry.capture_message('Product update failed', extra: { errors: @product.errors.full_messages, params: params })
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -140,8 +142,8 @@ class ProductController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :description, :start_date, :end_date, :document_name, :image, :content, :scope, :fod, :brd,
-                                    :plan, :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
-                                                                 documents_attributes: %i[id name file _destroy])
+    params.require(:product).permit(:name, :description, :start_date, :end_date, :document_name, :image, :content,
+                                    :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
+                                                          documents_attributes: %i[id name file _destroy])
   end
 end

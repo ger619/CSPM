@@ -69,7 +69,7 @@ Rails.application.routes.draw do
       resources :ratings, only: :create
     end
   end
-
+  
   resources :product do
     member do
       post :add_user
