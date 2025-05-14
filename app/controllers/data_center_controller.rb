@@ -489,30 +489,40 @@ class DataCenterController < ApplicationController
 
     # Define styles for each status
     styles = {
-      'New' => workbook.styles.add_style(bg_color: 'EF4444'), # Red
-      'Closed' => workbook.styles.add_style(bg_color: 'D9EAD3'), # Green
-      'Resolved' => workbook.styles.add_style(bg_color: 'D9EAD3'), # Green
-      'Reopened' => workbook.styles.add_style(bg_color: '87F1D1D'), # Dark Red with White text
-      'Under Development' => workbook.styles.add_style(bg_color: '93C5FD'), # Light Blue
-      'Work in Progress' => workbook.styles.add_style(bg_color: 'cccccc'), # Gray with White text
-      'QA Testing' => workbook.styles.add_style(bg_color: 'EC4899'), # Pink
-      'Awaiting Build' => workbook.styles.add_style(bg_color: '1F2937'), # Dark Slate Gray
-      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: 'FFF2CC'), # Purple with White text
-      'On-Hold' => workbook.styles.add_style(bg_color: 'FF0000'), # Yellow
-      'Assigned' => workbook.styles.add_style(bg_color: '1E40AF', fg_color: 'FFFFFF'), # Navy with White text
-      'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF') # Dark Slate Gray with White text
+      'New' => workbook.styles.add_style(bg_color: 'EF4444', sz: 9), # Red
+      'Closed' => workbook.styles.add_style(bg_color: 'D9EAD3', sz: 9), # Green
+      'Resolved' => workbook.styles.add_style(bg_color: 'D9EAD3', sz: 9), # Green
+      'Reopened' => workbook.styles.add_style(bg_color: '87F1D1D', sz: 9), # Dark Red with White text
+      'Under Development' => workbook.styles.add_style(bg_color: '93C5FD', sz: 9), # Light Blue
+      'Work in Progress' => workbook.styles.add_style(bg_color: 'cccccc', sz: 9), # Gray with White text
+      'QA Testing' => workbook.styles.add_style(bg_color: 'EC4899', sz: 9), # Pink
+      'Awaiting Build' => workbook.styles.add_style(bg_color: '1F2937', sz: 9), # Dark Slate Gray
+      'Client Confirmation Pending' => workbook.styles.add_style(bg_color: 'FFF2CC', sz: 9), # Purple with White text
+      'On-Hold' => workbook.styles.add_style(bg_color: 'FF0000', sz: 9), # Yellow
+      'Assigned' => workbook.styles.add_style(bg_color: '1E40AF', fg_color: 'FFFFFF', sz: 9), # Navy with White text
+      'Declined' => workbook.styles.add_style(bg_color: '000000', fg_color: 'FFFFFF', sz: 9) # Dark Slate Gray with White text
     }
+
+    # Define header style
+    header_style = workbook.styles.add_style(b: true, sz: 9)
+
+    # Default row style
+    default_row_style = workbook.styles.add_style(sz: 9)
 
     # Group tickets by project
     tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
-      truncated_title = project_title[0, 31] # Truncate to 31 characters
+      truncated_title = project_title[0, 50] # Truncate to 31 characters
       workbook.add_worksheet(name: truncated_title) do |sheet|
-        sheet.add_row ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To',
-                       'Reporter', 'Details', 'Created', 'Status Updated At', 'Last Comment Updated At', 'Due Date',
-                       "Comments #{Date.today.strftime('%d/%b/%Y')}"]
+        # Add header row with the header style
+        sheet.add_row(
+          ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status', 'Assignee To',
+           'Reporter', 'Details', 'Created', 'Status Updated At', 'Last Comment Updated At', 'Due Date',
+           "Comments #{Date.today.strftime('%d/%b/%Y')}"],
+          style: header_style
+        )
         project_tickets.sort_by { |ticket| -ticket.created_at.to_i }.each do |ticket|
           status = ticket.statuses.first&.name || 'N/A'
-          row_style = styles[status] || nil
+          row_style = styles[status] || default_row_style
 
           sheet.add_row [
             ticket.unique_id.gsub('–', '-'),
