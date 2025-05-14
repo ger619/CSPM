@@ -59,7 +59,7 @@ class BugsController < ApplicationController
 
       # Send email to the newly assigned user
       assigned_user = user # Assuming the first user is the assigned user
-      UserMailer.bug_mailer(user, @bug, current_user, assigned_user).deliver_later
+      UserMailer.bug_mailer_email(user, @bug, current_user, assigned_user).deliver_later
 
       redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
 
