@@ -34,11 +34,11 @@
       <span class="font-light">
         <% if @product.end_date.present? %>
           <% if @product.end_date <= Date.today %>
-            <p class="bg-red-900  rounded pr-1 font-bold">
+            <p class="bg-red-900  rounded px-2  py-0.5 font-bold">
               <%= @product.end_date.strftime("%d-%b-%y") %>
             </p>
           <% else %>
-            <p class="bg-red-green  rounded pr-1 font-bold">
+            <p class="bg-red-green  rounded px-2 py-0.5  font-bold">
               <%= @product.end_date.strftime("%d-%b-%y") %>
             </p>
           <% end %>
@@ -51,7 +51,7 @@
         <ul>
           <% @product.documents.each do |document| %>
             <li class="flex gap-2">
-              <h1><%= document.name %></h1> -
+              <h1 class="capitalize"><%= document.name %></h1> -
               <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "text-blue-500" %>
             </li>
           <% end %>
