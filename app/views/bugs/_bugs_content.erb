@@ -1,4 +1,4 @@
-<div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
+<div class="mb-2.5 font-bold capitalize flex flex-wrap ">
   <% if @bug.content.present? %>
     <div class="pl-2 flex flex-wrap m-1">
       <%= raw @bug.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>

@@ -1,33 +1,129 @@
 <div class="grid grid-cols-3 gap-2 font-bold">
   <div class="col-span-2">
-    <% if @bug.video.attached? %>
-      <% @bug.video.each do |video| %>
-        <video width="854" height="480" controls>
-          <source src="<%= url_for(video) %>" type="<%= video.content_type %>">
-          Your browser does not support the video tag.
-        </video>
-      <% end %>
-    <% end %>
-
-    <% if @bug.images.attached? %>
-      <div class="grid grid-cols-3 gap-2 mt-4">
-        <% @bug.images.each do |image| %>
-          <div class="col-span-1">
-            <%= image_tag url_for(image), class: "w-full h-auto rounded-lg" %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-  <div class="col-span-1 justify-end">
-    Issue:  <p><%= @bug.issue %></p>
-    Severity: <p><%= @bug.priority %></p>
-    Reporter:  <p><%= @bug.user.name %></p>
-
-    <%= render 'bugs/add_user_remove' %>
-    <%= render 'bugs/status_bug' %>
-    <p><%= @bug.summary %></p>
+    <h1 class="text-3xl text-left mb-10"><%= @bug.summary %></h1>
     <div><%= render 'bugs/bugs_content' %></div>
-
+  </div>
+  <div class="col-span-1 justify-end border border-l border-gray-300 p-6">
+    <div class="flex flex-row gap-2 items-center">
+      STATUS   <%= render 'bugs/bug_status' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+        Issue:  <%= @bug.issue %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Assignee:  <%= render 'bugs/show_user' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Assignee: <%= render 'reporter_user' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Label: <%= render 'reporter_user' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Start Date: <%= render 'reporter_user' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      End Date: <%= render 'reporter_user' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Priority: <%= render 'reporter_user' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Assign User: <%= render 'bugs/add_user_remove' %>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      Status Change <%= render 'bugs/status_bug' %>
+    </div>
   </div>
 </div>
+<h3>Attachments</h3>
+<div class="grid grid-cols-3 gap-2 font-bold">
+
+<div class="col-span-2">
+  <% if @bug.video.attached? %>
+    <% @bug.video.each do |video| %>
+      <video width="854" height="480" controls>
+        <source src="<%= url_for(video) %>" type="<%= video.content_type %>">
+        Your browser does not support the video tag.
+      </video>
+    <% end %>
+  <% end %>
+
+  <% if @bug.images.attached? %>
+    <div class="grid grid-cols-4 gap-2 mt-4">
+      <% @bug.images.each do |image| %>
+        <div class="col-span-1">
+          <%= image_tag url_for(image), class: "w-full h-auto rounded-lg cursor-pointer zoomable-image", data: { src: url_for(image) } %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Modal -->
+    <div id="imageModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="modalImage" alt="Modal Image">
+    </div>
+  <% end %>
+</div>
+</div>
+<style>
+    .zoomable-image {
+        cursor: pointer;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        height: 90%;
+        background-color: rgba(0, 0, 0, 0.9);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        display: block;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        color: #fff;
+        font-size: 30px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+  document.addEventListener('turbo:load', function () {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const closeBtn = document.querySelector('.close');
+
+    document.addEventListener('click', function (event) {
+      if (event.target.classList.contains('zoomable-image')) {
+        modal.style.display = 'flex';
+        modalImage.src = event.target.dataset.src;
+      }
+    });
+
+    closeBtn.addEventListener('click', function () {
+      modal.style.display = 'none';
+    });
+
+    modal.addEventListener('click', function (event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  });
+</script>
