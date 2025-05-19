@@ -26,7 +26,8 @@
 
     <%= render 'bugs/add_user_remove' %>
     <%= render 'bugs/status_bug' %>
-    <p><%= @bug.content %></p>
     <p><%= @bug.summary %></p>
+    <div><%= render 'bugs/bugs_content' %></div>
+
   </div>
 </div>
