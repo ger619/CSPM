@@ -39,35 +39,41 @@
 <h3>Attachments</h3>
 <div class="grid grid-cols-3 gap-2 font-bold">
 
-<div class="col-span-2">
-  <% if @bug.video.attached? %>
-    <% @bug.video.each do |video| %>
-      <video width="854" height="480" controls>
-        <source src="<%= url_for(video) %>" type="<%= video.content_type %>">
-        Your browser does not support the video tag.
-      </video>
+  <div class="col-span-2">
+    <% if @bug.videos.attached? %>
+      <div class="grid grid-cols-4 gap-2 mt-4">
+        <% @bug.videos.each do |video| %>
+          <div class="col-span-1">
+            <video width="854" height="480" class="cursor-pointer zoomable-video" data-src="<%= url_for(video) %>" data-type="<%= video.content_type %>">
+              <source src="<%= url_for(video) %>" type="<%= video.content_type %>">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-  <% end %>
 
-  <% if @bug.images.attached? %>
-    <div class="grid grid-cols-4 gap-2 mt-4">
-      <% @bug.images.each do |image| %>
-        <div class="col-span-1">
-          <%= image_tag url_for(image), class: "w-full h-auto rounded-lg cursor-pointer zoomable-image", data: { src: url_for(image) } %>
-        </div>
-      <% end %>
-    </div>
+    <% if @bug.images.attached? %>
+      <div class="grid grid-cols-4 gap-2 mt-4">
+        <% @bug.images.each do |image| %>
+          <div class="col-span-1">
+            <%= image_tag url_for(image), class: "w-full h-auto rounded-lg cursor-pointer zoomable-image", data: { src: url_for(image) } %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
 
     <!-- Modal -->
-    <div id="imageModal" class="modal">
+    <div id="mediaModal" class="modal">
       <span class="close">&times;</span>
-      <img class="modal-content" id="modalImage" alt="Modal Image">
+      <img class="modal-content" id="modalImage" alt="Modal Image" style="display: none;">
+      <video id="modalVideo" class="modal-content" controls style="display: none;"></video>
     </div>
-  <% end %>
-</div>
+  </div>
+
 </div>
 <style>
-    .zoomable-image {
+    .zoomable-image, .zoomable-video {
         cursor: pointer;
     }
 
@@ -105,24 +111,35 @@
 
 <script>
   document.addEventListener('turbo:load', function () {
-    const modal = document.getElementById('imageModal');
+    const modal = document.getElementById('mediaModal');
     const modalImage = document.getElementById('modalImage');
+    const modalVideo = document.getElementById('modalVideo');
     const closeBtn = document.querySelector('.close');
 
     document.addEventListener('click', function (event) {
       if (event.target.classList.contains('zoomable-image')) {
         modal.style.display = 'flex';
+        modalImage.style.display = 'block';
+        modalVideo.style.display = 'none';
         modalImage.src = event.target.dataset.src;
+      } else if (event.target.classList.contains('zoomable-video')) {
+        modal.style.display = 'flex';
+        modalVideo.style.display = 'block';
+        modalImage.style.display = 'none';
+        modalVideo.src = event.target.dataset.src;
+        modalVideo.type = event.target.dataset.type;
       }
     });
 
     closeBtn.addEventListener('click', function () {
       modal.style.display = 'none';
+      modalVideo.pause(); // Pause video when modal is closed
     });
 
     modal.addEventListener('click', function (event) {
       if (event.target === modal) {
         modal.style.display = 'none';
+        modalVideo.pause(); // Pause video when modal is closed
       }
     });
   });
