@@ -2,7 +2,6 @@ class Bug < ApplicationRecord
   belongs_to :product
   belongs_to :user
   has_rich_text :content
-  has_many_attached :video
   belongs_to :software, optional: true
   belongs_to :groupware, optional: true
   belongs_to :script, optional: true
@@ -14,6 +13,7 @@ class Bug < ApplicationRecord
   has_many :statuses, through: :status_bugs, dependent: :destroy
 
   has_many_attached :images
+  has_many_attached :videos
 
   before_create :set_default_status
 
