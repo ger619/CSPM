@@ -14,13 +14,13 @@
       Assignee:  <%= render 'bugs/show_user' %>
     </div>
     <div class="flex flex-row gap-2 items-center">
-      Assignee: <%= render 'reporter_user' %>
+      Reporter: <%= render 'bugs/reporter_user' %>
     </div>
     <div class="flex flex-row gap-2 items-center">
       Label: <span class="text-black"><%= @bug.label %></span>
     </div>
     <div class="flex flex-row gap-2 items-center">
-      Start Date: <%= render 'reporter_user' %>
+      Start Date: <%= @bug.created_at.strftime('%I:%M %p %d/%b/%Y') %>
     </div>
     <div class="flex flex-row gap-2 items-center">
       End Date: <%= render 'reporter_user' %>
