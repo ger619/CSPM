@@ -8,7 +8,7 @@
       STATUS   <%= render 'bugs/bug_status' %>
     </div>
     <div class="flex flex-row gap-2 items-center">
-        Issue:  <%= @bug.issue %>
+        Issue:  <span class="text-sm font-medium"><%= @bug.issue %></span>
     </div>
     <div class="flex flex-row gap-2 items-center">
       Assignee:  <%= render 'bugs/show_user' %>

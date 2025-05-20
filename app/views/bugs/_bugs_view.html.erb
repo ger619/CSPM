@@ -5,9 +5,8 @@
       <th scope="col" class="px-6 py-3">Bug</th>
       <th scope="col" class="px-6 py-3">Severity</th>
       <th scope="col" class="px-6 py-3">Product</th>
-      <th scope="col" class="px-6 py-3">SubProduct</th>
-      <th scope="col" class="px-6 py-3">Module</th>
-      <th scope="col" class="px-6 py-3">Sub Module</th>
+      <th scope="col" class="px-6 py-3">Banking Type</th>
+      <th scope="col" class="px-6 py-3">Label</th>
       <th scope="col" class="px-6 py-3">Assigned To</th>
       <th scope="col" class="px-6 py-3">Status</th>
       <th scope="col" class="px-6 py-3">Created By</th>
@@ -39,12 +38,10 @@
               <% end %>
           </td>
           <td class="px-6 py-4 font-medium text-left">
-            Module
+            <% if bug.label.present? %>
+              <%= bug.label %>
+            <% end %>
           </td>
-          <td class="px-6 py-4 font-medium text-left">
-            Sub-Module
-          </td>
-
           <td class="px-6 py-4 font-medium text-left">
             <% if bug.users.any? %>
               <% bug.users.each do |user| %>
