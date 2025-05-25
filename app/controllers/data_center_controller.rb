@@ -4,7 +4,8 @@ require 'axlsx'
 class DataCenterController < ApplicationController
   before_action :authenticate_user!
   def cease_fire_report
-    authorize! :generate, :report # Check if the user can generate reports
+    authorize! :generate, :report
+
     if params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
@@ -29,18 +30,36 @@ class DataCenterController < ApplicationController
                  end
 
       @status_counts = @tickets.joins(:statuses).group('statuses.name').count
+      @xlsx_data = generate_xlsx(@tickets)
+      @clients = Client.where(id: params[:client_ids])
 
       respond_to do |format|
-        format.html # Default view
+        format.html # renders view
         client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
         filename = "ticket_status_report_#{client_name}_#{Date.today}.xlsx"
-        format.xlsx { send_data generate_xlsx(@tickets), filename: filename }
+        format.xlsx { send_data @xlsx_data, filename: filename }
       end
     else
       @tickets = Ticket.none
       flash[:alert] = 'Please provide a valid client.'
       render :cease_fire_report
     end
+  end
+
+  def email_report
+    client = Client.find(params[:client_id])
+    tickets = Ticket.joins(project: :client).where(projects: { client_id: client.id })
+    xlsx_data = generate_xlsx(tickets)
+
+    # Encode the binary data to Base64
+    encoded_xlsx_data = Base64.encode64(xlsx_data)
+
+    # Use the email from the client model
+    UserMailer.cease_fire_report_email(client.client_contact_person_email, client.name, encoded_xlsx_data).deliver_later
+
+    # Flash a message indicating the email has been sent
+    flash[:notice] = "Report sent to #{client.client_contact_person_email}"
+    redirect_to cease_fire_report_path
   end
 
   def breach_report

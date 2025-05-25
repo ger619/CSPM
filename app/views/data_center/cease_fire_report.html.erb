@@ -89,13 +89,7 @@
 <% if @tickets.any? %>
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <h2 class="text-xl font-bold mb-4 text-center capitalize">
-      Ticket Status Report for
-      <% if params[:client_ids].present? %>
-        <%= Client.where(id: params[:client_ids]).pluck(:name).join(', ') %>
-      <% else %>
-        All Clients
-      <% end %>
-      as at <%= Time.now.strftime("%I:%M %p on %d/%b/%Y") %>
+      Ticket Status Report AS AT <%= Date.today %> for <%= params[:client_id].present? ? Client.find(params[:client_id]).name : 'All Clients' %>
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
@@ -125,9 +119,22 @@
                   ),
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
 
+
       <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
         <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
       <% end %>
+
+      <% if @clients.present? && @clients.first.present? %>
+        <%= link_to "Send To CEO",
+                    email_report_path(client_id: @clients.first.id),
+                    data: { 'turbo_method': :get, 'turbo-confirm': "Are you sure you want to send the report to #{@clients.first.name} at #{@clients.first.client_contact_person_email}?" },
+                    class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
+      <% else %>
+        <div class="flex justify-end my-4">
+          <span class="text-gray-500">No clients available to email the report.</span>
+        </div>
+      <% end %>
+≈
     </div>
     <table id="ceasefire" class="table-auto w-full mt-2">
       <thead>
