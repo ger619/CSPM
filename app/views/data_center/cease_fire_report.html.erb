@@ -89,7 +89,13 @@
 <% if @tickets.any? %>
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <h2 class="text-xl font-bold mb-4 text-center capitalize">
-      Ticket Status Report AS AT <%= Date.today %> for <%= params[:client_id].present? ? Client.find(params[:client_id]).name : 'All Clients' %>
+      Ticket Status Report for
+      <% if params[:client_ids].present? %>
+        <%= Client.where(id: params[:client_ids]).pluck(:name).join(', ') %>
+      <% else %>
+        All Clients
+      <% end %>
+      as at <%= Time.now.strftime("%I:%M %p on %d/%b/%Y") %>
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
