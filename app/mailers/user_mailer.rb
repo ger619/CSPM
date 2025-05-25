@@ -131,8 +131,11 @@ class UserMailer < ApplicationMailer
     )
   end
 
-  def cease_fire_report_email(email, client_name, encoded_xlsx_data)
+  def cease_fire_report_email(email, contact_person, client_name, encoded_xlsx_data)
     return if email.blank? # Skip sending if email is blank
+
+    @contact_person = contact_person
+    @client_name = client_name
 
     attachments["ticket_status_report_#{client_name}_#{Date.today}.xlsx"] = Base64.decode64(encoded_xlsx_data)
     mail(to: email, subject: "Cease Fire Report for #{client_name}")

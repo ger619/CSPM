@@ -55,7 +55,7 @@ class DataCenterController < ApplicationController
     encoded_xlsx_data = Base64.encode64(xlsx_data)
 
     # Use the email from the client model
-    UserMailer.cease_fire_report_email(client.client_contact_person_email, client.name, encoded_xlsx_data).deliver_later
+    UserMailer.cease_fire_report_email(client.client_contact_person_email, client.client_contact_person, client.name, encoded_xlsx_data).deliver_later
 
     # Flash a message indicating the email has been sent
     flash[:notice] = "Report sent to #{client.client_contact_person_email}"
