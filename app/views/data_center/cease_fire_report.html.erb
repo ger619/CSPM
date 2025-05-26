@@ -119,8 +119,21 @@
                   ),
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
 
+
       <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
         <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
+      <% end %>
+      <% if current_user.has_role?(:admin) or current_user.has_role?('project manager') or current_user.has_role?(:observer) %>
+        <% if @clients.present? && @clients.first.present? %>
+          <%= link_to "Send To CEO",
+                      email_report_path(client_id: @clients.first.id),
+                      data: { 'turbo_method': :get, 'turbo-confirm': "Are you sure you want to send the report for #{@clients.first.name} to #{@clients.first.client_contact_person} at #{@clients.first.client_contact_person_email}?" },
+                      class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
+        <% else %>
+          <div class="flex justify-end my-4">
+            <span class="text-gray-500">No clients available to email the report.</span>
+          </div>
+        <% end %>
       <% end %>
     </div>
     <table id="ceasefire" class="table-auto w-full mt-2">

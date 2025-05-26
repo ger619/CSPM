@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f9fafb;
+          padding: 20px;
+          color: #111827;
+      }
+      .container {
+          background-color: white;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 20px;
+      }
+      .header {
+          font-size: 20px;
+          font-weight: bold;
+          color: #3b82f6;
+      }
+      .section {
+          margin-top: 20px;
+          font-size: 16px;
+      }
+      .footer {
+          margin-top: 40px;
+          font-size: 12px;
+          color: #6b7280;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">📄 Ticket Status Report</div>
+
+  <div class="section">
+    Hello, <%= @contact_person %>,
+    <p>
+      Please find attached the <strong>Cease Fire Report</strong> for
+      <strong><%= @client_name %></strong> as of <%= Date.today.strftime("%B %d, %Y") %>.
+    </p>
+    <p>
+      This report includes the current distribution of ticket statuses, and summary information based on the filters applied during the generation.
+    </p>
+  </div>
+  <div class="section">
+    For further details or questions, feel free to reply to this email.
+  </div>
+
+  <div class="footer">
+    This is an automated email. Please do not reply directly.
+    <br>
+    &copy; <%= Date.today.year %> YourCompanyName. All rights reserved.
+  </div>
+</div>
+</body>
+</html>

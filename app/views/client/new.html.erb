@@ -6,7 +6,7 @@
     </div>
     <div class="relative z-0 w-full mb-6 group">
       <%= f.label :email, ('Email *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-      <%= f.text_field :email, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
+      <%= f.email_field :email, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
     </div>
   </div>
   <div class="grid grid-cols-2 gap-2">
@@ -21,16 +21,16 @@
   </div>
   <div class="grid grid-cols-2 gap-2">
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :client_contact_person, ('Client Contact Person *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+      <%= f.label :client_contact_person, ('C.E.0 Name *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
       <%= f.text_field :client_contact_person, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
     </div>
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :client_contact_phone_number, ('Client Contact Person Phone Number *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
+      <%= f.label :client_contact_phone_number, ('C.E.0 Person Phone Number *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
       <%= f.number_field :client_contact_phone_number, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
     </div>
     <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :client_contact_person_email, ('Client Contact Person Email *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-      <%= f.text_field :client_contact_person_email, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
+      <%= f.label :client_contact_person_email, ('C.E.0 Email *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
+      <%= f.email_field :client_contact_person_email, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
     </div>
     <div class="relative z-0 w-full mb-6 group">
       <%= f.label :country_code, 'Country *', class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white" %><br/>
