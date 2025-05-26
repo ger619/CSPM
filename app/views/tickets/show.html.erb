@@ -56,7 +56,7 @@
           </div>
           <div class="mb-2.5 font-bold capitalize flex flex-wrap ">Content:
             <% if @ticket.content.present? %>
-              <div class="font-extralight pl-2 flex flex-wrap m-1">
+              <span class="break-words overflow-hidden">
                 <%= raw @ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>
                 <% if @ticket.content.body.attachments.any? %>
                   <% @ticket.content.body.attachments.each do |attachment| %>
@@ -86,7 +86,7 @@
                     </div>
                   <% end %>
                 <% end %>
-              </div>
+              </span>
             <% end %>
           </div>
         </div>
