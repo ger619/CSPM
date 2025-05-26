@@ -1,42 +1,96 @@
-  <h1 class="flex justify-center text-2xl font-bold mb-4"><% if current_user.has_role?(:admin) or current_user.has_role?('project manager') %>
-      Cease Fire Report
-      <% else %>
-        Status Report
-      <% end %>
-      <span class="text-xs p-2 text-red">(Leave the date field blank if you want all the data from inception to date*)</span>
-  </h1>
+<h1 class="flex justify-center text-2xl font-bold mb-4">
+  <% if current_user.has_role?(:admin) or current_user.has_role?('project manager') %>
+    Cease Fire Report
+  <% else %>
+    Status Report
+  <% end %>
+  <span class="text-xs p-2 text-red">(Leave the date field blank if you want all the data from inception to date*)</span>
+</h1>
 <div class="p-2 w-full flex-wrap">
   <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
     <div class="flex flex-wrap justify-center gap-2">
-      <div class="flex flex-col gap-2">
-        <%= f.label :status, "Status", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.select :status,
-                     options_from_collection_for_select(Status.where(name: ['New', 'Closed', 'Resolved', 'Reopened', 'Under Development', 'Work in Progress', 'QA Testing', 'Awaiting Build', 'Client Confirmation Pending', 'On-Hold', 'Assigned', 'Declined']), :name, :name, params[:status]),
-                     { include_blank: 'All Statuses', multiple: true },
-                     class: "border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100", id: "statusSelect" %>
+      <div class="flex flex-col relative gap-2">
+        <label for="searchStatus" class="capitalize text-sm font-bold w-full align-middle pt-3">Status</label>
+        <!-- Searchable Input -->
+        <input type="text" id="searchStatus" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Status...">
+        <!-- Dropdown List -->
+        <div id="statusDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
+          <% ['New', 'Resolved', 'Closed', 'Reopened', 'Under Development', 'QA Testing', 'Awaiting Build', 'Client Confirmation Pending', 'On-Hold', 'Assigned', 'Declined', 'Work in Progress'].each do |status| %>
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+              <label>
+                <input type="checkbox" value="<%= status %>" data-status-name="<%= status %>" class="status-checkbox mr-2 capitalize">
+                <%= status %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Hidden Input to store multiple selected statuses -->
+        <div id="selectedStatusesWrapper"></div>
       </div>
+
       <script>
-        document.addEventListener('turbo:load', function() {
-          const statusSelect = document.getElementById('statusSelect');
+        document.addEventListener("turbo:load", () => {
+          const searchInput = document.getElementById("searchStatus");
+          const dropdown = document.getElementById("statusDropdown");
+          const selectedWrapper = document.getElementById("selectedStatusesWrapper");
 
-          statusSelect.addEventListener('change', function() {
-            const allStatuses = Array.from(statusSelect.options).slice(1); // Exclude the blank option
-            const blankOption = statusSelect.options[0];
+          function updateSelections() {
+            let selectedNames = [];
+            selectedWrapper.innerHTML = ""; // Clear previous hidden fields
 
-            if (blankOption.selected) {
-              allStatuses.forEach(option => option.selected = true);
-            } else {
-              blankOption.selected = false;
+            document.querySelectorAll(".status-checkbox:checked").forEach((checkbox) => {
+              const statusName = checkbox.dataset.statusName;
+              const statusValue = checkbox.value;
+
+              if (statusName) selectedNames.push(statusName);
+              if (statusValue) {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "status[]";
+                input.value = statusValue;
+                selectedWrapper.appendChild(input);
+              }
+            });
+
+            searchInput.value = selectedNames.join(", ");
+          }
+
+          // Show dropdown on click
+          searchInput.addEventListener("click", () => {
+            dropdown.classList.remove("hidden");
+          });
+
+          // Filter dropdown based on search input
+          searchInput.addEventListener("keyup", () => {
+            const searchValue = searchInput.value.toLowerCase();
+            const items = dropdown.querySelectorAll(".dropdown-item");
+
+            items.forEach((item) => {
+              const label = item.textContent.toLowerCase();
+              item.style.display = label.includes(searchValue) ? "block" : "none";
+            });
+          });
+
+          // Apply selection logic to all checkboxes
+          document.querySelectorAll(".status-checkbox").forEach((cb) => {
+            cb.addEventListener("change", updateSelections);
+          });
+
+          // Hide dropdown when clicking outside
+          document.addEventListener("click", function (event) {
+            if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
+              dropdown.classList.add("hidden");
             }
           });
         });
       </script>
 
       <div class="flex flex-col relative gap-2">
-          <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
-          <!-- Searchable Input -->
-          <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
-          <!-- Dropdown List -->
+        <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
+        <!-- Searchable Input -->
+        <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
+        <!-- Dropdown List -->
         <!-- Dropdown List with Checkboxes -->
         <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
           <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
@@ -88,8 +142,20 @@
 
 <% if @tickets.any? %>
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-xl font-bold mb-4 text-center capitalize">
-      Ticket Status Report AS AT <%= Date.today %> for <%= params[:client_id].present? ? Client.find(params[:client_id]).name : 'All Clients' %>
+    <h2 class="text-xl font-bold mb-4 text-center">
+      Ticket Status Report as of <%= Time.now.strftime("%d/%b/%Y at %I:%M %p") %> for
+      <% if params[:client_ids].present? %>
+        <% selected_clients = Client.where(id: params[:client_ids]) %>
+        <% if selected_clients.count == 1 %>
+          <%= selected_clients.first.name %>
+        <% elsif selected_clients.count == 2 %>
+          <%= selected_clients.map(&:name).join(' and ') %>
+        <% else %>
+          All Clients
+        <% end %>
+      <% else %>
+        All Clients
+      <% end %>
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
@@ -214,59 +280,59 @@
   </div>
 <% end %>
 
-  <script>
-    document.addEventListener("turbo:load", () => {
-      const searchInput = document.getElementById("searchClient");
-      const dropdown = document.getElementById("clientDropdown");
-      const selectedWrapper = document.getElementById("selectedClientsWrapper");
+<script>
+  document.addEventListener("turbo:load", () => {
+    const searchInput = document.getElementById("searchClient");
+    const dropdown = document.getElementById("clientDropdown");
+    const selectedWrapper = document.getElementById("selectedClientsWrapper");
 
-      function updateSelections() {
-        let selectedNames = [];
-        selectedWrapper.innerHTML = ""; // Clear previous hidden fields
+    function updateSelections() {
+      let selectedNames = [];
+      selectedWrapper.innerHTML = ""; // Clear previous hidden fields
 
-        document.querySelectorAll(".client-checkbox:checked").forEach((checkbox) => {
-          const clientName = checkbox.dataset.clientName;
-          const clientId = checkbox.value;
+      document.querySelectorAll(".client-checkbox:checked").forEach((checkbox) => {
+        const clientName = checkbox.dataset.clientName;
+        const clientId = checkbox.value;
 
-          if (clientName) selectedNames.push(clientName);
-          if (clientId) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "client_ids[]";
-            input.value = clientId;
-            selectedWrapper.appendChild(input);
-          }
-        });
-
-        searchInput.value = selectedNames.join(", ");
-      }
-
-      // Show dropdown on click
-      searchInput.addEventListener("click", () => {
-        dropdown.classList.remove("hidden");
-      });
-
-      // Filter dropdown based on search input
-      searchInput.addEventListener("keyup", () => {
-        const searchValue = searchInput.value.toLowerCase();
-        const items = dropdown.querySelectorAll(".dropdown-item");
-
-        items.forEach((item) => {
-          const label = item.textContent.toLowerCase();
-          item.style.display = label.includes(searchValue) ? "block" : "none";
-        });
-      });
-
-      // Apply selection logic to all checkboxes
-      document.querySelectorAll(".client-checkbox").forEach((cb) => {
-        cb.addEventListener("change", updateSelections);
-      });
-
-      // Hide dropdown when clicking outside
-      document.addEventListener("click", function (event) {
-        if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
-          dropdown.classList.add("hidden");
+        if (clientName) selectedNames.push(clientName);
+        if (clientId) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "client_ids[]";
+          input.value = clientId;
+          selectedWrapper.appendChild(input);
         }
       });
+
+      searchInput.value = selectedNames.join(", ");
+    }
+
+    // Show dropdown on click
+    searchInput.addEventListener("click", () => {
+      dropdown.classList.remove("hidden");
     });
-  </script>
+
+    // Filter dropdown based on search input
+    searchInput.addEventListener("keyup", () => {
+      const searchValue = searchInput.value.toLowerCase();
+      const items = dropdown.querySelectorAll(".dropdown-item");
+
+      items.forEach((item) => {
+        const label = item.textContent.toLowerCase();
+        item.style.display = label.includes(searchValue) ? "block" : "none";
+      });
+    });
+
+    // Apply selection logic to all checkboxes
+    document.querySelectorAll(".client-checkbox").forEach((cb) => {
+      cb.addEventListener("change", updateSelections);
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+      if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
+        dropdown.classList.add("hidden");
+      }
+    });
+  });
+</script>

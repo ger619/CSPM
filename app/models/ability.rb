@@ -13,6 +13,9 @@ class Ability
       can %i[add_status add_status update_issue_type update_due_date update_priority index_home all_tickets], Ticket
       can :manage, Issue, user_id: user.id
 
+    elsif user.has_role? :ceo
+      can :generate, :report # allow ceo to do anything
+
     elsif user.has_role?('project manager')
       can %i[read assign_user unassign_user add_team], Project
       can %i[create read assign_tag unassign_tag add_status update_issue_type update_due_date update_priority index_home all_tickets], Ticket
