@@ -18,10 +18,20 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, alert: exception.message
+    if user_signed_in? && current_user.has_role?(:ceo)
+      redirect_to dashboards_cease_fire_report_path, alert: exception.message
+    else
+      redirect_to root_path, alert: exception.message
+    end
   end
 
   private
+
+  def redirect_based_on_role
+    return unless current_user.has_role?(:ceo)
+
+    redirect_to dashboards_cease_fire_report_path
+  end
 
   def load_notifications
     return unless user_signed_in?

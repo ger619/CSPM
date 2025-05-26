@@ -54,7 +54,8 @@
               <%= @ticket.subject %>
             </span>
           </div>
-          <div class="mb-2.5 flex flex-wrap ">Content:
+          <div class="mb-2.5 flex flex-wrap">
+            <span class="font-bold">Content:</span>
             <% if @ticket.content.present? %>
               <span class="break-words overflow-hidden">
                 <%= raw @ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>
