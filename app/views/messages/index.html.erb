@@ -14,7 +14,7 @@
             </p>
           </div>
           <div class="mt-2 text-sm">
-            <%= message.content.to_s.presence || "No content provided." %>
+            <%= raw message.content.to_trix_html.gsub(/\[.*?\]/, '').strip.presence || "No content provided." %>
           </div>
           <% if message.attachments.attached? %>
             <div class="mt-2">

@@ -40,31 +40,37 @@
   <div class="sm:p-4 p-2 sm:w-1/2 flex flex-col">
     <div>
       <div class="flex items-center">
-        <h4 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 hover:underline mr-2">Task Name: </h4>
-        <p class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 hover:underline">
+        <h4 class="block mt-2 text-2xl font-semibold mr-2">
+          Task Name:
+        </h4>
+        <p class="block sm:mt-2 text-xl">
           <%= @task.name %>
         </p>
       </div>
       <div class="flex items-center">
-        <h4 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 mr-2">Description: </h4>
-        <p class="mt-2 text-sm"><%= @task.description %></p>
+        <h4 class="block sm:mt-2 text-2xl font-semibold mr-2">
+          Description:
+        </h4>
+        <p class="mt-2 text-xl"><%= @task.description %></p>
       </div>
-      <div class="flex ">
-          <h5 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 mr-2">Assigned Users:</h5>
-          <div class="flex items-center">
+      <div class="flex">
+        <h5 class="block sm:mt-2 text-2xl font-semibold mr-2">
+          Assignee:
+        </h5>
+        <div class="mt-2 text-xl">
           <% @task.users.each do |user| %>
             <% if user.profile_picture.attached? %>
               <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
             <% elsif user.name_initials.present? %>
-              <p class="rounded-full capitalize font-bold">
+              <p class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize">
                 <%= user.name_initials %>
               </p>
             <% else %>
-              <%= image_tag 'default.png', class: 'w-12 h-12 rounded-full' %>
+              <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
             <% end %>
           <% end %>
         </div>
-        <div class="mx-2 font-semibold">
+        <div class="p-2 min-w-3 gap-2 col-span-1 rounded mt-2">
           <% @task.users.each do |user| %>
             <% if user.name.present? %>
               <%= user.name %>
@@ -73,22 +79,13 @@
             <% end %>
           <% end %>
         </div>
-        <span class="hover:cursor-pointer relative sm:left-12 text-xs">
-          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f2f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-        </span>
       </div>
     </div>
 
     <div>
       <div class="flex items-center">
-        <h5 class="block sm:mt-2 text-2xl font-semibold hover:text-gray-600 mr-2">Task End Date:</h5>
-        <span class="mx-1 text-2xl font-bold capitalize">
+        <h5 class="block mt-2 text-2xl font-semibold mr-2">Task End Date:</h5>
+        <span class="mt-2  text-xl capitalize">
           <%= @task.end_date.strftime("%d %b %Y") %>
         </span>
       </div>
