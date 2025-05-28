@@ -29,63 +29,6 @@
         <div id="selectedStatusesWrapper"></div>
       </div>
 
-      <script>
-        document.addEventListener("turbo:load", () => {
-          const searchInput = document.getElementById("searchStatus");
-          const dropdown = document.getElementById("statusDropdown");
-          const selectedWrapper = document.getElementById("selectedStatusesWrapper");
-
-          function updateSelections() {
-            let selectedNames = [];
-            selectedWrapper.innerHTML = ""; // Clear previous hidden fields
-
-            document.querySelectorAll(".status-checkbox:checked").forEach((checkbox) => {
-              const statusName = checkbox.dataset.statusName;
-              const statusValue = checkbox.value;
-
-              if (statusName) selectedNames.push(statusName);
-              if (statusValue) {
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "status[]";
-                input.value = statusValue;
-                selectedWrapper.appendChild(input);
-              }
-            });
-
-            searchInput.value = selectedNames.join(", ");
-          }
-
-          // Show dropdown on click
-          searchInput.addEventListener("click", () => {
-            dropdown.classList.remove("hidden");
-          });
-
-          // Filter dropdown based on search input
-          searchInput.addEventListener("keyup", () => {
-            const searchValue = searchInput.value.toLowerCase();
-            const items = dropdown.querySelectorAll(".dropdown-item");
-
-            items.forEach((item) => {
-              const label = item.textContent.toLowerCase();
-              item.style.display = label.includes(searchValue) ? "block" : "none";
-            });
-          });
-
-          // Apply selection logic to all checkboxes
-          document.querySelectorAll(".status-checkbox").forEach((cb) => {
-            cb.addEventListener("change", updateSelections);
-          });
-
-          // Hide dropdown when clicking outside
-          document.addEventListener("click", function (event) {
-            if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
-              dropdown.classList.add("hidden");
-            }
-          });
-        });
-      </script>
-
       <div class="flex flex-col relative gap-2">
         <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
         <!-- Searchable Input -->
@@ -140,166 +83,27 @@
   <% end %>
 </div>
 
-<% if @tickets.any? %>
-  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-xl font-bold mb-4 text-center">
-      Ticket Status Report as of <%= Time.now.strftime("%d/%b/%Y at %I:%M %p") %> for
-      <% if params[:client_ids].present? %>
-        <% selected_clients = Client.where(id: params[:client_ids]) %>
-        <% if selected_clients.count == 1 %>
-          <%= selected_clients.first.name %>
-        <% elsif selected_clients.count == 2 %>
-          <%= selected_clients.map(&:name).join(' and ') %>
-        <% else %>
-          All Clients
-        <% end %>
-      <% else %>
-        All Clients
-      <% end %>
-    </h2>
-    <div class="grid grid-cols-3">
-      <div class="col-span-2">
-        <%= pie_chart @status_counts, height: "400px", library: { title: { text: "Ticket Status Distribution" } } %>
-      </div>
-
-      <div class="col-span-1">
-        <div class="p-2">
-          <h1 class="font-semibold">Total Tickets</h1>
-          <% @status_counts.each do |status, count| %>
-            <li><%= status %>: <%= count %></li>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-end gap-2">
-      <%= link_to "Download Status Report",
-                  cease_fire_report_path(
-                    format: :xlsx,
-                    start_date: params[:start_date],
-                    end_date: params[:end_date],
-                    priority: params[:priority],
-                    status: params[:status],
-                    client_ids: params[:client_ids]
-                  ),
-                  class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
-
-
-      <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
-        <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
-      <% end %>
-      <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
-        <% if @clients.present? && @clients.first.present? %>
-          <%= link_to "Send To CEO",
-                      email_report_path(client_id: @clients.first.id),
-                      data: { 'turbo_method': :get, 'turbo-confirm': "Are you sure you want to send the report for #{@clients.first.name} to #{@clients.first.client_contact_person} at #{@clients.first.client_contact_person_email}?" },
-                      class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
-        <% else %>
-          <div class="flex justify-end my-4">
-            <span class="text-gray-500">No clients available to email the report.</span>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-    <table id="ceasefire" class="table-auto w-full mt-2">
-      <thead>
-      <tr>
-        <th class="border border-black px-4 py-2">Ticket ID</th>
-        <th class="border border-black px-4 py-2">Project Name</th>
-        <th class="border border-black px-4 py-2">Severity</th>
-        <th class="border border-black px-4 py-2">Summary</th>
-        <th class="border border-black px-4 py-2">Issue Type</th>
-        <th class="border border-black px-4 py-2">Status</th>
-        <th class="border border-black px-4 py-2">Assigned To</th>
-        <th class="border border-black px-4 py-2">Reporter</th>
-        <th class="border border-black px-4 py-2">Details</th>
-        <th class="border border-black px-4 py-2">Created</th>
-        <th class="border border-black px-4 py-2">Status Updated At</th>
-        <th class="border border-black px-4 py-2">Last Comment Updated At</th>
-        <th class="border border-black px-4 py-2">Due Date</th>
-        <th class="border border-black px-4 py-2">View</th>
-
-      </tr>
-      </thead>
-      <tbody>
-      <% @tickets.each do |ticket| %>
-        <% row_class = case ticket.statuses.first&.name
-                       when 'New'
-                         'bg-red-500'
-                       when 'Closed', 'Resolved'
-                         'bg-emerald-100 text-black'
-                       when 'Reopened'
-                         'bg-red-900 text-slate-100'
-                       when 'Under Development'
-                         'bg-blue-300'
-                       when 'Work in Progress'
-                         'bg-[#CCCCCC] text-black'
-                       when 'QA Testing'
-                         'bg-pink-500'
-                       when 'Awaiting Build'
-                         'bg-gray-800 text-slate-100'
-                       when 'Client Confirmation Pending'
-                         'bg-yellow-100 text-black'
-                       when 'On-Hold'
-                         'bg-red-600 text-slate-100'
-                       when 'Assigned'
-                         'bg-blue-800 text-slate-100'
-                       when 'Declined'
-                         'bg-gray-800 text-slate-100'
-                       else
-                         ''
-                       end %>
-        <tr class="<%= row_class %>">
-          <td class="border border border-black px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.project.title %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.priority %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.subject %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.issue %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-          <td class="border border border-black px-4 py-2">
-            <% ticket.users.each do |user| %>
-              <% if user.name.present? %>
-                <%= user.name %>
-              <% end %>
-            <% end %>
-          </td>
-          <td class="border border border-black px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border border border-black px-4 py-2 "><%= ticket.content.to_plain_text.truncate(3000) %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d/%b/%Y %I:%M:%S %p") %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2">
-            <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-<% end %>
+<%= render 'data_center/ticket_cease' %>
 
 <script>
   document.addEventListener("turbo:load", () => {
-    const searchInput = document.getElementById("searchClient");
-    const dropdown = document.getElementById("clientDropdown");
-    const selectedWrapper = document.getElementById("selectedClientsWrapper");
-
-    function updateSelections() {
+    // Common function to update selections
+    function updateSelections(inputId, wrapperId, checkboxClass, inputName, dataAttr) {
+      const searchInput = document.getElementById(inputId);
+      const selectedWrapper = document.getElementById(wrapperId);
       let selectedNames = [];
       selectedWrapper.innerHTML = ""; // Clear previous hidden fields
 
-      document.querySelectorAll(".client-checkbox:checked").forEach((checkbox) => {
-        const clientName = checkbox.dataset.clientName;
-        const clientId = checkbox.value;
+      document.querySelectorAll(`.${checkboxClass}:checked`).forEach((checkbox) => {
+        const name = checkbox.dataset[dataAttr];
+        const value = checkbox.value;
 
-        if (clientName) selectedNames.push(clientName);
-        if (clientId) {
+        if (name) selectedNames.push(name);
+        if (value) {
           const input = document.createElement("input");
           input.type = "hidden";
-          input.name = "client_ids[]";
-          input.value = clientId;
+          input.name = inputName;
+          input.value = value;
           selectedWrapper.appendChild(input);
         }
       });
@@ -307,32 +111,60 @@
       searchInput.value = selectedNames.join(", ");
     }
 
-    // Show dropdown on click
-    searchInput.addEventListener("click", () => {
-      dropdown.classList.remove("hidden");
-    });
+    // Common function to handle dropdown visibility and filtering
+    function setupDropdown(inputId, dropdownId, checkboxClass, wrapperId, inputName, dataAttr) {
+      const searchInput = document.getElementById(inputId);
+      const dropdown = document.getElementById(dropdownId);
 
-    // Filter dropdown based on search input
-    searchInput.addEventListener("keyup", () => {
-      const searchValue = searchInput.value.toLowerCase();
-      const items = dropdown.querySelectorAll(".dropdown-item");
-
-      items.forEach((item) => {
-        const label = item.textContent.toLowerCase();
-        item.style.display = label.includes(searchValue) ? "block" : "none";
+      // Show dropdown on click
+      searchInput.addEventListener("click", () => {
+        dropdown.classList.remove("hidden");
       });
-    });
 
-    // Apply selection logic to all checkboxes
-    document.querySelectorAll(".client-checkbox").forEach((cb) => {
-      cb.addEventListener("change", updateSelections);
-    });
+      // Filter dropdown based on search input
+      searchInput.addEventListener("keyup", () => {
+        const searchValue = searchInput.value.toLowerCase();
+        const items = dropdown.querySelectorAll(".dropdown-item");
 
-    // Hide dropdown when clicking outside
-    document.addEventListener("click", function (event) {
-      if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
-        dropdown.classList.add("hidden");
-      }
-    });
+        items.forEach((item) => {
+          const label = item.textContent.toLowerCase();
+          item.style.display = label.includes(searchValue) ? "block" : "none";
+        });
+      });
+
+      // Apply selection logic to all checkboxes
+      document.querySelectorAll(`.${checkboxClass}`).forEach((cb) => {
+        cb.addEventListener("change", () => {
+          updateSelections(inputId, wrapperId, checkboxClass, inputName, dataAttr);
+        });
+      });
+
+      // Hide dropdown when clicking outside
+      document.addEventListener("click", function (event) {
+        if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+    }
+
+    // Setup for "Status" dropdown
+    setupDropdown(
+      "searchStatus",
+      "statusDropdown",
+      "status-checkbox",
+      "selectedStatusesWrapper",
+      "status[]",
+      "statusName"
+    );
+
+    // Setup for "Client" dropdown
+    setupDropdown(
+      "searchClient",
+      "clientDropdown",
+      "client-checkbox",
+      "selectedClientsWrapper",
+      "client_ids[]",
+      "clientName"
+    );
   });
 </script>
