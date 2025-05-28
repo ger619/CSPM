@@ -123,7 +123,7 @@
             <% end %>
           </td>
           <td class="border border border-black px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border border border-black px-4 py-2 "><%= ticket.content.to_plain_text.truncate(3000) %></td>
+          <td class="border border border-black px-4 py-2"><%= ticket.content.to_plain_text.truncate(3000) %></td>
           <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d/%b/%Y %I:%M:%S %p") %></td>
           <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
           <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>

@@ -57,6 +57,8 @@ Lint/RaiseException:
   Enabled: false
 Lint/StructNewOverride:
   Enabled: false
+Lint/RequireParentheses:
+    Enabled: false
 Style/HashEachMethods:
   Enabled: false
 Style/HashTransformKeys:

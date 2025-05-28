@@ -3,11 +3,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!, except: %i[new create]
   before_action :update_allowed_parameters, if: :devise_controller?
-  before_action :check_profile_completion
-  before_action :check_active_status
+  before_action :check_user_state
   before_action :load_notifications
+  before_action :redirect_based_on_role, unless: -> { devise_controller? && action_name == 'destroy' }
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
+  rescue_from CanCan::AccessDenied, with: :handle_access_denied
 
   def update_allowed_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password) }
@@ -17,20 +18,25 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:invite, keys: %i[email role])
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
-    if user_signed_in? && current_user.has_role?(:ceo)
-      redirect_to dashboards_cease_fire_report_path, alert: exception.message
-    else
-      redirect_to root_path, alert: exception.message
-    end
-  end
-
   private
 
-  def redirect_based_on_role
-    return unless current_user.has_role?(:ceo)
+  def check_user_state
+    return unless user_signed_in?
 
-    redirect_to dashboards_cease_fire_report_path
+    unless current_user.active
+      sign_out current_user
+      redirect_to new_user_session_path, alert: 'Your account is deactivated. Please contact the administrator.' and return
+    end
+
+    return unless !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
+
+    redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.' and return
+  end
+
+  def redirect_based_on_role
+    return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
+
+    redirect_to cease_fire_report_path
   end
 
   def load_notifications
@@ -39,25 +45,11 @@ class ApplicationController < ActionController::Base
     @notifications = current_user.notifications.order(created_at: :desc)
   end
 
-  def check_profile_completion
-    if user_signed_in? && !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
-      redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.'
-    end
-    return unless user_signed_in? && controller_name == 'registrations' && action_name == 'update'
-
-    current_user.update(first_login: true, first_name: params[:user][:first_name],
-                        last_name: params[:user][:last_name], profile_picture: params[:user][:profile_picture])
-    redirect_to root_path, alert: 'Profile is Updated.'
-  end
-
-  def check_active_status
-    return unless user_signed_in? && !current_user.active
-
-    sign_out current_user
-    redirect_to new_user_session_path, alert: 'Your account is deactivated. Please contact the administrator.'
-  end
-
   def redirect_to_root
     redirect_to root_path, alert: 'The page you were looking for does not exist.'
+  end
+
+  def handle_access_denied(exception)
+    redirect_to user_signed_in? && current_user.has_role?(:ceo) ? cease_fire_report_path : root_path, alert: exception.message
   end
 end
