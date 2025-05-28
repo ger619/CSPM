@@ -59,7 +59,13 @@ class DataCenterController < ApplicationController
 
     # Flash a message indicating the email has been sent
     flash[:notice] = "Report sent to #{client.client_contact_person_email}"
-    redirect_to cease_fire_report_path
+
+    respond_to do |format|
+      format.html # renders view
+      client_name = params[:client_id].present? ? Client.find(params[:client_id]).name : 'all_clients'
+      filename = "ticket_status_report_#{client_name}_#{Date.today}.xlsx"
+      format.xlsx { send_data @xlsx_data, filename: filename }
+    end
   end
 
   def breach_report
