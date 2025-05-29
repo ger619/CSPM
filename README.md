@@ -27,7 +27,7 @@ git clone https://github.com/ger619/CSPM.git <Your-Build-Directory>
 
 
 ## Built with
-- Ruby 3.3.5 on Rails 7.2.1
+- Ruby 3.3.5 on Rails 7.2.2
 - PostgreSQL 14
 
 ## Prerequisites
