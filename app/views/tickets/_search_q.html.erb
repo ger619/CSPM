@@ -19,12 +19,27 @@
         <%= f.date_field :end_date, class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
       </div>
 
-      <div class="flex flex-col">
-        <%= label_tag :status, 'Status' %>
-        <%= f.select :status, options_for_select(@statuses, params[:status]),
-                     { include_blank: 'All Statuses' },
-                     prompt: 'Select Status',
-                     class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900"  %>
+
+      <div class="flex flex-wrap justify-center">
+        <div class="flex flex-col relative">
+          <label for="searchStatus" class="w-full align-middle">Status</label>
+          <!-- Searchable Input -->
+          <input type="text" id="searchStatus" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Status...">
+          <!-- Dropdown List -->
+          <div id="statusDropdown" class="absolute top-16 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
+            <% @statuses.each do |status| %>
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+                <label>
+                  <input type="checkbox" value="<%= status %>" data-status-name="<%= status %>" class="status-checkbox mr-2 capitalize">
+                  <%= status %>
+                </label>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Hidden Input to store multiple selected statuses -->
+          <div id="selectedStatusesWrapper"></div>
+        </div>
       </div>
 
 
@@ -65,3 +80,71 @@
     <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 mt-3' %>
   <% end %>
 </div>
+
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    function updateSelections(inputId, wrapperId, checkboxClass, inputName, dataAttr) {
+      const searchInput = document.getElementById(inputId);
+      const selectedWrapper = document.getElementById(wrapperId);
+      let selectedNames = [];
+      selectedWrapper.innerHTML = "";
+
+      document.querySelectorAll(`.${checkboxClass}:checked`).forEach((checkbox) => {
+        const name = checkbox.dataset[dataAttr];
+        const value = checkbox.value;
+
+        if (name) selectedNames.push(name);
+        if (value) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = inputName;
+          input.value = value;
+          selectedWrapper.appendChild(input);
+        }
+      });
+
+      searchInput.value = selectedNames.join(", ");
+    }
+
+    function setupDropdown(inputId, dropdownId, checkboxClass, wrapperId, inputName, dataAttr) {
+      const searchInput = document.getElementById(inputId);
+      const dropdown = document.getElementById(dropdownId);
+
+      searchInput.addEventListener("click", () => {
+        dropdown.classList.remove("hidden");
+      });
+
+      searchInput.addEventListener("keyup", () => {
+        const searchValue = searchInput.value.toLowerCase();
+        const items = dropdown.querySelectorAll(".dropdown-item");
+
+        items.forEach((item) => {
+          const label = item.textContent.toLowerCase();
+          item.style.display = label.includes(searchValue) ? "block" : "none";
+        });
+      });
+
+      document.querySelectorAll(`.${checkboxClass}`).forEach((cb) => {
+        cb.addEventListener("change", () => {
+          updateSelections(inputId, wrapperId, checkboxClass, inputName, dataAttr);
+        });
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+    }
+
+    setupDropdown(
+      "searchStatus",
+      "statusDropdown",
+      "status-checkbox",
+      "selectedStatusesWrapper",
+      "status[]",
+      "statusName"
+    );
+  });
+</script>
