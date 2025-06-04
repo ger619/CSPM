@@ -2,7 +2,17 @@
   <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
     <h2 class="text-xl font-bold mb-4 text-center">
       Ticket Status Report as of <%= Time.now.strftime("%d/%b/%Y at %I:%M %p") %> for
-      <% if params[:client_ids].present? %>
+
+      <% if current_user.has_role?(:ceo) %>
+        <% ceo_clients = Client.joins(projects: :users).where(projects: { id: current_user.projects.ids }).distinct %>
+        <% if ceo_clients.count == 1 %>
+          <%= ceo_clients.first.name %>
+        <% elsif ceo_clients.count == 2 %>
+          <%= ceo_clients.map(&:name).join(' and ') %>
+        <% else %>
+          <%= ceo_clients.map(&:name).to_sentence %>
+        <% end %>
+      <% elsif params[:client_ids].present? %>
         <% selected_clients = Client.where(id: params[:client_ids]) %>
         <% if selected_clients.count == 1 %>
           <%= selected_clients.first.name %>
@@ -14,6 +24,7 @@
       <% else %>
         All Clients
       <% end %>
+
     </h2>
     <div class="grid grid-cols-3">
       <div class="col-span-2">
@@ -76,7 +87,9 @@
         <th class="border border-black px-4 py-2">Status Updated At</th>
         <th class="border border-black px-4 py-2">Last Comment Updated At</th>
         <th class="border border-black px-4 py-2">Due Date</th>
-        <th class="border border-black px-4 py-2">View</th>
+        <% if !current_user.has_role?(:ceo) %>
+          <th class="border border-black px-4 py-2">View</th>
+        <% end %>
 
       </tr>
       </thead>
@@ -128,9 +141,11 @@
           <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
           <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
           <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2">
-            <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-          </td>
+          <% if !current_user.has_role?(:ceo) %>
+            <td class="border border-black px-4 py-2">
+              <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
+            </td>
+          <% end %>
         </tr>
       <% end %>
       </tbody>

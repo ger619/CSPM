@@ -14,7 +14,7 @@ class Ability
       can :manage, Issue, user_id: user.id
 
     elsif user.has_role? :ceo
-      can :generate, :report # allow ceo to do anything
+      can :generate, :report # allow ceo to do anything cept manage all
 
     elsif user.has_role?('project manager')
       can %i[read assign_user unassign_user add_team], Project
