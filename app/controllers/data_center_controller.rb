@@ -561,7 +561,7 @@ class DataCenterController < ApplicationController
 
     # Group tickets by project
     tickets.group_by { |ticket| ticket.project.title }.each do |project_title, project_tickets|
-      truncated_title = project_title[0, 50] # Truncate to 31 characters
+      truncated_title = project_title[0, 31] # Truncate to 31 characters
       workbook.add_worksheet(name: truncated_title) do |sheet|
         # Add header row with the header style
         sheet.add_row(
