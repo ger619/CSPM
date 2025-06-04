@@ -4,11 +4,12 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, except: %i[new create]
   before_action :update_allowed_parameters, if: :devise_controller?
   before_action :check_user_state
-  before_action :load_notifications
-  before_action :redirect_based_on_role, unless: -> { devise_controller? && action_name == 'destroy' }
+  before_action :redirect_based_on_role, :load_notifications, if: :user_signed_in?
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
-  rescue_from CanCan::AccessDenied, with: :handle_access_denied
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_path, alert: exception.message
+  end
 
   def update_allowed_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password) }
@@ -28,15 +29,14 @@ class ApplicationController < ActionController::Base
       redirect_to new_user_session_path, alert: 'Your account is deactivated. Please contact the administrator.' and return
     end
 
-    return unless !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
+    if !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
+      redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.' and return
+    end
 
-    redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.' and return
-  end
+    return unless controller_name == 'registrations' && action_name == 'update' && params[:user].present?
+    return unless current_user.update(first_login: true, first_name: params[:user][:first_name], last_name: params[:user][:last_name])
 
-  def redirect_based_on_role
-    return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
-
-    redirect_to cease_fire_report_path
+    redirect_to root_path, alert: 'Profile is Updated.' and return
   end
 
   def load_notifications
@@ -45,11 +45,13 @@ class ApplicationController < ActionController::Base
     @notifications = current_user.notifications.order(created_at: :desc)
   end
 
-  def redirect_to_root
-    redirect_to root_path, alert: 'The page you were looking for does not exist.'
+  def redirect_based_on_role
+    return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
+
+    redirect_to cease_fire_report_path
   end
 
-  def handle_access_denied(exception)
-    redirect_to user_signed_in? && current_user.has_role?(:ceo) ? cease_fire_report_path : root_path, alert: exception.message
+  def redirect_to_root
+    redirect_to root_path, alert: 'The page you were looking for does not exist.'
   end
 end
