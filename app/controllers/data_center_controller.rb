@@ -11,7 +11,7 @@ class DataCenterController < ApplicationController
       @tickets = Ticket.joins(project: :client)
         .where(projects: { id: current_user.projects.ids })
         .joins(:statuses)
-        .where.not(statuses: { name: %w[closed resolved declined] })
+        .where.not(statuses: { name: %w[Closed Resolved Declined] })
 
       if params[:start_date].present? && params[:end_date].present?
         start_date = Date.parse(params[:start_date])
