@@ -36,11 +36,11 @@ class ApplicationController < ActionController::Base
     return unless controller_name == 'registrations' && action_name == 'update' && params[:user].present?
     return unless current_user.update(first_login: true, first_name: params[:user][:first_name], last_name: params[:user][:last_name])
 
-    redirect_to root_path, alert: 'Profile is Updated.' and return
-
-    return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
-
-    redirect_to cease_fire_report_path
+    if user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
+      redirect_to cease_fire_report_path
+    else
+      redirect_to root_path, alert: 'Profile is Updated.' and return
+    end
   end
 
   def load_notifications
