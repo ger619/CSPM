@@ -47,12 +47,6 @@ class ApplicationController < ActionController::Base
     @notifications = current_user.notifications.order(created_at: :desc)
   end
 
-  # def redirect_based_on_role
-  #  return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
-
-  #  redirect_to cease_fire_report_path
-  # end
-
   def redirect_to_root
     redirect_to root_path, alert: 'The page you were looking for does not exist.'
   end
