@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, except: %i[new create]
   before_action :update_allowed_parameters, if: :devise_controller?
   before_action :check_user_state
-  before_action :redirect_based_on_role, :load_notifications, if: :user_signed_in?
+  before_action :load_notifications, if: :user_signed_in?
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
   rescue_from CanCan::AccessDenied do |exception|
@@ -37,6 +37,10 @@ class ApplicationController < ActionController::Base
     return unless current_user.update(first_login: true, first_name: params[:user][:first_name], last_name: params[:user][:last_name])
 
     redirect_to root_path, alert: 'Profile is Updated.' and return
+
+    return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
+
+    redirect_to cease_fire_report_path
   end
 
   def load_notifications
@@ -45,11 +49,11 @@ class ApplicationController < ActionController::Base
     @notifications = current_user.notifications.order(created_at: :desc)
   end
 
-  def redirect_based_on_role
-    return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
+  # def redirect_based_on_role
+  #  return unless user_signed_in? && current_user.has_role?(:ceo) && !request.path.start_with?(cease_fire_report_path)
 
-    redirect_to cease_fire_report_path
-  end
+  #  redirect_to cease_fire_report_path
+  # end
 
   def redirect_to_root
     redirect_to root_path, alert: 'The page you were looking for does not exist.'
