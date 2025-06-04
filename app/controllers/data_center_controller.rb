@@ -3,10 +3,35 @@ require 'axlsx'
 
 class DataCenterController < ApplicationController
   before_action :authenticate_user!
+
   def cease_fire_report
     authorize! :generate, :report
 
-    if params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
+    if current_user.has_role?(:ceo)
+      @tickets = Ticket.joins(project: :client)
+        .where(projects: { id: current_user.projects.ids })
+        .joins(:statuses)
+        .where.not(statuses: { name: %w[closed resolved declined] })
+
+      if params[:start_date].present? && params[:end_date].present?
+        start_date = Date.parse(params[:start_date])
+        end_date = Date.parse(params[:end_date])
+        @tickets = @tickets.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+        @tickets = @tickets.where(priority: params[:priority]) if params[:priority].present?
+      end
+
+      @tickets = @tickets.where(statuses: { name: params[:status] }) if params[:status].present?
+
+      @status_counts = @tickets.group('statuses.name').count
+      @xlsx_data = generate_xlsx(@tickets)
+      @clients = Client.where(id: @tickets.pluck('clients.id').uniq)
+
+      respond_to do |format|
+        format.html # renders view
+        filename = "ticket_status_report_ceo_#{Date.today}.xlsx"
+        format.xlsx { send_data @xlsx_data, filename: filename }
+      end
+    elsif params[:client_id].present? || params[:start_date].present? || params[:end_date].present? || params[:status].present?
 
       @tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                    Ticket.joins(project: :client)
