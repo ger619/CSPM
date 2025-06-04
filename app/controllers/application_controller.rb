@@ -3,7 +3,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!, except: %i[new create]
   before_action :update_allowed_parameters, if: :devise_controller?
-  before_action :check_user_state
+  before_action :check_active_status
+  before_action :check_profile_completion
   before_action :load_notifications
   before_action :redirect_based_on_role, unless: -> { devise_controller? && action_name == 'destroy' }
 
@@ -20,17 +21,20 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def check_user_state
+  def check_active_status
     return unless user_signed_in?
 
-    unless current_user.active
-      sign_out current_user
-      redirect_to new_user_session_path, alert: 'Your account is deactivated. Please contact the administrator.' and return
-    end
+    return if current_user.active
 
-    return unless !current_user.first_login && controller_name != 'registrations' && action_name != 'edit'
+    sign_out current_user
+    redirect_to new_user_session_path, alert: 'Your account is deactivated. Please contact the administrator.'
+  end
 
-    redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.' and return
+  def check_profile_completion
+    return unless user_signed_in?
+    return if current_user.first_login || (controller_name == 'registrations' && action_name == 'edit')
+
+    redirect_to edit_user_registration_path, alert: 'Please complete your profile before continuing.'
   end
 
   def redirect_based_on_role

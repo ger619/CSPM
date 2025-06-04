@@ -18,5 +18,3 @@ Role.find_or_create_by!(name: 'client')
 Role.find_or_create_by!(name: 'observer')
 Role.find_or_create_by!(name: 'sales')
 Role.find_or_create_by!(name: 'ceo')
-
-
