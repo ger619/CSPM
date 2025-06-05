@@ -1,11 +1,62 @@
-<p><%= t("devise.mailer.invitation_instructions.hello", first_name: @resource.first_name, last_name: @resource.last_name) %></p>
+<i>
+  <p><%= t("devise.mailer.invitation_instructions.hello", first_name: @resource.first_name, last_name: @resource.last_name) %></p>
+  <p>Greetings from Craft Silicon!</p>
+  <p>We hope this message finds you well.</p>
+  <p>Until December 2024, we shared periodic support snapshot updates via email.<br>
+    While this helped give visibility into issue statuses, we’ve been working to make<br>
+    this process even more seamless and accessible.
+  </p>
+  <p>
+    We’re pleased to inform you that your <b>real-time Support Snapshot</b> is now available online — anytime, anywhere — through <b>TaskBridge</b> portal.<br>
+    With this enhancement, you can now:
+  </p>
+  <ul>
+    <li>View live updates on the status of all your reported issues</li>
+    <li>Track progress instantly without waiting for email updates</li>
+    <li>Access detailed issue logs categorized by status and priority</li>
+  </ul>
+  <p>
+    We believe this change will provide you with more transparency, control, and convenience in managing ongoing concerns and resolutions.
+  </p>
+  <p>
+    To facilitate this I am sending you a link to access this portal. Your ICT/Operations team can give you initial guidance as they already use this portal to log support requests for our<br>
+    attention and follow resolution progress of the same.
+  </p>
+  <p>
+    You may also recommend any of your officers that we can share credentials to access the same portal by sending us their name and email ID
+  </p>
+  <p>
+    <b>
+      You can access the report using this link:
+    </b>
+    <%= link_to t("devise.mailer.invitation_instructions.accept"), accept_invitation_url(@resource, invitation_token: @token) %>
+  </p>
+  <% if @resource.invitation_due_at %>
+    <p>
+      <%= t("devise.mailer.invitation_instructions.accept_until", due_date: l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format')) %>
+    </p>
+  <% end %>
 
-<p><%= t("devise.mailer.invitation_instructions.someone_invited_you") %></p>
+  <p>
+    Of course, we will continue to send important updates and reminders via email as needed.
+  </p>
+  <p>
+    If you have any questions or need further assistance, please don’t hesitate to reach out.<br>
+    We’re here to ensure a smooth and efficient resolution process for all your concerns.<br>
+    You can contact me directly at <b>fokwaro@craftsilicon.com</b> | +254 709 044 223
+  </p>
+  <p>
+    Thank you for your continued partnership. We’re excited about this step and look forward to even more<br>
+    efficient and collaborative engagements ahead.
+  </p>
+  <p>
+    Warm regards,<br>
+    <b>Fredrick Okwaro</b><br>
+    Deputy Chief Executive Officer<br>
+    <b>Craft Silicon</b>
+  </p>
+  <p>
+    <%= t("devise.mailer.invitation_instructions.ignore") %>
+  </p>
 
-<p><%= link_to t("devise.mailer.invitation_instructions.accept"), accept_invitation_url(@resource, invitation_token: @token) %></p>
-
-<% if @resource.invitation_due_at %>
-  <p><%= t("devise.mailer.invitation_instructions.accept_until", due_date: l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format')) %></p>
-<% end %>
-
-<p><%= t("devise.mailer.invitation_instructions.ignore") %></p>
+</i>
