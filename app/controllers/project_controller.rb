@@ -179,7 +179,9 @@ class ProjectController < ApplicationController
 
       # Send email to the newly assigned user
       assigned_user = user # Assuming the first user is the assigned user
-      UserMailer.assignment_email(user, @project, current_user, assigned_user).deliver_later
+      # if current user has role :ceo do not send email to the user
+
+      UserMailer.assignment_email(user, @project, current_user, assigned_user).deliver_later unless user.has_role?(:ceo)
       # @project.users.each do |project_user|
       #  next if project_user == current_user
 
