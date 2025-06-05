@@ -18,7 +18,7 @@ en:
     mailer:
       invitation_instructions:
         subject: "Invitation instructions"
-        hello: "Hello %{email}"
+        hello: "Hello %{first_name} %{last_name}"
         someone_invited_you: "Craftsilicon Project Management has invited you to Taskbridge, you can accept it through the link below."
         accept: "Please click here to Accept invitation"
         accept_until: "This invitation will remain active until %{due_date}"
