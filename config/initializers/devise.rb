@@ -27,7 +27,9 @@ Devise.setup do |config|
   config.mailer_sender = 'cspm@craftsilicon.com'
 
   # Configure the class responsible to send e-mails.
-   config.mailer = 'Devise::Mailer'
+  # config.mailer = 'Devise::Mailer'
+  # Configure the class for custom emails to send e-mails.
+  config.mailer = 'CustomDeviseMailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'

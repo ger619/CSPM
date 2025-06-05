@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  attr_accessor :skip_invitation
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -34,14 +35,14 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
 
   after_initialize :set_default_profile_completed, if: :new_record?
-  validate :email_domain_must_be_certified, on: %i[create invitation_create]
+  validate :email_domain_must_be_certified, on: %i[create invitation_create skip_invitation]
 
   # To show which user invited a user
 
   has_many :invitees, class_name: 'User', foreign_key: :invited_by_id
 
   # To ensure that a user has at least one role
-  after_create :assign_default_role
+  before_create :assign_default_role
   # To ensure that a user has at least one role
   validate :must_have_a_role, on: :update
 
@@ -66,6 +67,7 @@ class User < ApplicationRecord
   belongs_to :location, optional: true
   has_and_belongs_to_many :teams
 
+  validates :password, presence: true, unless: :skip_invitation
   def assign_default_role
     return if invited_by_id.present?
 

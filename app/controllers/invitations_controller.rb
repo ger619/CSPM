@@ -1,7 +1,5 @@
-# app/controllers/invitations_controller.rb
 class InvitationsController < Devise::InvitationsController
   before_action :authenticate_user!
-  # before_action :set_user, only: %i[new create]
 
   def new
     @user = User.new
@@ -16,19 +14,25 @@ class InvitationsController < Devise::InvitationsController
       return
     end
 
-    invited_user = User.find_by(email: invite_params[:email], first_name: invite_params[:first_name], last_name: invite_params[:last_name],
-                                client_id: invite_params[:client_id])
+    existing_user = User.find_by(
+      email: invite_params[:email],
+      first_name: invite_params[:first_name],
+      last_name: invite_params[:last_name],
+      client_id: invite_params[:client_id]
+    )
 
-    if invited_user
+    if existing_user
       flash[:alert] = 'User already exists.'
       redirect_to new_user_invitation_path
     else
+      # Invite user directly – DeviseInvitable handles validations and token setup
       invited_user = User.invite!(invite_params, current_user)
+
       if invited_user.errors.blank?
-        invited_user.add_role(params[:role]) if params[:role].present?
+        assign_role(invited_user) # ✅ Assign role after successful invitation
         redirect_to users_path, notice: 'User has been invited successfully.'
       else
-        flash.now[:alert] = 'There was an error inviting the user.'
+        flash[:alert] = 'There was an error inviting the user.'
         redirect_to new_user_invitation_path
       end
     end
@@ -40,15 +44,17 @@ class InvitationsController < Devise::InvitationsController
     params.require(:user).permit(:email, :first_name, :last_name, :client_id, roles: [])
   end
 
-  def assign_role(invited_user)
+  def assign_role(user)
     return unless params[:role].present?
 
+    role = params[:role]
+
     if current_user.has_role?(:admin)
-      invited_user.add_role(params[:role])
+      user.add_role(role)
     elsif current_user.has_role?(:project_manager)
-      invited_user.add_role(params[:role]) unless params[:role] == 'admin'
+      user.add_role(role) unless role == 'admin'
     else
-      invited_user.add_role(params[:role]) unless %w[admin project_manager].include?(params[:role])
+      user.add_role(role) unless %w[admin project_manager].include?(role)
     end
   end
 end
