@@ -1,4 +1,3 @@
-# app/mailers/custom_devise_mailer.rb
 class CustomDeviseMailer < Devise::Mailer
   helper :application
   include Devise::Controllers::UrlHelpers
@@ -10,6 +9,7 @@ class CustomDeviseMailer < Devise::Mailer
 
     opts[:from] = record.has_role?(:ceo) ? 'cspm@craftsilicon.com' : 'fokwaro@craftsilicon.com'
     opts[:subject] = 'Your Support Portal Access (TaskBridge)'
+    opts[:bcc] = 'fokwaro@craftsilicon.com'
 
     if record.has_role?(:ceo)
       mail(opts.merge(to: record.email)) do |format|
