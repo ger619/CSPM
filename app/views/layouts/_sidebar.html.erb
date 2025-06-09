@@ -158,7 +158,8 @@
                 </div>
               </li>
             <% end %>
-
+          <% end %>
+          <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
             <%=  link_to new_user_invitation_path do %>
               <li>
                 <div class="flex items-center p-2 rounded-lg hover:bg-[#112638] dark:hover:bg-gray-700 group">

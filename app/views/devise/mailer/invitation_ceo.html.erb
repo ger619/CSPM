@@ -1,3 +1,4 @@
+<!-- CEO-specific content -->
 <i>
   <p><%= t("devise.mailer.invitation_instructions.hello", first_name: @resource.first_name, last_name: @resource.last_name) %></p>
   <p>Greetings from Craft Silicon!</p>
@@ -36,7 +37,6 @@
       <%= t("devise.mailer.invitation_instructions.accept_until", due_date: l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format')) %>
     </p>
   <% end %>
-
   <p>
     Of course, we will continue to send important updates and reminders via email as needed.
   </p>
@@ -58,5 +58,4 @@
   <p>
     <%= t("devise.mailer.invitation_instructions.ignore") %>
   </p>
-
 </i>

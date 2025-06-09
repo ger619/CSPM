@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   attr_accessor :skip_invitation
+
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
