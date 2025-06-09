@@ -68,7 +68,6 @@ class User < ApplicationRecord
   belongs_to :location, optional: true
   has_and_belongs_to_many :teams
 
-  validates :password, presence: true, unless: :skip_invitation
   def assign_default_role
     return if invited_by_id.present?
 
