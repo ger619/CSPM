@@ -58,7 +58,7 @@
             <span class="font-bold">Content:</span>
             <% if @ticket.content.present? %>
               <span class="break-words overflow-hidden">
-                <%= raw @ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>
+                <%= sanitize raw (@ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip) %>
                 <% if @ticket.content.body.attachments.any? %>
                   <% @ticket.content.body.attachments.each do |attachment| %>
                     <div class="mb-2">
