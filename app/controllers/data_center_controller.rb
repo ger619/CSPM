@@ -187,8 +187,8 @@ class DataCenterController < ApplicationController
 
       # Fetch tickets excluding specific statuses
       @tickets = Ticket.joins(:statuses, :project, :taggings)
-                       .where.not(statuses: { name: %w[Resolved Closed Declined] })
-                       .where(taggings: { user_id: user_ids })
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where(taggings: { user_id: user_ids })
 
       # Group tickets by user and status and show the counts of users and the tickets assigned
       @tickets_by_user = @tickets.joins(:statuses)
