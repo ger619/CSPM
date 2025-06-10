@@ -187,7 +187,7 @@ class DataCenterController < ApplicationController
 
       # Fetch tickets excluding specific statuses
       @tickets = Ticket.joins(:statuses, :project, :taggings)
-        # .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: user_ids })
 
       # Group tickets by user and status and show the counts of users and the tickets assigned
@@ -195,19 +195,22 @@ class DataCenterController < ApplicationController
         .group('taggings.user_id', 'statuses.name')
         .count
 
-      @sla_status = @tickets.joins(:sla_tickets)
+      @sla_status = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
         .where(sla_tickets: { sla_status: ['Breached'] })
+        .where('tickets.created_at >= ?', 6.months.ago)
         .group('taggings.user_id')
         .count
 
       # Count target response SLA breaches per user
-      @sla_target_response_deadline = @tickets.joins(:sla_tickets)
+      @sla_target_response_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .where('tickets.created_at >= ?', 6.months.ago)
         .group('taggings.user_id')
         .count
 
-      @sla_resolution_deadline = @tickets.joins(:sla_tickets)
+      @sla_resolution_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .where('tickets.created_at >= ?', 6.months.ago)
         .group('taggings.user_id')
         .count
 
