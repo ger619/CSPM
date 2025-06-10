@@ -67,7 +67,7 @@
       <thead>
       <tr>
         <th class="border border-gray-300 px-4 py-2">User Name</th>
-        <th class="border border-gray-300 px-4 py-2">Total Tickets</th>
+        <th class="border border-gray-300 px-4 py-2">Total Open Tickets</th>
         <th class="border border-gray-300 px-4 py-2">Assigned</th>
         <th class="border border-gray-300 px-4 py-2">Work in Progress</th>
         <th class="border border-gray-300 px-4 py-2">Under Development</th>
@@ -100,7 +100,7 @@
           <td class="border border-gray-300 px-4 py-2"><%= @sla_target_response_deadline[user.id] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= @sla_resolution_deadline[user.id] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2 font-bold">
-            <%= link_to "View All", assigned_tickets_path(team_id: @team.id, user_id: user.id), class: 'bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+            <%= link_to "View All", assigned_tickets_path(team_id: @team.id, user_id: user.id), class: 'bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
           </td>
         </tr>
       <% end %>
