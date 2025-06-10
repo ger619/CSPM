@@ -7,16 +7,16 @@ class CustomDeviseMailer < Devise::Mailer
     @token = token
     @resource = record
 
-    # opts[:from] = record.has_role?(:ceo) ? 'cspm@craftsilicon.com' : 'fokwaro@craftsilicon.com'
-    opts[:from] = record.has_role?(:ceo) ? 'cspm12@craftsilicon.com' : 'cspm@craftsilicon.com'
-    opts[:subject] = 'Your Support Portal Access (TaskBridge)'
-    # opts[:bcc] = 'fokwaro@craftsilicon.com'
-
     if record.has_role?(:ceo)
+      opts[:from] = 'fokwaro@craftsilicon.com'
+      opts[:subject] = 'Your Support Portal Access (TaskBridge)'
+      opts[:bcc] = 'fokwaro@craftsilicon.com'
       mail(opts.merge(to: record.email)) do |format|
         format.html { render 'devise/mailer/invitation_ceo' }
       end
     else
+      opts[:from] = 'cspm@craftsilicon.com'
+      opts[:subject] = 'Your Support Portal Access (TaskBridge)'
       super
     end
   end

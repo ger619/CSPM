@@ -25,11 +25,13 @@ class InvitationsController < Devise::InvitationsController
       flash[:alert] = 'User already exists.'
       redirect_to new_user_invitation_path
     else
-      # Invite user directly – DeviseInvitable handles validations and token setup
-      invited_user = User.invite!(invite_params, current_user)
+      invited_user = nil
+      User.invite!(invite_params, current_user) do |u|
+        assign_role(u)
+        invited_user = u
+      end
 
-      if invited_user.errors.blank?
-        assign_role(invited_user) # ✅ Assign role after successful invitation
+      if invited_user&.errors&.blank?
         redirect_to users_path, notice: 'User has been invited successfully.'
       else
         flash[:alert] = 'There was an error inviting the user.'
