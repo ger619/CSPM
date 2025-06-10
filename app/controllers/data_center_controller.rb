@@ -187,12 +187,28 @@ class DataCenterController < ApplicationController
 
       # Fetch tickets excluding specific statuses
       @tickets = Ticket.joins(:statuses, :project, :taggings)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
+        # .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: user_ids })
 
       # Group tickets by user and status and show the counts of users and the tickets assigned
       @tickets_by_user = @tickets.joins(:statuses)
         .group('taggings.user_id', 'statuses.name')
+        .count
+
+      @sla_status = @tickets.joins(:sla_tickets)
+        .where(sla_tickets: { sla_status: ['Breached'] })
+        .group('taggings.user_id')
+        .count
+
+      # Count target response SLA breaches per user
+      @sla_target_response_deadline = @tickets.joins(:sla_tickets)
+        .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .group('taggings.user_id')
+        .count
+
+      @sla_resolution_deadline = @tickets.joins(:sla_tickets)
+        .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .group('taggings.user_id')
         .count
 
       # Organize data into a hash for easier display in the view
