@@ -68,6 +68,7 @@
       <tr>
         <th class="border border-gray-300 px-4 py-2">User Name</th>
         <th class="border border-gray-300 px-4 py-2">Total Assigned Tickets</th>
+        <th class="border border-gray-300 px-4 py-2">Total Open Tickets</th>
         <th class="border border-gray-300 px-4 py-2">Assigned</th>
         <th class="border border-gray-300 px-4 py-2">Work in Progress</th>
         <th class="border border-gray-300 px-4 py-2">Under Development</th>
@@ -88,6 +89,7 @@
         <tr>
           <td class="border border-gray-300 px-4 py-2"><%= user.name %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data[:total] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= @tickets_chart_data[user.name] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Assigned'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Work in Progress'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Under Development'] || 0 %></td>
