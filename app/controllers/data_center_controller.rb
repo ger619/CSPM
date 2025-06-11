@@ -231,8 +231,11 @@ class DataCenterController < ApplicationController
         filtered.values.sum
       end
       @tickets_chart_data = filtered_chart_data.transform_keys { |id| User.find(id).name }
-      @tickets_per_project = @tickets.group('projects.title').count
-
+      @tickets_per_project = @tickets
+        .joins(:statuses)
+        .where.not(statuses: { name: excluded_statuses })
+        .group('projects.title')
+        .count
       respond_to do |format|
         format.html # Default view
         team_name = @team.name
