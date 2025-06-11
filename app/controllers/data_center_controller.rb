@@ -226,13 +226,11 @@ class DataCenterController < ApplicationController
       # @tickets_chart_data = @tickets_chart_data.transform_values { |data| data[:total] }
 
       excluded_statuses = %w[Closed Resolved Declined]
-      @tickets_chart_data = @organized_tickets.transform_values do |data|
-        # Remove excluded statuses and sum the rest
+      filtered_chart_data = @organized_tickets.transform_values do |data|
         filtered = data.reject { |k, _| excluded_statuses.include?(k) || k == :total }
         filtered.values.sum
-      end.transform_keys { |id| User.find(id).name }
-      @tickets_chart_data = @tickets_chart_data.reject { |_, count| count.zero? }
-
+      end
+      @tickets_chart_data = filtered_chart_data.transform_keys { |id| User.find(id).name }
       @tickets_per_project = @tickets.group('projects.title').count
 
       respond_to do |format|
