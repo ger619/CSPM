@@ -30,7 +30,6 @@
       <h2 class="p-2 font-bold">Team Report for <span class="capitalize"><%= @team.name %> </span></h2>
       <%= link_to 'Download CSV Report', project_report_path(format: :csv, team_id: @team.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
     </div>
-
     <div class="flex justify-center w-full my-6 gap-10">
       <div class="flex justify-center gap-10">
         <div>
@@ -45,7 +44,6 @@
           </ul>
         </div>
       </div>
-
       <div class="flex justify-center gap-10">
         <div>
           <%= pie_chart @tickets_per_project, height: "400px", library: { title: { text: "Tickets per Project" } } %>
@@ -60,9 +58,6 @@
         </div>
       </div>
     </div>
-
-
-
     <table class="table-auto w-full border-collapse border border-gray-300">
       <thead>
       <tr>
@@ -72,14 +67,12 @@
         <th class="border border-gray-300 px-4 py-2">Assigned</th>
         <th class="border border-gray-300 px-4 py-2">Work in Progress</th>
         <th class="border border-gray-300 px-4 py-2">Under Development</th>
-        <th class="border border-gray-300 px-4 py-2">On Hold</th>
         <th class="border border-gray-300 px-4 py-2">Client Confirmation Pending</th>
         <th class="border border-gray-300 px-4 py-2">Awaiting Build</th>
         <th class="border border-gray-300 px-4 py-2">Initial Response Breaches</th>
         <th class="border border-gray-300 px-4 py-2">Target Response Breaches</th>
         <th class="border border-gray-300 px-4 py-2">Target Resolution Breaches</th>
         <th class="border border-gray-300 px-4 py-2">View</th>
-
       </tr>
       </thead>
       <tbody>
@@ -93,7 +86,6 @@
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Assigned'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Work in Progress'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Under Development'] || 0 %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['On-Hold'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Client Confirmation Pending'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Awaiting Build'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= @sla_status[user.id] || 0 %></td>
