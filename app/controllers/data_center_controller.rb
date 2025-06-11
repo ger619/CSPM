@@ -257,12 +257,12 @@ class DataCenterController < ApplicationController
       @tickets = Ticket.joins(:statuses, :taggings, :project)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: @user.id })
-        .order('projects.title')
+        .order('projects.title').order('created_at DESC')
     else
       @tickets_by_user = Ticket.joins(:statuses, :taggings, :project)
         .where.not(statuses: { name: %w[Resolved Closed Declined] })
         .where(taggings: { user_id: @team.users.pluck(:id) })
-        .order('projects.title')
+        .order('projects.title').order('created_at DESC')
         .group_by(&:user)
     end
   end
