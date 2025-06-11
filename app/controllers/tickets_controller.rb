@@ -397,6 +397,7 @@ class TicketsController < ApplicationController
     @tickets = Ticket.joins(:statuses, :project)
       .where(projects: { id: @projects.ids })
       .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .order('created_at DESC')
       .distinct
     @per_page = 20
     @page = (params[:page] || 1).to_i
