@@ -125,7 +125,7 @@ class TicketsController < ApplicationController
         # Send notification email to assigned user
         assigned_user = @project.user
         if @ticket.issue == 'CHANGE REQUEST'
-          UserMailer.create_ticket_email(@ticket, current_user, 'change@craftsilicon.com', assigned_user, @project).deliver_later
+          UserMailer.create_ticket_email(@ticket, current_user, 'change@craftsilicon.com', @project).deliver_later
         elsif assigned_user.present?
           UserMailer.create_ticket_email(@ticket, current_user, assigned_user, @project).deliver_later
         else
