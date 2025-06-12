@@ -1,4 +1,8 @@
-<p>Hello <%= @assigned_user.first_name %> <%= @assigned_user.last_name %>,</p>
+<% if @assigned_user.respond_to?(:first_name) %>
+  <p>Hello <%= @assigned_user.first_name %> <%= @assigned_user.last_name %>,</p>
+<% else %>
+  Hello Change Request Team,
+<% end %>
 
 <p>We would like to inform you that you have been assigned a new ticket: <%= @ticket.unique_id %> by <%= @current_user.name %>.</p>
 

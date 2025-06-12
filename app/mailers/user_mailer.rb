@@ -24,7 +24,8 @@ class UserMailer < ApplicationMailer
     @assigned_user = assigned_user
     @project = project
     @url = project_ticket_url(@ticket.project, @ticket)
-    mail(to: @assigned_user.email, subject: "A new ticket has been created with Ticket ID #{@ticket.unique_id}.")
+    recipient_email = assigned_user.respond_to?(:email) ? assigned_user.email : assigned_user
+    mail(to: recipient_email, subject: "A new ticket has been created with Ticket ID #{@ticket.unique_id}.")
   end
 
   def edit_ticket_email(user, ticket, current_user, assigned_user, project)
