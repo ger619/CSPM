@@ -123,16 +123,13 @@ class TicketsController < ApplicationController
         end
 
         # Send notification email to assigned user
+        assigned_user = @project.user
         if @ticket.issue == 'CHANGE REQUEST'
-          assigned_user = @project.user
           UserMailer.create_ticket_email(@ticket, current_user, 'change@craftsilicon.com', assigned_user, @project).deliver_later
+        elsif assigned_user.present?
+          UserMailer.create_ticket_email(@ticket, current_user, assigned_user, @project).deliver_later
         else
-          assigned_user = @project.user
-          if assigned_user.present?
-            UserMailer.create_ticket_email(@ticket, current_user, assigned_user, @project).deliver_later
-          else
-            Rails.logger.warn('Assigned user is nil, email not sent.')
-          end
+          Rails.logger.warn('Assigned user is nil, email not sent.')
         end
 
         # Log the creation event
