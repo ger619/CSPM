@@ -195,30 +195,30 @@ class DataCenterController < ApplicationController
       end
 
       @tickets = Ticket.joins(:statuses, :project, :taggings)
-                       .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
-                       .where(taggings: { user_id: user_ids })
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+        .where(taggings: { user_id: user_ids })
 
       @tickets_by_user = @tickets.joins(:statuses)
-                                 .group('taggings.user_id', 'statuses.name')
-                                 .count
+        .group('taggings.user_id', 'statuses.name')
+        .count
 
       @sla_status = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
-                          .where(sla_tickets: { sla_status: ['Breached'] })
-                          .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
-                          .group('taggings.user_id')
-                          .count
+        .where(sla_tickets: { sla_status: ['Breached'] })
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+        .group('taggings.user_id')
+        .count
 
       @sla_target_response_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
-                                            .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
-                                            .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
-                                            .group('taggings.user_id')
-                                            .count
+        .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+        .group('taggings.user_id')
+        .count
 
       @sla_resolution_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
-                                       .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
-                                       .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
-                                       .group('taggings.user_id')
-                                       .count
+        .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+        .group('taggings.user_id')
+        .count
 
       @organized_tickets = @tickets_by_user.each_with_object({}) do |((user_id, status), count), hash|
         hash[user_id] ||= { total: 0 }
@@ -233,10 +233,10 @@ class DataCenterController < ApplicationController
       end
       @tickets_chart_data = filtered_chart_data.transform_keys { |id| User.find(id).name }
       @tickets_per_project = @tickets
-                               .joins(:statuses)
-                               .where.not(statuses: { name: excluded_statuses })
-                               .group('projects.title')
-                               .count
+        .joins(:statuses)
+        .where.not(statuses: { name: excluded_statuses })
+        .group('projects.title')
+        .count
 
       respond_to do |format|
         format.html
