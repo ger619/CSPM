@@ -178,52 +178,53 @@ class DataCenterController < ApplicationController
   end
 
   def project_report
-    authorize! :generate, :report # Check if the user can generate reports
+    authorize! :generate, :report
 
     if params[:team_id].present?
       @team = Team.find(params[:team_id])
       @team_members = @team.users
       user_ids = @team_members.pluck(:id)
 
-      # Fetch tickets excluding specific statuses
+      # Handle custom date range or default to last 6 months
+      if params[:start_date].present? && params[:end_date].present?
+        start_date = Date.parse(params[:start_date])
+        end_date = Date.parse(params[:end_date])
+      else
+        start_date = 6.months.ago.to_date
+        end_date = Date.today
+      end
+
       @tickets = Ticket.joins(:statuses, :project, :taggings)
-        .where('tickets.created_at >= ?', 6.months.ago)
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
         .where(taggings: { user_id: user_ids })
 
-      # Group tickets by user and status and show the counts of users and the tickets assigned
       @tickets_by_user = @tickets.joins(:statuses)
         .group('taggings.user_id', 'statuses.name')
         .count
 
       @sla_status = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
         .where(sla_tickets: { sla_status: ['Breached'] })
-        .where('tickets.created_at >= ?', 6.months.ago)
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
         .group('taggings.user_id')
         .count
 
-      # Count target response SLA breaches per user
       @sla_target_response_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
-        .where('tickets.created_at >= ?', 6.months.ago)
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
         .group('taggings.user_id')
         .count
 
       @sla_resolution_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
         .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
-        .where('tickets.created_at >= ?', 6.months.ago)
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
         .group('taggings.user_id')
         .count
 
-      # Organize data into a hash for easier display in the view
       @organized_tickets = @tickets_by_user.each_with_object({}) do |((user_id, status), count), hash|
         hash[user_id] ||= { total: 0 }
         hash[user_id][:total] += count
         hash[user_id][status] = count
       end
-
-      # Prepare data for the pie chart
-      # @tickets_chart_data = @organized_tickets.transform_keys { |id| User.find(id).name }
-      # @tickets_chart_data = @tickets_chart_data.transform_values { |data| data[:total] }
 
       excluded_statuses = %w[Closed Resolved Declined]
       filtered_chart_data = @organized_tickets.transform_values do |data|
@@ -236,8 +237,9 @@ class DataCenterController < ApplicationController
         .where.not(statuses: { name: excluded_statuses })
         .group('projects.title')
         .count
+
       respond_to do |format|
-        format.html # Default view
+        format.html
         team_name = @team.name
         format.csv { send_data generate_project_report_csv(@tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
       end
