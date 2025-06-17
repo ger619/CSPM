@@ -16,7 +16,7 @@
           Active Users<br>(User who have login more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: ['client','project manager','admin','agent','observer'] }).where('sign_in_count > ?', 0).count %>
+          <%= users_who_have_loggedin_more_than_once_count %>
         </span>
       </div>
       <% end %>
@@ -26,7 +26,7 @@
           Active Clients<br>(Clients who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
+          <%= clients_who_have_loggedin_more_than_once_count %>
         </span>
       </div>
       <% end %>
@@ -35,8 +35,8 @@
         <p class="text-xs sm:text-sm truncate">
           Active Project Manager<br>(Project Managers who have logged in more than once)
         </p>
-        <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count %>
+        <span class="textUser.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count-lg sm:text-xl font-bold">
+          <%= project_managers_who_have_loggedin_more_than_once_count %>`
         </span>
       </div>
       <% end %>
@@ -46,7 +46,7 @@
           Active Internal Users<br>(Agents who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count %>
+          <%= agents_who_have_loggedin_more_than_once_count %>
         </span>
       </div>
       <% end %>
