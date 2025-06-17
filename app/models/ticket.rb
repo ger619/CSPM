@@ -308,7 +308,7 @@ class Ticket < ApplicationRecord
     Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count
   end
 
-  def get_all_tickets_count
+  def all_tickets_count
     Ticket.distinct.count
   end
 end

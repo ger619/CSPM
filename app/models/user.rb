@@ -145,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def users_who_have_loggedin_more_than_once_count
-    User.joins(:roles).where(roles: { name: ['client','project manager','admin','agent','observer'] }).where('sign_in_count > ?', 0).count
+    User.joins(:roles).where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] }).where('sign_in_count > ?', 0).count
   end
 
   def clients_who_have_loggedin_more_than_once_count
@@ -160,11 +160,11 @@ class User < ApplicationRecord
     User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count
   end
 
-  def get_all_projects_for_the_current_user_count
+  def all_projects_for_the_current_user_count
     projects.distinct.count(:id)
   end
 
-  def get_all_open_tickets_for_the_current_user_count
-    tickets.joins(:statuses).where.not(statuses: { name: [...] }).distinct.count(:id)
+  def all_open_tickets_for_the_current_user_count
+    tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count(:id)
   end
 end
