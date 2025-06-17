@@ -128,6 +128,42 @@ class User < ApplicationRecord
     update(attribute => !self[attribute])
   end
 
+   def self.users_who_have_loggedin_more_than_once_count
+    joins(:roles)
+      .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
+      .where('sign_in_count > ?', 0)
+      .count
+  end
+
+  def self.clients_who_have_loggedin_more_than_once_count
+    joins(:roles)
+      .where(roles: { name: 'client' })
+      .where('sign_in_count > ?', 0)
+      .count
+  end
+
+  def self.project_managers_who_have_loggedin_more_than_once_count
+    joins(:roles)
+      .where(roles: { name: 'project manager' })
+      .where('sign_in_count > ?', 0)
+      .count
+  end
+
+  def self.agents_who_have_loggedin_more_than_once_count
+    joins(:roles)
+      .where(roles: { name: 'agent' })
+      .where('sign_in_count > ?', 0)
+      .count
+  end
+
+  def all_projects_for_the_current_user_count
+    projects.distinct.count(:id)
+  end
+
+  def all_open_tickets_for_the_current_user_count
+    tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count(:id)
+  end
+
   private
 
   def email_domain_must_be_certified
@@ -142,29 +178,5 @@ class User < ApplicationRecord
     return if roles.any?
 
     errors.add(:roles, 'must have at least one role')
-  end
-
-  def users_who_have_loggedin_more_than_once_count
-    User.joins(:roles).where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] }).where('sign_in_count > ?', 0).count
-  end
-
-  def clients_who_have_loggedin_more_than_once_count
-    User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count
-  end
-
-  def project_managers_who_have_loggedin_more_than_once_count
-    User.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count
-  end
-
-  def agents_who_have_loggedin_more_than_once_count
-    User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count
-  end
-
-  def all_projects_for_the_current_user_count
-    projects.distinct.count(:id)
-  end
-
-  def all_open_tickets_for_the_current_user_count
-    tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count(:id)
   end
 end
