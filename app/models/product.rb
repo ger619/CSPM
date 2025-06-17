@@ -10,7 +10,7 @@ class Product < ApplicationRecord
   has_many :documents, dependent: :destroy
   accepts_nested_attributes_for :documents, allow_destroy: true
   has_one_attached :image
-  belongs_to :defect, optional: true
+  has_many :defects, dependent: :nullify
 
   has_rich_text :content
 

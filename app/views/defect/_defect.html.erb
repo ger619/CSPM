@@ -65,6 +65,12 @@
           <td class="px-6 py-4">
             <%= defect.user.name %>
           </td>
+          <td class="px-6 py-4">
+            <%= defect.product.name %>
+          </td>
+          <td class="px-6 py-4">
+            <%= defect.product.client.name %>
+          </td>
           <td class="px-6 py-4 ">
             <%= link_to "VIEW", defect_path(defect.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
           </td>
