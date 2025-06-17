@@ -15,10 +15,13 @@ class DefectController < ApplicationController
 
   def create
     @defect = Defect.new(defect_params)
-    if @defect.save
-      redirect_to @defect, notice: 'Defect was successfully created.'
-    else
-      render :new
+
+    respond_to do |format|
+      if @defect.save
+        format.html { redirect_to defect_index_path, notice: 'Defect was successfully created.' }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -42,6 +45,6 @@ class DefectController < ApplicationController
   end
 
   def defect_params
-    params.require(:defect).permit(:name, :description, :start_date, :end_date, :product_id)
+    params.require(:defect).permit(:name, :description, :start_date, :end_date, :product_id, :user_id)
   end
 end

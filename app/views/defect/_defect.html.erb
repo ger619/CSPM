@@ -38,7 +38,7 @@
     </thead>
     <tbody>
     <% @defect.each do |defect|  %>
-      <% if defect.added_to?(current_user) or current_user.has_role?(:admin) %>
+      <%# if defect.added_to?(current_user) or current_user.has_role?(:admin) %>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
           <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
             <%= link_to defect.name, defect_path(defect.id) %>
@@ -65,16 +65,6 @@
           <td class="px-6 py-4">
             <%= defect.user.name %>
           </td>
-          <td class="px-6 py-4 capitalize">
-            <% defect.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
-              <%= software.name %>
-            <% end %>
-          </td>
-          <td class="px-6 py-4 capitalize ">
-            <% if defect.client.present? && defect.client.name.present? %>
-              <%= defect.client.name %>
-            <% end %>
-          </td>
           <td class="px-6 py-4 ">
             <%= link_to "VIEW", defect_path(defect.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
           </td>
@@ -91,7 +81,7 @@
             <% end %>
           <% end %>
         </tr>
-      <% end %>
+      <%# end %>
     <% end %>
     </tbody>
   </table>

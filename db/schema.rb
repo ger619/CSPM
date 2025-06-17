@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_17_085608) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_17_121006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -164,6 +164,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_085608) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "product_id", null: false
+    t.uuid "user_id", null: false
+    t.index ["product_id"], name: "index_defects_on_product_id"
+    t.index ["user_id"], name: "index_defects_on_user_id"
   end
 
   create_table "documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -553,6 +557,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_085608) do
   add_foreign_key "comments", "projects"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
+  add_foreign_key "defects", "products"
+  add_foreign_key "defects", "users"
   add_foreign_key "documents", "products"
   add_foreign_key "events", "tickets"
   add_foreign_key "events", "users"
