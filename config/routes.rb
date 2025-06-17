@@ -126,6 +126,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :defect
+
   resources :groupwares # Independent route for AJAX requests
 
   resources :client

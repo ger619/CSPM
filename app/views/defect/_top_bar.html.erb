@@ -1,0 +1,36 @@
+<div class="grid grid-cols-2 ">
+  <div class="col-span-1">
+    <% if can? :create, @project %>
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+        <div class="flex gap-1">
+          <%= button_to root_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' do %>
+            &#8656; Back
+          <% end %>
+
+          <%= button_to '+ Add Quality Assurance ', new_defect_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded-md font-bold rounded-lg text-slate-100', id: 'button' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <!-- Search on the right -->
+  <div class="grid col-span-1 justify-end">
+    <div class="flex flex-col md:flex-row items-start md:items-center w-full">
+      <%= form_with url: defect_index_path, method: :get, class: 'flex gap-2' do |f| %>
+        <%= f.text_field :query, placeholder: "Search ", class: "p-1 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:text-black" %>
+        <%= f.submit "Search",  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+      <%= form_with url: defect_index_path, method: :get, class: 'flex' do |f| %>
+        <%= f.submit "Clear", class: 'ml-2 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('button');
+    button.addEventListener('click', function() {
+      button.style.backgroundColor = '#1F6DE0';
+    });
+  });
+</script>

@@ -19,6 +19,9 @@ class User < ApplicationRecord
   has_many :boards, foreign_key: :user_id, class_name: 'Board', dependent: :nullify
   has_many :tasks, foreign_key: :user_id, class_name: 'Task', dependent: :nullify
 
+  # Defect a.k.a. Quality Assurance
+  has_many :defects, foreign_key: :user_id, class_name: 'Defect', dependent: :nullify
+
   # To ensure that a user has at least one role
   has_many :projects, through: :roles, source: :resource, source_type: :Project
   has_many :tickets, through: :roles, source: :resource, source_type: :Ticket
@@ -30,6 +33,7 @@ class User < ApplicationRecord
   has_many :products, through: :roles, source: :resource, source_type: :Product
   has_many :boards, through: :roles, source: :resource, source_type: :Board
   has_many :tasks, through: :roles, source: :resource, source_type: :Task
+  has_many :defects, through: :roles, source: :resource, source_type: :Defect
 
   has_many :assignees
   has_many :projects, through: :assignees
