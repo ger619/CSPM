@@ -291,4 +291,16 @@ class Ticket < ApplicationRecord
 
     errors.add(:content, 'must be less than or equal to 3000 characters')
   end
+
+  def tickets_closed_in_last_one_week_count
+    Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] }).where('tickets.updated_at >= ?', 1.week.ago).count
+  end
+
+  def all_open_tickets_for_current_user_count
+    Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count
+  end
+
+  def tickets_created_in_last_one_week_count
+    Ticket.where('created_at >= ?', 1.week.ago).count
+  end
 end

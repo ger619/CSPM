@@ -57,7 +57,7 @@
               Tickets Closed in the last one week
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] }).where('tickets.updated_at >= ?', 1.week.ago).count %>
+              <%= tickets_closed_in_last_one_week_count %>
             </span>
           </div>
         <% end %>
@@ -83,7 +83,7 @@
               All Open Tickets
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
+              <%= all_open_tickets_for_current_user_count %>
             </span>
           </div>
         <% end %>
@@ -101,7 +101,7 @@
               All Tickets created in the last one week
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.where('created_at >= ?', 1.week.ago).count %>
+              <%= tickets_created_in_last_one_week_count %>
             </span>
           </div>
         <% end %>
