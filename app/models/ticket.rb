@@ -307,4 +307,8 @@ class Ticket < ApplicationRecord
   def total_no_of_open_tickets_for_current_user_count
     Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count
   end
+
+  def get_all_tickets_count
+    Ticket.distinct.count
+  end
 end

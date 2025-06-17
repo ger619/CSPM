@@ -159,4 +159,12 @@ class User < ApplicationRecord
   def agents_who_have_loggedin_more_than_once_count
     User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count
   end
+
+  def get_all_projects_for_the_current_user_count
+    projects.distinct.count(:id)
+  end
+
+  def get_all_open_tickets_for_the_current_user_count
+    tickets.joins(:statuses).where.not(statuses: { name: [...] }).distinct.count(:id)
+  end
 end
