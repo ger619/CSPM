@@ -2,7 +2,7 @@ class DefectController < ApplicationController
   before_action :set_defect, only: %i[show edit update destroy]
 
   def index
-    @defects = Defect.all
+    @defect = Defect.all
   end
 
   def show; end
