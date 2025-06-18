@@ -185,6 +185,33 @@ class HomeController < ApplicationController
 
       # Count of all the tickets
       @all_tickets_count = Ticket.distinct.count
+
+      # Users who have logged in more than once count
+      @users_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Clients who have logged in more than once count
+      @clients_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: 'client' })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Project managers who have logged in more than once count
+      @project_managers_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: 'project manager' })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Agents who have logged in more than once count
+      @agents_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: 'agent' })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Count the total number of service desks\
+      @all_service_desks_count = Project.distinct.count
     end
   end
 end

@@ -128,34 +128,6 @@ class User < ApplicationRecord
     update(attribute => !self[attribute])
   end
 
-   def self.users_who_have_loggedin_more_than_once_count
-    joins(:roles)
-      .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
-      .where('sign_in_count > ?', 0)
-      .count
-  end
-
-  def self.clients_who_have_loggedin_more_than_once_count
-    joins(:roles)
-      .where(roles: { name: 'client' })
-      .where('sign_in_count > ?', 0)
-      .count
-  end
-
-  def self.project_managers_who_have_loggedin_more_than_once_count
-    joins(:roles)
-      .where(roles: { name: 'project manager' })
-      .where('sign_in_count > ?', 0)
-      .count
-  end
-
-  def self.agents_who_have_loggedin_more_than_once_count
-    joins(:roles)
-      .where(roles: { name: 'agent' })
-      .where('sign_in_count > ?', 0)
-      .count
-  end
-
   def all_projects_for_the_current_user_count
     projects.distinct.count(:id)
   end
