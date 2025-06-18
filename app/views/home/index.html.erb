@@ -7,7 +7,7 @@
           All Service Desks
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Project.distinct.count %>
+          <%= @all_service_desks_count %>
         </span>
       </div>
       <%= link_to active_users_path, class: 'flex items-center justify-between w-full' do %>
@@ -16,7 +16,7 @@
           Active Users<br>(User who have login more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: ['client','project manager','admin','agent','observer'] }).where('sign_in_count > ?', 0).count %>
+          <%= @users_who_have_loggedin_more_than_once_count %>
         </span>
       </div>
       <% end %>
@@ -26,7 +26,7 @@
           Active Clients<br>(Clients who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: 'client' }).where('sign_in_count > ?', 0).count %>
+          <%= @clients_who_have_loggedin_more_than_once_count %>
         </span>
       </div>
       <% end %>
@@ -35,8 +35,8 @@
         <p class="text-xs sm:text-sm truncate">
           Active Project Manager<br>(Project Managers who have logged in more than once)
         </p>
-        <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count %>
+        <span class="textUser.joins(:roles).where(roles: { name: 'project manager' }).where('sign_in_count > ?', 0).count-lg sm:text-xl font-bold">
+          <%= @project_managers_who_have_loggedin_more_than_once_count %>`
         </span>
       </div>
       <% end %>
@@ -46,7 +46,7 @@
           Active Internal Users<br>(Agents who have logged in more than once)
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= User.joins(:roles).where(roles: { name: 'agent' }).where('sign_in_count > ?', 0).count %>
+          <%= @agents_who_have_loggedin_more_than_once_count %>
         </span>
       </div>
       <% end %>
@@ -57,7 +57,7 @@
               Tickets Closed in the last one week
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.joins(:statuses).where(statuses: { name: %w[Closed Resolved Declined] }).where('tickets.updated_at >= ?', 1.week.ago).count %>
+              <%= @tickets_closed_in_last_one_week_count %>
             </span>
           </div>
         <% end %>
@@ -73,7 +73,7 @@
           All Tickets
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.distinct.count %>
+          <%= @all_tickets_count %>
         </span>
       </div>
       <% if current_user.projects.any? %>
@@ -83,7 +83,7 @@
               All Open Tickets
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
+              <%= @all_open_tickets_for_current_user_count %>
             </span>
           </div>
         <% end %>
@@ -101,7 +101,7 @@
               All Tickets created in the last one week
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.where('created_at >= ?', 1.week.ago).count %>
+              <%= @tickets_created_in_last_one_week_count %>
             </span>
           </div>
         <% end %>
@@ -124,7 +124,7 @@
         Number of Service Desks
       </p>
       <span class="text-lg sm:text-xl font-bold">
-        <%= current_user.projects.distinct.pluck(:id).count %>
+        <%= current_user.all_projects_for_the_current_user_count %>
       </span>
     </div>
   <% end %>
@@ -135,7 +135,7 @@
             My Open Tickets
           </p>
           <span class="text-lg sm:text-xl font-bold">
-            <%= current_user.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.pluck(:id).count %>
+            <%= current_user.all_open_tickets_for_the_current_user_count %>
           </span>
         </div>
       <% end %>
@@ -155,7 +155,7 @@
           Total Number of Open Tickets
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.joins(:statuses, :project).where(projects: { id: current_user.projects.ids }).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count %>
+          <%= @total_no_of_open_tickets_for_current_user_count %>
         </span>
       </div>
     <% end %>

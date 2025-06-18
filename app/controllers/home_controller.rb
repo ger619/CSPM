@@ -160,6 +160,58 @@ class HomeController < ApplicationController
         .joins(:tickets)
         .group('projects.title', 'tickets.status')
         .count
+
+      # Count of the tickets closed in the last one week
+      @tickets_closed_in_last_one_week_count = Ticket.joins(:statuses)
+        .where(statuses: { name: %w[Closed Resolved Declined] })
+        .where('tickets.updated_at >= ?', 1.week.ago)
+        .count
+
+      # All the open tickets for the current user count
+      @all_open_tickets_for_current_user_count = Ticket.joins(:statuses)
+        .where.not(statuses: { name: %w[Closed Resolved Declined] })
+        .distinct
+        .count
+
+      # COunt of all tickets created in the last one week count
+      @tickets_created_in_last_one_week_count = Ticket.where('created_at >= ?', 1.week.ago).count
+
+      # Get the total number of open tickets for the current user count
+      @total_no_of_open_tickets_for_current_user_count = Ticket.joins(:statuses, :project)
+        .where(projects: { id: current_user.projects.ids })
+        .where.not(statuses: { name: %w[Closed Resolved Declined] })
+        .distinct
+        .count
+
+      # Count of all the tickets
+      @all_tickets_count = Ticket.distinct.count
+
+      # Users who have logged in more than once count
+      @users_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: ['client', 'project manager', 'admin', 'agent', 'observer'] })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Clients who have logged in more than once count
+      @clients_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: 'client' })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Project managers who have logged in more than once count
+      @project_managers_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: 'project manager' })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Agents who have logged in more than once count
+      @agents_who_have_loggedin_more_than_once_count = User.joins(:roles)
+        .where(roles: { name: 'agent' })
+        .where('sign_in_count > ?', 0)
+        .count
+
+      # Count the total number of service desks\
+      @all_service_desks_count = Project.distinct.count
     end
   end
 end
