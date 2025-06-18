@@ -377,10 +377,20 @@ class TicketsController < ApplicationController
   end
 
   # List all open tickets (not closed, resolved, or declined)
+  # app/controllers/tickets_controller.rb
   def all_open_tickets
-    @tickets = Ticket.joins(:statuses, :project)
+    @tickets = Ticket.joins(:statuses, :project, :users)
       .where.not(statuses: { name: %w[Closed Resolved Declined] })
       .distinct
+
+    if params[:search].present?
+      search = "%#{params[:search]}%"
+      @tickets = @tickets.where(
+        'projects.title ILIKE :search OR statuses.name ILIKE :search OR users.first_name ILIKE :search OR users.last_name ILIKE :search',
+        search: search
+      )
+    end
+
     @per_page = 50
     @page = (params[:page] || 1).to_i
     @total_pages = (@tickets.count / @per_page.to_f).ceil

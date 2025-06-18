@@ -23,9 +23,7 @@
       <% end %>
     </div>
     <% end %>
-    <div class="flex flex-row">
-      <%= link_to 'Add Bug', new_product_bug_path(@product ), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-    </div>
+
   </div>
   <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2 ">
     <h1>Date Created: <span class="font-light p-1"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></span></h1>
@@ -74,11 +72,5 @@
     <div class="w-full overflow-auto transform origin-top scale-90 md:scale-100">
       <%= render 'boards/board_display' %>
     </div>
-  <% end %>
-</div>
-
-<div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 w-full">
-  <% if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
-    <%= render 'bugs/bugs_view' %>
   <% end %>
 </div>
