@@ -5,18 +5,11 @@ class BugsController < ApplicationController
   def index; end
 
   def new
-    @bug = @defect.bugs.new
-
-    # Fetch associated softwares for the project
-    # @softwares = @product.softwares
-
-    # Fetch groupwares associated with the project and the selected software
-    # @groupwares = if @bug.software_id.present?
-    #                @product.groupwares
-    #                  .joins(:softwares)
-    #                  .where(softwares: { id: @bug.software_id })
-    #                   .distinct
-    #              end
+    @defect = Defect.find(params[:defect_id])
+    @product = @defect.product
+    @bug = Bug.new
+    @bug.software_id = @product.softwares.first&.id if @product.softwares.any?
+    @bug.groupware_id = @product.groupwares.where(software_id: @bug.software_id).first&.id if @product.groupwares.any?
   end
 
   def create

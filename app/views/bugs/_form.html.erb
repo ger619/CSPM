@@ -31,13 +31,13 @@
       <%= f.collection_select :software_id, @product.softwares, :id, :name,
                               { prompt: "Select Product" },
                               { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
-                                id: "software-select", data: { action: "change->form#updateGroupwareOptions" } }
+                                id: "software-select" }
       %>
     </div>
     <div class="relative z-0 w-full mb-6 group" id="groupware-field">
       <%= f.label :groupware_id, 'Banking Type *', class: "capitalize block mb-1 text-sm font-medium" %>
       <%= f.collection_select :groupware_id,
-                              @product.groupwares.where(software_id: @bug.software_id), # Load groupwares based on selected software
+                              @product.groupwares.where(software_id: @bug.software_id),
                               :id,
                               :name,
                               { prompt: "Select The Product" },
@@ -46,19 +46,6 @@
                                 required: true }
       %>
     </div>
-    <div class="relative z-0 w-full mb-6 group" id="groupware-field">
-      <%#= f.label :groupware_id, 'Module *', class: "capitalize block mb-1 text-sm font-medium" %>
-      <%#= f.collection_select :script_id,
-                              #@product.groupwares.where(software_id: @bug.software_id), # Load groupwares based on selected software
-                              :id,
-                              :name,
-                              { prompt: "Select The Module" },
-                              { class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white",
-                                id: "groupware-select",
-                                required: true }
-      %>
-    </div>
-
   </div>
   <div class="relative z-0 w-full mb-6 group">
     <%= f.label :summary, 'Summary', class: "capitalize block mb-1 text-sm font-medium" %><br />
@@ -70,11 +57,11 @@
       <p id="char-count">0/3000</p>
       <%= f.rich_text_area :content, id: "content",
                            data: { text_limit_target: "content" },
-                           class: "min-h-[300px] #{'border-red-500' if @product.errors[:content].any?}",
+                           class: "min-h-[300px] #{'border-red-500' if @bug.errors[:content].any?}",
                            required: true %>
     </div>
-    <% if @product.errors[:content].any? %>
-      <div class="text-red-500 text-sm"><%= @product.errors[:content].join(', ') %></div>
+    <% if @bug.errors[:content].any? %>
+      <div class="text-red-500 text-sm"><%= @bug.errors[:content].join(', ') %></div>
     <% end %>
   </div>
   <%= f.submit 'Create Bug', class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
@@ -88,7 +75,7 @@
 
     softwareSelect.addEventListener('change', function (event) {
       const softwareId = event.target.value;
-      const productId = '<%= @product.id %>'; // Ensure productId is available
+      const productId = '<%= @defect.id %>'; // Ensure productId is available
 
       // Clear existing groupware options
       groupwareSelect.innerHTML = '<option value="">Select The Product</option>';
