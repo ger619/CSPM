@@ -1,15 +1,12 @@
+<%= render 'tickets/open_ticket_search' %>
 <table class="min-w-full bg-white dark:bg-gray-800">
   <thead>
   <tr>
     <th class="py-2 px-4 border-b">ID</th>
     <th class="py-2 px-4 border-b">Date</th>
     <th class="py-2 px-4 border-b">SERVICE DESK NAME</th>
-
     <th class="py-2 px-4 border-b">ISSUE</th>
-
     <th class="py-2 px-4 border-b">PRIORITY</th>
-    <th class="py-2 px-4 border-b">SUBJECT</th>
-
     <th class="py-2 px-4 border-b">ASSIGNEE</th>
     <th class="py-2 px-4 border-b">STATUS</th>
     <th class="py-2 px-4 border-b">PROGRESS</th>
@@ -45,9 +42,6 @@
         <% else %>
           <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
         <% end %>
-      </td>
-      <td class="px-2 py-2 truncate w-64">
-        <%= ticket.subject.truncate(50) if ticket.subject.present? %>
       </td>
       <td class="px-2 py-2 font-bold">
         <% ticket.users.each do |user| %>
