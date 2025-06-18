@@ -70,7 +70,7 @@
               <%= defect.product.name %>
             </td>
             <td class="px-6 py-4">
-              <%= defect.product.client.name %>
+              <%= defect.product.client&.name || "N/A" %>
             </td>
             <td class="px-6 py-4 ">
               <%= link_to "VIEW", defect_path(defect.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
