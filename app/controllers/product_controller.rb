@@ -36,6 +36,13 @@ class ProductController < ApplicationController
       @total_pages = (@bugs.count / @per_page.to_f).ceil
       @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
 
+      # Show the count of the tasks per status in the product boards
+      board_statuses = @product.boards.pluck(:status).uniq
+      task_counts = Task.joins(:board)
+        .where(boards: { product_id: @product.id })
+        .group('boards.status')
+        .count
+      @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
