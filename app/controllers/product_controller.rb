@@ -30,8 +30,6 @@ class ProductController < ApplicationController
         boards
       end
 
-
-
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end

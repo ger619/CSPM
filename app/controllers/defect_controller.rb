@@ -8,9 +8,9 @@ class DefectController < ApplicationController
   def show
     @bugs = @defect.bugs
     @per_page = 10
-     @page = (params[:page] || 1).to_i
-     @total_pages = (@bugs.count / @per_page.to_f).ceil
-     @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@bugs.count / @per_page.to_f).ceil
+    @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def new
