@@ -7,6 +7,7 @@ class DefectController < ApplicationController
 
   def show
     @bugs = @defect.bugs
+    @bugs = @bugs.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
     @per_page = 10
     @page = (params[:page] || 1).to_i
     @total_pages = (@bugs.count / @per_page.to_f).ceil
