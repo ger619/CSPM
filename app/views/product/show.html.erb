@@ -27,6 +27,17 @@
       <%= link_to 'Add Bug', new_product_bug_path(@product ), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
     </div>
   </div>
+
+  <div class="text-xl p-4 rounded border-r-2 ">
+    <h2>Product boards status Count for: <%= @product.name %></h2>
+
+    <ul>
+      <% @product_tasks_per_board_status.each do |topic, count| %>
+        <li><strong><%= topic %></strong>: <%= count %> task(s)</li>
+      <% end %>
+    </ul>
+  </div>
+
   <div class="font-semibold p-4 justify-between rounded col-span-1 col-span-1 border-r-2 ">
     <h1>Date Created: <span class="font-light p-1"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></span></h1>
     <h1>Date to Commence: <span class="font-light p-1"><%= @product.start_date.strftime("%d %b %y") %></span></h1>
@@ -62,15 +73,6 @@
         </ul>
       <% end %>
     </div>
-  </div>
-  <div class="font-semibold p-4 rounded border-r-2 ">
-    <h2>Product boards status Count for <%= @product.name %></h2>
-
-    <ul>
-      <% @product_tasks_per_board_status.each do |topic, count| %>
-        <li><strong><%= topic %></strong>: <%= count %> task(s)</li>
-      <% end %>
-    </ul>
   </div>
   
   <div class="col-span-1">
