@@ -37,57 +37,59 @@
     </tr>
     </thead>
     <tbody>
-    <% @defect.each do |defect|  %>
-      <%# if defect.added_to?(current_user) or current_user.has_role?(:admin) %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
-          <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
-            <%= link_to defect.name, defect_path(defect.id) %>
-          </th>
-          <td class="px-6 py-4">
-            <%= defect.description.truncate(50) %>
-          </td>
-          <td class="px-6 py-4 hide-in-sidebar">
-            <%= defect.start_date.strftime("%d-%b-%y") %>
-          </td>
-          <td class="px-6 py-4 hide-in-sidebar">
-            <% if defect.end_date.present? %>
-              <% if defect.end_date <= Date.today %>
-                <p class="text-red-900 p-1 rounded font-bold">
-                  <%= defect.end_date.strftime("%d-%b-%y") %>
-                </p>
-              <% else %>
-                <p class="bg-red-green p-1 rounded">
-                  <%= defect.end_date.strftime("%d-%b-%y") %>
-                </p>
+    <% if @defect.present? %>
+      <% @defect.each do |defect|  %>
+        <%# if defect.added_to?(current_user) or current_user.has_role?(:admin) %>
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
+            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
+              <%= link_to defect.name, defect_path(defect.id) %>
+            </th>
+            <td class="px-6 py-4">
+              <%= defect.description.truncate(50) %>
+            </td>
+            <td class="px-6 py-4 hide-in-sidebar">
+              <%= defect.start_date.strftime("%d-%b-%y") %>
+            </td>
+            <td class="px-6 py-4 hide-in-sidebar">
+              <% if defect.end_date.present? %>
+                <% if defect.end_date <= Date.today %>
+                  <p class="text-red-900 p-1 rounded font-bold">
+                    <%= defect.end_date.strftime("%d-%b-%y") %>
+                  </p>
+                <% else %>
+                  <p class="bg-red-green p-1 rounded">
+                    <%= defect.end_date.strftime("%d-%b-%y") %>
+                  </p>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="px-6 py-4">
+              <%= defect.user.name %>
+            </td>
+            <td class="px-6 py-4">
+              <%= defect.product.name %>
+            </td>
+            <td class="px-6 py-4">
+              <%= defect.product.client.name %>
+            </td>
+            <td class="px-6 py-4 ">
+              <%= link_to "VIEW", defect_path(defect.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
+            </td>
+            <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+              <% if can? :edit, defect %>
+                <td class="px-6 py-4 ">
+                  <%= link_to 'EDIT', edit_defect_path(defect), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 uppercase'  %>
+                </td>
+              <% end %>
+              <% if can? :delete, defect %>
+                <td class="px-6 py-4 ">
+                  <%= button_to 'delete', defect, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
+                </td>
               <% end %>
             <% end %>
-          </td>
-          <td class="px-6 py-4">
-            <%= defect.user.name %>
-          </td>
-          <td class="px-6 py-4">
-            <%= defect.product.name %>
-          </td>
-          <td class="px-6 py-4">
-            <%= defect.product.client.name %>
-          </td>
-          <td class="px-6 py-4 ">
-            <%= link_to "VIEW", defect_path(defect.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-          </td>
-          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-            <% if can? :edit, defect %>
-              <td class="px-6 py-4 ">
-                <%= link_to 'EDIT', edit_defect_path(defect), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 uppercase'  %>
-              </td>
-            <% end %>
-            <% if can? :delete, defect %>
-              <td class="px-6 py-4 ">
-                <%= button_to 'delete', defect, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } ,  class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
-              </td>
-            <% end %>
-          <% end %>
-        </tr>
-      <%# end %>
+          </tr>
+        <%# end %>
+      <% end %>
     <% end %>
     </tbody>
   </table>
