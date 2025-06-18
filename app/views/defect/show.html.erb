@@ -1,12 +1,17 @@
-<div class="p-2 container">
+<div class="p-2">
   <!-- Topbar and Alert -->
-  <%#= render 'defect/defect_topbar' %>
+  <%= render 'bugs/top_bug' %>
 
   <div class="flex flex-row">
     <%= link_to 'Add Bug', new_defect_bug_path(@defect ), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
   </div>
 
   <%= render 'layouts/alert', class: "" %>
+  <div class="grid grid-cols-3 gap-4 mb-4">
+    <div class="col-span-1">
+      <%= render 'defect/add_defect_user' %>
+    </div>
+  </div>
 
   <!-- Defect Information Section -->
   <div class="grid md:grid-cols-5 md:items-center ">
@@ -28,10 +33,10 @@
       </div>
     </div>
   </div>
+  <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 w-full">
+    <%# if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
+    <%= render 'bugs/bugs_view' %>
+    <%# end %>
+  </div>
 </div>
 
-<div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 w-full">
-  <%# if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
-    <%= render 'bugs/bugs_view' %>
-  <%# end %>
-</div>
