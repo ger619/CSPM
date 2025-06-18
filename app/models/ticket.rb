@@ -136,36 +136,6 @@ class Ticket < ApplicationRecord
     joins(:sla_tickets).where(sla_tickets: { sla_resolution_deadline: 'Breached' }).count
   end
 
-  def self.tickets_closed_in_last_one_week_count
-    joins(:status)
-      .where(statuses: { name: %w[Closed Resolved Declined] })
-      .where('tickets.updated_at >= ?', 1.week.ago)
-      .count
-  end
-
-  def self.all_open_tickets_for_current_user_count
-    joins(:status)
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
-      .distinct
-      .count
-  end
-
-  def self.tickets_created_in_last_one_week_count
-    where('created_at >= ?', 1.week.ago).count
-  end
-
-  def self.total_no_of_open_tickets_for_current_user_count(user)
-    joins(:status, :project)
-      .where(projects: { id: user.projects.ids })
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
-      .distinct
-      .count
-  end
-
-  def self.all_tickets_count
-    distinct.count
-  end
-
   private
 
   def skip_callbacks

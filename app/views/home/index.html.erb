@@ -57,7 +57,7 @@
               Tickets Closed in the last one week
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.tickets_closed_in_last_one_week_count %>
+              <%= @tickets_closed_in_last_one_week_count %>
             </span>
           </div>
         <% end %>
@@ -73,7 +73,7 @@
           All Tickets
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.all_tickets_count %>
+          <%= @all_tickets_count %>
         </span>
       </div>
       <% if current_user.projects.any? %>
@@ -101,7 +101,7 @@
               All Tickets created in the last one week
             </p>
             <span class="text-lg sm:text-xl font-bold">
-              <%= Ticket.tickets_created_in_last_one_week_count %>
+              <%= @tickets_created_in_last_one_week_count %>
             </span>
           </div>
         <% end %>
@@ -155,7 +155,7 @@
           Total Number of Open Tickets
         </p>
         <span class="text-lg sm:text-xl font-bold">
-          <%= Ticket.total_no_of_open_tickets_for_current_user_count %>
+          <%= @total_no_of_open_tickets_for_current_user_count %>
         </span>
       </div>
     <% end %>
