@@ -89,6 +89,10 @@ Rails.application.routes.draw do
   end
 
   resources :defect do
+    member do
+      post :add_defect_user
+      delete :remove_defect_user
+    end
     resources :bugs do
       member do
         post :add_bug

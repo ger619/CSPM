@@ -44,6 +44,19 @@ class DefectController < ApplicationController
     redirect_to defects_url, notice: 'Defect was successfully destroyed.'
   end
 
+  # add a user to the defect
+  def add_defect_user
+    @defect = Defect.find(params[:id])
+    user = User.find(params[:user_id])
+
+    if @defect.users.include?(user)
+      redirect_to defect_path(@defect), notice: 'User has already been assigned.'
+    else
+      @defect.users << user
+      redirect_to defect_path(@defect), notice: 'User was successfully assigned.'
+    end
+  end
+
   private
 
   def set_defect
