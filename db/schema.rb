@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_17_121006) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_18_095801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -114,14 +114,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_121006) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id"
-    t.uuid "product_id", null: false
     t.string "summary"
     t.uuid "software_id"
     t.uuid "groupware_id"
     t.uuid "script_id"
     t.string "label"
+    t.uuid "defect_id", null: false
+    t.index ["defect_id"], name: "index_bugs_on_defect_id"
     t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
-    t.index ["product_id"], name: "index_bugs_on_product_id"
     t.index ["script_id"], name: "index_bugs_on_script_id"
     t.index ["software_id"], name: "index_bugs_on_software_id"
     t.index ["user_id"], name: "index_bugs_on_user_id"
@@ -548,8 +548,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_121006) do
   add_foreign_key "assignees", "users"
   add_foreign_key "boards", "products"
   add_foreign_key "boards", "users"
+  add_foreign_key "bugs", "defects"
   add_foreign_key "bugs", "groupwares"
-  add_foreign_key "bugs", "products"
   add_foreign_key "bugs", "scripts"
   add_foreign_key "bugs", "softwares"
   add_foreign_key "bugs", "users"

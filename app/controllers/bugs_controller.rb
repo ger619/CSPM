@@ -1,30 +1,30 @@
 class BugsController < ApplicationController
-  before_action :set_product
+  before_action :set_defect
   before_action :set_bug, only: %i[show edit update destroy]
 
   def index; end
 
   def new
-    @bug = @product.bugs.new
+    @bug = @defect.bugs.new
 
     # Fetch associated softwares for the project
-    @softwares = @product.softwares
+    # @softwares = @product.softwares
 
     # Fetch groupwares associated with the project and the selected software
-    @groupwares = if @bug.software_id.present?
-                    @product.groupwares
-                      .joins(:softwares)
-                      .where(softwares: { id: @bug.software_id })
-                      .distinct
-                  end
+    # @groupwares = if @bug.software_id.present?
+    #                @product.groupwares
+    #                  .joins(:softwares)
+    #                  .where(softwares: { id: @bug.software_id })
+    #                   .distinct
+    #              end
   end
 
   def create
-    @bug = @product.bugs.build(bug_params)
+    @bug = @defect.bugs.build(bug_params)
     @bug.user = current_user
 
     if @bug.save
-      redirect_to product_bug_path(@product, @bug), notice: 'Bug was successfully created.'
+      redirect_to defect_bug_path(@defect, @bug), notice: 'Bug was successfully created.'
     else
       render :new, alert: 'Bug was unsuccessfully created.'
     end
@@ -36,7 +36,7 @@ class BugsController < ApplicationController
 
   def update
     if @bug.update(bug_params)
-      redirect_to product_bug_path(@product, @bug), notice: 'Bug was successfully updated.'
+      redirect_to defect_bug_path(@defect, @bug), notice: 'Bug was successfully updated.'
     else
       render :edit, alert: 'Bug was unsuccessfully updated.'
     end
@@ -50,7 +50,7 @@ class BugsController < ApplicationController
   def add_bug
     set_bug
     if @bug.users.include?(User.find(params[:user_id]))
-      redirect_to product_bugs_path(@product), notice: 'User has already been assigned.'
+      redirect_to defect_bugs_path(@defect), notice: 'User has already been assigned.'
     else
       @bug.user = current_user
       user = User.find(params[:user_id])
@@ -61,7 +61,7 @@ class BugsController < ApplicationController
       assigned_user = user # Assuming the first user is the assigned user
       UserMailer.bug_mailer_email(user, @bug, current_user, assigned_user).deliver_later
 
-      redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
+      redirect_to defect_bug_path(@defect, @bug), notice: 'User was successfully assigned.'
 
     end
   end
@@ -71,27 +71,27 @@ class BugsController < ApplicationController
     status = Status.find(params[:status_id])
     @bug.statuses.clear
     @bug.statuses << status
-    redirect_to product_bug_path(@product, @bug), notice: 'User was successfully assigned.'
+    redirect_to defect_bug_path(@defect, @bug), notice: 'User was successfully assigned.'
   end
 
   def unassign_tag
     user = User.find(params[:user_id])
     @ticket.users.delete(user)
     log_event(@ticket, current_user, 'unassign', "#{user.name} was unassigned from the ticket.")
-    redirect_to project_ticket_path(@project, @ticket), notice: 'Ticket was successfully unassigned.'
+    redirect_to project_ticket_path(@defect, @ticket), notice: 'Ticket was successfully unassigned.'
   end
 
   private
 
-  def set_product
-    @product = Product.find(params[:product_id])
+  def set_defect
+    @defect = Defect.find(params[:defect_id])
   end
 
   def set_bug
-    @bug = @product.bugs.find(params[:id])
+    @bug = @defect.bugs.find(params[:id])
   end
 
   def bug_params
-    params.require(:bug).permit(:issue, :priority, :content, :product_id, :software_id, :groupware_id, :script_id, :label, :summary, videos: [], images: [])
+    params.require(:bug).permit(:issue, :priority, :content, :defect_id, :software_id, :groupware_id, :label, :summary, videos: [], images: [])
   end
 end

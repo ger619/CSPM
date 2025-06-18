@@ -5,7 +5,13 @@ class DefectController < ApplicationController
     @defect = Defect.all
   end
 
-  def show; end
+  def show
+    @bugs = @defect.bugs
+    @per_page = 10
+     @page = (params[:page] || 1).to_i
+     @total_pages = (@bugs.count / @per_page.to_f).ceil
+     @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
+  end
 
   def new
     @defect = Defect.new

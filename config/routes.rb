@@ -76,13 +76,6 @@ Rails.application.routes.draw do
       post :add_user
       delete :remove_user
     end
-    resources :bugs do
-     member do
-       post :add_bug
-       delete :remove_bug
-       post :bug_status
-     end
-    end
     resources :boards do
       resources :tasks do
         member do
@@ -91,6 +84,16 @@ Rails.application.routes.draw do
           post :add_state
           delete :remove_state
         end
+      end
+    end
+  end
+
+  resources :defect do
+    resources :bugs do
+      member do
+        post :add_bug
+        delete :remove_bug
+        post :bug_status
       end
     end
   end
@@ -125,8 +128,6 @@ Rails.application.routes.draw do
       patch :mark_as_read
     end
   end
-
-  resources :defect
 
   resources :groupwares # Independent route for AJAX requests
 
