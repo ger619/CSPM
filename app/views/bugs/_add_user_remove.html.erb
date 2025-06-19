@@ -1,7 +1,7 @@
 <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
       <div class="flex flex-wrap mt-2 gap-2">
           <div class="text-xs">
-            <%= form_with url: add_bug_product_bug_path(@product, @bug), local: true do %>
+            <%= form_with url: add_bug_defect_bug_path(@defect, @bug), local: true do %>
               <div class="flex flex-wrap p-2 gap-2">
                 <% available_users = User.with_assigned_role.where.not(id: @bug.users.pluck(:id)).where(id: @product.users.pluck(:id)).distinct %>
                 <% if available_users.any? %>

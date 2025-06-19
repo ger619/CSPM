@@ -4,7 +4,7 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :groupwares
   has_and_belongs_to_many :scripts
   belongs_to :client
-  has_many :bugs
+  # has_many :bugs
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :documents, dependent: :destroy

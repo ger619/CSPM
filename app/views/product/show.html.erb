@@ -23,9 +23,7 @@
       <% end %>
     </div>
     <% end %>
-    <div class="flex flex-row">
-      <%= link_to 'Add Bug', new_product_bug_path(@product ), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-    </div>
+
   </div>
 
   <% if !@product_tasks_per_board_status.empty? %>
@@ -92,11 +90,5 @@
     <div class="w-full overflow-auto transform origin-top scale-90 md:scale-100">
       <%= render 'boards/board_display' %>
     </div>
-  <% end %>
-</div>
-
-<div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 w-full">
-  <% if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
-    <%= render 'bugs/bugs_view' %>
   <% end %>
 </div>

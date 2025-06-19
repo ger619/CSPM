@@ -5,7 +5,13 @@ class DefectController < ApplicationController
     @defect = Defect.all
   end
 
-  def show; end
+  def show
+    @bugs = @defect.bugs
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@bugs.count / @per_page.to_f).ceil
+    @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
+  end
 
   def new
     @defect = Defect.new
@@ -36,6 +42,19 @@ class DefectController < ApplicationController
   def destroy
     @defect.destroy
     redirect_to defects_url, notice: 'Defect was successfully destroyed.'
+  end
+
+  # add a user to the defect
+  def add_defect_user
+    @defect = Defect.find(params[:id])
+    user = User.find(params[:user_id])
+
+    if @defect.users.include?(user)
+      redirect_to defect_path(@defect), notice: 'User has already been assigned.'
+    else
+      @defect.users << user
+      redirect_to defect_path(@defect), notice: 'User was successfully assigned.'
+    end
   end
 
   private

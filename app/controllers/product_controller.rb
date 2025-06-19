@@ -30,12 +30,6 @@ class ProductController < ApplicationController
         boards
       end
 
-      @bugs = @product.bugs
-      @per_page = 10
-      @page = (params[:page] || 1).to_i
-      @total_pages = (@bugs.count / @per_page.to_f).ceil
-      @bugs = @bugs.offset((@page - 1) * @per_page).limit(@per_page)
-
       # Show the count of the tasks per status in the product boards
       board_statuses = @product.boards.pluck(:status).uniq
       task_counts = Task.joins(:board)
