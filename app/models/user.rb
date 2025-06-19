@@ -67,11 +67,7 @@ class User < ApplicationRecord
   has_many :add_bugs
   has_many :bugs, through: :add_bugs
 
-  has_many :defects_users
-  has_many :defects, through: :defects_users
-  # has_and_belongs_to_many :defects, join_table: :defects_users
-
-  # has_and_belongs_to_many :roles # Only if using a roles system
+  has_and_belongs_to_many :defects
 
   has_many :softwares
   belongs_to :client, optional: true

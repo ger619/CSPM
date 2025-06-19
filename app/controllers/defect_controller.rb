@@ -1,8 +1,13 @@
 class DefectController < ApplicationController
-  before_action :set_defect, only: %i[show edit update destroy]
+  before_action :set_defect, only: %i[show edit update destroy add_defect]
 
   def index
-    @defect = Defect.all
+    if current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.has_role?(:agent) ||
+       # show all defects or those relevant to the user
+       (@defect = Defect.all)
+    else
+      @defect = Defect.none
+    end
   end
 
   def show
@@ -46,14 +51,13 @@ class DefectController < ApplicationController
   end
 
   # add a user to the defect
-  def add_defect_user
-    @defect = Defect.find(params[:id])
-    user = User.find(params[:user_id])
-    if @defect.users.exists?(user.id)
+  def add_defect
+    if @defect.users.include?(User.find(params[:user_id]))
       redirect_to @defect, notice: 'User has already been assigned.'
     else
-      DefectsUser.create!(defect: @defect, user: user)
-      redirect_to @defect, notice: 'User was successfully assigned.'
+      user = User.find(params[:user_id])
+      @defect.users << user
+      redirect_to defect_path(@defect), notice: "#{@defect.users.name} was successfully assigned."
     end
   end
 
