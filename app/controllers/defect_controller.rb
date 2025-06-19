@@ -7,6 +7,7 @@ class DefectController < ApplicationController
 
   def show
     @bugs = @defect.bugs
+    @bugs = @bugs.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
     @per_page = 10
     @page = (params[:page] || 1).to_i
     @total_pages = (@bugs.count / @per_page.to_f).ceil
@@ -48,12 +49,11 @@ class DefectController < ApplicationController
   def add_defect_user
     @defect = Defect.find(params[:id])
     user = User.find(params[:user_id])
-
-    if @defect.users.include?(user)
-      redirect_to defect_path(@defect), notice: 'User has already been assigned.'
+    if @defect.users.exists?(user.id)
+      redirect_to @defect, notice: 'User has already been assigned.'
     else
-      @defect.users << user
-      redirect_to defect_path(@defect), notice: 'User was successfully assigned.'
+      DefectsUser.create!(defect: @defect, user: user)
+      redirect_to @defect, notice: 'User was successfully assigned.'
     end
   end
 
