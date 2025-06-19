@@ -13,7 +13,6 @@ class Defect < ApplicationRecord
     where(roles: { name: ['admin', 'project manager'] })
   }, class_name: 'User', through: :roles, source: :users
 
-
   def assigned_to?(user)
     users.include?(user)
   end
@@ -21,5 +20,4 @@ class Defect < ApplicationRecord
   def craftsilicon_users
     User.where('email LIKE ANY (array[?, ?, ?]) AND active = ?', '%@craftsilicon.com', '%@craftsilicon.co.tz', '%@little.africa', true)
   end
-
 end
