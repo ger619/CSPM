@@ -1,8 +1,8 @@
 <div class="mx-auto mb-6 p-6">
   <div class="flex justify-between items-center">
     <div class="relative w-80">
-      <input type="text" id="search" class="w-full px-4 py-2 border rounded-lg" placeholder="Search Teams..." autocomplete="new-password" onkeyup="filterDropdown()" onfocus="showDropdown()">
-      <div id="dropdown" class="absolute w-full border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-black w-full">
+      <input type="text" id="search" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700" placeholder="Search Teams..." autocomplete="new-password" onkeyup="filterDropdown()" onfocus="showDropdown()">
+      <div id="dropdown" class="absolute w-full border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 w-full">
         <% @teams.each do |team| %>
           <div class="dropdown-item px-4 py-2 hover:bg-gray-100 hover:dark:bg-gray-900 cursor-pointer" onclick="selectItem(this)"><%= team.name %></div>
         <% end %>
@@ -78,14 +78,14 @@
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time (Breached vs Not Breached)</h2>
       <div id="responseTimeChart">
         <%= pie_chart [["Breached", @stats[:response_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_response_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff] %>
       </div>
     </div>
 
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time (Breached vs Not Breached)</h2>
       <div id="resolutionTimeChart">
         <%= pie_chart [["Breached", @stats[:resolution_breached_tickets_last_30_days]], ["Not Breached", @stats[:not_resolution_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff]%>
@@ -95,14 +95,14 @@
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Breached (Closed vs Open)</h2>
       <div id="responseOpenClosedTimeChart">
         <%= pie_chart [["Closed", @stats[:response_breached_tickets_closed_last_30_days]], ["Open", @stats[:response_breached_tickets_open_last_30_days]]], colors: %w[#ff0000 #0000ff] %>
       </div>
     </div>
 
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Breached (Closed vs Open)</h2>
       <div id="resolutionOpenClosedTimeChart">
         <%= pie_chart [["Closed", @stats[:resolution_breached_tickets_last_30_days]], ["Open", @stats[:not_resolution_breached_tickets_last_30_days]]], colors: %w[#ff0000 #0000ff]%>
@@ -112,7 +112,7 @@
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Assignees (Breached)</h2>
       <div id="breachedTicketsAssigneeChart">
         <% if @stats[:breached_tickets_per_assignee] %>
@@ -123,7 +123,7 @@
       </div>
     </div>
 
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Repair Time Clients (Breached)</h2>
       <div id="resolutionTimeChartAssignee">
         <% if @stats[:breached_resolution_tickets_per_project] %>
@@ -137,7 +137,7 @@
 
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Assignees (Breached)</h2>
       <div id="breachedResolvedTicketsAssigneeChart">
         <% if @stats[:breached_tickets_resolved_per_assignee] %>
@@ -148,7 +148,7 @@
       </div>
     </div>
 
-    <div class="bg-white p-4 shadow-md rounded-lg">
+    <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">
       <h2 class="text-lg font-semibold mb-3 text-center">Target Resolution Time Clients (Breached)</h2>
       <div id="resolutionResolvedTimeChartAssignee">
         <% if @stats[:breached_resolution_resolved_tickets_per_project] %>
