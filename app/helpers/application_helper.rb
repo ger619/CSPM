@@ -29,4 +29,14 @@ module ApplicationHelper
   def previewable?(attachment)
     attachment.content_type.start_with?('image/')
   end
+
+  def full_title(page_title = '')
+    base_title = 'Taskbridge'
+
+    if page_title.empty?
+      base_title
+    else
+      "#{base_title} | #{page_title}"
+    end
+  end
 end

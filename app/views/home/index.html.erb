@@ -1,3 +1,5 @@
+<% provide(:title, "Home") %>
+
 <div class="p-4 border-2 border-white rounded-lg flex flex-col items-center">
   <!-- Topbar Section  for admin and observer-->
   <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>

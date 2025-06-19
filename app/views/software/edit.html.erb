@@ -1,3 +1,5 @@
+<% provide(:title, "Edit CS Product") %>
+
 <%= form_with  model: @software, url: software_path(@software), method: :patch do |f| %>
   <div class="relative z-0 w-full mb-6 group">
     <%= f.label :name, :Name, class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />

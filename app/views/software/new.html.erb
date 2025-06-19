@@ -1,3 +1,5 @@
+<% provide(:title, "New CS Product") %>
+
 <%= form_with  model: @software, url: software_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
   <div class="z-0 w-full mb-6 group">
     <%= f.label :name, ('Product Title'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />

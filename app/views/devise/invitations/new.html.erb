@@ -1,3 +1,5 @@
+<% provide(:title, "  Create new user invitation") %>
+
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
   <h2><%= t "devise.invitations.new.header" %></h2>
 

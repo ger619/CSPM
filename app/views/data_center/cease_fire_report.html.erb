@@ -1,3 +1,5 @@
+<% provide(:title, "Tickets Status") %>
+
 <h1 class="flex justify-center text-2xl font-bold mb-4">
   <% if current_user.has_role?(:admin) or current_user.has_role?('project manager') %>
     Cease Fire Report

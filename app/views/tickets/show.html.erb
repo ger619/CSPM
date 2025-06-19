@@ -1,3 +1,5 @@
+<% provide(:title, "Ticket: #{@ticket.subject} for Service Desk: #{@project.title}") %>
+
 <div class="p-2 container">
   <!-- Topbar and Alert -->
   <%= render 'issues/issue_topbar' %>

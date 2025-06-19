@@ -1,3 +1,4 @@
+<% provide(:title, "Resend Confirmation Instructions") %>
 
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }, data: {turbo: false}) do |f| %>
   <section class="mx-auto pr-64 ">
