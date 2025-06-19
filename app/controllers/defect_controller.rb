@@ -1,13 +1,23 @@
 class DefectController < ApplicationController
-  before_action :set_defect, only: %i[show edit update destroy]
+  before_action :set_defect, only: %i[show edit update destroy add_defect]
 
   def index
     @defect = Defect.all
+    @defect = @defect.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
+
+    # Pagination
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@defect.count / @per_page.to_f).ceil
+    @defect = @defect.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def show
+    unless current_user.has_any_role?(:admin, :observer) || @defect.users.include?(current_user)
+      redirect_to defect_index_path, alert: 'You are not authorized to view this defect.' and return
+    end
+
     @bugs = @defect.bugs
-    @bugs = @bugs.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
     @per_page = 10
     @page = (params[:page] || 1).to_i
     @total_pages = (@bugs.count / @per_page.to_f).ceil
@@ -46,15 +56,21 @@ class DefectController < ApplicationController
   end
 
   # add a user to the defect
-  def add_defect_user
-    @defect = Defect.find(params[:id])
-    user = User.find(params[:user_id])
-    if @defect.users.exists?(user.id)
+  def add_defect
+    if @defect.users.include?(User.find(params[:user_id]))
       redirect_to @defect, notice: 'User has already been assigned.'
     else
-      DefectsUser.create!(defect: @defect, user: user)
-      redirect_to @defect, notice: 'User was successfully assigned.'
+      user = User.find(params[:user_id])
+      @defect.users << user
+      redirect_to defect_path(@defect), notice: "#{@defect.users.name} was successfully assigned."
     end
+  end
+
+  def remove_defect
+    @defect = Defect.find(params[:id])
+    user = User.find(params[:user_id])
+    @defect.users.delete(user)
+    redirect_to defect_path(@defect), notice: "#{user.name} was successfully removed from the defect."
   end
 
   private
