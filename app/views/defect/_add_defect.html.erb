@@ -20,6 +20,35 @@
   <% end %>
 </div>
 
+
+<div class="col-span-1 text-xs">
+  <% if @defect.users.present? %>
+    <%= form_with url: remove_defect_defect_path(@defect), method: :delete, local: true do %>
+      <%= label_tag :user_id, "REMOVE USER" %>
+      <div class="flex flex-wrap gap-2">
+        <div class="relative w-80">
+          <!-- Searchable Input -->
+          <input type="text" id="searchRemoveUser" class="border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" placeholder="Search User..." onkeyup="filterRemoveUserDropdown()">
+
+          <!-- Dropdown List -->
+          <div id="removeUserDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+            <% @defect.users.each do |user| %>
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
+                <%= user.name %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Hidden Input to store selected user ID -->
+          <input type="hidden" id="selectedRemoveUserId" name="user_id" required>
+        </div>
+
+        <%= submit_tag "REMOVE USER", class: 'text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold text-slate-100' %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
 <script>
   function filterRemoveUserDropdown() {
     let input = document.getElementById("searchRemoveUser").value.toLowerCase();
