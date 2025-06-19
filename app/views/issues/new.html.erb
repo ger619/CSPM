@@ -1,2 +1,4 @@
+<% provide(:title, "New message for ticket: #{@ticket.subject}") %>
+
 <%= render 'issues/form', project: @project, ticket: @ticket %>
 
