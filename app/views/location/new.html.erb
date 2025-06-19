@@ -1,3 +1,5 @@
+<% provide(:title, "Create new location") %>
+
 <%= form_with  model: @location, url: location_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
   <div class="grid grid-cols-2 gap-2">
     <div class="relative z-0 w-full mb-6 group">
