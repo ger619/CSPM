@@ -31,12 +31,12 @@ module ApplicationHelper
   end
 
   def full_title(page_title = '')
-    base_title = "Taskbridge"
+    base_title = 'Taskbridge'
 
-    unless page_title.empty?
-      "#{base_title} | #{page_title}"
-    else
+    if page_title.empty?
       base_title
+    else
+      "#{base_title} | #{page_title}"
     end
   end
 end
