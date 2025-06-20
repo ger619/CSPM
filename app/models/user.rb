@@ -97,7 +97,7 @@ class User < ApplicationRecord
     joins(:roles).where(roles: { name: ['client'] }, first_login: true, active: true)
   end
 
-  def tagging_to(user)
+  def tagging_to?(user)
     # if project has user added show the list of users
     # who have been added to the project
     return false unless project.users.include?(user)
