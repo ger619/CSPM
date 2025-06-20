@@ -35,9 +35,7 @@ class TeamController < ApplicationController
   end
 
   # show tickets assigned to the team users both open and closed and their service desk
-  def show_team_users
-
-  end
+  def show_team_users; end
 
   def new
     @team = Team.new
