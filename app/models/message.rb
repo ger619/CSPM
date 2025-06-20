@@ -6,8 +6,8 @@ class Message < ApplicationRecord
   has_rich_text :content # This stores the rich text in `action_text_rich_texts`.
   has_many_attached :attachments # Allows multiple file uploads.
 
-  validates :content, presence: true
-  validates :message_type, inclusion: { in: %w[internal external] }
+  # validates :content, presence: true
+  # validates :message_type, inclusion: { in: %w[internal external] }
 
   def visible_to?(user)
     return true if message_type == 'external'
