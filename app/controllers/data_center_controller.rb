@@ -408,22 +408,16 @@ class DataCenterController < ApplicationController
                    base_scope.where(projects: { id: current_user.projects.ids })
                  end
 
-      @tickets = if report_type == 'eod'
-                   # EOD: Tickets that changed to "outstanding_statuses" within the last 24 hours
+      @tickets = if report_type == 'closed'
+                   # Only tickets with outstanding statuses updated in the last 24 hours
+                   @tickets.where(statuses: { name: outstanding_statuses })
+                     .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                 elsif report_type == 'eod'
                    recently_updated_tickets = @tickets
                      .where(statuses: { name: outstanding_statuses })
                      .where('add_statuses.updated_at >= ?', 24.hours.ago)
-
-                   # Get latest issues separately
-                   Issue
-                     .where(ticket_id: recently_updated_tickets.select(:id))
-                     .order(updated_at: :desc)
-                     .distinct(:ticket_id)
-
-                   # Combine with tickets that are not in the outstanding statuses
                    @tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated_tickets)
                  else
-                   # SOD: Start of Day report shows tickets that are not in the outstanding statuses
                    @tickets.where.not(statuses: { name: outstanding_statuses })
                  end.order('add_statuses.updated_at DESC')
     else
@@ -686,13 +680,14 @@ class DataCenterController < ApplicationController
     )
 
     csv_data = CSV.generate(headers: true) do |csv|
-      csv << ['Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created At',
+      csv << ['Service Desk', 'Issue Key', 'Summary', 'Issue Type', 'Assignee', 'Reporter', 'Priority', 'Status', 'Created At',
               'Status Updated At', 'Comment Added At', 'Content', 'Due Date']
 
       tickets.each do |ticket|
         latest_issue = ticket.issues.max_by(&:updated_at) # Using in-memory sorting after eager loading
 
         csv << [
+          ticket.project.title,
           ticket.unique_id.gsub('–', '-'),
           ticket.subject,
           ticket.issue,

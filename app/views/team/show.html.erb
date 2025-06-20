@@ -27,7 +27,9 @@
           <%= user.projects.count %>
         </td>
         <td class="px-4 py-4 text-left">
-          <%= link_to 'View', show_team_member_team_path(@team, user_id: user.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>      </tr>
+          <%= link_to 'View', show_team_member_team_path(@team, user_id: user.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
+        </td>
+      </tr>
     <% end %>
     </tbody>
   </table>
