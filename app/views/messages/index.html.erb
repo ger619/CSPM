@@ -21,9 +21,11 @@
               <h4 class="text-sm font-medium">Attachments:</h4>
               <ul>
                 <% message.attachments.each do |attachment| %>
-                  <li>
-                    <%= link_to attachment.filename, rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-500 hover:underline" %>
-                  </li>
+                  <% if attachment.persisted? %>
+                    <li>
+                      <%= link_to attachment.filename, rails_blob_path(attachment, disposition: "attachment"), class: "text-blue-500 hover:underline" %>
+                    </li>
+                  <% end %>
                 <% end %>
               </ul>
             </div>
