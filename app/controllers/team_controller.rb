@@ -35,7 +35,17 @@ class TeamController < ApplicationController
   end
 
   # show tickets assigned to the team users both open and closed and their service desk
-  def show_team_member; end
+  def show_team_member
+    @user = @team.users.find(params[:user_id])
+    @open_tickets = @user.tickets
+      .joins(:statuses)
+      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .distinct
+    @closed_tickets = @user.tickets
+      .joins(:statuses)
+      .where(statuses: { name: %w[Closed Resolved], created_at: Date.today.all_day })
+      .distinct
+  end
 
   def new
     @team = Team.new
