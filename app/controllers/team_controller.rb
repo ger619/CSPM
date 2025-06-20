@@ -1,6 +1,6 @@
 class TeamController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_team, only: %i[show edit update destroy]
+  before_action :set_team, only: %i[show edit update destroy show_team_member]
   load_and_authorize_resource
 
   def index
@@ -35,7 +35,7 @@ class TeamController < ApplicationController
   end
 
   # show tickets assigned to the team users both open and closed and their service desk
-  def show_team_users; end
+  def show_team_member; end
 
   def new
     @team = Team.new

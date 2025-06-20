@@ -137,6 +137,10 @@ Rails.application.routes.draw do
 
   resources :client
   resources :status
-  resources :team
+  resources :team do
+    member do
+      get "show_team_member"
+    end
+  end
   resources :location
 end
