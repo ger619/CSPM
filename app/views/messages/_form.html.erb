@@ -15,9 +15,10 @@
     </div>
     <% unless current_user.has_role?(:client) %>
       <div class="mb-4">
-        <%= form.label :visibility, "Message Visibility", class: "block text-sm font-medium text-gray-700" %>
-        <%= form.select :message_type, [["External", "external"], ["Internal", "internal"]], {}, class: "mt-1 block w-full" %>
+        <%= form.label :content, "Message", class: "block text-sm font-medium text-gray-700" %>
+        <%= form.text_field :content, class: "mt-1 block w-full", placeholder: "Enter message here" %>
       </div>
+
     <% end %>
     <div class="mb-4">
       <%= form.label :attachments, "Attachments", class: "block text-sm font-medium text-gray-700" %>
