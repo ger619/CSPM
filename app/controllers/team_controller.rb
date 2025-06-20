@@ -12,7 +12,6 @@ class TeamController < ApplicationController
             else
               Team.all.order('created_at DESC')
             end
-
     @total_pages = (@team.count / @per_page.to_f).ceil
     @team = @team.offset((@page - 1) * @per_page).limit(@per_page)
   end
