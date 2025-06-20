@@ -17,13 +17,26 @@ class TeamController < ApplicationController
   end
 
   def show
+    @assigned_today_counts = {}
+    @team.users.each do |user|
+      @assigned_today_counts[user.id] = user.tickets
+        .joins(:statuses)
+        .where.not(statuses: { name: %w[Closed Resolved Declined] })
+        .count
+    end
+
     @closed_today_counts = {}
     @team.users.each do |user|
       @closed_today_counts[user.id] = user.tickets
-                                          .joins(:statuses)
-                                          .where(statuses: { name: ['Closed', 'Resolved'], created_at: Date.today.all_day })
-                                          .count
-      end
+        .joins(:statuses)
+        .where(statuses: { name: %w[Closed Resolved], created_at: Date.today.all_day })
+        .count
+    end
+  end
+
+  # show tickets assigned to the team users both open and closed and their service desk
+  def show_team_users
+
   end
 
   def new
