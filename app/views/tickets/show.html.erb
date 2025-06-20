@@ -96,9 +96,8 @@
       </div>
     </div>
     <div class="w-full col-span-1 h-full p-2">
-  <%= render 'tickets/assign_people_tickets' %>
-
-  <% if @ticket.attachments.any? %>
+      <%= render 'tickets/assign_people_tickets' %>
+      <% if @ticket.attachments.any? %>
     <h3 class="text-lg font-bold mt-4">Attachments:</h3>
     <% @ticket.attachments.each do |attachment| %>
       <div class="mb-2">
@@ -109,9 +108,8 @@
   <% else %>
     <p class="text-gray-500 italic">No attachments available.</p>
   <% end %>
-<%= render 'custom_field' %>
-</div>
-
+      <%= render 'custom_field' %>
+    </div>
   </div>
   <div class="grid grid-cols-4 mb-6">
     <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4">

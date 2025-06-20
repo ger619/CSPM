@@ -1,6 +1,6 @@
 class TeamController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_team, only: %i[show edit update destroy]
+  before_action :set_team, only: %i[show edit update destroy show_team_member]
   load_and_authorize_resource
 
   def index
@@ -12,12 +12,40 @@ class TeamController < ApplicationController
             else
               Team.all.order('created_at DESC')
             end
-
     @total_pages = (@team.count / @per_page.to_f).ceil
     @team = @team.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def show; end
+  def show
+    @assigned_today_counts = {}
+    @team.users.each do |user|
+      @assigned_today_counts[user.id] = user.tickets
+        .joins(:statuses)
+        .where.not(statuses: { name: %w[Closed Resolved Declined] })
+        .count
+    end
+
+    @closed_today_counts = {}
+    @team.users.each do |user|
+      @closed_today_counts[user.id] = user.tickets
+        .joins(:statuses)
+        .where(statuses: { name: %w[Closed Resolved], created_at: Date.today.all_day })
+        .count
+    end
+  end
+
+  # show tickets assigned to the team users both open and closed and their service desk
+  def show_team_member
+    @user = @team.users.find(params[:user_id])
+    @open_tickets = @user.tickets
+      .joins(:statuses)
+      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .distinct
+    @closed_tickets = @user.tickets
+      .joins(:statuses)
+      .where(statuses: { name: %w[Closed Resolved], created_at: Date.today.all_day })
+      .distinct
+  end
 
   def new
     @team = Team.new

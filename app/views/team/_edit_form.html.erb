@@ -1,19 +1,19 @@
 <%= form_with model: @team, url: team_path(@team), method: :patch, data: { turbo: false }, local: true do |f| %>
   <div class="mb-5">
     <%= f.label :name, 'Team Name', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-    <%= f.text_field :name, class: "h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:text-black", placeholder: 'Enter team name', required: true %>
+    <%= f.text_field :name, class: "border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full", placeholder: 'Enter team name', required: true %>
   </div>
 
   <div class="mb-5">
     <%= f.label :description, 'Description', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-    <%= f.text_area :description, class: "h-24 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", placeholder: 'Enter team description' %>
+    <%= f.text_area :description, class: "border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full", placeholder: 'Enter team description' %>
   </div>
   <div class="mb-2">
     <%= f.label :user_ids, 'Pick Agents and Project Managers', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
   </div>
   <div class="relative w-full mb-4">
     <!-- Searchable Input -->
-    <input type="text" id="searchUser" class="h-10 border border-gray-300 rounded-lg dark:text-black px-2 text-sm w-full"
+    <input type="text" id="searchUser" class="border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full"
            placeholder="Search User..." onclick="showDropdown()"  onkeyup="filterUserDropdown()" autocomplete="off">
 
     <!-- Selected Items Container -->
@@ -30,7 +30,7 @@
     <div id="hiddenUserInputs"></div>
 
     <!-- Dropdown List -->
-    <div id="userDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
+    <div id="userDropdown" class="absolute w-full bg-white dark:bg-gray-700 border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden z-10">
       <div class="flex justify-start px-4 py-2">
         <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 text-left">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -40,7 +40,7 @@
       </div>
       <% users = User.with_assigned_role.distinct - @team.users %>
       <% users.each do |user| %>
-        <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
+        <div class="dropdown-item px-4 py-2 hover:bg-gray-100 hover:dark:bg-gray-500 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectUser(this)">
           <%= user.name %>
         </div>
       <% end %>
