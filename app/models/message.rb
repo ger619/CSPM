@@ -11,7 +11,7 @@ class Message < ApplicationRecord
   private
 
   def set_message_type
-    self.message_type = "internal"
+    self.message_type = 'internal'
   end
 
   # validates :content, presence: true
