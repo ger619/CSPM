@@ -1,7 +1,7 @@
 <!-- app/views/messages/index.html.erb -->
 <h2>Messages</h2>
 <% if @task.messages.any? %>
-    <% @task.messages.each do |message| %>
+    <% @task.messages.order(created_at: :desc).each do |message| %>
       <% if message.message_type == "external" or current_user.has_role? :admin or current_user.has_role?(:observer) %>
         <div class="p-4 border rounded mb-4">
           <div class="flex justify-between items-center">

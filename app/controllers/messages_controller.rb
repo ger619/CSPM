@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
   end
 
   def index
-    @messages = @task.messages.select { |message| message.visible_to?(current_user) }
+    @messages = @task.messages.order(created_at: "desc").select { |message| message.visible_to?(current_user) }
   end
 
   def create

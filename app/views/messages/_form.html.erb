@@ -14,10 +14,6 @@
       </div>
     </div>
     <% unless current_user.has_role?(:client) %>
-      <div class="mb-4">
-        <%= form.label :content, "Message", class: "block text-sm font-medium text-gray-700" %>
-        <%= form.text_field :content, class: "mt-1 block w-full", placeholder: "Enter message here" %>
-      </div>
 
     <% end %>
     <div class="mb-4">
