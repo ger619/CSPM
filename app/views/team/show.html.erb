@@ -7,23 +7,44 @@
       <th scope="col" class="px-4 py-2">Name of Person</th>
       <th scope="col" class="px-4 px-2">Role</th>
       <th scope="col" class="px-4 px-2">Client</th>
-
+      <th scope="col" class="px-4 px-2">Tickets Assigned</th>
+      <th scope="col" class="px-4 px-2">Tickets Closed Today</th>
+      <th scope="col" class="px-4 px-2">Tickets Closed in this month</th>
+      <th scope="col" class="px-4 px-2">Tickets Open</th>
+      <th scope="col" class="px-4 px-2">Projects Assigned</th>
     </tr>
     </thead>
     <tbody>
-    <!-- Looping through each project -->
     <% @team.users.each do |user| %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-          <td class="px-4 py-4 font-medium text-left">
-              <p class="text-gray-700 dark:text-gray-300"><%= user.name %></p>
-          </td>
-          <td class="px-4 py-4 text-left">
-            <p class="text-gray-700 dark:text-gray-300"><%= user.roles.map(&:name).uniq.join(', ') %></p>
-          </td>
-          <td class="px-4 py-4 text-left">
-            <p class="text-gray-700 dark:text-gray-300"><%= user.client&.name || 'No Client' %></p>
-          </td>
-        </tr>
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+        <td class="px-4 py-4 font-medium text-left">
+          <p class="text-gray-700 dark:text-gray-300"><%= user.name %></p>
+        </td>
+        <td class="px-4 py-4 text-left">
+          <p class="text-gray-700 dark:text-gray-300"><%= user.roles.map(&:name).uniq.join(', ') %></p>
+        </td>
+        <td class="px-4 py-4 text-left">
+          <p class="text-gray-700 dark:text-gray-300"><%= user.client&.name || 'No Client' %></p>
+        </td>
+        <td class="px-4 py-4 text-left">
+          <%= user.tickets.count %>
+        </td>
+        <td class="px-4 py-4 text-left">
+          <%= @closed_today_counts[user.id] %>
+        </td>
+        <td class="px-4 py-4 text-left">
+          <%= user.tickets.joins(:statuses)
+                  .where(statuses: { name: ['Closed', 'Resolved'], created_at: Date.current.beginning_of_month..Date.current.end_of_month })
+                  .count %>
+        </td>
+        <td class="px-4 py-4 text-left">
+
+          <%#= user.tickets.where(status: 'open').count %>
+        </td>
+        <td class="px-4 py-4 text-left">
+          <%= user.projects.count %>
+        </td>
+      </tr>
     <% end %>
     </tbody>
   </table>

@@ -16,7 +16,15 @@ class TeamController < ApplicationController
     @team = @team.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def show; end
+  def show
+    @closed_today_counts = {}
+    @team.users.each do |user|
+      @closed_today_counts[user.id] = user.tickets
+                                          .joins(:statuses)
+                                          .where(statuses: { name: ['Closed', 'Resolved'], created_at: Date.today.all_day })
+                                          .count
+      end
+  end
 
   def new
     @team = Team.new
