@@ -376,7 +376,6 @@ class TicketsController < ApplicationController
     @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  # List all open tickets (not closed, resolved, or declined)
   # app/controllers/tickets_controller.rb
   def all_open_tickets
     @tickets = Ticket.joins(:statuses, :project, :users)
