@@ -68,14 +68,14 @@
           </h1>
 
           <h1>Total Open Tickets:
-            <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).count %></span>
+            <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined Approved] }).count %></span>
             <%= link_to 'View', project_path(@project, filter: 'Open'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
           </h1>
         <% end %>
         <% if current_user.has_role?(:client) %>
           <h1>Total Open Tickets:
 
-            <%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).count %>
+            <%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined Approved] }).count %>
           </h1>
         <% end %>
 

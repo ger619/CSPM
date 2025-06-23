@@ -105,6 +105,7 @@ class ProjectController < ApplicationController
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] })
         .count
+      # SLA Breaches on Tickets
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
