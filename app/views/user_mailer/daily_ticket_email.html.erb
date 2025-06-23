@@ -1,0 +1,23 @@
+<!-- app/views/report_mailer/daily_ticket_email.html.erb -->
+<h1>Daily Ticket Report</h1>
+<p>Hello <%= @user.name %>,</p>
+<p>Here are your current assigned tickets:</p>
+
+<table border="1" cellpadding="5">
+  <tr>
+    <th>Issue Key</th>
+    <th>Service Desk</th>
+    <th>Summary</th>
+    <th>Status</th>
+    <th>View Ticket</th>
+  </tr>
+  <% @tickets.each do |ticket| %>
+    <tr>
+      <td><%= ticket.unique_id %></td>
+      <td><%= ticket.project.title %></td>
+      <td><%= ticket.subject %></td>
+      <td><%= ticket.statuses.first&.name || 'N/A' %></td>
+      <%= link_to 'View Ticket', project_ticket_url(ticket.project, ticket), target: '_blank' %>
+    </tr>
+  <% end %>
+</table>
