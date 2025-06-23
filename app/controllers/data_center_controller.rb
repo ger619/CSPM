@@ -436,29 +436,46 @@ class DataCenterController < ApplicationController
   end
 
   # Team send emails for the day
+
   def daily_report
     team = Team.find_by(name: params[:team_name])
 
     if team
-      team.users.pluck(:id)
+      outstanding_statuses = %w[Closed Resolved Declined]
+      report_type = params[:report_type] || 'sod'
 
-      users_with_tickets = team.users.includes(:tickets).each_with_object({}) do |user, hash|
-        assigned_tickets = user.tickets
-          .joins(:statuses)
-          .where.not(statuses: { name: %w[Closed Resolved Declined] })
-          .to_a
+      user_ids = team.users.pluck(:id)
+      base_scope = Ticket.joins(:users, project: :client)
+        .joins(:statuses)
+        .joins(:add_statuses)
+        .where(users: { id: user_ids })
 
-        hash[user] = assigned_tickets if assigned_tickets.any?
+      tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
+                  base_scope
+                else
+                  base_scope.where(projects: { id: current_user.projects.ids })
+                end
+
+      tickets = if report_type == 'closed'
+                  tickets.where(statuses: { name: outstanding_statuses })
+                    .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                elsif report_type == 'eod'
+                  recently_updated_tickets = tickets
+                    .where(statuses: { name: outstanding_statuses })
+                    .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                  tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated_tickets)
+                else
+                  tickets.where.not(statuses: { name: outstanding_statuses })
+                end.order('add_statuses.updated_at DESC')
+
+      mail_options = {}
+      mail_options[:cc] = current_user.email if current_user.has_role?(:hod)
+
+      # Send the SOD report as an email (adjust mailer as needed)
+      team.users.each do |user|
+        UserMailer.daily_ticket_email(user, tickets.to_a, mail_options).deliver_later
       end
-
-      users_with_tickets.each do |user, tickets|
-        mail_options = {}
-        mail_options[:cc] = current_user.email if current_user.has_role?(:hod)
-
-        UserMailer.daily_ticket_email(user, tickets, mail_options).deliver_later
-      end
-
-      redirect_back fallback_location: root_path, notice: 'Emails sent successfully.'
+      redirect_back fallback_location: root_path, notice: 'SOD report emailed successfully.'
     else
       redirect_back fallback_location: root_path, alert: 'Team not found.'
     end
