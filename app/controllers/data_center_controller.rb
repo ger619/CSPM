@@ -446,8 +446,8 @@ class DataCenterController < ApplicationController
 
       user_ids = team.users.pluck(:id)
       base_scope = Ticket.joins(:users, project: :client)
-                         .joins(:statuses, :add_statuses, :taggings)
-                         .where(users: { id: user_ids })
+        .joins(:statuses, :add_statuses, :taggings)
+        .where(users: { id: user_ids })
 
       tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
                   base_scope
@@ -457,10 +457,10 @@ class DataCenterController < ApplicationController
 
       tickets = if report_type == 'closed'
                   tickets.where(statuses: { name: outstanding_statuses })
-                         .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                    .where('add_statuses.updated_at >= ?', 24.hours.ago)
                 elsif report_type == 'eod'
                   recently_updated = tickets.where(statuses: { name: outstanding_statuses })
-                                            .where('add_statuses.updated_at >= ?', 24.hours.ago)
+                    .where('add_statuses.updated_at >= ?', 24.hours.ago)
                   tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated)
                 else
                   tickets.where.not(statuses: { name: outstanding_statuses })
@@ -473,10 +473,10 @@ class DataCenterController < ApplicationController
       # Send to each user only the tickets they are tagged on
       team.users.each do |user|
         tagged_tickets = tickets
-                           .select('tickets.*, add_statuses.updated_at') # Include order column
-                           .joins(:taggings)
-                           .where(taggings: { user_id: user.id })
-                           .distinct
+          .select('tickets.*, add_statuses.updated_at') # Include order column
+          .joins(:taggings)
+          .where(taggings: { user_id: user.id })
+          .distinct
 
         next if tagged_tickets.empty?
 
