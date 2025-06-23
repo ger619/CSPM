@@ -23,6 +23,10 @@
     <% if @task.image.present? %>
       <%= image_tag(@task.image, class: 'rounded object-cover w-full h-[400px]') %>
     <% end %>
+
+    <% if @task.file.present? %>
+      <%= link_to "Download #{@task.file.filename}", url_for(@task.file), target: "_blank", class: "text-blue-600 hover:underline" %>
+    <% end %>
     <div class="flex flex-row">
       <%= render 'tasks/add_task' %>
       <%= render 'tasks/add_state' %>
