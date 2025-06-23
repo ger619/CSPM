@@ -17,7 +17,7 @@
       <td><%= ticket.project.title %></td>
       <td><%= ticket.subject %></td>
       <td><%= ticket.statuses.first&.name || 'N/A' %></td>
-      <%= link_to 'View Ticket', project_ticket_url(ticket.project, ticket), target: '_blank' %>
+      <td><%= link_to 'View Ticket', project_ticket_url(ticket.project, ticket), target: '_blank' %></td>
     </tr>
   <% end %>
 </table>
