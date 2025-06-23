@@ -24,6 +24,13 @@
       <%= link_to "Download CSV",
                   sod_report_path(format: :csv, team_name: params[:team_name], report_type: params[:report_type]),
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
+
+      <%= link_to "Email Team Tickets",
+                  daily_report_path(team_name: params[:team_name]),
+                  method: :get,
+                  class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
+                  data: { confirm: "Are you sure you want to email the tickets to the team?" } %>
+
     </div>
     <table class="min-w-full mt-4">
       <thead>

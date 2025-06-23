@@ -435,6 +435,35 @@ class DataCenterController < ApplicationController
     end
   end
 
+  # Team send emails for the day
+  def daily_report
+    team = Team.find_by(name: params[:team_name])
+
+    if team
+      team.users.pluck(:id)
+
+      users_with_tickets = team.users.includes(:tickets).each_with_object({}) do |user, hash|
+        assigned_tickets = user.tickets
+          .joins(:statuses)
+          .where.not(statuses: { name: %w[Closed Resolved Declined] })
+          .to_a
+
+        hash[user] = assigned_tickets if assigned_tickets.any?
+      end
+
+      users_with_tickets.each do |user, tickets|
+        mail_options = {}
+        mail_options[:cc] = current_user.email if current_user.has_role?(:hod)
+
+        UserMailer.daily_ticket_email(user, tickets, mail_options).deliver_later
+      end
+
+      redirect_back fallback_location: root_path, notice: 'Emails sent successfully.'
+    else
+      redirect_back fallback_location: root_path, alert: 'Team not found.'
+    end
+  end
+
   # CBK Report for Groupware/Elma
 
   def cbk_groupware_report

@@ -141,4 +141,15 @@ class UserMailer < ApplicationMailer
     attachments["ticket_status_report_#{client_name}_#{Date.today}.xlsx"] = Base64.decode64(encoded_xlsx_data)
     mail(to: email, subject: "Cease Fire Report for #{client_name}")
   end
+
+  # Report email for all user
+  def daily_ticket_email(user, tickets, mail_options = {})
+    @user = user
+    @tickets = tickets
+
+    mail(to: @user.email, cc: mail_options[:cc], subject: "Daily Ticket Report for #{@user.name}") do |format|
+      format.html { render 'daily_ticket_email' }
+      format.text { render plain: "Daily Ticket Report for #{@user.name}" }
+    end
+  end
 end

@@ -1,0 +1,21 @@
+<!-- app/views/report_mailer/daily_ticket_email.html.erb -->
+<h1>Daily Ticket Report</h1>
+<p>Hello <%= @user.name %>,</p>
+<p>Here are your current assigned tickets:</p>
+
+<table border="1" cellpadding="5">
+  <tr>
+    <th>Issue Key</th>
+    <th>Summary</th>
+    <th>Status</th>
+    <th>Due Date</th>
+  </tr>
+  <% @tickets.each do |ticket| %>
+    <tr>
+      <td><%= ticket.unique_id %></td>
+      <td><%= ticket.subject %></td>
+      <td><%= ticket.statuses.first&.name || 'N/A' %></td>
+      <td><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
+    </tr>
+  <% end %>
+</table>
