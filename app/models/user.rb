@@ -139,7 +139,7 @@ class User < ApplicationRecord
   end
 
   def all_open_tickets_for_the_current_user_count
-    tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).distinct.count(:id)
+    tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined Approved] }).distinct.count(:id)
   end
 
   private
