@@ -325,17 +325,6 @@
       }
     });
 
-    sidebarMain.addEventListener("mouseenter", () => {
-      if (!isManuallyToggled) {
-        expandSidebar();
-      }
-    });
-
-    sidebarMain.addEventListener("mouseleave", () => {
-      if (!isManuallyToggled) {
-        collapseSidebar();
-      }
-    });
 
     function expandSidebar() {
       sidebarMain.classList.remove('w-12');
