@@ -31,17 +31,17 @@ class Task < ApplicationRecord
   def image_must_be_an_image
     return unless image.attached?
 
-    unless image.content_type.starts_with?("image/")
-      errors.add(:image, "must be an image file (jpeg, jpg, gif, or png).")
-    end
+    return if image.content_type.starts_with?('image/')
+
+    errors.add(:image, 'must be an image file (jpeg, jpg, gif, or png).')
   end
 
   # Ensure uploaded file is a generic valid file
   def file_must_be_a_file
     return unless file.attached?
 
-    unless file.content_type.start_with?("application/") || file.content_type.start_with?("text/")
-      errors.add(:file, "must be a valid file (pdf, doc, txt, etc.).")
-    end
+    return if file.content_type.start_with?('application/') || file.content_type.start_with?('text/')
+
+    errors.add(:file, 'must be a valid file (pdf, doc, txt, etc.).')
   end
 end
