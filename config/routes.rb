@@ -124,7 +124,7 @@ Rails.application.routes.draw do
   end
 
   resources :tasks do
-    resources :messages, only: [:index, :create]
+    resources :messages
   end
 
   resources :notifications, only: [:index] do

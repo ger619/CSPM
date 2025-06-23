@@ -1,0 +1,20 @@
+<h1>Edit Message</h1>
+
+<%= form_with(model: [@task, @message], local: true) do |f| %>
+  <div class="mb-4">
+    <%= f.label :content, "Content", class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.text_area :content,
+        value: ActionView::Base.full_sanitizer.sanitize(@message.content).strip,
+        rows: 5,
+        class: "w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500",
+        required: true %>
+  </div>
+
+  <div class="flex space-x-2">
+    <%= f.submit "Update Message",
+        class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to "Cancel",
+        task_messages_path(@task),
+        class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" %>
+  </div>
+<% end %>
