@@ -163,13 +163,13 @@ class HomeController < ApplicationController
 
       # Count of the tickets closed in the last one week
       @tickets_closed_in_last_one_week_count = Ticket.joins(:statuses)
-        .where(statuses: { name: %w[Closed Resolved Declined] })
+        .where(statuses: { name: %w[Closed Resolved Declined Approved] })
         .where('tickets.updated_at >= ?', 1.week.ago)
         .count
 
       # All the open tickets for the current user count
       @all_open_tickets_for_current_user_count = Ticket.joins(:statuses)
-        .where.not(statuses: { name: %w[Closed Resolved Declined] })
+        .where.not(statuses: { name: %w[Closed Resolved Declined Approved] })
         .distinct
         .count
 
@@ -179,7 +179,7 @@ class HomeController < ApplicationController
       # Get the total number of open tickets for the current user count
       @total_no_of_open_tickets_for_current_user_count = Ticket.joins(:statuses, :project)
         .where(projects: { id: current_user.projects.ids })
-        .where.not(statuses: { name: %w[Closed Resolved Declined] })
+        .where.not(statuses: { name: %w[Closed Resolved Declined Approved] })
         .distinct
         .count
 

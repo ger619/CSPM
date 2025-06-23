@@ -379,7 +379,7 @@ class TicketsController < ApplicationController
   # app/controllers/tickets_controller.rb
   def all_open_tickets
     @tickets = Ticket.joins(:statuses, :project, :users)
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .where.not(statuses: { name: %w[Closed Resolved Declined Approved] })
       .distinct
 
     if params[:search].present?
@@ -399,7 +399,7 @@ class TicketsController < ApplicationController
   # List open tickets for the current user
   def index
     @tickets = current_user.tickets.joins(:statuses)
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .where.not(statuses: { name: %w[Closed Resolved Declined Approved] })
       .distinct
     @per_page = 10
     @page = (params[:page] || 1).to_i
@@ -412,7 +412,7 @@ class TicketsController < ApplicationController
     @projects = current_user.projects
     @tickets = Ticket.joins(:statuses, :project)
       .where(projects: { id: @projects.ids })
-      .where.not(statuses: { name: %w[Closed Resolved Declined] })
+      .where.not(statuses: { name: %w[Closed Resolved Declined Approved] })
       .order('created_at DESC')
       .distinct
     @per_page = 20
