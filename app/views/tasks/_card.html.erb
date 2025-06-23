@@ -18,8 +18,10 @@
         Due Date: <%= task.end_date %>
       </h3>
       <div class="flex justify-center">
-        <% if task.image.present? %>
-          <%= image_tag(task.image, class: 'object-cover w-full max-w-xs h-auto rounded') %>
+        <% if task.image.attached? %>
+          <div class="mb-4">
+            <%= image_tag(task.image, class: 'object-cover w-full max-w-xs h-auto rounded') %>
+          </div>
         <% end %>
       </div>
         <h3 class="text-xs font-semibold">
