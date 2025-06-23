@@ -26,6 +26,9 @@
 
     <% if @task.file.present? %>
       <%= link_to "Download #{@task.file.filename}", url_for(@task.file), target: "_blank", class: "text-blue-600 hover:underline" %>
+
+    <% else %>
+      This task does not have an uploaded file. If you need to add a file, kindly <%= link_to "edit", edit_product_board_task_path(@product, @board, @task), method: :get, class: 'underline text-[#3F8CFF]' %> the task to include it.
     <% end %>
     <div class="flex flex-row">
       <%= render 'tasks/add_task' %>
