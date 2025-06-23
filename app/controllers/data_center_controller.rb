@@ -446,8 +446,7 @@ class DataCenterController < ApplicationController
 
       user_ids = team.users.pluck(:id)
       base_scope = Ticket.joins(:users, project: :client)
-        .joins(:statuses)
-        .joins(:add_statuses)
+        .joins(:statuses, :add_statuses, :taggings)
         .where(users: { id: user_ids })
 
       tickets = if current_user.has_role?(:admin) || current_user.has_role?(:observer)
@@ -460,10 +459,9 @@ class DataCenterController < ApplicationController
                   tickets.where(statuses: { name: outstanding_statuses })
                     .where('add_statuses.updated_at >= ?', 24.hours.ago)
                 elsif report_type == 'eod'
-                  recently_updated_tickets = tickets
-                    .where(statuses: { name: outstanding_statuses })
+                  recently_updated = tickets.where(statuses: { name: outstanding_statuses })
                     .where('add_statuses.updated_at >= ?', 24.hours.ago)
-                  tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated_tickets)
+                  tickets.where.not(statuses: { name: outstanding_statuses }).or(recently_updated)
                 else
                   tickets.where.not(statuses: { name: outstanding_statuses })
                 end.order('add_statuses.updated_at DESC')
@@ -471,10 +469,19 @@ class DataCenterController < ApplicationController
       mail_options = {}
       mail_options[:cc] = current_user.email if current_user.has_role?(:hod)
 
-      # Send the SOD report as an email (adjust mailer as needed)
+      # Send to each user only the tickets they are tagged on
       team.users.each do |user|
-        UserMailer.daily_ticket_email(user, tickets.to_a, mail_options).deliver_later
+        tagged_tickets = tickets
+          .select('tickets.*, add_statuses.updated_at') # Include order column
+          .joins(:taggings)
+          .where(taggings: { user_id: user.id })
+          .distinct
+
+        next if tagged_tickets.empty?
+
+        UserMailer.daily_ticket_email(user, tagged_tickets.to_a, mail_options).deliver_later
       end
+
       redirect_back fallback_location: root_path, notice: 'SOD report emailed successfully.'
     else
       redirect_back fallback_location: root_path, alert: 'Team not found.'
