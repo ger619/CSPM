@@ -1,9 +1,8 @@
 <!-- app/views/messages/index.html.erb -->
 <h2>Messages</h2>
 <% if @task.messages.any? %>
-    <% @task.messages.order(created_at: :desc).each do |message| %>
-      <% if message.message_type == "external" or current_user.has_role? :admin or current_user.has_role?(:observer) %>
-        <div class="p-4 border rounded mb-4">
+  <% @task.messages.order(created_at: :desc).each do |message| %>
+    <div class="p-4 border rounded mb-4">
           <div class="flex justify-between items-center">
             <p class="text-sm font-medium">
               <%= message.user&.first_name || "Unknown User" %>
@@ -32,9 +31,7 @@
           <% else %>
             <div class="mt-2 text-sm text-gray-500">No attachments.</div>
           <% end %>
-        </div>
-      <% end %>
-    <% end %>
-  <% else %>
-    <p class="text-gray-500">No messages to display.</p>
+    </div>
   <% end %>
+<% end %>
+
