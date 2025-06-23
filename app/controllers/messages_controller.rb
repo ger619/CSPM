@@ -1,6 +1,7 @@
 class MessagesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_task
+  before_action :set_message, only: [:edit, :update, :destroy]
 
   def new
     @task = Task.find(params[:task_id])
@@ -13,7 +14,7 @@ class MessagesController < ApplicationController
   end
 
   def index
-    @messages = @task.messages.order(created_at: 'desc').select { |message| message.visible_to?(current_user) }
+    @messages = @task.messages.order(created_at: 'desc')
   end
 
   def create
@@ -28,10 +29,30 @@ class MessagesController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @message.update(message_params)
+      redirect_to product_board_task_path(@task.product, @task.board, @task), notice: 'Message was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @message.destroy
+    redirect_to product_board_task_path(@task.product, @task.board, @task), notice: 'Message deleted successfully.'
+  end
+
   private
 
   def set_task
     @task = Task.find(params[:task_id])
+  end
+
+  def set_message
+    @message = @task.messages.find(params[:id])
   end
 
   def message_params
