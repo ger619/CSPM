@@ -41,6 +41,7 @@ class Ability
       can :read, Product
       can :read, Board
       can :read, Task
+      can :manage, Message
       can :generate, :report
 
     elsif user.has_role? :client
@@ -52,6 +53,7 @@ class Ability
       can :read, Product
       cannot %i[create delete edit], Board
       cannot :manage, Task
+      can :manage, Message
       can :generate, :report
 
     else
