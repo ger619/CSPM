@@ -466,8 +466,9 @@ class DataCenterController < ApplicationController
                   tickets.where.not(statuses: { name: outstanding_statuses })
                 end.order('add_statuses.updated_at DESC')
 
+      hod_emails = team.users.select { |u| u.has_role?(:hod) }.map(&:email)
       mail_options = {}
-      mail_options[:cc] = current_user.email if current_user.has_role?(:hod)
+      mail_options[:cc] = hod_emails if hod_emails.any?
 
       # Send to each user only the tickets they are tagged on
       team.users.each do |user|
