@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_task
-  before_action :set_message, only: [:edit, :update, :destroy]
+  before_action :set_message, only: %i[edit update destroy]
 
   def new
     @task = Task.find(params[:task_id])
@@ -29,8 +29,7 @@ class MessagesController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @message.update(message_params)
