@@ -15,11 +15,11 @@
           <% if f.object.class.require_password_on_accepting %>
             <div class="field">
               <%= f.label ('Password*') %><br />
-              <%= f.password_field :password, placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+              <%= f.password_field :password, placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:bg-gray-700", required: true %>
             </div>
             <div class="field">
               <%= f.label ('Password Confirm*') %><br />
-              <%= f.password_field :password_confirmation, placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full", required: true %>
+              <%= f.password_field :password_confirmation, placeholder: '••••••••', class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg w-full dark:bg-gray-700", required: true %>
             </div>
           <% end %>
           <div class="actions">
