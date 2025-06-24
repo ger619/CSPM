@@ -18,6 +18,7 @@ class Task < ApplicationRecord
   has_many :add_tasks
   has_many :users, through: :add_tasks, dependent: :destroy
   has_many :bugs
+  has_rich_text :description
 
   private
 

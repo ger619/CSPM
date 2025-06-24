@@ -28,7 +28,9 @@
           <%= task.name %>
         </h3>
         <p class="my-4">
-          <%= task.description %>
+        <% if task.description.nil? %>
+        <%= sanitize raw (task.description.to_trix_html) %>
+<% end %>
         </p>
         <div class="text-xs text-gray-500 dark:text-gray-400">
           <%= task.topic %>
