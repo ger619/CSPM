@@ -4,7 +4,7 @@
   <div class="flex justify-between items-center">
     <div class="relative w-80">
       <input type="text" id="search" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700" placeholder="Search Teams..." autocomplete="new-password" onkeyup="filterDropdown()" onfocus="showDropdown()">
-      <div id="dropdown" class="absolute w-full border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 w-full">
+      <div id="dropdown" class="absolute w-full border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none bg-white dark:bg-gray-700 dark:border-gray-50 w-full">
         <% @teams.each do |team| %>
           <div class="dropdown-item px-4 py-2 hover:bg-gray-100 hover:dark:bg-gray-900 cursor-pointer" onclick="selectItem(this)"><%= team.name %></div>
         <% end %>
