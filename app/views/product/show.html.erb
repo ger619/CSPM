@@ -4,7 +4,7 @@
 <div class="grid grid-cols-3 gap-4 mb-4">
   <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
     <%= render 'layouts/alert' %>
-    <h1 class="text-xl">
+    <h1 class="text-md">
       Name of the Project: <%= @product.name %>
     </h1>
     <p class="capitalize text-sm text-balance">
@@ -29,7 +29,7 @@
   </div>
 
   <% if !@product_tasks_per_board_status.empty? %>
-    <div class="text-xl p-4 rounded border-r-2 ">
+    <div class="text-md p-4 rounded border-r-2 ">
       <h2>Product boards status Count for: <%= @product.name %></h2>
 
       <ul>
@@ -79,11 +79,13 @@
         </ul>
       <% end %>
     </div>
+
+    <div class="col-span-1 pt-4">
+      <%= render 'product/added_users' %>
+    </div>
   </div>
   
-  <div class="col-span-1">
-    <%= render 'product/added_users' %>
-  </div>
+  
 
 </div>
 
