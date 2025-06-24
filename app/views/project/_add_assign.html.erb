@@ -11,9 +11,9 @@
               <!-- Searchable Input -->
               <input type="text" id="searchClientUser" class="border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" placeholder="Search User..." onkeyup="filterClientUserDropdown()">
               <!-- Dropdown List -->
-              <div id="clientUserDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+              <div id="clientUserDropdown" class="absolute w-full bg-white  dark:bg-gray-500 border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
                 <% @project.users_with_same_client.where.not(id: @project.users.pluck(:id)).distinct.each do |user| %>
-                  <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectClientUser(this)">
+                  <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectClientUser(this)">
                     <%= user.name %>
                   </div>
                 <% end %>
@@ -37,9 +37,9 @@
         <div class="flex flex-wrap gap-2">
           <div class="relative w-80">
             <input type="text" id="searchCraftUser" class="border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" placeholder="Search User..." onkeyup="filterCraftDropdown()">
-            <div id="craftDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+            <div id="craftDropdown" class="absolute w-full bg-white dark:bg-gray-500 border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
               <% @project.craftsilicon_users.where.not(id: @project.users.pluck(:id)).distinct.each do |user| %>
-                <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
+                <div class="dropdown-item px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-800 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
                   <%= user.name %>
                 </div>
               <% end %>
@@ -63,9 +63,9 @@
               <input type="text" id="searchRemoveUser" class="border border-gray-300 rounded-lg text-xs focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" placeholder="Search User..." onkeyup="filterRemoveUserDropdown()">
               
               <!-- Dropdown List -->
-              <div id="removeUserDropdown" class="absolute w-full bg-white border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
+              <div id="removeUserDropdown" class="absolute w-full bg-white dark:bg-gray-500  border rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto hidden">
                 <% @project.users.each do |user| %>
-                  <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
+                  <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800  cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
                     <%= user.name %>
                   </div>
                 <% end %>
