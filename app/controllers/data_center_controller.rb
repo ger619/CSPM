@@ -445,6 +445,7 @@ class DataCenterController < ApplicationController
       report_type = params[:report_type] || 'sod'
 
       user_ids = team.users.pluck(:id)
+
       base_scope = Ticket.joins(:users, project: :client)
         .joins(:statuses, :add_statuses, :taggings)
         .where(users: { id: user_ids })
@@ -470,17 +471,19 @@ class DataCenterController < ApplicationController
       mail_options = {}
       mail_options[:cc] = hod_emails if hod_emails.any?
 
-      # Send to each user only the tickets they are tagged on
       team.users.each do |user|
-        tagged_tickets = tickets
-          .select('tickets.*, add_statuses.updated_at') # Include order column
+        tagged_tickets = tickets.select('tickets.*, add_statuses.updated_at')
           .joins(:taggings)
           .where(taggings: { user_id: user.id })
+          .order('add_statuses.updated_at DESC')
           .distinct
 
-        next if tagged_tickets.empty?
-
-        UserMailer.daily_ticket_email(user, tagged_tickets.to_a, mail_options).deliver_later
+        if tagged_tickets.any?
+          UserMailer.daily_ticket_email(user, tagged_tickets.to_a, mail_options).deliver_later
+        elsif report_type == 'closed'
+          # Send an empty notice for the user with no closed/resolved/declined tickets
+          UserMailer.daily_ticket_email(user, [], mail_options).deliver_later
+        end
       end
 
       redirect_back fallback_location: root_path, notice: 'SOD report emailed successfully.'
