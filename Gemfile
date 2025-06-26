@@ -102,3 +102,4 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'stackprof'
+gem 'whenever', require: false
