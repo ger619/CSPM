@@ -23,7 +23,7 @@
 set :output, "log/cron.log"
 set :environment, 'production'
 
-every 1.day, at: '1:00 pm' do
+every 1.day, at: '12:01 am' do
   runner "DailyReportJob.perform_later"
 end
 
