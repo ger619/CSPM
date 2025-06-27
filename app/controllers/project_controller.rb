@@ -1,5 +1,5 @@
 class ProjectController < ApplicationController
-  before_action :set_project, only: %i[show edit update destroy assign_user unassign_user]
+  before_action :set_project, only: %i[show edit update destroy assign_user manage_users unassign_user]
   before_action :authenticate_user!
   load_and_authorize_resource
   # GET /projects
@@ -40,6 +40,11 @@ class ProjectController < ApplicationController
     @total_pages = (@project.count / @per_page.to_f).ceil
     @project = @project.offset((@page - 1) * @per_page).limit(@per_page)
   end
+
+  def manage_users
+    render layout: false
+  end
+
 
   # GET /projects/id
   def show
