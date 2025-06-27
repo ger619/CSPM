@@ -67,7 +67,7 @@
       <% end %>
       <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
     <% end %>
-  <% elsif !current_user.has_role?(:client) %>
+  <% elsif current_user.has_role?(:client) %>
     <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
       <% current_status = @ticket.statuses.first&.name %>
       <% allowed = %w[Client Confirmation Pending Resolved Reopened Closed Declined] %>
