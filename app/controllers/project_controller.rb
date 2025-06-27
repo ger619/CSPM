@@ -41,10 +41,6 @@ class ProjectController < ApplicationController
     @project = @project.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-  def manage_users
-    render layout: false
-  end
-
 
   # GET /projects/id
   def show
@@ -59,6 +55,12 @@ class ProjectController < ApplicationController
       elsif params[:end_date].present?
         @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
       end
+
+      # Get the clients of CRaft silicon
+    @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
+
+      # Get the staff who have the email of Craft silicon
+      @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
 
       @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
       @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
@@ -173,6 +175,16 @@ class ProjectController < ApplicationController
       format.html { redirect_to project_url, notice: 'Project was successfully destroyed.' }
     end
   end
+
+    def manage_users
+    # Get the clients of CRaft silicon
+    @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
+    
+    # Get the staff who have the email of Craft silicon
+    @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
+    render layout: false
+  end
+
 
   def assign_user
     if @project.users.include?(User.find(params[:user_id]))

@@ -4,27 +4,17 @@
     <!-- Craft Silicon Staff -->
     <div>
       <h3 class="text-sm font-semibold text-gray-700 mb-2">Craft Silicon Staff</h3>
-      <div class="flex flex-wrap gap-2">
-        <%= form_with url: '#', local: true do %>
-          <% craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') } %>
-          <%= select_tag 'assigned_agents',
-                options_from_collection_for_select(craft_silicon_users, 'id', 'name'),
-                class: "w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <% end %>
-      </div>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        <%= @craft_silicon_users.map(&:name).join(", ") %>
+      </p>
     </div>
 
     <!-- Clients -->
     <div>
       <h3 class="text-sm font-semibold text-gray-700 mb-2">Clients</h3>
-      <div class="flex flex-wrap gap-2">
-        <%= form_with url: '#', local: true do %>
-          <% non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') } %>
-          <%= select_tag 'assigned_agents',
-                options_from_collection_for_select(non_craft_silicon_users, 'id', 'name'),
-                class: "w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <% end %>
-      </div>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        <%= @non_craft_silicon_users.map(&:name).join(", ") %>
+      </p>
     </div>
 
   <% end %>
