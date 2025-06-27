@@ -29,6 +29,6 @@ end
 
 # For development (uncomment if you want to test locally)
 set :environment, 'development'
-every 1.day, at: '1: pm' do
+every 1.day, at: '18:20 pm' do
   runner "DailyReportJob.perform_later"
 end
