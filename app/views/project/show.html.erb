@@ -1,103 +1,142 @@
 <% provide(:title, "Support Desk: #{@project.title}") %>
 
 <%= render 'tickets/ticket_topbar' %>
-<div class="border-2 border-gray-200 rounded-lg dark:border-gray-700">
-  <div class="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4 h-full">
-    <div class="p-4 items-center justify-center rounded md:col-span-2 border-r-2">
-      <% unless notice == "Signed in successfully." %>
-        <p class="notice"><%= notice %></p>
-      <% end %>
-      <p class="alert"><%= alert %></p>
-      <h1 class="text-2xl flex gap-2">
-        <% if @project.image.present? %>
-          <%= image_tag(@project.image, class: 'w-16') %>
-        <% else %>
-          <%= image_tag 'default.png', class: 'w-16' %>
-        <% end %>
 
-        <%= @project.title %>
-      </h1>
-      <p class="capitalize"><%= @project.description %></p>
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- First Column -->
+    <div class="space-y-2">
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Support Desk Manager</h2>
+          <p class="text-sm font-semibold"><%= @project.user&.name || 'No Project Manager Assigned' %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Date to Commence</h2>
+          <p class="text-sm font-semibold"><%= @project.start_date.strftime("%d %b %Y") %></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Second Column -->
+    <div class="space-y-4">
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">My Tickets</h2>
+          <p class="text-md font-semibold "><%= @assigned_tickets_count %></p>
+        </div>
+        <div class="flex items-center justify-end">
+          <%= link_to "View",
+            project_path(@project, filter: 'Assigned'),
+              class: "bg-blue-600 text-white font-medium rounded-md p-2 no-underline hover:bg-blue-700 transition" %>
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+        </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Assigned & Closed</h2>
+          <p class="text-md font-semibold"><%= @closed_assigned_tickets %></p>
+        </div>
+        <div class="flex items-center justify-end">
+          <%= link_to "View",
+              project_path(@project, filter: 'Assigned'),
+              class: "bg-blue-600 text-white font-medium rounded-md p-2 no-underline hover:bg-blue-700 transition" %>
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">SLA on Target Response</h2>
+          <p class="text-md font-semibold"><%= @breached_target_tickets_count %></p>
+        </div>
+        <div class="flex items-center justify-end">
+          <%= link_to "View",
+              project_path(@project, filter: 'Assigned'),
+              class: "bg-blue-600 text-white font-medium rounded p-2 no-underline hover:bg-blue-700 transition" %>
+        </div>
+      </div>
     </div>
 
-    <div class="font-semibold p-2 rounded md:col-span-2 border-r-2 flex flex-col md:flex-row">
-      <div class="text-xs mr-2">
-        <h1>Support Desk Manager: <span class="font-light"><%= @project.user&.name || 'No Project Manager Assigned' %></span></h1>
-        <h1>Product:
-          <span class="font-light">
-            <% if @project.softwares.any? %>
+    
+    <!-- Third Column -->
+    <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4">
+      <div class="flex flex-col">
+        <h2 class="text-md font-light">Products</h2>
+        <div class="text-md font-semibold">
             <ul>
-              <% @project.softwares.each do |software| %>
-                <li><%= software.name %></li>
+              <% if @project.softwares.any? %>
+                <% @project.softwares.each do |software| %>
+                  <ul>
+                    <% software.groupwares.each do |groupware| %>
+                      <% active_groupware = @project.tickets.where(groupware_id: groupware.id).count %>
+                      <% if active_groupware > 0 %>
+                        <li class="grid grid-cols-2 gap-2 items-center">
+                          <span>
+                            <% if groupware.image.present? %>
+                              <%= image_tag(groupware.image, class: 'sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-md object-cover') %>
+                            <% else %>
+                              <%= image_tag 'default.png', class: 'sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-md object-cover' %>
+                            <% end %>
+                          </span>
+                          
+                          <span class="text-md font-semibold">
+                             <%= groupware.name %>
+                          </span>
+                        </li>
+                      <% end %>
+                      <% end %>
+                  </ul>
+                <% end %>
+              <% else %>
+                No sub-product present
               <% end %>
             </ul>
-            <% else %>
-              No Product Assigned
-            <% end %>
-          </span>
-        </h1>
-        <h1>Sub-Products</h1>
-        <span class="font-light">
-          <% if @project.softwares.any? %>
-            <% @project.softwares.each do |software| %>
-              <ul>
-                <% software.groupwares.each do |groupware| %>
-                  <% active_tickets_count = @project.tickets.where(groupware_id: groupware.id).count %>
-                  <% if active_tickets_count > 0 %>
-                    <li>
-                      <%= groupware.name %> - Active Tickets: <%= active_tickets_count %>
-                    </li>
-                  <% end %>
-                <% end %>
-              </ul>
-            <% end %>
-          <% else %>
-            No sub-product present
-          <% end %>
-        </span>
-      </div>
-      <div class="text-xs">
-        <h1>Date to Commence: <span class="font-light"><%= @project.start_date.strftime("%d %b %Y") %></span></h1>
-        <% if current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?('project manager') %>
-          <h1 class="pt-1">
-            My Tickets: <%= @assigned_tickets_count %> <%= link_to 'View', project_path(@project, filter: 'Assigned'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
-            <span class="font-light"><%= @assigned_tickets %></span>
-          </h1>
-          <h1 class="pt-1">
-            Assigned & Closed: <%= @closed_assigned_tickets %>
-          </h1>
-
-          <h1>Total Open Tickets:
-            <span class="font-light"><%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined Approved] }).count %></span>
-            <%= link_to 'View', project_path(@project, filter: 'Open'), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-1 rounded font-bold text-slate-100' %>
-          </h1>
-        <% end %>
-        <% if current_user.has_role?(:client) %>
-          <h1>Total Open Tickets:
-
-            <%= @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined Approved] }).count %>
-          </h1>
-        <% end %>
-
-        <!--
-        <h1>Closed Tickets: <span class="font-light"><%#= @closed_tickets %></span></h1>\
-        -->
-        <h1>SLA on Target Response <span class="font-light"><%= @breached_target_tickets_count %></span></h1>
-
-
-      </div>
-    </div>
-
-    <div class="md:col-span-2 text-xs">
-      <%= render 'assign_people' %>
-      <div class="text-xs">
-        <%= render 'project/add_assign' %>
-      </div>
-      <div class="text-xs">
-        <%= render 'project/add_teams' %>
+        </div>
       </div>
     </div>
   </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="border-2 border-gray-200 rounded-lg dark:border-gray-700">
+  
   <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-[300px] w-full">
     <% if @project.assigned_to?(current_user) or current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?(:observer) %>
       <%= render 'tickets/ticket' %>
