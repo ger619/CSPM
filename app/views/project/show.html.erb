@@ -101,18 +101,26 @@
           <% if @project.softwares.any? %>
             <ul>
               <% if @project.softwares.any? %>
-            <% @project.softwares.each do |software| %>
-              <ul>
-                <% software.groupwares.each do |groupware| %>
-                    <li>
-                      <%= groupware.name %> 
-                    </li>
+                <% @project.softwares.each do |software| %>
+                  <ul>
+                    <% software.groupwares.each do |groupware| %>
+                      <% unless groupware.image.attached? %>
+                        <li>
+                          <%= image_tag 'default.png', class: 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover' %>
+                          <%= groupware.name %>
+                        </li>
+                      <% else %>
+                        <li>
+                          <%= image_tag(groupware.image, class: 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover') %>
+                          <%= groupware.name %>
+                        </li>
+                      <% end %>
+                    <% end %>
+                  </ul>
                 <% end %>
-              </ul>
-            <% end %>
-          <% else %>
-            No sub-product present
-          <% end %>
+              <% else %>
+                No sub-product present
+              <% end %>
             </ul>
           <% else %>
             No Product Assigned
