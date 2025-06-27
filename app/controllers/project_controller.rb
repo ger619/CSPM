@@ -41,7 +41,6 @@ class ProjectController < ApplicationController
     @project = @project.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
-
   # GET /projects/id
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
@@ -57,7 +56,7 @@ class ProjectController < ApplicationController
       end
 
       # Get the clients of CRaft silicon
-    @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
+      @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
 
       # Get the staff who have the email of Craft silicon
       @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
@@ -176,15 +175,14 @@ class ProjectController < ApplicationController
     end
   end
 
-    def manage_users
+  def manage_users
     # Get the clients of CRaft silicon
     @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
-    
+
     # Get the staff who have the email of Craft silicon
     @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
     render layout: false
   end
-
 
   def assign_user
     if @project.users.include?(User.find(params[:user_id]))
