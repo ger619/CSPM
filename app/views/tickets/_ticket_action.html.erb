@@ -1,73 +1,80 @@
+<% if @project.special && @ticket.issue == 'CHANGE REQUEST' %>
+  <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
+    <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+      <% current_status = @ticket.statuses.first&.name %>
 
-<% if @project.special and @ticket.issue == 'CHANGE REQUEST' %>
-  <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
-  <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
-    <% if @ticket.statuses.empty? %>
-      <%= select_tag :status_id, options_for_select(Status.where(name: %w[Assigned]).collect { |status| [status.name, status.id] }, @ticket.statuses.first&.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-    <% else %>
-      <% @ticket.statuses.each do |status| %>
-        <% case status.name %>
-        <% when 'Assigned' %>
-          <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined Pending]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mt-2' %>
-        <% when 'Pending' %>
-          <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mt-2' %>
-        <% end %>
+      <% if @ticket.statuses.empty? %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: ['Assigned']).pluck(:name, :id)), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      <% elsif current_status == 'Assigned' %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined Pending]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+      <% elsif current_status == 'Pending' %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
+  <% end %>
+
+  <% allowed_statuses = ['Approved', 'Work in Progress', 'On-Hold', 'Under Development', 'QA Testing', 'Client Confirmation Pending', 'Awaiting Build', 'Reopened', 'Resolved', 'Closed', 'Declined'] %>
+  <% current_status = @ticket.statuses.first&.name %>
+  <% if allowed_statuses.include?(current_status) && !current_user.has_role?(:client) %>
+    <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+      <% current_status = @ticket.statuses.first&.name %>
+      <% transition_map = {
+        'Approved' => ['Work in Progress'],
+        'Work in Progress' => ['Declined', 'Resolved', 'On-Hold', 'Under Development', 'Client Confirmation Pending'],
+        'On-Hold' => ['Under Development', 'Work in Progress'],
+        'Under Development' => ['QA Testing', 'Awaiting Build', 'On-Hold'],
+        'QA Testing' => ['Resolved', 'Client Confirmation Pending', 'Under Development'],
+        'Client Confirmation Pending' => ['Resolved', 'Reopened', 'Work in Progress'],
+        'Awaiting Build' => ['QA Testing'],
+        'Reopened' => ['Work in Progress'],
+        'Resolved' => ['Closed', 'Reopened'],
+        'Closed' => ['Reopened'],
+        'Declined' => ['Reopened']
+      } %>
+
+      <% if transition_map[current_status] %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: transition_map[current_status]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+      <% end %>
     <% end %>
   <% end %>
+
 <% else %>
-  <% unless current_user.has_role?(:observer)%>
-  <% if current_user.has_role? :admin or current_user.has_role? :agent or  current_user.has_role?('project manager') %>
+  <% if !current_user.has_role?(:observer) && (current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager')) %>
     <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
-      <% if @ticket.statuses.empty? or @ticket.statuses.blank? or @ticket.statuses.nil?  %>
-        <%= select_tag :status_id, options_for_select(Status.where(name: %w[Assigned]).collect { |status| [status.name, status.id] }, @ticket.statuses.first&.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-      <% else %>
-        <% @ticket.statuses.each do |status| %>
-          <% case status.name %>
-          <% when 'New' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: %w[Assigned]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Assigned' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Work in Progress']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Work in Progress' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Declined', 'Resolved', 'On-Hold', 'Under Development', 'Client Confirmation Pending']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'On-Hold' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Under Development', 'Work in Progress']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Under Development' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['QA Testing', 'Awaiting Build', 'On-Hold']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'QA Testing' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Resolved', 'Client Confirmation Pending', 'Under Development']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Client Confirmation Pending' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Resolved', 'Reopened', 'Work in Progress']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Awaiting Build' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['QA Testing']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'QA Testing' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Resolved', 'Client Confirmation Pending']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Reopened' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Work in Progress']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Closed', 'Declined' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: ['Reopened']).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% when 'Resolved' %>
-            <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-          <% end %>
-        <% end %>
+      <% current_status = @ticket.statuses.first&.name %>
+      <% transition_map = {
+        'New' => ['Assigned'],
+        'Assigned' => ['Work in Progress'],
+        'Work in Progress' => ['Declined', 'Resolved', 'On-Hold', 'Under Development', 'Client Confirmation Pending'],
+        'On-Hold' => ['Under Development', 'Work in Progress'],
+        'Under Development' => ['QA Testing', 'Awaiting Build', 'On-Hold'],
+        'QA Testing' => ['Resolved', 'Client Confirmation Pending', 'Under Development'],
+        'Client Confirmation Pending' => ['Resolved', 'Reopened', 'Work in Progress'],
+        'Awaiting Build' => ['QA Testing'],
+        'Reopened' => ['Work in Progress'],
+        'Resolved' => ['Closed', 'Reopened'],
+        'Closed' => ['Reopened'],
+        'Declined' => ['Reopened']
+      } %>
+
+      <% if @ticket.statuses.empty? %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: ['Assigned']).pluck(:name, :id)), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      <% elsif transition_map[current_status] %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: transition_map[current_status]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       <% end %>
-      <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mt-2' %>
+      <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
     <% end %>
-  <% end %>
-  <% unless current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
+  <% elsif !current_user.has_role?(:client) %>
     <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
-      <% @ticket.statuses.each do |status| %>
-        <% if status.name == 'Client Confirmation Pending' or status.name == 'Resolved' or status.name == 'Reopened' or status.name == 'Closed' or status.name == 'Declined'%>
-          <div>
-            <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened Resolved]).collect { |status| [status.name, status.id] }, @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Select The Status' %>
-            <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 mt-2' %>
-          </div>
-        <% end %>
+      <% current_status = @ticket.statuses.first&.name %>
+      <% allowed = %w[Client Confirmation Pending Resolved Reopened Closed Declined] %>
+      <% if allowed.include?(current_status) %>
+        <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened Resolved]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
-<% end %>
 <% end %>
