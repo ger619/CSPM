@@ -1,0 +1,20 @@
+
+
+<%= turbo_frame_tag "modal" do %>
+    <div class="md:col-span-2 text-xs">
+      <%= render 'assign_people' %>
+      <div class="text-xs">
+        <%= render 'project/add_assign' %>
+      </div>
+      <div class="text-xs">
+        <%= render 'project/add_teams' %>
+      </div>
+
+      <div class="close-modal">
+        <%= link_to "Cancel", "#", aata: {
+            controller: "modal",
+            action: "modal#close"
+        }, class: "close-modal-btn" %>
+      </div>
+    </div>
+<% end %>
