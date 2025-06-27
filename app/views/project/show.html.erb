@@ -100,12 +100,12 @@
                     <% software.groupwares.each do |groupware| %>
                       <% active_groupware = @project.tickets.where(groupware_id: groupware.id).count %>
                       <% if active_groupware > 0 %>
-                        <li class="grid grid-cols-2 gap-2 items-center">
+                        <li class="gap-2 items-center flex flex-wrap">
                           <span>
                             <% if groupware.image.present? %>
-                              <%= image_tag(groupware.image, class: 'sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-md object-cover') %>
+                              <%= image_tag(groupware.image, class: 'sm:h-6 md:h-10 rounded-md object-cover') %>
                             <% else %>
-                              <%= image_tag 'default.png', class: 'sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-md object-cover' %>
+                              <%= image_tag 'default.png', class: 'sm:h-6 sm:h-10 rounded-md object-cover' %>
                             <% end %>
                           </span>
                           

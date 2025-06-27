@@ -5,7 +5,7 @@
     <div>
       <h3 class="text-sm font-semibold mb-2">Craft Silicon Staff</h3>
       <p class="text-sm ">
-        <%= @craft_silicon_users.map(&:name).join(", ") %>
+        <%= @craft_silicon_users.map(&:name).join(", ").first(5) %>
       </p>
     </div>
 
@@ -13,7 +13,7 @@
     <div>
       <h3 class="text-sm font-semibold mb-2">Clients</h3>
       <p class="text-sm">
-        <%= @non_craft_silicon_users.map(&:name).join(", ") %>
+        <%= @non_craft_silicon_users.map(&:name).join(", ").first(5) %>
       </p>
     </div>
 
