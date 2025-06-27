@@ -3,13 +3,13 @@
     <!-- Assign Client -->
     <div>
       <%= form_with url: assign_user_project_path(@project), local: true do %>
-        <label for="searchClientUser" class="block mb-1 text-sm font-medium text-gray-700">Clients</label>
+        <label for="searchClientUser" class="block mb-1 text-sm font-medium">Clients</label>
         <div class="relative space-y-2">
-          <input type="text" id="searchClientUser" class="w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500" placeholder="Search User..." onkeyup="filterClientUserDropdown()">
+          <input type="text" id="searchClientUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500" placeholder="Search User..." onkeyup="filterClientUserDropdown()">
 
-          <div id="clientUserDropdown" class="hidden absolute w-full bg-white border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
+          <div id="clientUserDropdown" class="hidden absolute w-full bg-white dark:bg-gray-500 border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
             <% @project.users_with_same_client.where.not(id: @project.users.pluck(:id)).distinct.each do |user| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectClientUser(this)">
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectClientUser(this)">
                 <%= user.name %>
               </div>
             <% end %>
@@ -27,11 +27,11 @@
       <%= form_with url: assign_user_project_path(@project), local: true do %>
         <label for="searchCraftUser" class="block mb-1 text-sm font-medium text-gray-700">Craft Silicon Users</label>
         <div class="relative space-y-2">
-          <input type="text" id="searchCraftUser" class="w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500" placeholder="Search User..." onkeyup="filterCraftDropdown()">
+          <input type="text" id="searchCraftUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500" placeholder="Search User..." onkeyup="filterCraftDropdown()">
 
-          <div id="craftDropdown" class="hidden absolute w-full bg-white border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
+          <div id="craftDropdown" class="hidden absolute w-full bg-white dark:bg-gray-500 border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
             <% @project.craftsilicon_users.where.not(id: @project.users.pluck(:id)).distinct.each do |user| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
                 <%= user.name %>
               </div>
             <% end %>
@@ -50,11 +50,11 @@
         <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
           <label for="searchRemoveUser" class="block mb-1 text-sm font-medium text-gray-700">Remove User</label>
           <div class="relative space-y-2">
-            <input type="text" id="searchRemoveUser" class="w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500" placeholder="Search User..." onkeyup="filterRemoveUserDropdown()">
+            <input type="text" id="searchRemoveUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500" placeholder="Search User..." onkeyup="filterRemoveUserDropdown()">
 
-            <div id="removeUserDropdown" class="hidden absolute w-full bg-white border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
+            <div id="removeUserDropdown" class="hidden absolute w-full bg-white dark:bg-gray-500 border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
               <% @project.users.each do |user| %>
-                <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
+                <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
                   <%= user.name %>
                 </div>
               <% end %>
