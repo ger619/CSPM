@@ -1,0 +1,33 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-4xl relative space-y-6">
+      
+      <!-- Close Button -->
+        <%= link_to "X", "#", data: {
+          controller: "modal",
+          action: "modal#close"
+        }, class: "absolute top-3 right-3 text-xl font-bold" %>
+
+      <!-- Header -->
+      <h2 class="text-2xl font-semibold mb-4">Manage Project Users</h2>
+
+      <!-- Assign People -->
+      <%= render 'assign_people' %>
+
+      <!-- Add Assignments -->
+      <%= render 'project/add_assign' %>
+
+      <!-- Add Teams -->
+      <%= render 'project/add_teams' %>
+
+      <!-- Cancel Button -->
+      <div class="flex justify-end">
+        <%= link_to "Cancel", "#", data: {
+          controller: "modal",
+          action: "modal#close"
+        }, class: "text-sm text-red-600 hover:text-red-800 font-medium" %>
+      </div>
+
+    </div>
+  </div>
+<% end %>

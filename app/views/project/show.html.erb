@@ -102,6 +102,7 @@
     <% if @project.assigned_to?(current_user) or current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?(:observer) %>
       <%= render 'tickets/ticket' %>
     <% end %>
+    
   </div>
   <h1>Total Tickets:
     <span class="font-medium">

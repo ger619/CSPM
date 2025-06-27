@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get "home/index"
 
   resources :project do
+    get 'project/:project_id/manage_users', to: 'project#manage_users', as: :project_manage_users
     member do
       post :assign_user
       delete :unassign_user
@@ -103,7 +104,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :projects do
+  resources :projects, controller: 'project' do
+    member do
+      get :manage_users
+    end
     resources :groupwares, only: :index
   end
   resources :product do
