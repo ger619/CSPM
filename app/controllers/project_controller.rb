@@ -88,6 +88,11 @@ class ProjectController < ApplicationController
       # ✅ Order by descending creation date
       @ticket = @ticket.order(created_at: :desc)
 
+      # Filter by issue or subject from the project show search input form in the search bar
+      @search_ticket_issue_and_subject = @project.tickets.where(
+          "issue ILIKE :q OR subject ILIKE :q", q: "%#{params[:search]}%"
+      )
+
       # Show all the tickets for the last one month when last month filter is clicked
       @last_one_month_tickets = @project.tickets.where('created_at >= ?', 1.month.ago).order(created_at: :desc)
       @use_last_month_filter = params[:last_month].present?
