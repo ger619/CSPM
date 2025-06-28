@@ -55,12 +55,6 @@ class ProjectController < ApplicationController
         @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
       end
 
-      # Get the clients of CRaft silicon
-      @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
-
-      # Get the staff who have the email of Craft silicon
-      @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
-
       @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
       @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
       @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
