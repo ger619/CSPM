@@ -124,7 +124,8 @@
     <tbody>
 
 
-    <% @ticket.each do |ticket| %>
+    <% filtered_tickets = @use_last_month_filter ? @last_one_month_tickets : @ticket %>
+    <% filtered_tickets.each do |ticket| %>
     <% if ticket.present? %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
 
