@@ -7,10 +7,7 @@
                name="search" 
                value="<%= params[:search] %>" 
                class="block w-full p-2 pl-10 text-sm border-gray-300 dark:bg-gray-500 dark:border-gray-50 dark:text-gray-200 border rounded-l-lg focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300" 
-               placeholder="Q search">
-        <button type="submit" class="px-4 text-sm font-medium bg-blue-600 rounded-r-lg border border-blue-600 hover:bg-blue-700 focus:outline-none">
-          Search
-        </button>
+               placeholder="Q search by either issue or subject">
       </div>
     <% end %>
   </div>
@@ -129,26 +126,34 @@
 </div>
 
 <script>
-document.addEventListener("turbo:load", function() {
-  // Toggle filter dropdown
-  const filterButton = document.getElementById('filterDropdownButton');
-  const filterDropdown = document.getElementById('filterDropdown');
-  
-  if (filterButton && filterDropdown) {
-    filterButton.addEventListener('click', function(e) {
+document.addEventListener("turbo:load", function () {
+  const filterButton = document.getElementById("filterDropdownButton");
+  const filterDropdown = document.getElementById("filterDropdown");
+
+  // Remove any previously attached event listeners (cleanup)
+  const newButton = filterButton.cloneNode(true);
+  filterButton.parentNode.replaceChild(newButton, filterButton);
+
+  const newDropdown = filterDropdown.cloneNode(true);
+  filterDropdown.parentNode.replaceChild(newDropdown, filterDropdown);
+
+  // Re-query after DOM replacement
+  const button = document.getElementById("filterDropdownButton");
+  const dropdown = document.getElementById("filterDropdown");
+
+  if (button && dropdown) {
+    button.addEventListener("click", function (e) {
       e.stopPropagation();
-      filterDropdown.classList.toggle('hidden');
+      dropdown.classList.toggle("hidden");
     });
-    
-    // Close when clicking outside
-    document.addEventListener('click', function() {
-      filterDropdown.classList.add('hidden');
+
+    document.addEventListener("click", function () {
+      dropdown.classList.add("hidden");
     });
-    
-    filterDropdown.addEventListener('click', function(e) {
+
+    dropdown.addEventListener("click", function (e) {
       e.stopPropagation();
     });
   }
 });
 </script>
-
