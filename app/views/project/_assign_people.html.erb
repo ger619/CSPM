@@ -5,7 +5,7 @@
     <div>
       <h3 class="text-sm font-semibold mb-2">Craft Silicon Staff</h3>
       <p class="text-sm ">
-        <%= @craft_silicon_users.map(&:name).join(", ").first(5) %>
+        <%= @craft_silicon_users.first(5).map(&:name).join(", ") %>
       </p>
     </div>
 
