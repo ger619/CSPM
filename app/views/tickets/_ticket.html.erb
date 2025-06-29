@@ -196,7 +196,7 @@
               </td>
               
               <!-- Actions -->
-              <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium" data-controller="dropdown" data-dropdown-ticket-id-value="<%= ticket.id %>">
   <div class="relative inline-block text-left">
     <div>
       <button
@@ -205,7 +205,7 @@
         id="menu-button-<%= ticket.id %>"
         aria-expanded="false"
         aria-haspopup="true"
-        onclick="toggleDropdown('<%= ticket.id %>')">
+        data-action="click->dropdown#toggle">
         <svg class="w-5 h-5" 
              xmlns="http://www.w3.org/2000/svg" 
              viewBox="0 0 20 20" 
@@ -216,6 +216,7 @@
     </div>
 
     <div id="dropdown-<%= ticket.id %>" 
+         data-dropdown-target="menu"
          class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
       <div class="py-1" role="none">
         <%= link_to 'View',
@@ -241,6 +242,7 @@
 </td>
 
 
+
               
               <% if current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
                 <td class="px-4 py-4 whitespace-nowrap text-sm text-center hide-on-sidebar">
@@ -264,21 +266,6 @@ document.addEventListener("turbo:load", function() {
   const sidebar = document.getElementById("sidebar");
   const tableColumns = document.querySelectorAll(".hide-on-sidebar");
 
-  window.toggleDropdown = function(ticketId) {
-    const dropdown = document.getElementById(`dropdown-${ticketId}`);
-    if (!dropdown) return;
-
-    dropdown.classList.toggle('hidden');
-
-    // Close when clicking outside
-    const closeDropdown = function(event) {
-      if (!dropdown.contains(event.target) && event.target.id !== `menu-button-${ticketId}`) {
-        dropdown.classList.add('hidden');
-        document.removeEventListener('click', closeDropdown);
-      }
-    };
-    document.addEventListener('click', closeDropdown);
-  };
   
   function toggleColumns() {
     const isExpanded = sidebar.classList.contains("w-64");
