@@ -45,8 +45,8 @@ class ProjectController < ApplicationController
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
       @ticket = @project.tickets
-           .left_joins(:rich_text_content, :statuses, :users, :add_statuses)
-           .includes(:users, :statuses, :add_statuses)
+        .left_joins(:rich_text_content, :statuses, :users, :add_statuses)
+        .includes(:users, :statuses, :add_statuses)
       @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
 
       # ✅ Start/End Date
@@ -85,7 +85,7 @@ class ProjectController < ApplicationController
 
       # Filter by issue or subject from the project show search input form in the search bar
       @search_ticket_issue_and_subject = @project.tickets.where(
-          "issue ILIKE :q OR subject ILIKE :q", q: "%#{params[:search]}%"
+        'issue ILIKE :q OR subject ILIKE :q', q: "%#{params[:search]}%"
       )
 
       @selected_order = params[:order]
