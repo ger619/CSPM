@@ -1,381 +1,306 @@
 <div class="w-full">
-<%= render 'tickets/search_q' %>
+  <%= render 'tickets/search_q' %>
 
-<div class="overflow-x-auto shadow-md sm:rounded-lg w-full p-1">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-2">
-        Date of Issue
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Ticket ID
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Issue
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Priority
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Summary
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Assigned To
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Status
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Progress Bar
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Reported By
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-      <th scope="col" class="px-2 ">
-        VIEW
-      </th>
-      <th scope="col" class="px-2 py-3">
-          <div class="flex items-center">
-              Status Updated At
-              <a href="#">
-                <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                </svg>
-              </a>
-          </div>
-      </th>
-
-        <th scope="col" class="px-2 ">
-          EDIT
-        </th>
-
-      <th scope="col" class="px-2">
-        DELETE
-      </th>
-
-
-      <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-        <th scope="col" class="px-2 hide-on-sidebar">
-          Number of Edits
-        </th>
-        <th scope="col" class="px-2 hide-on-sidebar">
-          Last Edit
-        </th>
-      <% end %>
-    </tr>
-    </thead>
-    <tbody>
-
-
-    <% @ticket.each do |ticket| %>
-    <% if ticket.present? %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
-
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket)   %>
-        </th>
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white uppercase">
-          <% if ticket.unique_id.present? %>
-          <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket)  %>
+  <div class="overflow-x-auto border border-gray-200 rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Issue</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket ID</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue Type</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Severity</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reported By</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated</th>
+          <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          <% if current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hide-on-sidebar">Edits</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hide-on-sidebar">Last Edit</th>
           <% end %>
-        </th>
-        <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
-        </th>
-        <td class="px-2 py-2 ">
-          <% if ticket.priority == 'SEVERITY 1' %>
-               <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-            <% elsif ticket.priority == 'SEVERITY 2' %>
-               <p class='bg-red-600 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-            <% elsif ticket.priority == 'SEVERITY 3' %>
-               <p class='bg-yellow-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-            <% else %>
-               <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-          <% end %>
-        </td>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @ticket.each do |ticket| %>
+          <% if ticket.present? %>
+            <tr class="hover:bg-gray-50">
+              <!-- Date of Issue -->
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
+              </td>
+              
+              <!-- Ticket ID -->
+              <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 uppercase">
+                <% if ticket.unique_id.present? %>
+                  <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) %>
+                <% end %>
+              </td>
+              
+              <!-- Issue Type -->
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
+              </td>
+              
+              <!-- Severity -->
+              <td class="px-4 py-4 whitespace-nowrap">
+                <% if ticket.priority == 'SEVERITY 1' %>
+                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800">SEV-1</span>
+                <% elsif ticket.priority == 'SEVERITY 2' %>
+                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-800">SEV-2</span>
+                <% elsif ticket.priority == 'SEVERITY 3' %>
+                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800">SEV-3</span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800">SEV-4</span>
+                <% end %>
+              </td>
+              
+              <!-- Summary -->
+              
+              <td class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+                <div class="flex-shrink-0">
+                  <svg class="h-8 w-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col">
+                  <div class="font-medium"><%= ticket.subject.truncate(50) if ticket.subject.present? %></div>
+                  <% if ticket.subject.present? %>
+                    <div class="text-gray-500 mt-1"><%= ticket.subject.truncate(70) %></div>
+                  <% end %>
+                </div>
+              </td>
+              
+              <!-- Assigned To -->
+              <td class="px-4 py-4 whitespace-nowrap">
+                <% ticket.users.each do |user| %>
+                  <% if user.name.present? %>
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center">
+                        <span class="text-xs font-medium text-gray-600"><%= user.name %></span>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              </td>
+              
+              <!-- Status -->
+              <td class="px-4 py-4 whitespace-nowrap">
+                <% ticket.statuses.each do |status| %>
+                  <% case status.name %>
+                    <% when 'Resolved' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+                    <% when 'Closed' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Closed</span>
+                    <% when 'Reopened' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Reopened</span>
+                    <% when 'New' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">New</span>
+                    <% when 'Under Development' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Under Dev</span>
+                    <% when 'Work in Progress' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">WIP</span>
+                    <% when 'QA Testing' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-800">QA Testing</span>
+                    <% when 'Awaiting Build' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full border border-gray-300">Awaiting Build</span>
+                    <% when 'Client Confirmation Pending' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Client Confirm</span>
+                    <% when 'On-Hold' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">On-Hold</span>
+                    <% when 'Assigned' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Assigned</span>
+                    <% when 'Approved' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
+                    <% when 'Pending' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-green-100 to-gray-100">Pending</span>
+                    <% when 'Declined' %>
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Declined</span>
+                  <% end %>
+                <% end %>
+              </td>
+              
+              <!-- Progress Bar -->
+              <td class="px-4 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-16 mr-2 text-xs text-right text-gray-500">
+                    <%= ticket.progress_percentage || 0 %>%
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="h-2 rounded-full <%= if ticket.progress_percentage.nil?
+                                                      'bg-gray-400'
+                                                    elsif ticket.progress_percentage < 30
+                                                      'bg-red-600'
+                                                    elsif ticket.progress_percentage < 60
+                                                      'bg-blue-600'
+                                                    else
+                                                      ticket.progress_percentage >= 100 ? 'bg-black' : 'bg-green-600'
+                                                    end %>" 
+                         style="width: <%= ticket.progress_percentage || 0 %>%">
+                    </div>
+                  </div>
+                </div>
+              </td>
+              
+              <!-- Reported By -->
+              <td class="px-8 py-4 whitespace-nowrap text-sm text-gray-500">
+                <% if ticket.user.name.present? %>
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center">
+                      <span class="text-xs font-medium text-gray-600"><%= ticket.user.name %></span>
+                    </div>
+                  </div>
+                <% end %>
+              </td>
+              
+              <!-- Last Updated -->
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                <% if ticket.add_statuses.present? %>
+                  <%= ticket.add_statuses.first.updated_at.strftime('%H:%M %d %b %Y') %>
+                <% end %>
+              </td>
+              
+              <!-- Actions -->
+              <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+  <div class="relative inline-block text-left">
+    <div>
+      <button
+        type="button"
+        class="inline-flex justify-center w-8 h-8 rounded-full hover:bg-gray-100 focus:outline-none"
+        id="menu-button-<%= ticket.id %>"
+        aria-expanded="false"
+        aria-haspopup="true"
+        onclick="toggleDropdown('<%= ticket.id %>')">
+        <svg class="w-5 h-5 text-gray-500" 
+             xmlns="http://www.w3.org/2000/svg" 
+             viewBox="0 0 20 20" 
+             fill="currentColor">
+          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+        </svg>
+      </button>
+    </div>
 
-        <td class="px-2 py-2 truncate w-64 ">
-          <% if ticket.subject.present? %>
-            <%= ticket.subject.truncate(50) %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2 font-bold">
-          <% ticket.users.each do |user| %>
-            <% if user.name.present? %>
-                <%= user.name %>
-            <% end %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2 ">
-          <% ticket.statuses.each do |status| %>
-            <% case status.name %>
-          <% when 'Resolved' %>
-              <p class='bg-green-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-green-600'>
-                <%= status.name %>
-              </p>
-            <% when 'Closed' %>
-              <p class='bg-gray-800 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-gray-900'>
-                <%= status.name %>
-              </p>
-            <% when 'Reopened' %>
-              <p class="bg-red-900 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-red-800">
-                <%= status.name %>
-              </p>
-            <% when 'New' %>
-              <p class="bg-red-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-red-600">
-                <%= status.name %>
-              </p>
-            <% when 'Under Development' %>
-              <p class='bg-blue-300 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-blue-400'>
-                <%= status.name %>
-              </p>
-            <% when 'Work in Progress' %>
-              <p class='bg-gray-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-gray-600'>
-                <%= status.name %>
-              </p>
-            <% when 'QA Testing' %>
-              <p class='bg-pink-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-pink-600'>
-                <%= status.name %>
-              </p>
-            <% when 'Awaiting Build' %>
-              <p class='text-center text-gray-900 dark:text-slate-100 font-semibold rounded p-1 border-black dark:border-slate-100 border border-b-4 border-r-2'>
-                <%= status.name %>
-              </p>
-            <% when 'Client Confirmation Pending' %>
-              <p class='bg-purple-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-purple-600'>
-                <%= status.name %>
-              </p>
-            <% when 'On-Hold' %>
-              <p class='bg-yellow-300 text-center text-black font-semibold rounded p-1 border-r-2 border-b-4 border-yellow-400'>
-                <%= status.name %>
-              </p>
-            <% when 'Assigned' %>
-              <p class='bg-blue-800 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-blue-900'>
-                <%= status.name %>
-              </p>
-            <% when 'Approved' %>
-              <p class='bg-green-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
-                <%= status.name %>
-              </p>
-              <% when 'Pending' %>
-              <p class='bg-gradient-to-r from-green-800 to-black text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
-                <%= status.name %>
-              </p>
-        <% when 'Declined' %>
-              <p class='bg-gray-800 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-gray-900'>
-                <%= status.name %>
-              </p>
-            <% end %>
-          <% end %>
-        </td>
-        <!-- Progress Bar -->
-        <td class="pl-2 pr-5 py-2">
-          <% progress = ticket.progress_percentage || 0 %>
-          <% radius = 20 %>
-          <% stroke = 5 %>
-          <% normalized_radius = radius - stroke %>
-          <% circumference = 2 * Math::PI * normalized_radius %>
-          <% stroke_dashoffset = circumference - (progress.to_f / 100) * circumference %>
+    <div id="dropdown-<%= ticket.id %>" 
+         class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+      <div class="py-1" role="none">
+        <%= link_to 'View',
+            project_ticket_path(ticket.project, ticket),
+            class: 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900' %>
 
-          <% color = if ticket.progress_percentage.nil?
-                       '#9CA3AF' # gray-400
-                     elsif ticket.progress_percentage < 30
-                       '#DC2626' # red-600
-                     elsif ticket.progress_percentage < 60
-                       '#2563EB' # blue-600
-                     else
-                       ticket.progress_percentage >= 100 ? '#000000' : '#16A34A' # black or green-600
-                     end %>
-
-          <div class="relative flex items-center justify-center w-16 h-16">
-            <!-- SVG Donut -->
-            <svg
-              height="100%"
-              width="100%"
-              viewBox="0 0 <%= radius * 2 %> <%= radius * 2 %>"
-              class="transform -rotate-90"
-            >
-              <!-- Background Circle -->
-              <circle
-                stroke="#E5E7EB"
-                fill="transparent"
-                stroke-width="<%= stroke %>"
-                r="<%= normalized_radius %>"
-                cx="<%= radius %>"
-                cy="<%= radius %>"
-                />
-              <!-- Progress Circle -->
-              <circle
-                stroke="<%= color %>"
-                fill="transparent"
-                stroke-width="<%= stroke %>"
-                stroke-dasharray="<%= circumference %>"
-                stroke-dashoffset="<%= stroke_dashoffset %>"
-                stroke-linecap="round"
-                r="<%= normalized_radius %>"
-                cx="<%= radius %>"
-                cy="<%= radius %>"
-                />
-            </svg>
-            <!-- Centered Label -->
-            <div class="absolute text-sm font-bold" style="color: <%= color %>">
-              <%= progress %>%
-            </div>
-          </div>
-        </td>
-
-        <td class="px-2 py-2 capitalize">
-          <% if ticket.user.name.present? %>
-          <%= ticket.user.name %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2">
-          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-        </td>
-        <td class="px-2 py-2">
-          <% if ticket.add_statuses.present? %>
-            <%= ticket.add_statuses.first.updated_at.strftime('%H:%M of %d %b %Y') %>
-          <% end %>
-        </td>
-
-        <td class="px-2 py-2">
-          <% if can?(:edit, ticket) %>
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 ' %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2">
-          <% if can? :destroy, ticket %>
-            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-2 rounded-md font-bold rounded-lg text-slate-100'  %>
-          <% end %>
-        </td>
-        <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
-          <td class="px-2 py-2 text-center hide-on-sidebar">
-           <%= ticket.update_count %>
-          </td>
-          <td class="px-2 py-2 text-center hide-on-sidebar">
-            <%= ticket.last_updated_at ? ticket.last_updated_at.strftime("%T") : 'Never' %>
-          </td>
+        <% if can?(:edit, ticket) %>
+          <%= link_to 'Edit',
+              edit_project_ticket_path(ticket.project, ticket),
+              class: 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900' %>
         <% end %>
-      </tr>
-    <% end %>
-    <% end %>
-    </tbody>
-  </table>
-</div>
+
+        <% if can?(:destroy, ticket) %>
+          <%= button_to 'Delete',
+              [ticket.project, ticket],
+              method: :delete,
+              data: { turbo_confirm: 'Are you sure?' },
+              class: 'block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</td>
+
+
+              
+              <% if current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
+                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-center hide-on-sidebar">
+                  <%= ticket.update_count %>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-center hide-on-sidebar">
+                  <%= ticket.last_updated_at ? ticket.last_updated_at.strftime("%T") : 'Never' %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>
- document.addEventListener("turbo:load", function() {
-    const sidebar = document.getElementById("sidebar"); // Ensure sidebar has this ID
-    const tableColumns = document.querySelectorAll(".hide-on-sidebar");
+document.addEventListener("turbo:load", function() {
+  // Sidebar column visibility toggle
+  const sidebar = document.getElementById("sidebar");
+  const tableColumns = document.querySelectorAll(".hide-on-sidebar");
 
-    function toggleColumns() {
-      if (sidebar.classList.contains("w-64")) {
-        // If sidebar is expanded, hide the columns
-        tableColumns.forEach(col => {
-          col.style.display = "none";
-        });
-      } else {
-        // If sidebar is collapsed, show the columns
-        tableColumns.forEach(col => {
-          col.style.display = "table-cell"; // Use table-cell instead of block
-        });
+  window.toggleDropdown = function(ticketId) {
+    const dropdown = document.getElementById(`dropdown-${ticketId}`);
+    if (!dropdown) return;
+
+    dropdown.classList.toggle('hidden');
+
+    // Close when clicking outside
+    const closeDropdown = function(event) {
+      if (!dropdown.contains(event.target) && event.target.id !== `menu-button-${ticketId}`) {
+        dropdown.classList.add('hidden');
+        document.removeEventListener('click', closeDropdown);
       }
-    }
-
-    toggleColumns(); // Run initially
+    };
+    document.addEventListener('click', closeDropdown);
+  };
+  
+  function toggleColumns() {
+    const isExpanded = sidebar.classList.contains("w-64");
+    tableColumns.forEach(col => {
+      col.style.display = isExpanded ? "none" : "table-cell";
+    });
+  }
+  
+  // Initialize and observe sidebar changes
+  if (sidebar) {
+    toggleColumns();
     const observer = new MutationObserver(toggleColumns);
-    observer.observe(sidebar, { attributes: true });
-  });
+    observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
+  }
 
-  document.addEventListener("DOMContentLoaded", function () {
-      const table = document.querySelector("table");
-      const headers = table.querySelectorAll("th div a");
-      
-      headers.forEach((header, index) => {
-          header.addEventListener("click", function (event) {
-              event.preventDefault();
-              sortTableByColumn(table, index);
-          });
-      });
-  });
-
-  function sortTableByColumn(table, columnIndex) {
+  // Sorting functionality
+  document.querySelectorAll("th[scope='col']").forEach(header => {
+    header.addEventListener("click", function() {
+      const table = this.closest("table");
+      const headerIndex = Array.from(this.parentElement.children).indexOf(this);
       const tbody = table.querySelector("tbody");
       const rows = Array.from(tbody.querySelectorAll("tr"));
-      const isAscending = table.dataset.sortOrder !== "asc";
+      const isAscending = !this.classList.contains("asc");
       
-      rows.sort((rowA, rowB) => {
-          const cellA = rowA.cells[columnIndex].textContent.trim();
-          const cellB = rowB.cells[columnIndex].textContent.trim();
-          
-          const isNumeric = !isNaN(cellA) && !isNaN(cellB);
-          if (isNumeric) {
-              return isAscending ? cellA - cellB : cellB - cellA;
-          }
-          return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+      // Reset all headers
+      table.querySelectorAll("th[scope='col']").forEach(h => {
+        h.classList.remove("asc", "desc");
       });
       
-      tbody.innerHTML = "";
-      rows.forEach(row => tbody.appendChild(row));
+      // Set current sort direction
+      this.classList.add(isAscending ? "asc" : "desc");
       
-      table.dataset.sortOrder = isAscending ? "asc" : "desc";
-  }
+      // Sort rows
+      rows.sort((rowA, rowB) => {
+        const cellA = rowA.children[headerIndex].textContent.trim();
+        const cellB = rowB.children[headerIndex].textContent.trim();
+        
+        // Handle numeric values
+        if (!isNaN(cellA) {
+          return isAscending ? cellA - cellB : cellB - cellA;
+        }
+        
+        // Handle dates
+        const dateA = Date.parse(cellA);
+        const dateB = Date.parse(cellB);
+        if (!isNaN(dateA) {
+          return isAscending ? dateA - dateB : dateB - dateA;
+        }
+        
+        // Default string comparison
+        return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+      });
+      
+      // Re-insert rows
+      rows.forEach(row => tbody.appendChild(row));
+    });
+  });
+});
 </script>
