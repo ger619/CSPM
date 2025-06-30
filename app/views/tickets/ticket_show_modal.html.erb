@@ -1,3 +1,4 @@
+<%= turbo_frame_tag "modal" do %>
 
 <div class="fixed inset-y-0 right-0 z-50 w-full max-w-2xl bg-white dark:bg-gray-900 shadow-xl overflow-y-auto border-l border-gray-200 dark:border-gray-700" data-controller="modal">
   <div class="px-6 py-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
@@ -94,3 +95,4 @@
 <div class="fixed inset-0 z-40 bg-black bg-opacity-30 backdrop-blur-sm" data-action="click->modal#close"></div>
 
 
+<% end %>
