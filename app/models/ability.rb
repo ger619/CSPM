@@ -17,7 +17,7 @@ class Ability
       can :generate, :report # allow ceo to do anything cept manage all
 
     elsif user.has_role?('project manager')
-      can %i[read assign_user unassign_user add_team], Project
+      can %i[read assign_user unassign_user add_team manage_users], Project
       can %i[create read assign_tag unassign_tag add_status update_issue_type update_due_date update_priority index_home all_tickets], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
@@ -31,7 +31,7 @@ class Ability
       can :manage, Team
 
     elsif user.has_role? :agent
-      can %i[read assign_user unassign_user], Project
+      can %i[read assign_user unassign_user add_team manage_users], Project
       can %i[create read assign_tag unassign_tag update_status add_status index_home all_tickets], Ticket
       can %i[edit destroy update], Ticket, user_id: user.id
       can :manage, Issue, user_id: user.id
