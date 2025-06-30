@@ -47,13 +47,13 @@
               <!-- Severity -->
               <td class="px-4 py-4 whitespace-nowrap">
                 <% if ticket.priority == 'SEVERITY 1' %>
-                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800">SEV-1</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-red-100 text-red-800">SEVERITY-1</span>
                 <% elsif ticket.priority == 'SEVERITY 2' %>
-                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-800">SEV-2</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-orange-100 text-orange-800">SEVERITY-2</span>
                 <% elsif ticket.priority == 'SEVERITY 3' %>
-                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800">SEV-3</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-yellow-100 text-yellow-800">SEVERITY-3</span>
                 <% else %>
-                  <span class="px-2 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800">SEV-4</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-blue-100 text-blue-800">SEVERITY-4</span>
                 <% end %>
               </td>
               
@@ -66,9 +66,9 @@
                   </svg>
                 </div>
                 <div class="flex flex-col">
-                  <div class="font-medium"><%= ticket.subject.truncate(50) if ticket.subject.present? %></div>
+                  <div class="font-medium text-sm"><%= ticket.subject.truncate(70) if ticket.subject.present? %></div>
                   <% if ticket.subject.present? %>
-                    <div class= mt-1"><%= ticket.subject.truncate(70) %></div>
+                    <div class=" mt-1 text-sm"><%= ticket.subject.truncate(70) %></div>
                   <% end %>
                 </div>
               </td>
