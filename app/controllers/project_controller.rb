@@ -78,6 +78,21 @@ class ProjectController < ApplicationController
         )
       end
 
+      # All assigned tickets and open tickets and closed tickets
+      @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
+      # All assigned and opened tickets
+      @ticket = @ticket.joins(:users).where(users: { id: current_user.id }).where.not(statuses: { name: %w[Closed Resolved Declined] }) if params[:filter] == 'Assigned_opened'
+
+      # All assigned and closed tickets
+      @ticket = @ticket.joins(:users).where(users: { id: current_user.id }).where(statuses: { name: %w[Closed Resolved Declined] }) if params[:filter] == 'Assigned_closed'
+
+      # All open tickets for all users
+      @ticket = @ticket.joins(:users).where.not(statuses: { name: %w[Closed Resolved Declined] }) if params[:filter] == 'Open'
+      # All open tickets for all users
+      @ticket = @ticket.joins(:users, :statuses).where(statuses: { name: %w[Closed Resolved Declined] }) if params[:filter] == 'Closed_for_all'
+
+      # All closed tickets for tickets closed by the current user
+
       # Ordering
       @selected_order = params[:order]
       @ticket = @ticket.order(created_at: params[:order] == 'asc' ? :asc : :desc)
@@ -117,10 +132,13 @@ class ProjectController < ApplicationController
 
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
+      @assigned_and_tickets = @project.tickets.joins(:users, :statuses).where(users: { id: current_user.id }).where.not(statuses: { name: %w[Closed Resolved Declined] }).count
       @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
         .where(users: { id: current_user.id })
         .where(statuses: { name: %w[Closed Resolved] }).count
+      @closed_tickets = @project.tickets.joins(:statuses).where(statuses: { name: %w[Closed Resolved] }).count
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
+      @total_tickets_open = @project.tickets.joins(:statuses).where.not(statuses: { name: %w[Closed Resolved Declined] }).count
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
