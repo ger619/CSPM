@@ -44,9 +44,17 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
-      @ticket = @project.tickets.left_joins(:rich_text_content, :statuses, :users)
+      @per_page = 10
+      @page = params[:page].to_i.positive? ? params[:page].to_i : 1
+      offset = (@page - 1) * @per_page
 
-      # ✅ Apply filters while persisting selection
+      @ticket = @project.tickets
+        .left_joins(:rich_text_content, :statuses, :users, :add_statuses)
+        .includes(:users, :statuses, :add_statuses)
+
+      @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
+
+      # Filters
       if params[:start_date].present? && params[:end_date].present?
         @ticket = @ticket.where('tickets.created_at::date BETWEEN ? AND ?', params[:start_date], params[:end_date])
       elsif params[:start_date].present?
@@ -55,63 +63,63 @@ class ProjectController < ApplicationController
         @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
       end
 
-      # Get the clients of CRaft silicon
-      @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
-
-      # Get the staff who have the email of Craft silicon
-      @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
-
-      @ticket = @ticket.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present?
-      @ticket = @ticket.where(priority: params[:priority]) if params[:priority].present?
-      @ticket = @ticket.where(issue: params[:issue]) if params[:issue].present?
+      @ticket = @ticket.where('statuses.name ILIKE ?', params[:status]) if params[:status].present?
+      @ticket = @ticket.where('priority ILIKE ?', params[:priority]) if params[:priority].present?
+      @ticket = @ticket.where('issue ILIKE ?', params[:issue]) if params[:issue].present?
       @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
-      order_direction = params[:order] == 'asc' ? 'ASC' : 'DESC'
-      @ticket = @ticket.joins(:add_statuses).order("add_statuses.updated_at #{order_direction}") if params[:order].present?
+
+      # Full-text-like search
       if params[:query].present?
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
-          'action_text_rich_texts.body ILIKE ? OR issue ILIKE ? OR priority ILIKE ? OR statuses.name ILIKE ? OR unique_id ILIKE ?
-      OR users.first_name ILIKE ? OR users.last_name ILIKE ? OR tickets.created_at::text ILIKE ?',
-          query, query, query, query, query, query, query, query
+          'action_text_rich_texts.body ILIKE :q OR issue ILIKE :q OR priority ILIKE :q OR statuses.name ILIKE :q OR unique_id ILIKE :q
+        OR users.first_name ILIKE :q OR users.last_name ILIKE :q OR tickets.created_at::text ILIKE :q',
+          q: query
         )
       end
 
-      @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
+      # Ordering
+      @selected_order = params[:order]
+      @ticket = @ticket.order(created_at: params[:order] == 'asc' ? :asc : :desc)
 
-      @ticket = @ticket.joins(:users).where(users: { id: current_user.id }) if params[:filter] == 'Assigned'
-      @ticket = @ticket.joins(:users).where.not(statuses: { name: %w[Closed Resolved Declined] }) if params[:filter] == 'Open'
-
-      @tickets = if params[:filter] == 'closed_assigned'
-                   @project.tickets.joins(:users, :statuses)
-                     .where(users: { id: current_user.id })
-                     .where(statuses: { name: %w[Closed Resolved] })
-                 else
-                   @project.tickets.joins(:users, :statuses)
-                     .where(users: { id: current_user.id })
-                     .where.not(statuses: { name: %w[Closed Resolved] })
-                 end
-
-      # ✅ Order by descending creation date
-      @ticket = @ticket.order(created_at: :desc)
-
-      # Store the count of the filtered tickets
+      # Paginate main result
       @ticket_count = @ticket.count
+      @total_pages = (@ticket_count / @per_page.to_f).ceil
+      @ticket = @ticket.offset(offset).limit(@per_page)
 
-      # ✅ Pagination (Fix offset calculation)
-      @per_page = 10
-      @page = params[:page].to_i.positive? ? params[:page].to_i : 1
-      @total_pages = (@ticket.count / @per_page.to_f).ceil
-      @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
+      # Last month tickets - paginated if filter active
+      @use_last_month_filter = params[:last_month].present?
+      if @use_last_month_filter
+        @last_one_month_tickets = @project.tickets
+          .where('created_at >= ?', 1.month.ago)
+          .order(created_at: :desc)
+          .offset(offset)
+          .limit(@per_page)
+      end
 
-      # ✅ Ticket counts
+      # Search by issue/subject - also paginate
+      @search_ticket_issue_and_subject = if params[:search].present?
+                                           @project.tickets
+                                             .where('issue ILIKE :q OR subject ILIKE :q', q: "%#{params[:search]}%")
+                                             .offset(offset)
+                                             .limit(@per_page)
+                                         else
+                                           @project.tickets.none
+                                         end
+
+      # Misc
+      @selected_status = params[:status]
+      @selected_priority = params[:priority]
+      @selected_issue = params[:issue]
+      @selected_user_id = params[:user_id]
+      @selected_start_date = params[:start_date]
+      @selected_end_date = params[:end_date]
+
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
-
       @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
         .where(users: { id: current_user.id })
-        .where(statuses: { name: %w[Closed Resolved] })
-        .count
-      # SLA Breaches on Tickets
+        .where(statuses: { name: %w[Closed Resolved] }).count
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'

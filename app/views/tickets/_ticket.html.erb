@@ -124,7 +124,20 @@
     <tbody>
 
 
-    <% @ticket.each do |ticket| %>
+    <% filtered_tickets =
+     if params[:search].present?
+       @search_ticket_issue_and_subject
+     elsif params[:start_date].present? || params[:end_date].present? ||
+           params[:status].present? || params[:priority].present? || params[:issue].present? ||
+           params[:user_id].present? || params[:query].present? || params[:order].present? ||
+           params[:filter].present?
+       @ticket
+     elsif @use_last_month_filter
+       @last_one_month_tickets
+     else
+       @ticket
+     end %>
+    <% filtered_tickets.each do |ticket| %>
     <% if ticket.present? %>
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
 
