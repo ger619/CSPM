@@ -13,6 +13,17 @@
  *= require_tree .
  *= require_self
  */
+
+ /* Animation for modal appearance */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.fixed.inset-y-0.right-0 {
+  animation: slideIn 0.3s ease-out;
+}
+
 .modal {
   position: fixed;
   z-index: 1;
