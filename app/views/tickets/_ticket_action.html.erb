@@ -46,7 +46,7 @@
     <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
       <% current_status = @ticket.statuses.first&.name %>
       <% transition_map = {
-        'New' => ['Assigned'],
+        'New' => ['Assigned', ""],
         'Assigned' => ['Work in Progress'],
         'Work in Progress' => ['Declined', 'Resolved', 'On-Hold', 'Under Development', 'Client Confirmation Pending'],
         'On-Hold' => ['Under Development', 'Work in Progress'],
