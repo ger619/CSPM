@@ -1,0 +1,153 @@
+<%= turbo_frame_tag "modal" do %>
+
+<div class="fixed inset-0 z-50 overflow-hidden">
+  <!-- Blurred background -->
+  <div class="absolute inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm" data-action="click->turbo-modal#hideModal"></div>
+  
+  <!-- Modal container -->
+  <div class="fixed inset-y-0 right-0 w-full max-w-lg bg-white shadow-xl overflow-y-auto">
+    <div class="p-6">
+      <!-- Close button -->
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" data-action="click->turbo-modal#hideModal">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Ticket header -->
+      <div class="border-b pb-4 mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Ticket Details</h2>
+        <p class="text-sm text-gray-500">Issue ID: <%= @ticket.unique_id %></p>
+      </div>
+
+      <!-- Main content -->
+      <div class="grid gap-6">
+        <!-- First row - Basic info -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Created by</p>
+            <p class="font-medium"><%= @ticket.user.name %></p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Type of Issue</p>
+            <p class="font-medium"><%= @ticket.issue %></p>
+          </div>
+        </div>
+
+        <!-- Second row - Priority/Status -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Priority</p>
+            <p class="font-medium"><%= @ticket.priority %></p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Status</p>
+            <div class="font-medium">
+              <%= render 'ticket_status' %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Third row - Product info -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Product</p>
+            <p class="font-light">
+              <% if @ticket.software.present? %>
+                <%= @ticket.software&.name || 'No Software Assigned' %>
+              <% end %>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Sub-Product</p>
+            <p class="font-light">
+              <% if @ticket.software.present? %>
+                <% selected_groupware = @ticket.software.groupwares.find_by(id: @ticket.groupware_id) %>
+                <%= selected_groupware ? selected_groupware.name : 'No Groupware Assigned' %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+
+        <!-- Image section -->
+        <% if @ticket.ticket_image.present? %>
+          <div>
+            <p class="text-sm font-medium text-gray-500 mb-2">Attached Image</p>
+            <div class="relative">
+              <%= image_tag @ticket.ticket_image, class: 'w-full h-48 object-contain rounded border border-gray-200 cursor-pointer', data: { action: 'click->image-modal#openModal' } %>
+            </div>
+          </div>
+        <% elsif @project.image.present? %>
+          <div>
+            <p class="text-sm font-medium text-gray-500 mb-2">Project Image</p>
+            <%= image_tag @project.image, class: 'w-16' %>
+          </div>
+        <% end %>
+
+        <!-- SLA Section -->
+        <div class="border-t pt-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">SLA Information</h3>
+          
+          <div class="space-y-3">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Time Created</p>
+              <p class="font-light"><%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %></p>
+            </div>
+            
+            <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
+              <div>
+                <p class="text-sm font-medium text-gray-500">Target Response Time</p>
+                <p class="font-light"><%= @ticket.initial_response_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
+              </div>
+              
+              <div>
+                <p class="text-sm font-medium text-gray-500">Target Repair Time</p>
+                <p class="font-light"><%= @ticket.target_repair_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
+              </div>
+              
+              <div>
+                <p class="text-sm font-medium text-gray-500">Target Resolution Time</p>
+                <p class="font-light"><%= @ticket.resolution_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
+              </div>
+              
+              <% if @sla_ticket.present? %>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Response Time SLA Status</p>
+                  <p class="font-light"><%= @sla_ticket.sla_status %></p>
+                </div>
+                
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Repair Time SLA Status</p>
+                  <p class="font-light"><%= @sla_ticket.sla_target_response_deadline %></p>
+                </div>
+                
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Resolution Time SLA Status</p>
+                  <p class="font-light"><%= @sla_ticket.sla_resolution_deadline %></p>
+                </div>
+              <% end %>
+            <% end %>
+            
+            <% if @ticket.due_date.present? %>
+              <div>
+                <p class="text-sm font-medium text-gray-500">Target Due Date</p>
+                <p class="font-light">
+                  <%= @ticket.due_date.strftime("%d %b %Y at %I:%M %p") %> 
+                  (<%= distance_of_time_in_words(DateTime.now, @ticket.due_date) %>)
+                </p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Image modal (keep this the same as before) -->
+<div id="imageModal" class="modal hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-75" data-controller="image-modal" data-image-modal-target="modal">
+  <span class="close absolute top-4 right-4 text-white text-3xl cursor-pointer" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+  <img class="modal-content block max-w-full max-h-screen m-auto" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
+</div>
+
+<% end %>

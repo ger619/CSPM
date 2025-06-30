@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
   # Set the current project for all actions
   before_action :set_project
   # Set the ticket for specific actions
-  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status]
+  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status modal_show]
   # Load and authorize resources using CanCanCan
   load_and_authorize_resource
 
@@ -444,6 +444,14 @@ class TicketsController < ApplicationController
     @project = Project.find(params[:project_id])
     @tickets = @project.tickets.joins(:sla_tickets).where("sla_tickets.sla_status = 'Not Breached'")
   end
+
+  def modal_show
+    @sla_ticket = @ticket.sla_ticket if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
+
+    render partial: "tickets/ticket_show_modal", layout: false
+  end
+
+
 
   private
 
