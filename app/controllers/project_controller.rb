@@ -44,12 +44,17 @@ class ProjectController < ApplicationController
   # GET /projects/id
   def show
     if current_user.has_role?(:admin) || @project.users.include?(current_user) || current_user.has_role?(:observer) || current_user.has_role?(:agent)
+      @per_page = 10
+      @page = params[:page].to_i.positive? ? params[:page].to_i : 1
+      offset = (@page - 1) * @per_page
+
       @ticket = @project.tickets
         .left_joins(:rich_text_content, :statuses, :users, :add_statuses)
         .includes(:users, :statuses, :add_statuses)
+
       @statuses = @project.tickets.joins(:statuses).distinct.pluck('statuses.name')
 
-      # ✅ Start/End Date
+      # Filters
       if params[:start_date].present? && params[:end_date].present?
         @ticket = @ticket.where('tickets.created_at::date BETWEEN ? AND ?', params[:start_date], params[:end_date])
       elsif params[:start_date].present?
@@ -58,37 +63,51 @@ class ProjectController < ApplicationController
         @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
       end
 
-      # ✅ Use ILIKE for fuzzy/case-insensitive matching
       @ticket = @ticket.where('statuses.name ILIKE ?', params[:status]) if params[:status].present?
       @ticket = @ticket.where('priority ILIKE ?', params[:priority]) if params[:priority].present?
       @ticket = @ticket.where('issue ILIKE ?', params[:issue]) if params[:issue].present?
-
       @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
 
-      # ✅ Search Query
+      # Full-text-like search
       if params[:query].present?
         query = "%#{params[:query]}%"
         @ticket = @ticket.where(
           'action_text_rich_texts.body ILIKE :q OR issue ILIKE :q OR priority ILIKE :q OR statuses.name ILIKE :q OR unique_id ILIKE :q
-          OR users.first_name ILIKE :q OR users.last_name ILIKE :q OR tickets.created_at::text ILIKE :q',
+        OR users.first_name ILIKE :q OR users.last_name ILIKE :q OR tickets.created_at::text ILIKE :q',
           q: query
         )
       end
 
-      # ✅ Order by ticket creation date (asc/desc)
-      if params[:order].present?
-        order_direction = params[:order] == 'asc' ? :asc : :desc
-        @ticket = @ticket.order(created_at: order_direction)
-      else
-        @ticket = @ticket.order(created_at: :desc)
+      # Ordering
+      @selected_order = params[:order]
+      @ticket = @ticket.order(created_at: params[:order] == 'asc' ? :asc : :desc)
+
+      # Paginate main result
+      @ticket_count = @ticket.count
+      @total_pages = (@ticket_count / @per_page.to_f).ceil
+      @ticket = @ticket.offset(offset).limit(@per_page)
+
+      # Last month tickets - paginated if filter active
+      @use_last_month_filter = params[:last_month].present?
+      if @use_last_month_filter
+        @last_one_month_tickets = @project.tickets
+          .where('created_at >= ?', 1.month.ago)
+          .order(created_at: :desc)
+          .offset(offset)
+          .limit(@per_page)
       end
 
-      # Filter by issue or subject from the project show search input form in the search bar
-      @search_ticket_issue_and_subject = @project.tickets.where(
-        'issue ILIKE :q OR subject ILIKE :q', q: "%#{params[:search]}%"
-      )
+      # Search by issue/subject - also paginate
+      @search_ticket_issue_and_subject = if params[:search].present?
+                                           @project.tickets
+                                             .where('issue ILIKE :q OR subject ILIKE :q', q: "%#{params[:search]}%")
+                                             .offset(offset)
+                                             .limit(@per_page)
+                                         else
+                                           @project.tickets.none
+                                         end
 
-      @selected_order = params[:order]
+      # Misc
       @selected_status = params[:status]
       @selected_priority = params[:priority]
       @selected_issue = params[:issue]
@@ -96,28 +115,11 @@ class ProjectController < ApplicationController
       @selected_start_date = params[:start_date]
       @selected_end_date = params[:end_date]
 
-      # Show all the tickets for the last one month when last month filter is clicked
-      @last_one_month_tickets = @project.tickets.where('created_at >= ?', 1.month.ago).order(created_at: :desc)
-      @use_last_month_filter = params[:last_month].present?
-
-      # Store the count of the filtered tickets
-      @ticket_count = @ticket.count
-
-      # ✅ Pagination (Fix offset calculation)
-      @per_page = 10
-      @page = params[:page].to_i.positive? ? params[:page].to_i : 1
-      @total_pages = (@ticket.count / @per_page.to_f).ceil
-      @ticket = @ticket.offset((@page - 1) * @per_page).limit(@per_page)
-
-      # ✅ Ticket counts
       @created_tickets = @project.tickets.where(user_id: current_user.id).count
       @assigned_tickets_count = @project.tickets.joins(:users).where(users: { id: current_user.id }).count
-
       @closed_assigned_tickets = @project.tickets.joins(:users, :statuses)
         .where(users: { id: current_user.id })
-        .where(statuses: { name: %w[Closed Resolved] })
-        .count
-      # SLA Breaches on Tickets
+        .where(statuses: { name: %w[Closed Resolved] }).count
       @breached_target_tickets_count = @project.tickets.count_target_breached_sla
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
