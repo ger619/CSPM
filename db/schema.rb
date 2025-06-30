@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_18_141646) do
     t.uuid "groupware_id"
     t.uuid "script_id"
     t.string "label"
-    t.uuid "defect_id", null: false
+    t.uuid "defect_id"
     t.index ["defect_id"], name: "index_bugs_on_defect_id"
     t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
     t.index ["script_id"], name: "index_bugs_on_script_id"
