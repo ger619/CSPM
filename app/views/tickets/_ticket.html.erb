@@ -258,6 +258,27 @@
                         </div>
                       <% end %>
 
+                    <div class="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="h-5 w-5">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M15.75 10.5L12 14.25l-3.75-3.75" />
+                      </svg>
+
+                      <%= link_to 'Quick View',
+                          modal_show_project_ticket_path(ticket.project, ticket),
+                          data: { turbo_frame: "modal" },
+                          controller: "modal",
+                          action: "modal#close",
+                          class: 'text-sm hover:text-blue-600 hover:underline' %>
+                    </div>
+
+
 
                     <% if can?(:destroy, ticket) %>
                       <div class="flex items-center gap-2 text-red-600">
