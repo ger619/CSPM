@@ -1,27 +1,27 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ["dropdown"]
+  static targets = ['dropdown']
 
   toggle() {
-    this.dropdownTarget.classList.toggle('hidden')
+    this.dropdownTarget.classList.toggle('hidden');
   }
 
   close() {
-    this.dropdownTarget.classList.add('hidden')
+    this.dropdownTarget.classList.add('hidden');
   }
 
   // Close when clicking outside
   closeOnClickOutside(event) {
     if (!this.element.contains(event.target)) {
-      this.close()
+      this.close();
     }
   }
 
   // Close when pressing Escape
   closeWithKey(e) {
-    if (e.key === "Escape") {
-      this.close()
+    if (e.key === 'Escape') {
+      this.close();
     }
   }
 }

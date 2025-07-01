@@ -1,42 +1,42 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ["modalContainer"] 
+  static targets = ['modalContainer']
 
   connect() {
-    document.body.classList.add('overflow-hidden')
-    document.addEventListener('keydown', this.closeWithKey.bind(this))
-    this.element.addEventListener('click', this.closeOnClickOutside.bind(this))
+    document.body.classList.add('overflow-hidden');
+    document.addEventListener('keydown', this.closeWithKey.bind(this));
+    this.element.addEventListener('click', this.closeOnClickOutside.bind(this));
   }
 
   disconnect() {
-    document.body.classList.remove('overflow-hidden')
-    document.removeEventListener('keydown', this.closeWithKey.bind(this))
+    document.body.classList.remove('overflow-hidden');
+    document.removeEventListener('keydown', this.closeWithKey.bind(this));
   }
 
   async close() {
     // Add slide-out class to trigger animation
-    this.element.querySelector('.fixed.inset-y-0.right-0').classList.add('slide-out')
-    
+    this.element.querySelector('.fixed.inset-y-0.right-0').classList.add('slide-out');
+
     // Wait for animation to complete before removing
-    await new Promise(resolve => setTimeout(resolve, 300))
-    
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
     // Remove the modal
-    this.element.remove()
+    this.element.remove();
     if (this.element.closest('turbo-frame')) {
-      this.element.closest('turbo-frame').removeAttribute('src')
+      this.element.closest('turbo-frame').removeAttribute('src');
     }
   }
 
   closeOnClickOutside(event) {
     if (event.target === this.element) {
-      this.close()
+      this.close();
     }
   }
 
   closeWithKey(event) {
     if (event.key === 'Escape') {
-      this.close()
+      this.close();
     }
   }
 }

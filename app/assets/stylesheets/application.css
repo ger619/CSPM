@@ -14,7 +14,7 @@
  *= require_self
  */
 
- /* Animation for modal appearance */
+/* Animation for modal appearance */
 @keyframes slideIn {
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
