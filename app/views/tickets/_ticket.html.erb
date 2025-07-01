@@ -26,9 +26,16 @@
       <tbody class="">
         <% @ticket.each do |ticket| %>
           <% if ticket.present? %>
-            <tr class="">
-              <!-- Date of Issue -->
-              <td class="px-4 py-4 whitespace-nowrap text-sm">
+          <tr class="<%= case ticket.issue
+                         when 'SUPPORT' then 'bg-[#007ACC]'
+                         when 'NEW FEATURE' then 'bg-[#00B894]'
+                         when 'BUG' then 'bg-[#E53935]'
+                         when 'REQUEST' then 'bg-[#6c5CE7]'
+                         when 'INCIDENT' then 'bg-[#F39C12]'
+                         when 'CHANGE REQUEST' then 'bg-[#2ECC71]'
+                         else ''
+                         end %>">
+            <td class="px-4 py-4 whitespace-nowrap text-sm">
                 <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
               </td>
               
@@ -47,13 +54,13 @@
               <!-- Severity -->
               <td class="px-4 py-4 whitespace-nowrap">
                 <% if ticket.priority == 'SEVERITY 1' %>
-                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-red-100 text-red-800">SEVERITY-1</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-red-100 text-red-800">SEVERITY 1</span>
                 <% elsif ticket.priority == 'SEVERITY 2' %>
-                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-orange-100 text-orange-800">SEVERITY-2</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-orange-100 text-orange-800">SEVERITY 2</span>
                 <% elsif ticket.priority == 'SEVERITY 3' %>
-                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-yellow-100 text-yellow-800">SEVERITY-3</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-yellow-100 text-yellow-800">SEVERITY 3</span>
                 <% else %>
-                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-blue-100 text-blue-800">SEVERITY-4</span>
+                  <span class="px-2 py-1 text-sm font-bold rounded-lg bg-blue-100 text-blue-800">SEVERITY 4</span>
                 <% end %>
               </td>
               
@@ -92,95 +99,13 @@
               
               <!-- Status -->
               <td class="px-4 py-4 whitespace-nowrap">
-                <% ticket.statuses.each do |status| %>
-                  <% case status.name %>
-                    <% when 'Resolved' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-green-100 text-green-800">Resolved</span>
-                    <% when 'Closed' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Closed</span>
-                    <% when 'Reopened' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-red-100 text-red-800">Reopened</span>
-                    <% when 'New' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-red-100 text-red-800">New</span>
-                    <% when 'Under Development' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-blue-100 text-blue-800">Under Development</span>
-                    <% when 'Work in Progress' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Work In Progress</span>
-                    <% when 'QA Testing' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-pink-100 text-pink-800">QA Testing</span>
-                    <% when 'Awaiting Build' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg border border-gray-300">Awaiting Build</span>
-                    <% when 'Client Confirmation Pending' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-purple-100 text-purple-800">Client Confirmation Pending</span>
-                    <% when 'On-Hold' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-yellow-100 text-yellow-800">On-Hold</span>
-                    <% when 'Assigned' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-blue-100 text-blue-800">Assigned</span>
-                    <% when 'Approved' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-green-100 text-green-800">Approved</span>
-                    <% when 'Pending' %>
-                      <span class='px-2 py-1 text-sm bg-gradient-to-r from-green-100 to-gray-500 text-center text-green-800 font-semibold rounded-lg'>Pending</span>
-                    <% when 'Declined' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Declined</span>
-                  <% end %>
-                <% end %>
+                <%= render partial: 'tickets/ticket_status', locals: { ticket: ticket }  %>
               </td>
               
               <!-- Progress Bar -->
               <td class="pl-2 pr-5 py-2">
-          <% progress = ticket.progress_percentage || 0 %>
-          <% radius = 20 %>
-          <% stroke = 5 %>
-          <% normalized_radius = radius - stroke %>
-          <% circumference = 2 * Math::PI * normalized_radius %>
-          <% stroke_dashoffset = circumference - (progress.to_f / 100) * circumference %>
-
-          <% color = if ticket.progress_percentage.nil?
-                       '#9CA3AF' # gray-400
-                     elsif ticket.progress_percentage < 30
-                       '#DC2626' # red-600
-                     elsif ticket.progress_percentage < 60
-                       '#2563EB' # blue-600
-                     else
-                       ticket.progress_percentage >= 100 ? '#000000' : '#16A34A' # black or green-600
-                     end %>
-
-          <div class="relative flex items-center justify-center w-16 h-16">
-            <!-- SVG Donut -->
-            <svg
-              height="100%"
-              width="100%"
-              viewBox="0 0 <%= radius * 2 %> <%= radius * 2 %>"
-              class="transform -rotate-90"
-            >
-              <!-- Background Circle -->
-              <circle
-                stroke="#E5E7EB"
-                fill="transparent"
-                stroke-width="<%= stroke %>"
-                r="<%= normalized_radius %>"
-                cx="<%= radius %>"
-                cy="<%= radius %>"
-                />
-              <!-- Progress Circle -->
-              <circle
-                stroke="<%= color %>"
-                fill="transparent"
-                stroke-width="<%= stroke %>"
-                stroke-dasharray="<%= circumference %>"
-                stroke-dashoffset="<%= stroke_dashoffset %>"
-                stroke-linecap="round"
-                r="<%= normalized_radius %>"
-                cx="<%= radius %>"
-                cy="<%= radius %>"
-                />
-            </svg>
-            <!-- Centered Label -->
-            <div class="absolute text-sm font-bold" style="color: <%= color %>">
-              <%= progress %>%
-            </div>
-          </div>
-        </td>
+                <%= render partial: 'tickets/progress_bar', locals: { ticket: ticket } %>
+              </td>
               
               <!-- Reported By -->
               <td class="px-8 py-4 whitespace-nowrap text-sm">
@@ -206,7 +131,7 @@
                   <div>
                     <button
                       type="button"
-                      class="inline-flex justify-center w-8 h-8 rounded-full bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+                      class="inline-flex justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
                       id="menu-button-<%= ticket.id %>"
                       aria-expanded="false"
                       aria-haspopup="true"
