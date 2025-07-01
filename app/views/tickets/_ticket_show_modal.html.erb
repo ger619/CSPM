@@ -204,6 +204,24 @@
           </div>
         </div>
       </div>
+
+      <div class="col-span-2">
+        <div class="mb-4">
+          <div class="text-sm font-semibold uppercase tracking-wider">Subject</div>
+          <div class="mt-1 font-sm">
+            <%= @ticket.subject %>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-sm font-semibold uppercase">Content</div>
+          <div class="whitespace-pre-wrap">
+            <% if @ticket.content.present? %>
+              <%= sanitize raw(@ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip.squeeze("\n").strip) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
