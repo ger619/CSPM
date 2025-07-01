@@ -1,121 +1,120 @@
 <% allowed_roles = ["external", :admin, :agent, :observer, "project manager"] %>
-<div class="flex-col ml-4">
-  <% unless @ticket.statuses.first&.name == 'Closed' %>
-    <%= button_to 'New Message +', new_project_ticket_issue_path(@project.id, @ticket.id), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-  <% end %>
-  <div id="alert-additional-content-1" class="p-4" role="alert">
-    <div class="scrollable-section mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-      <% if @ticket_items.present? %>
-  <% @ticket_items.each do |item| %>
-    <% if item.is_a?(Comment) || (item.is_a?(Issue) && (allowed_roles.include?(item.message_type) || allowed_roles.any? { |role| current_user.has_role?(role) })) %>
-      <ol class="relative border-s border-gray-200 dark:border-gray-700 mt-10">
-        <li class="mb-10 ms-6 p-2 <%= 'bg-yellow-100' if item.is_a?(Issue) && item.message_type == 'internal' %>">
-          <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-            <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-            </svg>
-          </span>
+<div class="flex flex-col h-full">
 
-          <% if item.is_a?(Issue) %>
-            <!-- Issue Section -->
-            <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-              <%= item.user.name %>
-              <% if can? :edit, item %>
-                <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
-                  <%= link_to 'Edit', edit_project_ticket_issue_path(item.ticket.project, @ticket, item) %>
-                </span>
-              <% end %>
-              <% if can? :delete, item %>
-                <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
-                  <%= link_to 'Delete', [item.ticket.project, @ticket, item], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' } %>
-                </span>
-              <% end %>
-            </h3>
+  <!-- Messages Container -->
+  <div class="flex-1 overflow-y-auto">
+    <% if @ticket_items.present? %>
+      <ol class="relative space-y-6">
+        <% @ticket_items.each do |item| %>
+          <% if item.is_a?(Comment) || (item.is_a?(Issue) && (allowed_roles.include?(item.message_type) || allowed_roles.any? { |role| current_user.has_role?(role) })) %>
+            <li class="relative pl-8 <%= 'bg-yellow-50 dark:bg-yellow-900/20' if item.is_a?(Issue) && item.message_type == 'internal' %>">
+              <!-- Timeline dot -->
+              <span class="absolute left-0 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white dark:ring-gray-800 dark:bg-blue-900">
+                <svg class="w-3 h-3 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
+              </span>
 
-          <% elsif item.is_a?(Comment) %>
-            <!-- Comment Section -->
-            <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-              <%= item.user.name %>
-              <% if can? :edit, item %>
-                <%= button_to edit_project_ticket_comment_path(@project, @ticket, item), method: :get, data: { turbo_frame: 'modal' },
-                  class: 'text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="me-2 h-3 w-3">
-                    <path fill-rule="evenodd" d="M3.75 6a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75ZM12 18a.75.75 0 0 1-.75-.75V8.25a.75.75 0 0 1 1.5 0V17.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd"/>
-                  </svg>
-                  Edit
-                <% end %>
-              <% end %>
-
-              <% if can? :delete, item %>
-                <%= button_to project_ticket_comment_path(@project, @ticket, item), method: :delete, data: { confirm: 'Are you sure?' },
-                  class: 'text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800' do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="me-2 h-3 w-3">
-                    <path fill-rule="evenodd" d="M3.75 6a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75ZM12 18a.75.75 0 0 1-.75-.75V8.25a.75.75 0 0 1 1.5 0V17.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd"/>
-                  </svg>
-                  Delete
-                <% end %>
-              <% end %>
-            </h3>
-          <% end %>
-
-          <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            Posted on <%= item.created_at.strftime("%I:%M %p at %d %B %Y") %>
-          </time>
-          <div class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400 trix-content">
-            <%= raw item.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>
-            <% if item.content.body.attachments.any? %>
-              <% item.content.body.attachments.each do |attachment| %>
-                <div class="mb-2">
-                  <% if attachment.attachable.is_a?(ActionText::Attachables::RemoteImage) %>
-                    <a href="<%= attachment.attachable.url %>" download>
-                      <img src="<%= attachment.attachable.url %>" alt="Remote Image" class="max-w-xs cursor-pointer pl-2">
-                    </a>
-                    <br>
-                    <% if attachment.attachable.is_a?(ActiveStorage::Blob) %>
-                      <%= link_to attachment.filename.to_s, attachment.attachable.url, target: "_blank", download: true, class: "text-blue-600 hover:underline pl-2" %>
+              <!-- Message Card -->
+              <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+                <!-- Message Header -->
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="font-medium text-gray-900 dark:text-white">
+                      <%= item.user.name %>
+                    </span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                      <%= item.created_at.strftime("%I:%M %p at %d %B %Y") %>
+                    </span>
+                  </div>
+                  
+                  <!-- Message Actions -->
+                  <div class="flex gap-2">
+                    <% if can?(:edit, item) %>
+                      <% if item.is_a?(Issue) %>
+                        <%= link_to 'Edit', edit_project_ticket_issue_path(item.ticket.project, @ticket, item),
+                            class: 'text-xs px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-900' %>
+                      <% else %>
+                        <%= button_to edit_project_ticket_comment_path(@project, @ticket, item), 
+                            method: :get, 
+                            data: { turbo_frame: 'modal' },
+                            class: 'text-xs px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-900' do %>
+                          Edit
+                        <% end %>
+                      <% end %>
                     <% end %>
-                  <% elsif attachment.attachable.is_a?(ActiveStorage::Blob) %>
-                    <% if attachment.attachable.previewable? %>
-                      <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>
-                        <img src="<%= rails_representation_url(attachment.attachable.variant(resize_to_limit: [300, 300])) %>" alt="Attachment Preview" class="max-w-xs cursor-pointer pl-2">
-                      </a>
-                      <br>
-                      <%= link_to attachment.filename.to_s, rails_blob_path(attachment.attachable, only_path: true), target: "_blank", class: "text-blue-600 hover:underline pl-2" %>
-                    <% else %>
-                      <%= link_to attachment.filename.to_s, rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), class: "text-blue-600 hover:underline pl-2" %>
+
+                    <% if can?(:delete, item) %>
+                      <% if item.is_a?(Issue) %>
+                        <%= link_to 'Delete', [item.ticket.project, @ticket, item], 
+                            method: :delete, 
+                            data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                            class: 'text-xs px-2.5 py-0.5 rounded bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900' %>
+                      <% else %>
+                        <%= button_to project_ticket_comment_path(@project, @ticket, item), 
+                            method: :delete, 
+                            data: { confirm: 'Are you sure?' },
+                            class: 'text-xs px-2.5 py-0.5 rounded bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900' do %>
+                          Delete
+                        <% end %>
+                      <% end %>
                     <% end %>
-                  <% else %>
-                    <p>Attachment: <%= attachment.filename.to_s %></p>
-                    <%= link_to attachment.filename.to_s, rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), class: "text-blue-600 hover:underline pl-2" %>
-                  <% end %>
+                  </div>
                 </div>
-              <% end %>
-            <% end %>
-          </div>
-        </li>
-      </ol>
-    <% end %>
-  <% end %>
-<% else %>
-  <div class="flex justify-center items-center h-96">
-    <p class="text-gray-400 dark:text-gray-500">No Messages Added To The Ticket</p>
-  </div>
-<% end %>
 
-    </div>
-  </div>
-  <div class="flex gap-10 mt-5">
-  <!-- Pagination Controls -->
-  <div class="pagination">
-    <% if @page > 1 %>
-      <%= link_to 'Previous', project_ticket_path(@project, @ticket, ticket_items_page: @page - 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+                <!-- Message Content -->
+                <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                  <%= raw item.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>
+                </div>
+
+                <!-- Attachments -->
+                <% if item.content.body.attachments.any? %>
+                  <div class="mt-3 space-y-2">
+                    <% item.content.body.attachments.each do |attachment| %>
+                      <div class="flex items-center gap-2 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 0 0 2 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+                        </svg>
+                        <%= link_to attachment.filename, 
+                            rails_blob_path(attachment, disposition: "attachment"), 
+                            class: "text-blue-600 hover:underline dark:text-blue-400" %>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        <% end %>
+      </ol>
+    <% else %>
+      <div class="flex flex-col items-center justify-center h-64 text-gray-400 dark:text-gray-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+        <p>No messages yet</p>
+      </div>
     <% end %>
-    <% if @total_pages > 1 %>
-      <span>Page <%= @page %> of <%= @total_pages %></span>
-      <% if @page < @total_pages %>
-        <%= link_to 'Next', project_ticket_path(@project, @ticket, ticket_items_page: @page + 1), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+  </div>
+
+  <!-- Pagination -->
+  <% if @total_pages.present? && @total_pages > 1 %>
+    <div class="mt-6 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-4">
+      <% if @page > 1 %>
+        <%= link_to 'Previous', project_ticket_path(@project, @ticket, ticket_items_page: @page - 1), 
+            class: 'px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' %>
+      <% else %>
+        <span></span>
       <% end %>
-    <% end %>
-  </div>
-</div>
+      
+      <span class="text-sm text-gray-500 dark:text-gray-400">
+        Page <%= @page %> of <%= @total_pages %>
+      </span>
+      
+      <% if @page < @total_pages %>
+        <%= link_to 'Next', project_ticket_path(@project, @ticket, ticket_items_page: @page + 1), 
+            class: 'px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
