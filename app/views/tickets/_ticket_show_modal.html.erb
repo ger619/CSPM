@@ -4,10 +4,10 @@
   <div class="absolute inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"></div>
   
   <!-- Modal container -->
-  <div class="fixed inset-y-0 right-0 w-full max-w-2xl bg-white shadow-xl overflow-y-auto">
+  <div class="fixed bg-white dark:bg-gray-800 inset-y-0 right-0 w-full max-w-2xl shadow-xl overflow-y-auto">
     <div class="p-6">
       <!-- Close button -->
-      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" 
+      <button class="absolute top-4 right-4" 
               data-action="click->modal#close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -16,9 +16,9 @@
 
       <!-- SECTION 1: Ticket header -->
       <div class="border-b pb-4 mb-6">
-        <h2 class="text-xl font-bold text-gray-800">Issue ID <%= @ticket.unique_id %> Details</h2>
+        <h2 class="text-xl font-bold">Issue ID <%= @ticket.unique_id %> Details</h2>
         <div class="flex items-center justify-between mt-2">
-          <p class="text-sm text-gray-700">
+          <p class="text-sm">
             <span class="font-medium px-2">Created by: </span> <%= @ticket.user.name %> |
             <span class="font-medium px-2">Issue Type: </span> <%= @ticket.issue %>
           </p>
@@ -44,22 +44,22 @@
         <div class="w-full md:w-2/3">
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Priority</p>
-              <p class="font-bold text-gray-800"><%= @ticket.priority %></p>
+              <p class="text-sm font-medium mb-1">Priority</p>
+              <p class="font-bold"><%= @ticket.priority %></p>
             </div>
             <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Status</p>
+              <p class="text-sm font-medium mb-1">Status</p>
               
               <div class="font-bold flex items-center relative group" data-controller="status-modal">
                 <!-- Clickable Status with Edit Icon - Enhanced styling -->
                 <button type="button"
-                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        data-action="click->status-modal#toggle">
-                  <span class="text-gray-800 group-hover:text-blue-700">
+                  class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                    data-action="click->status-modal#toggle">
+                  <span class="text-gray-800 dark:text-gray-200 group-hover:text-blue-700 dark:group-hover:text-blue-400">
                     <%= render 'ticket_status' %>
                   </span>
                   <svg xmlns="http://www.w3.org/2000/svg" 
-                      class="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors" 
+                      class="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors" 
                       fill="none" 
                       viewBox="0 0 24 24" 
                       stroke="currentColor"
@@ -71,14 +71,14 @@
                 </button>
 
                 <!-- Status Change Modal - Enhanced styling -->
-                <div class="hidden absolute z-50 mt-2 w-80 bg-white rounded-xl shadow-xl ring-1 ring-gray-200/80 overflow-hidden"
+                <div class="hidden bg-white dark:bg-gray-800 absolute z-50 mt-2 w-80 rounded-xl shadow-xl ring-1 ring-gray-200/80 overflow-hidden"
                     data-status-modal-target="dropdown">
                   <!-- Modal Header -->
-                  <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <h3 class="text-base font-semibold flex items-center justify-between">
-                      <span class="text-black">Update Ticket Status</span>
+                  <div class="px-5 py-4 border-b border-gray-100">
+                    <h3 class="font-semibold flex items-center justify-between">
+                      <span >Update Ticket Status</span>
                       <button type="button"
-                              class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                              class=""
                               data-action="click->status-modal#close"
                               aria-label="Close">
                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -99,9 +99,9 @@
                   </div>
                   
                   <!-- Modal Footer -->
-                  <div class="px-5 py-3 border-t border-gray-100 bg-gray-50 flex justify-end">
+                  <div class="px-5 py-3 border-t border-gray-100 flex justify-end">
                     <button type="button"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                            class="px-4 py-2 text-sm text-red-600 hover:text-red-800 font-medium rounded-md transition-colors"
                             data-action="click->status-modal#close">
                       Cancel
                     </button>
@@ -113,8 +113,8 @@
           
           <div class="grid grid-cols-3 gap-4 mt-4">
             <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Product</p>
-              <p class="font-medium text-gray-800">
+              <p class="text-sm font-medium mb-1">Product</p>
+              <p class="font-medium">
                 <% if @ticket.software.present? %>
                   <%= @ticket.software&.name || 'No Software Assigned' %>
                 <% end %>
@@ -122,8 +122,8 @@
             </div>
             
             <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Sub-Product</p>
-              <p class="font-medium text-gray-800">
+              <p class="text-sm font-medium mb-1">Sub-Product</p>
+              <p class="font-medium">
                 <% if @ticket.software.present? %>
                   <% selected_groupware = @ticket.software.groupwares.find_by(id: @ticket.groupware_id) %>
                   <%= selected_groupware ? selected_groupware.name : 'No Groupware Assigned' %>
@@ -132,8 +132,8 @@
             </div>
             
             <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Time Created</p>
-              <p class="font-medium text-gray-800"><%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %></p>
+              <p class="text-sm font-medium mb-1">Time Created</p>
+              <p class="font-medium"><%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %></p>
             </div>
           </div>
         </div>
@@ -141,29 +141,29 @@
 
       <!-- SECTION 3: Target Times -->
       <div class="pt-6 mb-2">
-        <h3 class="text-sm font-bold text-gray-700 mb-2">TARGET TIMES</h3>
-        <div class="grid grid-cols-3 gap-4 bg-gray-50 p-2 rounded-lg">
+        <h3 class="text-sm font-bold mb-2">TARGET TIMES</h3>
+        <div class="grid grid-cols-3 gap-4 p-2 rounded-lg">
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">Target Response Time</p>
-            <p class="text-sm font-medium text-gray-800"><%= @ticket.initial_response_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
+            <p class="text-xs font-medium mb-1">Target Response Time</p>
+            <p class="text-sm font-medium"><%= @ticket.initial_response_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
           </div>
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">Target Repair Time</p>
-            <p class="text-sm font-medium text-gray-800"><%= @ticket.target_repair_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
+            <p class="text-xs font-medium mb-1">Target Repair Time</p>
+            <p class="text-sm font-medium"><%= @ticket.target_repair_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
           </div>
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">Target Resolution Time</p>
-            <p class="text-sm font-medium text-gray-800"><%= @ticket.resolution_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
+            <p class="text-xs font-medium mb-1">Target Resolution Time</p>
+            <p class="text-sm font-medium"><%= @ticket.resolution_deadline.strftime("%d %b %Y at %I:%M %p") %></p>
           </div>
         </div>
       </div>
 
       <!-- SECTION 4: SLA Status -->
       <div class="pt-2">
-        <h3 class="text-sm font-bold text-gray-700 mb-2">SLA STATUS</h3>
-        <div class="grid grid-cols-4 gap-4 bg-gray-50 p-2 rounded-lg">
+        <h3 class="text-sm font-bold mb-2">SLA STATUS</h3>
+        <div class="grid grid-cols-4 gap-4 p-2 rounded-lg">
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">SLA Status</p>
+            <p class="text-xs font-medium mb-1">SLA Status</p>
             <p class="text-sm font-medium text-green-600">
               <% if @sla_ticket.present? %>
                 <%= @sla_ticket.sla_status %>
@@ -173,7 +173,7 @@
             </p>
           </div>
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">Target Resolution Time</p>
+            <p class="text-xs font-medium mb-1">Target Resolution Time</p>
             <p class="text-sm font-medium text-green-600">
               <% if @sla_ticket.present? %>
                 <%= @sla_ticket.sla_resolution_deadline %>
@@ -183,7 +183,7 @@
             </p>
           </div>
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">Target Repair Time</p>
+            <p class="text-xs font-medium mb-1">Target Repair Time</p>
             <p class="text-sm font-medium text-green-600">
               <% if @sla_ticket.present? %>
                 <%= @sla_ticket.sla_target_response_deadline %>
@@ -193,7 +193,7 @@
             </p>
           </div>
           <div>
-            <p class="text-xs font-medium text-gray-500 mb-1">Target Response Time</p>
+            <p class="text-xs font-medium mb-1">Target Response Time</p>
             <p class="text-sm font-medium text-green-600">
               <% if @sla_ticket.present? %>
                 <%= @sla_ticket.sla_status %>
@@ -209,8 +209,8 @@
 </div>
 
 <!-- Image modal -->
-<div id="imageModal" class="modal hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-75" data-controller="image-modal" data-image-modal-target="modal">
-  <span class="close absolute top-4 right-4 text-white text-3xl cursor-pointer" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+<div id="imageModal" class="modal hidden fixed inset-0 z-50 overflow-auto bg-opacity-75" data-controller="image-modal" data-image-modal-target="modal">
+  <span class="close absolute top-4 right-4 text-3xl cursor-pointer" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
   <img class="modal-content block max-w-full max-h-screen m-auto" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
 </div>
 <% end %>
