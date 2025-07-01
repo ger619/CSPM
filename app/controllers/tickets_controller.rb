@@ -342,6 +342,9 @@ class TicketsController < ApplicationController
     @ticket = Ticket.find(params[:id])
 
     if @ticket.update(priority: params[:ticket][:priority])
+      @ticket.set_target_repair_deadline
+      @ticket.set_resolution_deadline
+
       respond_to do |format|
         format.js
         format.html { redirect_to project_ticket_path(@ticket.project, @ticket), notice: 'Priority updated successfully.' }
@@ -424,10 +427,24 @@ class TicketsController < ApplicationController
   # Update the issue type of a ticket
   def update_issue_type
     @ticket = Ticket.find(params[:id])
-    @ticket.skip_sla_callbacks = true
+
+    @ticket.skip_sla_callbacks = params[:ticket][:issue] != 'NEW FEATURE'
 
     if @ticket.update(issue: params[:ticket][:issue])
       respond_to do |format|
+        if @ticket.issue == 'NEW FEATURE'
+          sla = SlaTicket.find_or_initialize_by(ticket_id: @ticket.id)
+          sla.update!(
+            sla_status: 'NO SLA',
+            sla_target_response_deadline: 'NO SLA',
+            sla_resolution_deadline: 'NO SLA'
+          )
+        else
+          SlaTicket.find_or_create_by!(ticket_id: @ticket.id) do |sla_ticket|
+            sla_ticket.sla_status = @ticket.sla_status
+          end
+        end
+
         format.js
         format.html { redirect_to project_ticket_path(@ticket.project, @ticket), notice: 'Issue type updated successfully.' }
       end

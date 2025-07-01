@@ -44,8 +44,7 @@
           </div>
           <div class="mb-2.5 font-bold capitalize flex">Status:
             <span class="font-medium ml-1">
-              <%= render 'ticket_status' %>
-            </span>
+              <%= render partial: 'tickets/ticket_status', locals: { ticket: @ticket } %>            </span>
           </div>
           <!-- SLA -->
           <%= render 'sla' %>
