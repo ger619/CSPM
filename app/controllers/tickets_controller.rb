@@ -342,6 +342,9 @@ class TicketsController < ApplicationController
     @ticket = Ticket.find(params[:id])
 
     if @ticket.update(priority: params[:ticket][:priority])
+      @ticket.set_target_repair_deadline
+      @ticket.set_resolution_deadline
+
       respond_to do |format|
         format.js
         format.html { redirect_to project_ticket_path(@ticket.project, @ticket), notice: 'Priority updated successfully.' }
