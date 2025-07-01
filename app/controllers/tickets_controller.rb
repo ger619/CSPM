@@ -448,10 +448,8 @@ class TicketsController < ApplicationController
   def modal_show
     @sla_ticket = @ticket.sla_ticket if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
 
-    render partial: "tickets/ticket_show_modal", layout: false
+    render partial: 'tickets/ticket_show_modal', layout: false
   end
-
-
 
   private
 
