@@ -53,8 +53,8 @@
               <div class="font-bold flex items-center relative group" data-controller="status-modal">
                 <!-- Clickable Status with Edit Icon - Enhanced styling -->
                 <button type="button"
-                  class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-                    data-action="click->status-modal#toggle">
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                        data-action="click->status-modal#toggleDropdown">
                   <span class="text-gray-800 dark:text-gray-200 group-hover:text-blue-700 dark:group-hover:text-blue-400">
                     <%= render 'ticket_status' %>
                   </span>
@@ -79,7 +79,7 @@
                       <span >Update Ticket Status</span>
                       <button type="button"
                               class=""
-                              data-action="click->status-modal#close"
+                              data-action="click->status-modal#closeDropdown"
                               aria-label="Close">
                         <svg xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5"
@@ -102,7 +102,7 @@
                   <div class="px-5 py-3 border-t border-gray-100 flex justify-end">
                     <button type="button"
                             class="px-4 py-2 text-sm text-red-600 hover:text-red-800 font-medium rounded-md transition-colors"
-                            data-action="click->status-modal#close">
+                            data-action="click->status-modal#closeDropdown">
                       Cancel
                     </button>
                   </div>
