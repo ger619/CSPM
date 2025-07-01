@@ -26,9 +26,16 @@
       <tbody class="">
         <% @ticket.each do |ticket| %>
           <% if ticket.present? %>
-            <tr class="">
-              <!-- Date of Issue -->
-              <td class="px-4 py-4 whitespace-nowrap text-sm">
+          <tr class="<%= case ticket.issue
+                         when 'SUPPORT' then 'bg-[#007ACC]'
+                         when 'NEW FEATURE' then 'bg-[#00B894]'
+                         when 'BUG' then 'bg-[#E53935]'
+                         when 'REQUEST' then 'bg-[#6c5CE7]'
+                         when 'INCIDENT' then 'bg-[#F39C12]'
+                         when 'CHANGE REQUEST' then 'bg-[#2ECC71]'
+                         else ''
+                         end %>">
+            <td class="px-4 py-4 whitespace-nowrap text-sm">
                 <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
               </td>
               
