@@ -446,6 +446,15 @@ class TicketsController < ApplicationController
   end
 
   def modal_show
+    @ticket_items = if params[:query].present?
+                    @ticket.issues.left_joins(:rich_text_content)
+                          .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+                          .order('created_at DESC')
+                  else
+                    @ticket.issues.with_rich_text_content.order('created_at DESC')
+                  end
+
+  @issue = Issue.new
     @sla_ticket = @ticket.sla_ticket if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
 
     render partial: 'tickets/ticket_show_modal', layout: false
