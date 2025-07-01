@@ -92,95 +92,13 @@
               
               <!-- Status -->
               <td class="px-4 py-4 whitespace-nowrap">
-                <% ticket.statuses.each do |status| %>
-                  <% case status.name %>
-                    <% when 'Resolved' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-green-100 text-green-800">Resolved</span>
-                    <% when 'Closed' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Closed</span>
-                    <% when 'Reopened' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-red-100 text-red-800">Reopened</span>
-                    <% when 'New' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-red-100 text-red-800">New</span>
-                    <% when 'Under Development' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-blue-100 text-blue-800">Under Development</span>
-                    <% when 'Work in Progress' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Work In Progress</span>
-                    <% when 'QA Testing' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-pink-100 text-pink-800">QA Testing</span>
-                    <% when 'Awaiting Build' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg border border-gray-300">Awaiting Build</span>
-                    <% when 'Client Confirmation Pending' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-purple-100 text-purple-800">Client Confirmation Pending</span>
-                    <% when 'On-Hold' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-yellow-100 text-yellow-800">On-Hold</span>
-                    <% when 'Assigned' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-blue-100 text-blue-800">Assigned</span>
-                    <% when 'Approved' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-green-100 text-green-800">Approved</span>
-                    <% when 'Pending' %>
-                      <span class='px-2 py-1 text-sm bg-gradient-to-r from-green-100 to-gray-500 text-center text-green-800 font-semibold rounded-lg'>Pending</span>
-                    <% when 'Declined' %>
-                      <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Declined</span>
-                  <% end %>
-                <% end %>
+                <%= render partial: 'tickets/ticket_status', locals: { ticket: ticket }  %>
               </td>
               
               <!-- Progress Bar -->
               <td class="pl-2 pr-5 py-2">
-          <% progress = ticket.progress_percentage || 0 %>
-          <% radius = 20 %>
-          <% stroke = 5 %>
-          <% normalized_radius = radius - stroke %>
-          <% circumference = 2 * Math::PI * normalized_radius %>
-          <% stroke_dashoffset = circumference - (progress.to_f / 100) * circumference %>
-
-          <% color = if ticket.progress_percentage.nil?
-                       '#9CA3AF' # gray-400
-                     elsif ticket.progress_percentage < 30
-                       '#DC2626' # red-600
-                     elsif ticket.progress_percentage < 60
-                       '#2563EB' # blue-600
-                     else
-                       ticket.progress_percentage >= 100 ? '#000000' : '#16A34A' # black or green-600
-                     end %>
-
-          <div class="relative flex items-center justify-center w-16 h-16">
-            <!-- SVG Donut -->
-            <svg
-              height="100%"
-              width="100%"
-              viewBox="0 0 <%= radius * 2 %> <%= radius * 2 %>"
-              class="transform -rotate-90"
-            >
-              <!-- Background Circle -->
-              <circle
-                stroke="#E5E7EB"
-                fill="transparent"
-                stroke-width="<%= stroke %>"
-                r="<%= normalized_radius %>"
-                cx="<%= radius %>"
-                cy="<%= radius %>"
-                />
-              <!-- Progress Circle -->
-              <circle
-                stroke="<%= color %>"
-                fill="transparent"
-                stroke-width="<%= stroke %>"
-                stroke-dasharray="<%= circumference %>"
-                stroke-dashoffset="<%= stroke_dashoffset %>"
-                stroke-linecap="round"
-                r="<%= normalized_radius %>"
-                cx="<%= radius %>"
-                cy="<%= radius %>"
-                />
-            </svg>
-            <!-- Centered Label -->
-            <div class="absolute text-sm font-bold" style="color: <%= color %>">
-              <%= progress %>%
-            </div>
-          </div>
-        </td>
+                <%= render partial: 'tickets/progress_bar', locals: { ticket: ticket } %>
+              </td>
               
               <!-- Reported By -->
               <td class="px-8 py-4 whitespace-nowrap text-sm">
