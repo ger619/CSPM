@@ -11,7 +11,7 @@
           <div id="teamDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full">
             <% teams = Team.all %>
             <% teams.each do |team| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-500 cursor-pointer capitalize" data-team-id="<%= team.id %>" onclick="selectTeam(this)">
+              <div class="dropdown-item px-4 py-2 bg-white hover:bg-gray-100 dark:bg-gray-500 dark:hover:bg-gray-700 cursor-pointer capitalize" data-team-id="<%= team.id %>" onclick="selectTeam(this)">
                 <%= team.name %>
               </div>
             <% end %>
