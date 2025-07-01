@@ -1,4 +1,4 @@
-<%= form_with(model: [project, ticket, ticket.issues.build], html: { multipart: true }, remote: true) do |f| %>
+<%= form_with(model: [@project, @ticket, @ticket.issues.build], html: { multipart: true }, remote: true) do |f| %>
   <div class="space-y-4">
     <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
 
@@ -81,7 +81,6 @@
 <% end %>
 
 <script>
-  // All original JavaScript remains exactly the same
   let selectedUsers = [];
 
   function showDropdown() {
