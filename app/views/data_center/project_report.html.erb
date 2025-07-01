@@ -38,7 +38,9 @@
   <% if @team %>
     <div class="flex justify-center gap-2">
       <h2 class="p-2 font-bold">Team Report for <span class="capitalize"><%= @team.name %> </span></h2>
-      <%= link_to 'Download CSV Report', project_report_path(format: :csv, team_id: @team.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+
+      <%= link_to 'Download CSV Report',
+                  project_report_path(format: :csv, team_id: @team.id, start_date: params[:start_date], end_date: params[:end_date]), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
     </div>
     <div class="flex justify-center w-full my-6 gap-10">
       <div class="flex justify-center gap-10">
