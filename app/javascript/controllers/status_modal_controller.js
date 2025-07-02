@@ -1,16 +1,21 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ['dropdown', 'modal']
+  static targets = ['dropdown', 'modal'];
 
   connect() {
-    document.addEventListener('keydown', this.closeWithKey.bind(this));
-    document.addEventListener('click', this.closeOnClickOutside.bind(this));
+    // ✅ Bind once and reuse
+    this.boundCloseWithKey = this.closeWithKey.bind(this);
+    this.boundCloseOnClickOutside = this.closeOnClickOutside.bind(this);
+
+    document.addEventListener('keydown', this.boundCloseWithKey);
+    document.addEventListener('click', this.boundCloseOnClickOutside);
   }
 
   disconnect() {
-    document.removeEventListener('keydown', this.closeWithKey.bind(this));
-    document.removeEventListener('click', this.closeOnClickOutside.bind(this));
+    // ✅ Use the same references to remove listeners correctly
+    document.removeEventListener('keydown', this.boundCloseWithKey);
+    document.removeEventListener('click', this.boundCloseOnClickOutside);
   }
 
   // Status dropdown methods
@@ -42,8 +47,8 @@ export default class extends Controller {
   }
 
   // Close when pressing Escape
-  closeWithKey(e) {
-    if (e.key === 'Escape') {
+  closeWithKey(event) {
+    if (event.key === 'Escape') {
       this.closeDropdown();
       this.closeModal();
     }
