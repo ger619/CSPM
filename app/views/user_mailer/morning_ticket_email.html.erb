@@ -1,4 +1,4 @@
-<!-- app/views/report_mailer/daily_ticket_email.html.erb -->
+<!-- app/views/report_mailer/daily_assigned_ticket_email.html.erb -->
 <% if @tickets.any? %>
   <style>
       body {
@@ -33,10 +33,10 @@
       }
   </style>
 
-  <h1>Daily Ticket Summary</h1>
+  <h1>Daily Assigned Ticket Summary</h1>
   <p>Hello <strong><%= @user.name %></strong>,</p>
 
-  <p>Below is a summary of the tickets you <strong>Closed</strong>, <strong>Resolved</strong>, or <strong>Declined</strong> in the last 24 hours:</p>
+  <p>Here is a summary of tickets currently <strong>assigned</strong> to you as of today:</p>
 
   <table border="1">
     <thead>
@@ -61,7 +61,9 @@
     </tbody>
   </table>
 
-  <p style="margin-top: 30px;">Thank you for your continued efforts.</p>
+  <p style="margin-top: 30px;">Please make sure to follow up on the tickets assigned to you.</p>
+  <p>If you have any questions or need assistance, feel free to reach out.</p>
+
   <p>Best regards,<br><strong>TaskBridge Support Team</strong></p>
 <% else %>
   <style>
@@ -74,11 +76,11 @@
       }
   </style>
 
-  <h1>Daily Ticket Summary</h1>
+  <h1>Daily Assigned Ticket Summary</h1>
   <p>Hello <strong><%= @user.name %></strong>,</p>
 
-  <p>You did not close, resolve, or decline any tickets in the last 24 hours.</p>
+  <p>You currently have no tickets assigned to you.</p>
+  <p>We’ll notify you as soon as there are tickets needing your attention.</p>
 
-  <p>Keep up the great work!</p>
   <p>Best regards,<br><strong>TaskBridge Support Team</strong></p>
 <% end %>

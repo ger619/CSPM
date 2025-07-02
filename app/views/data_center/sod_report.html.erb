@@ -20,16 +20,24 @@
   <% end %>
 
   <% if @tickets.any? %>
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-2 mt-4">
       <%= link_to "Download CSV",
                   sod_report_path(format: :csv, team_name: params[:team_name], report_type: params[:report_type]),
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
 
-      <%= link_to "Email Team Tickets",
-                  daily_report_path(team_name: params[:team_name], report_type: params[:report_type]),
-                  method: :get,
-                  class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-                  data: { confirm: "Are you sure you want to email the tickets to the team?" } %>
+      <% if current_user.has_role?(:admin) %>
+        <%= link_to "Team Tickets (EOD)",
+                    daily_report_path(team_name: params[:team_name], report_type: params[:report_type]),
+                    method: :get,
+                    class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
+                    data: { confirm: "Are you sure you want to email the tickets to the team?" } %>
+
+        <%= link_to "Morning Tickets(SOD)",
+                    send_team_ticket_emails_path(team_name: params[:team_name], report_type: params[:report_type]),
+                    method: :get,
+                    class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
+                    data: { confirm: "Are you sure you want to email the tickets to the team?" } %>
+        <% end %>
 
     </div>
     <table class="min-w-full mt-4">
