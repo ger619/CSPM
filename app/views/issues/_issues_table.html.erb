@@ -4,7 +4,7 @@
   <div class="flex-1 overflow-y-auto">
     <% if @ticket_items.present? %>
       <ol class="relative space-y-6 messages-list" id="messages-list">
-        <% @ticket_items.each do |item| %>
+        <% @ticket_items.first(5).each do |item| %>
           <% if item.is_a?(Comment) || (item.is_a?(Issue) && (allowed_roles.include?(item.message_type) || allowed_roles.any? { |role| current_user.has_role?(role) })) %>
             <%= render 'issues/message', item: item %>
           <% end %>

@@ -2,7 +2,7 @@
   <% issue ||= Issue.new %>
   <%= form_with(model: [project, ticket, ticket.issues.build], 
                 html: { multipart: true },
-                data: { controller: 'messages' },
+                data: { controller: 'messages', turbo: false },
                 remote: true) do |f| %>
     <div class="space-y-4">
       <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
