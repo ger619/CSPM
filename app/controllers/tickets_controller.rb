@@ -31,7 +31,7 @@ class TicketsController < ApplicationController
     # Combine issues and comments, sort by creation date (descending), and paginate
     ticket_items = (@ticket.issues + @ticket.comments).sort_by(&:created_at).reverse
     @page = (params[:ticket_items_page] || 1).to_i
-    per_page = 10
+    per_page = 5
     @total_pages = (ticket_items.size / per_page.to_f).ceil
     @ticket_items = ticket_items.slice((@page - 1) * per_page, per_page) || []
 

@@ -4,7 +4,7 @@
   <div class="flex-1 overflow-y-auto">
     <% if @ticket_items.present? %>
       <ol class="relative space-y-6 messages-list" id="messages-list">
-        <% @ticket_items.first(5).each do |item| %>
+        <% @ticket_items.each do |item| %>
           <% if item.is_a?(Comment) || (item.is_a?(Issue) && (allowed_roles.include?(item.message_type) || allowed_roles.any? { |role| current_user.has_role?(role) })) %>
             <%= render 'issues/message', item: item %>
           <% end %>
@@ -20,14 +20,11 @@
     <% end %>
   </div>
 
-  <!-- Pagination -->
   <% if @total_pages.present? && @total_pages > 1 %>
     <div class="mt-6 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-4">
       <% if @page > 1 %>
         <%= link_to 'Previous', project_ticket_path(@project, @ticket, ticket_items_page: @page - 1), 
             class: 'px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' %>
-      <% else %>
-        <span></span>
       <% end %>
       
       <span class="text-sm text-gray-500 dark:text-gray-400">
