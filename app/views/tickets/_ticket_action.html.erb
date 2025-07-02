@@ -1,6 +1,6 @@
 <% if @project.special && @ticket.issue == 'CHANGE REQUEST' %>
   <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
-    <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+    <%= form_with url: add_status_project_ticket_path(@project, @ticket, data: { turbo: false}), local: true do %>
       <% current_status = @ticket.statuses.first&.name %>
 
       <% if @ticket.statuses.empty? %>
@@ -10,7 +10,7 @@
         <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% elsif current_status == 'Pending' %>
         <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+        <%= submit_tag "UPDATE STATUS0", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
@@ -18,7 +18,7 @@
   <% allowed_statuses = ['Approved', 'Work in Progress', 'On-Hold', 'Under Development', 'QA Testing', 'Client Confirmation Pending', 'Awaiting Build', 'Reopened', 'Resolved', 'Closed', 'Declined'] %>
   <% current_status = @ticket.statuses.first&.name %>
   <% if allowed_statuses.include?(current_status) && !current_user.has_role?(:client) %>
-    <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+    <%= form_with url: add_status_project_ticket_path(@project, @ticket, local: true, data: { turbo: false }) do %>
       <% current_status = @ticket.statuses.first&.name %>
       <% transition_map = {
         'Approved' => ['Work in Progress'],
@@ -36,14 +36,14 @@
 
       <% if transition_map[current_status] %>
         <%= select_tag :status_id, options_for_select(Status.where(name: transition_map[current_status]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+        <%= submit_tag "UPDATE STATUS1", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
 
 <% else %>
   <% if !current_user.has_role?(:observer) && (current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager')) %>
-    <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+    <%= form_with url: add_status_project_ticket_path(@project, @ticket, data: { turbo: false}), local: true do %>
       <% current_status = @ticket.statuses.first&.name %>
       <% transition_map = {
         'New' => ['Assigned', ""],
@@ -65,15 +65,15 @@
       <% elsif transition_map[current_status] %>
         <%= select_tag :status_id, options_for_select(Status.where(name: transition_map[current_status]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       <% end %>
-      <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+      <%= submit_tag "UPDATE STATUS2", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
     <% end %>
   <% elsif current_user.has_role?(:client) %>
-    <%= form_with url: add_status_project_ticket_path(@project, @ticket), local: true do %>
+    <%= form_with url: add_status_project_ticket_path(@project, @ticket, data: { turbo: false}), local: true do %>
       <% current_status = @ticket.statuses.first&.name %>
       <% allowed = ["Client Confirmation Pending", "Resolved", "Reopened",  "Closed",  "Declined"] %>
       <% if allowed.include?(current_status) %>
         <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened Resolved]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+        <%= submit_tag "UPDATE STATUS3", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
