@@ -24,9 +24,9 @@ class IssuesController < ApplicationController
     if @issue.content.blank?
       @issue.errors.add(:content, 'Message cannot be blank.')
       respond_to do |format|
-        format.turbo_stream do 
+        format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
-            "new_message_form",
+            'new_message_form',
             partial: 'issues/form',
             locals: { project: @project, ticket: @ticket, issue: @issue }
           )
@@ -51,24 +51,21 @@ class IssuesController < ApplicationController
 
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.prepend("messages-list",  # Fixed target ID
-              partial: 'issues/message',
-              locals: { item: @issue }
-            ),
-            turbo_stream.replace("new_message_form",
-              partial: 'issues/form',
-              locals: { project: @project, ticket: @ticket, issue: Issue.new }
-            ),
-            turbo_stream.update("messageFormContainer",
-              html: ""
-            )
+            turbo_stream.prepend('messages-list', # Fixed target ID
+                                 partial: 'issues/message',
+                                 locals: { item: @issue }),
+            turbo_stream.replace('new_message_form',
+                                 partial: 'issues/form',
+                                 locals: { project: @project, ticket: @ticket, issue: Issue.new }),
+            turbo_stream.update('messageFormContainer',
+                                html: '')
           ]
         end
         format.html { redirect_to project_ticket_path(@project, @ticket) }
       else
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
-            "new_message_form",
+            'new_message_form',
             partial: 'issues/form',
             locals: { project: @project, ticket: @ticket, issue: @issue }
           )
@@ -84,7 +81,7 @@ class IssuesController < ApplicationController
       format.html
     end
   end
-  
+
   def update
     respond_to do |format|
       if @issue.update(issue_params)
@@ -93,11 +90,11 @@ class IssuesController < ApplicationController
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace(
-              dom_id(@issue),  # Replace just the updated message
+              dom_id(@issue), # Replace just the updated message
               partial: 'issues/message',
               locals: { item: @issue }
             ),
-            turbo_stream.remove("edit-form-#{@issue.id}")  # Close the edit form
+            turbo_stream.remove("edit-form-#{@issue.id}") # Close the edit form
           ]
         end
 
@@ -115,8 +112,7 @@ class IssuesController < ApplicationController
     end
   end
 
-
-def destroy
+  def destroy
     @issue.destroy
     respond_to do |format|
       format.turbo_stream do
