@@ -1,97 +1,196 @@
 <div id="new_message_form">
   <% issue ||= Issue.new %>
-  <%= form_with(model: [project, ticket, ticket.issues.build], 
-                html: { multipart: true },
-                data: { controller: 'messages', turbo: false },
-                remote: true) do |f| %>
-    <div class="space-y-4">
-      <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
+  <% if current_page?(project_ticket_path(@project, @ticket)) %>
 
-      <!-- Message Content -->
-      <div data-controller="text-limit" data-text-limit-limit-value="3000">
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1" id="char-count">0/3000</p>
-        
-        <div data-controller="trix-sync">
-          <%= f.rich_text_area :content,
-                id: "content",
-                data: {
-                  text_limit_target: "content",
-                  is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
-                },
-                class: "trix-content w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white min-h-[200px] #{'border-red-500' if issue.errors[:content].any?}" %>
+    <%= form_with(model: [project, ticket, ticket.issues.build],
+                  html: { multipart: true },
+                  data: { controller: 'messages', turbo: false },
+                  remote: true) do |f| %>
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
+
+        <!-- Message Content -->
+        <div data-controller="text-limit" data-text-limit-limit-value="3000">
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1" id="char-count">0/3000</p>
+
+          <div data-controller="trix-sync">
+            <%= f.rich_text_area :content,
+                                 id: "content",
+                                 data: {
+                                   text_limit_target: "content",
+                                   is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
+                                 },
+                                 class: "trix-content w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white min-h-[200px] #{'border-red-500' if issue.errors[:content].any?}" %>
+          </div>
+
+          <% if issue.errors[:content].any? %>
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400" id="content-error">
+              <%= issue.errors[:content].join(', ') %>
+            </p>
+          <% end %>
         </div>
 
-        <% if issue.errors[:content].any? %>
-          <p class="mt-1 text-sm text-red-600 dark:text-red-400" id="content-error">
-            <%= issue.errors[:content].join(', ') %>
-          </p>
-        <% end %>
-      </div>
+        <% unless current_user.has_role?(:client) %>
+          <!-- User Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notify Users</label>
+            <div class="relative">
+              <input type="text" id="searchUser"
+                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white"
+                     placeholder="Search User..."
+                     onclick="showDropdown()"
+                     onkeyup="filterUserDropdown()"
+                     autocomplete="off">
 
-      <% unless current_user.has_role?(:client) %>
-        <!-- User Selection -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notify Users</label>
-          <div class="relative">
-            <input type="text" id="searchUser" 
-                   class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white"
-                   placeholder="Search User..." 
-                   onclick="showDropdown()" 
-                   onkeyup="filterUserDropdown()" 
-                   autocomplete="off">
-            
-            <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
-            <div id="hiddenUserInputs">
-              <%= hidden_field_tag "team[user_ids][]", "" %>
-            </div>
-            
-            <div id="userDropdown" class="hidden absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-              <div class="p-2">
-                <div class="flex justify-end">
-                  <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-                
-                <div id="externalUsers" class="user-list">
-                  <% project.users.distinct.order(:first_name).each do |user| %>
-                    <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" 
-                         data-user-id="<%= user.id %>" 
-                         onclick="selectUser(this)">
-                      <%= user.name %>
-                    </div>
-                  <% end %>
+              <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
+              <div id="hiddenUserInputs">
+                <%= hidden_field_tag "team[user_ids][]", "" %>
+              </div>
+
+              <div id="userDropdown" class="hidden absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                <div class="p-2">
+                  <div class="flex justify-end">
+                    <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div id="externalUsers" class="user-list">
+                    <% project.users.distinct.order(:first_name).each do |user| %>
+                      <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                           data-user-id="<%= user.id %>"
+                           onclick="selectUser(this)">
+                        <%= user.name %>
+                      </div>
+                    <% end %>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Message Type -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message Visibility</label>
-          <%= f.select :message_type, 
-              options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]], 
-              selected: issue.message_type || "external"),
-              {},
-              class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>
-        </div>
-      <% end %>
+          <!-- Message Type -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message Visibility</label>
+            <%= f.select :message_type,
+                         options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
+                                            selected: issue.message_type || "external"),
+                         {},
+                         class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>
+          </div>
+        <% end %>
 
-      <!-- Form Actions -->
-      <div class="flex justify-end gap-3 pt-2">
-        <button type="button" 
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
-                data-action="click->messages#toggleForm">
-          Cancel
-        </button>
-        <%= f.submit "Post Message", 
-            class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        <!-- Form Actions -->
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                  data-action="click->messages#toggleForm">
+            Cancel
+          </button>
+          <%= f.submit "Post Message",
+                       class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        </div>
       </div>
-    </div>
+    <% end %>
+
+  <% else %>
+
+    <%= form_with(model: [project, ticket, ticket.issues.build],
+                  html: { multipart: true },
+                  data: { controller: 'messages' },
+                  remote: true) do |f| %>
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
+
+        <!-- Message Content -->
+        <div data-controller="text-limit" data-text-limit-limit-value="3000">
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1" id="char-count">0/3000</p>
+
+          <div data-controller="trix-sync">
+            <%= f.rich_text_area :content,
+                                 id: "content",
+                                 data: {
+                                   text_limit_target: "content",
+                                   is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
+                                 },
+                                 class: "trix-content w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white min-h-[200px] #{'border-red-500' if issue.errors[:content].any?}" %>
+          </div>
+
+          <% if issue.errors[:content].any? %>
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400" id="content-error">
+              <%= issue.errors[:content].join(', ') %>
+            </p>
+          <% end %>
+        </div>
+
+        <% unless current_user.has_role?(:client) %>
+          <!-- User Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notify Users</label>
+            <div class="relative">
+              <input type="text" id="searchUser"
+                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white"
+                     placeholder="Search User..."
+                     onclick="showDropdown()"
+                     onkeyup="filterUserDropdown()"
+                     autocomplete="off">
+
+              <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
+              <div id="hiddenUserInputs">
+                <%= hidden_field_tag "team[user_ids][]", "" %>
+              </div>
+
+              <div id="userDropdown" class="hidden absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                <div class="p-2">
+                  <div class="flex justify-end">
+                    <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div id="externalUsers" class="user-list">
+                    <% project.users.distinct.order(:first_name).each do |user| %>
+                      <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                           data-user-id="<%= user.id %>"
+                           onclick="selectUser(this)">
+                        <%= user.name %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Type -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message Visibility</label>
+            <%= f.select :message_type,
+                         options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
+                                            selected: issue.message_type || "external"),
+                         {},
+                         class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>
+          </div>
+        <% end %>
+
+        <!-- Form Actions -->
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                  data-action="click->messages#toggleForm">
+            Cancel
+          </button>
+          <%= f.submit "Post Message",
+                       class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
+
 </div>
 
 <script>
