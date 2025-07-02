@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
   # Set the current project for all actions
   before_action :set_project
   # Set the ticket for specific actions
-  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status]
+  before_action :set_ticket, only: %i[show destroy edit assign_tag unassign_tag add_status modal_show]
   # Load and authorize resources using CanCanCan
   load_and_authorize_resource
 
@@ -31,7 +31,7 @@ class TicketsController < ApplicationController
     # Combine issues and comments, sort by creation date (descending), and paginate
     ticket_items = (@ticket.issues + @ticket.comments).sort_by(&:created_at).reverse
     @page = (params[:ticket_items_page] || 1).to_i
-    per_page = 10
+    per_page = 5
     @total_pages = (ticket_items.size / per_page.to_f).ceil
     @ticket_items = ticket_items.slice((@page - 1) * per_page, per_page) || []
 
@@ -460,6 +460,21 @@ class TicketsController < ApplicationController
   def non_breached_sla_tickets
     @project = Project.find(params[:project_id])
     @tickets = @project.tickets.joins(:sla_tickets).where("sla_tickets.sla_status = 'Not Breached'")
+  end
+
+  def modal_show
+    @ticket_items = if params[:query].present?
+                      @ticket.issues.left_joins(:rich_text_content)
+                        .where('action_text_rich_texts.body ILIKE ?', "%#{params[:query]}%")
+                        .order('created_at DESC')
+                    else
+                      @ticket.issues.with_rich_text_content.order('created_at DESC')
+                    end
+
+    @issue = Issue.new
+    @sla_ticket = @ticket.sla_ticket if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
+
+    render partial: 'tickets/ticket_show_modal', layout: false
   end
 
   private

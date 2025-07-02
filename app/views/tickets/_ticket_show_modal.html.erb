@@ -1,0 +1,113 @@
+<%= turbo_frame_tag "modal" do %>
+<div class="fixed inset-0 z-50 overflow-hidden" data-controller="modal">
+  <!-- Blurred background -->
+  <div class="absolute inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"></div>
+  
+  <!-- Modal container - now using flex for two columns -->
+  <div class="fixed inset-y-0 right-0 w-full max-w-6xl flex overflow-hidden">
+    <!-- Left panel (ticket details) -->
+    <div class="w-1/2 bg-white dark:bg-gray-800 shadow-xl overflow-y-auto">
+      <div class="p-6">
+        <!-- Close button -->
+        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" 
+                data-action="click->modal#close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <!-- SECTION 1: Ticket header -->
+        <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">Issue ID <%= @ticket.unique_id %> Details</h2>
+          <div class="flex items-center justify-between mt-2">
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              <span class="font-medium">Created by: </span> <%= @ticket.user.name %> |
+              <span class="font-medium">Issue Type: </span> <%= @ticket.issue %>
+            </p>
+          </div>
+        </div>
+
+        <!-- SECTION 2: Image and Details row -->
+        <%= render partial: "tickets/ticketshow_top_left" %>
+
+
+        <!-- SECTION 3: Target Times and SLA sections of the ticket show-->
+        <%= render partial: "tickets/tickets_targets_sla", locals: { ticket: @tickets} %>
+
+        <!-- Subject and Content -->
+        <div class="col-span-2 mt-6">
+          <div class="mb-4">
+            <div class="text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider mb-1">Subject</div>
+            <div class="mt-1 text-base font-medium text-gray-900 dark:text-white">
+              <%= @ticket.subject %>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider mb-1">Content</div>
+            <div class="mt-1 text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+              <% if @ticket.content.present? %>
+                <%= sanitize raw(@ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip) %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Users -->
+        <div class="mt-6">
+          <%= render 'tickets/assign_people_tickets' %>
+        </div>
+
+        <!-- Due Date, Severity, Issue Type -->
+        <div class="mt-6">
+          <%= render 'tickets/custom_field' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right panel (messaging) -->
+    <div class="w-1/2 bg-gray-50 dark:bg-gray-700 border-l border-gray-200 dark:border-gray-600 flex flex-col">
+      <!-- Messages header -->
+      <div class="p-4 border-b border-gray-200 dark:border-gray-600">
+        <h3 class="font-bold text-gray-900 dark:text-white">Messages</h3>
+      </div>
+
+      <!-- Messages content -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-4" id="messages">
+        <%= render 'issues/issues_table', ticket_items: @ticket %>
+      </div>
+
+      
+
+      <!-- New message button -->
+      <% unless @ticket.statuses.first&.name == 'Closed' %>
+        <div data-controller="messages">
+          <!-- Single New Message Button -->
+          <div class="p-4 border-t border-gray-200 dark:border-gray-600">
+            <button id="newMessageButton" 
+                    class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
+                    data-action="click->messages#toggleForm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+              </svg>
+              New Message
+            </button>
+          </div>
+
+          <!-- Form Container (initially hidden) -->
+          <div id="messageFormContainer" class="hidden" data-messages-target="form">
+            <%= render 'issues/form', project: @project, ticket: @ticket, issue: Issue.new %>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<!-- Image modal -->
+<div id="imageModal" class="modal hidden fixed inset-0 z-50 overflow-auto bg-opacity-75" data-controller="image-modal" data-image-modal-target="modal">
+  <span class="close absolute top-4 right-4 text-3xl cursor-pointer" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+  <img class="modal-content block max-w-full max-h-screen m-auto" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
+</div>
+<% end %>

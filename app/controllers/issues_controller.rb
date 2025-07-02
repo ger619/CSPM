@@ -1,4 +1,5 @@
 class IssuesController < ApplicationController
+  include ActionView::RecordIdentifier
   before_action :set_project
   before_action :set_ticket
   before_action :set_issue, only: %i[show destroy edit update]
@@ -20,10 +21,16 @@ class IssuesController < ApplicationController
     @issue.user = current_user
     @issue.message_type ||= 'external'
 
-    # Validate that content is not blank
     if @issue.content.blank?
-      @issue.errors.add(:content, 'Subject cannot be blank.') # Custom validation error
+      @issue.errors.add(:content, 'Message cannot be blank.')
       respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            'new_message_form',
+            partial: 'issues/form',
+            locals: { project: @project, ticket: @ticket, issue: @issue }
+          )
+        end
         format.html { render :new, status: :unprocessable_entity }
       end
       return
@@ -42,26 +49,76 @@ class IssuesController < ApplicationController
           end
         end
 
-        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully created.' }
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.prepend('messages-list', # Fixed target ID
+                                 partial: 'issues/message',
+                                 locals: { item: @issue }),
+            turbo_stream.replace('new_message_form',
+                                 partial: 'issues/form',
+                                 locals: { project: @project, ticket: @ticket, issue: Issue.new }),
+            turbo_stream.update('messageFormContainer',
+                                html: '')
+          ]
+        end
+        format.html { redirect_to project_ticket_path(@project, @ticket) }
       else
-        format.html { render :new, alert: 'Issue was not created.' }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            'new_message_form',
+            partial: 'issues/form',
+            locals: { project: @project, ticket: @ticket, issue: @issue }
+          )
+        end
+        format.html { render :new }
+      end
+    end
+  end
+
+  def edit
+    respond_to do |format|
+      format.turbo_stream
+      format.html
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @issue.update(issue_params)
+        send_email_notifications(@issue, current_user)
+
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace(
+              dom_id(@issue), # Replace just the updated message
+              partial: 'issues/message',
+              locals: { item: @issue }
+            ),
+            turbo_stream.remove("edit-form-#{@issue.id}") # Close the edit form
+          ]
+        end
+
+        format.html { redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully updated.' }
+      else
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "edit-form-#{@issue.id}",
+            partial: 'issues/edit_form',
+            locals: { issue: @issue, project: @project, ticket: @ticket }
+          )
+        end
+        format.html { render :edit, status: :unprocessable_entity }
       end
     end
   end
 
   def destroy
     @issue.destroy
-    redirect_to project_ticket_path(@project, @ticket)
-  end
-
-  def edit; end
-
-  def update
-    if @issue.update(issue_params)
-      send_email_notifications(@issue, current_user)
-      redirect_to project_ticket_path(@project, @ticket), notice: 'Issue was successfully updated.'
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.remove(dom_id(@issue))
+      end
+      format.html { redirect_to project_ticket_path(@project, @ticket) }
     end
   end
 

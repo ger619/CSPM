@@ -1,0 +1,8 @@
+<%= turbo_stream.append "messages" do %>
+  <%= render @issue %>
+<% end %>
+
+<%= turbo_stream.update "new_message_form" do %>
+  <!-- This clears the form -->
+  <%= render "form", project: @project, ticket: @ticket, issue: Issue.new %>
+<% end %>

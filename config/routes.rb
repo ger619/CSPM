@@ -61,6 +61,7 @@ Rails.application.routes.draw do
         get 'non_breached_sla_tickets'
       end
       member do
+        get :modal_show
         post :assign_tag
         delete :unassign_tag
         post :add_status

@@ -1,7 +1,7 @@
 <div class="w-full">
   <%= render 'tickets/search_q' %>
 
-  <div class="overflow-x-auto  h-full">
+  <div class="overflow-x-auto h-full">
     <table class="min-w-full divide-y">
       <thead class="">
       <tr>
@@ -44,6 +44,7 @@
                 <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) %>
               <% end %>
             </td>
+       
             <!-- Issue Type 3 -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
@@ -164,7 +165,6 @@
         const tbody = table.querySelector("tbody");
         const rows = Array.from(tbody.querySelectorAll("tr"));
         const isAscending = !this.classList.contains("asc");
-
         table.querySelectorAll("th[scope='col']").forEach(h => {
           h.classList.remove("asc", "desc");
         });

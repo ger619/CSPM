@@ -1,0 +1,72 @@
+<li class="relative pl-8 <%= 'bg-yellow-50 dark:bg-yellow-900/20' if item.is_a?(Issue) && item.message_type == 'internal' %>" id="<%= dom_id(item) %>">
+  <!-- Timeline dot -->
+  <span class="absolute left-0 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white dark:ring-gray-800 dark:bg-blue-900">
+    <svg class="w-3 h-3 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+    </svg>
+  </span>
+
+  <!-- Message Card -->
+  <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+    <!-- Message Header -->
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-3">
+        <span class="font-medium text-gray-900 dark:text-white">
+          <%= item.user.name %>
+        </span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">
+          <%= item.created_at.strftime("%I:%M %p at %d %B %Y") %>
+        </span>
+      </div>
+      
+      <!-- Message Actions -->
+      <div class="flex gap-2">
+        <% if can?(:edit, item) %>
+          <button type="button"
+                  class="text-xs px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-900"
+                  data-action="click->messages#showEditForm"
+                  data-message-id="<%= item.id %>">
+            Edit
+          </button>
+        <% end %>
+
+        <% if can?(:delete, item) %>
+          <%= link_to 'Delete', [item.ticket.project, @ticket, item], 
+              method: :delete, 
+              data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+              class: 'text-xs px-2.5 py-0.5 rounded bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900' %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Message Content -->
+    <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+      <%= raw item.content.to_trix_html.gsub(/\[.*?\]/, '').strip %>
+    </div>
+
+    <!-- Edit Form (hidden by default) -->
+    <div id="edit-form-<%= item.id %>" 
+         class="hidden mt-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg"
+         data-messages-target="editForm">
+      <%= render 'issues/edit_form', issue: item, project: @project, ticket: @ticket %>
+    </div>
+
+    <!-- Attachments -->
+    <% if item.content.body.attachments.any? %>
+      <div class="mt-3 space-y-2">
+        <% item.content.body.attachments.each do |attachment| %>
+          <div class="flex items-center gap-2 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+            </svg>
+            <% if attachment.attachable.is_a?(ActiveStorage::Blob) %>
+              <%= link_to attachment.attachable.filename.to_s,
+                        rails_blob_path(attachment.attachable, disposition: "attachment"),
+                        class: "text-blue-600 hover:underline dark:text-blue-400" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</li>
