@@ -1,5 +1,4 @@
-<td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium" data-controller="dropdown" data-dropdown-ticket-id-value="<%= ticket.id %>">
-  <div class="relative inline-block text-left">
+<div class="relative inline-block text-left">
     <div>
       <button
         type="button"
@@ -35,7 +34,7 @@
                       project_ticket_path(ticket.project, ticket),
                       class: 'text-sm hover:text-blue-600 hover:underline' %>
         </div>
-
+        
         <div class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg"
                fill="none"
@@ -47,7 +46,7 @@
                   stroke-linejoin="round"
                   d="M15.75 10.5L12 14.25l-3.75-3.75" />
           </svg>
-
+          
           <%= link_to 'Quick View',
                       modal_show_project_ticket_path(ticket.project, ticket),
                       data: { turbo_frame: "modal" },
@@ -96,6 +95,7 @@
           </div>
         <% end %>
       </div>
-    </div>
+  </div>
   </div>
 </td>
+</div>

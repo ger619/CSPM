@@ -492,6 +492,26 @@ class DataCenterController < ApplicationController
     end
   end
 
+  def send_team_ticket_emails
+    team = Team.find_by(name: params[:team_name])
+    return redirect_back fallback_location: root_path, alert: 'Team not found.' unless team
+
+    outstanding_statuses = %w[Closed Resolved Declined]
+    user_ids = team.users.pluck(:id)
+
+    base_scope = Ticket.joins(:users, project: :client)
+      .joins(:statuses, :taggings)
+      .where(users: { id: user_ids })
+      .where.not(statuses: { name: outstanding_statuses })
+
+    team.users.each do |user|
+      user_tickets = base_scope.where(taggings: { user_id: user.id }).distinct
+      UserMailer.morning_ticket_email(user, user_tickets.to_a).deliver_later if user_tickets.any?
+    end
+
+    redirect_back fallback_location: root_path, notice: 'Ticket emails sent to team members.'
+  end
+
   # CBK Report for Groupware/Elma
 
   def cbk_groupware_report

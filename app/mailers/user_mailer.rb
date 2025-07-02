@@ -152,4 +152,14 @@ class UserMailer < ApplicationMailer
       format.text { render plain: "Daily Ticket Report for #{@user.name}" }
     end
   end
+
+  def morning_ticket_email(user, tickets, mail_options = {})
+    @user = user
+    @tickets = tickets
+
+    mail(to: @user.email, cc: mail_options[:cc], subject: "Start of Day Ticket Report for #{@user.name}") do |format|
+      format.html { render 'morning_ticket_email' }
+      format.text { render plain: "Morning Ticket Report for #{@user.name}" }
+    end
+  end
 end
