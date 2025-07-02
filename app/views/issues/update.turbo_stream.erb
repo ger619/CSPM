@@ -1,0 +1,5 @@
+<%= turbo_stream.replace dom_id(@issue) do %>
+  <%= render "issues/issue", item: @issue %>
+<% end %>
+
+<%= turbo_stream.remove "edit-form-#{@issue.id}" %>
