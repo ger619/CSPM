@@ -1,14 +1,8 @@
 <div class="flex items-center justify-between w-full p-3 rounded-lg border mb-4">
   <!-- Search Input -->
   <div class="relative flex-1 max-w-md mr-4">
-    <%= form_with url: project_path(@project), method: :get, class: 'w-full' do |f| %>
-      <div class="flex">
-        <input type="search" 
-               name="search" 
-               value="<%= params[:search] %>" 
-               class="block w-full p-2 pl-10 text-sm border-gray-300 dark:bg-gray-500 dark:border-gray-50 dark:text-gray-200 border rounded-l-lg focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300" 
-               placeholder="Search by either issue or subject">
-      </div>
+    <%= form_with url: project_path(@project), method: :get, class: 'flex gap-2' do |f| %>
+      <%= f.text_field :query, class: "block w-full p-2 pl-10 text-sm border-gray-300 dark:bg-gray-500 dark:border-gray-50 dark:text-gray-200 border rounded-l-lg focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300", placeholder: "Search by either issue or subject" %>
     <% end %>
   </div>
 
