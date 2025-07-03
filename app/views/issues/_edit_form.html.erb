@@ -61,12 +61,12 @@
                   </svg>
                 </button>
               </div>
-              
+
               <div id="externalUsers-<%= issue.id %>" class="user-list">
                 <% project.users.distinct.order(:first_name).each do |user| %>
-                  <% unless issue.users.include?(user) %>
-                    <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" 
-                         data-user-id="<%= user.id %>" 
+                  <% if (issue.respond_to?(:users) && !issue.users.include?(user)) || (issue.respond_to?(:user) && issue.user != user) %>
+                    <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                         data-user-id="<%= user.id %>"
                          onclick="selectUser('<%= issue.id %>', this)">
                       <%= user.name %>
                     </div>
@@ -81,12 +81,11 @@
       <!-- Message Type -->
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message Visibility</label>
-        <%= f.select :message_type, 
-            options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]], 
-            selected: issue.message_type || "external"),
-            {},
-            class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>
-      </div>
+        <%= f.select :message_type,
+                     options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
+                                        selected: (issue.respond_to?(:message_type) ? issue.message_type : "external")),
+                     {},
+                     class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>      </div>
     <% end %>
 
     <!-- Form Actions -->
