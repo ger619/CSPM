@@ -10,7 +10,7 @@
         <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% elsif current_status == 'Pending' %>
         <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS0", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
@@ -36,7 +36,7 @@
 
       <% if transition_map[current_status] %>
         <%= select_tag :status_id, options_for_select(Status.where(name: transition_map[current_status]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS1", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
@@ -48,6 +48,7 @@
       <% transition_map = {
         'New' => ['Assigned', ""],
         'Assigned' => ['Work in Progress'],
+        ['Assigned','Assigned'] => ['Work in Progress'],
         'Work in Progress' => ['Declined', 'Resolved', 'On-Hold', 'Under Development', 'Client Confirmation Pending'],
         'On-Hold' => ['Under Development', 'Work in Progress'],
         'Under Development' => ['QA Testing', 'Awaiting Build', 'On-Hold'],
@@ -65,7 +66,7 @@
       <% elsif transition_map[current_status] %>
         <%= select_tag :status_id, options_for_select(Status.where(name: transition_map[current_status]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       <% end %>
-      <%= submit_tag "UPDATE STATUS2", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+      <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
     <% end %>
   <% elsif current_user.has_role?(:client) %>
     <%= form_with url: add_status_project_ticket_path(@project, @ticket, data: { turbo: false}), local: true do %>
@@ -73,7 +74,7 @@
       <% allowed = ["Client Confirmation Pending", "Resolved", "Reopened",  "Closed",  "Declined"] %>
       <% if allowed.include?(current_status) %>
         <%= select_tag :status_id, options_for_select(Status.where(name: %w[Closed Reopened Resolved]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS3", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
       <% end %>
     <% end %>
   <% end %>
