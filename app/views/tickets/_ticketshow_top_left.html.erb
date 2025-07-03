@@ -1,114 +1,116 @@
 <div class="flex flex-col md:flex-row gap-6 mb-6">
-          <!-- Left side - Image -->
-          <div class="w-full md:w-1/3">
-            <% if @ticket.ticket_image.present? %>
-              <%= image_tag @ticket.ticket_image, class: 'w-full h-48 object-contain rounded border border-gray-200 dark:border-gray-600 cursor-pointer', data: { action: 'click->image-modal#openModal' } %>
-            <% elsif @project.image.present? %>
-              <%= image_tag @project.image, class: 'w-full h-48 object-contain rounded border border-gray-200 dark:border-gray-600' %>
-            <% else %>
-              <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center">
-                <span class="text-gray-400 dark:text-gray-500">No Image</span>
-              </div>
-            <% end %>
-          </div>
-          
-          <!-- Right side - Details -->
-          <div class="w-full md:w-2/3">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Priority</p>
-                <p class="font-bold text-gray-900 dark:text-white"><%= @ticket.priority %></p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Status</p>
-                
-                <div class="font-bold flex items-center relative group" data-controller="status-modal">
-                  <!-- Clickable Status with Edit Icon -->
-                  <button type="button"
-                          class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-                          data-action="click->status-modal#toggleDropdown">
-                    <span class="text-gray-800 dark:text-gray-200 group-hover:text-blue-700 dark:group-hover:text-blue-400">
-                      <%= render partial: 'ticket_status', locals: { ticket: @ticket } %>                    </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" 
-                        class="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
-                        stroke-width="1.5">
-                      <path stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                    </svg>
-                  </button>
+  <!-- Left side - Image -->
+  <div class="w-full md:w-1/3">
+    <% if @ticket.ticket_image.present? %>
+      <%= image_tag @ticket.ticket_image, class: 'w-full h-48 object-contain rounded border border-gray-200 dark:border-gray-600 cursor-pointer', data: { action: 'click->image-modal#openModal' } %>
+    <% elsif @project.image.present? %>
+      <%= image_tag @project.image, class: 'w-full h-48 object-contain rounded border border-gray-200 dark:border-gray-600' %>
+    <% else %>
+      <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center">
+        <span class="text-gray-400 dark:text-gray-500">No Image</span>
+      </div>
+    <% end %>
+  </div>
 
-                  <!-- Status Change Modal -->
-                  <div class="hidden fixed inset-0 bg-gray-500 overflow-y-auto h-1/2 w-1/2 z-50"
-                      data-status-modal-target="dropdown">
-                    <!-- Modal Header -->
-                    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+  <!-- Right side - Details -->
+  <div class="w-full md:w-2/3">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Priority</p>
+        <p class="font-bold">
+          <%= render partial: 'tickets/priority_severity', locals: { ticket: @ticket } %>
+        </p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Status</p>
 
-                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700 z-50">
-                      <h3 class="font-semibold flex items-center justify-between text-gray-900 dark:text-white">
-                        <span>Update Ticket Status</span>
-                        <button type="button"
-                                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                                data-action="click->status-modal#closeDropdown"
-                                aria-label="Close">
-                          <svg xmlns="http://www.w3.org/2000/svg"
-                              class="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      </h3>
-                    </div>
-                    
-                    <!-- Modal Content -->
-                    <div class="p-5">
-                      <%= render 'tickets/ticket_action', project: @project, ticket: @ticket %>
-                    </div>
-                    
-                    <!-- Modal Footer -->
-                    <div class="px-5 py-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                      <button type="button"
-                              class="px-4 py-2 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 font-medium rounded-md transition-colors"
-                              data-action="click->status-modal#closeDropdown">
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                </div>
-              </div>
+        <div class="font-bold flex items-center relative group" data-controller="status-modal">
+          <!-- Clickable Status with Edit Icon -->
+          <button type="button"
+                  class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                  data-action="click->status-modal#toggleDropdown">
+            <span class="text-gray-800 dark:text-gray-200 group-hover:text-blue-700 dark:group-hover:text-blue-400">
+              <%= render partial: 'ticket_status', locals: { ticket: @ticket } %>                    </span>
+            <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5">
+              <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+            </svg>
+          </button>
+
+          <!-- Status Change Modal -->
+          <div class="hidden fixed inset-0 bg-gray-500 overflow-y-auto h-1/2 w-1/2 z-50"
+              data-status-modal-target="dropdown">
+            <!-- Modal Header -->
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+
+            <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700 z-50">
+              <h3 class="font-semibold flex items-center justify-between text-gray-900 dark:text-white">
+                <span>Update Ticket Status</span>
+                <button type="button"
+                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        data-action="click->status-modal#closeDropdown"
+                        aria-label="Close">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </h3>
             </div>
-            
-            <div class="grid grid-cols-3 gap-4 mt-4">
-              <div>
-                <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Product</p>
-                <p class="font-medium text-gray-900 dark:text-white">
-                  <% if @ticket.software.present? %>
-                    <%= @ticket.software&.name || 'No Software Assigned' %>
-                  <% end %>
-                </p>
-              </div>
-              
-              <div>
-                <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Sub-Product</p>
-                <p class="font-medium text-gray-900 dark:text-white">
-                  <% if @ticket.software.present? %>
-                    <% selected_groupware = @ticket.software.groupwares.find_by(id: @ticket.groupware_id) %>
-                    <%= selected_groupware ? selected_groupware.name : 'No Groupware Assigned' %>
-                  <% end %>
-                </p>
-              </div>
-              
-              <div>
-                <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Time Created</p>
-                <p class="font-medium text-gray-900 dark:text-white"><%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %></p>
-              </div>
+
+            <!-- Modal Content -->
+            <div class="p-5">
+              <%= render 'tickets/ticket_action', project: @project, ticket: @ticket %>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-5 py-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+              <button type="button"
+                      class="px-4 py-2 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 font-medium rounded-md transition-colors"
+                      data-action="click->status-modal#closeDropdown">
+                Cancel
+              </button>
             </div>
           </div>
         </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mt-4">
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Product</p>
+        <p class="font-medium text-gray-900 dark:text-white">
+          <% if @ticket.software.present? %>
+            <%= @ticket.software&.name || 'No Software Assigned' %>
+          <% end %>
+        </p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Sub-Product</p>
+        <p class="font-medium text-gray-900 dark:text-white">
+          <% if @ticket.software.present? %>
+            <% selected_groupware = @ticket.software.groupwares.find_by(id: @ticket.groupware_id) %>
+            <%= selected_groupware ? selected_groupware.name : 'No Groupware Assigned' %>
+          <% end %>
+        </p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Time Created</p>
+        <p class="font-medium text-gray-900 dark:text-white"><%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %></p>
+      </div>
+    </div>
+  </div>
+</div>

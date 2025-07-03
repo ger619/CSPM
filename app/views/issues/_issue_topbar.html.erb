@@ -1,9 +1,41 @@
 <div class="grid grid-cols-2 ">
-  <div class="col-span-1">
+  <div class="col-span-1 flex">
     <div class="flex flex-wrap gap-1">
       <button onclick="history.back()" class="bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100">
         &#8656; Back
       </button>
+    </div>
+    <div class="flex items-center gap-3 sm:gap-4">
+      <div class="flex-shrink-0">
+        <% if @project.image.present? %>
+          <%= image_tag(@project.image, class: 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover') %>
+        <% else %>
+          <%= image_tag 'default.png', class: 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover' %>
+        <% end %>
+      </div>
+
+      <div class="flex flex-col">
+        <h1 class="text-lg sm:text-xl md:text-2xl font-semibold">
+          <%= @project.title %> /
+          <span class="font-medium text-md">
+          <%= @ticket.issue %>
+        </span>
+        </h1>
+        <p class="text-xs sm:text-sm md:text-base">
+          <span class="font-medium">
+            <%= @ticket.user.name %>
+          </span>
+          /
+          <span class="font-medium uppercase">
+            <%= @ticket.unique_id %>
+          </span>
+          /
+          <span class="font-medium">
+            <%= render partial: 'tickets/priority_severity', locals: { ticket: @ticket } %>
+          </span>
+
+        </p>
+      </div>
     </div>
   </div>
   <!-- Search on the right -->

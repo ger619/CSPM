@@ -1,0 +1,32 @@
+  <div class="mt-6 col-span-3 flex mr-2 flex-col gap-4 p-4 w-full">
+    <h1 class="text-3xl text-center mb-10">Communication Center</h1>
+    <!-- Tabs Section -->
+    <div id="history" class="tabcontent active">
+      <%= render partial: 'issues/issues_table' %>
+    </div>
+
+    <% if current_page?(project_ticket_path(@project, @ticket)) %>
+
+      <!-- New message button -->
+      <% unless @ticket.statuses.first&.name == 'Closed' %>
+        <div data-controller="messages">
+          <!-- Single New Message Button -->
+          <div class="p-4 border-t border-gray-200 dark:border-gray-600">
+            <button id="newMessageButton"
+                    class="flex items-center justify-center gap-2 w-2xl px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
+                    data-action="click->messages#toggleForm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+              </svg>
+              New Message
+            </button>
+          </div>
+
+          <!-- Form Container (initially hidden) -->
+          <div id="messageFormContainer" class="hidden" data-messages-target="form">
+            <%= render 'issues/form', project: @project, ticket: @ticket, issue: Issue.new %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
