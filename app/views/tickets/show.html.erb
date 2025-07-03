@@ -7,49 +7,16 @@
 
   <!-- Ticket Information Section -->
   <div class="grid md:grid-cols-5 md:items-center ">
-    <div class="mb-4 font-bold capitalize">
-      <p>Ticket ID:
-        <span class="font-medium uppercase">
-          <%= @ticket.unique_id %>
-        </span>
-      </p>
-      <p>Created by:
-        <span class="font-medium">
-          <%= @ticket.user.name %>
-        </span>
-      </p>
-      <div class="mb-4 font-bold capitalize">Type of Issue:
-        <span class="font-medium">
-          <%= @ticket.issue %>
-        </span>
-      </div>
-      <% if @ticket.ticket_image.present? %>
-        <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
-      <% elsif @project.image.present? %>
-        <%= image_tag @project.image, class: 'w-16' %>
-      <% else %>
-        <%= image_tag 'default.png', class: 'h4 me-3 sm:h7' %>
-      <% end %>
-    </div>
-    <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
-      <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
-      <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
-    </div>
-
-    <div class="w-full col-span-3 h-full flex">
-      <div class="grid grid-cols-3">
+    <div class="w-full col-span-4 h-full flex">
+      <div class="grid grid-cols-4">
         <div class="col-span-1">
           <div>
             <%= render 'ticket_middle' %>
           </div>
-          <div class="mb-2.5 font-bold capitalize flex">Status:
-            <span class="font-medium ml-1">
-              <%= render partial: 'tickets/ticket_status', locals: { ticket: @ticket } %>            </span>
-          </div>
           <!-- SLA -->
           <%= render 'sla' %>
         </div>
-        <div class="col-span-2">
+        <div class="col-span-3">
           <div class="mb-2.5 font-bold capitalize">Subject:
             <span class="font-extralight">
               <%= @ticket.subject %>
@@ -95,6 +62,26 @@
       </div>
     </div>
     <div class="w-full col-span-1 h-full p-2">
+      <div class="mb-4 font-bold capitalize">
+        <% if @ticket.ticket_image.present? %>
+          <p> Click to Enlarge</p>
+          <%= image_tag @ticket.ticket_image, class: 'zoomable-image w-48 object-cover' %>
+        <% elsif @project.image.present? %>
+          <%= image_tag @project.image, class: 'w-16' %>
+        <% else %>
+          <%= image_tag 'default.png', class: 'w-16' %>
+        <% end %>
+      </div>
+      <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
+        <span class="close" data-action="click->image-modal#closeModal" data-image-modal-target="closeButton">&times;</span>
+        <img class="modal-content" id="fullImage" data-image-modal-target="modalImage" alt='show image'>
+      </div>
+
+      <div class="mb-2.5 font-bold capitalize flex">Status:
+        <span class="font-medium ml-1">
+          <%= render partial: 'tickets/ticket_status', locals: { ticket: @ticket } %>
+        </span>
+      </div>
       <%= render 'tickets/assign_people_tickets' %>
       <% if @ticket.attachments.any? %>
     <h3 class="text-lg font-bold mt-4">Attachments:</h3>
