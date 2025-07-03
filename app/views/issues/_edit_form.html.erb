@@ -34,11 +34,19 @@
                  autocomplete="off">
           
           <div id="selectedUsers-<%= issue.id %>" class="flex flex-wrap gap-2 mt-2">
-            <% issue.users.each do |user| %>
+            <% if issue.respond_to?(:users) %>
+              <% issue.users.each do |user| %>
+                <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-2 text-sm">
+                  <%= user.name %>
+                  <span onclick="removeUser('<%= issue.id %>', '<%= user.id %>', this)" class="cursor-pointer text-red-500">×</span>
+                  <input type="hidden" name="team[user_ids][]" value="<%= user.id %>" class="user-input-<%= user.id %>">
+                </div>
+              <% end %>
+            <% elsif issue.respond_to?(:user) && issue.user.present? %>
               <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-2 text-sm">
                 <%= issue.user.name %>
-                <span onclick="removeUser('<%= issue.id %>', '<%= user.id %>', this)" class="cursor-pointer text-red-500">×</span>
-                <input type="hidden" name="team[user_ids][]" value="<%= user.id %>" class="user-input-<%= user.id %>">
+                <span onclick="removeUser('<%= issue.id %>', '<%= issue.user.id %>', this)" class="cursor-pointer text-red-500">×</span>
+                <input type="hidden" name="team[user_ids][]" value="<%= issue.user.id %>" class="user-input-<%= issue.user.id %>">
               </div>
             <% end %>
           </div>
