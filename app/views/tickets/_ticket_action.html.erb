@@ -2,16 +2,17 @@
   <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
     <%= form_with url: add_status_project_ticket_path(@project, @ticket, data: { turbo: false}), local: true do %>
       <% current_status = @ticket.statuses.first&.name %>
-
-      <% if @ticket.statuses.empty? %>
-        <%= select_tag :status_id, options_for_select(Status.where(name: ['Assigned']).pluck(:name, :id)), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-      <% elsif current_status == 'Assigned' %>
-        <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined Pending]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
-      <% elsif current_status == 'Pending' %>
-        <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
-      <% end %>
+      <div class="relative flex flex-row gap-2">
+            <% if @ticket.statuses.empty? %>
+              <%= select_tag :status_id, options_for_select(Status.where(name: ['Assigned']).pluck(:name, :id)), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+            <% elsif current_status == 'Assigned' %>
+              <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined Pending]).pluck(:name, :id), @ticket.statuses.first.id), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+              <%= submit_tag "UPDATE STATUS", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+            <% elsif current_status == 'Pending' %>
+              <%= select_tag :status_id, options_for_select(Status.where(name: %w[Approved Declined]).pluck(:name, :id), @ticket.statuses.first.id), class: "w-[50%] border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+              <%= submit_tag "UPDATE", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mt-2' %>
+            <% end %>
+      </div>
     <% end %>
   <% end %>
 
