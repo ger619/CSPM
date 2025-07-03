@@ -10,13 +10,10 @@
     <div class="w-full col-span-4 h-full flex">
       <div class="grid grid-cols-4">
         <div class="col-span-4">
-          <div class="mb-2.5 font-bold capitalize">Subject:
-            <span class="font-extralight">
+          <div class="mb-2.5 font-bold capitalize">
               <%= @ticket.subject %>
-            </span>
           </div>
           <div class="mb-2.5 flex flex-wrap">
-            <span class="font-bold">Content:</span>
             <% if @ticket.content.present? %>
               <span class="break-words overflow-hidden">
                 <%= sanitize raw (@ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip) %>
