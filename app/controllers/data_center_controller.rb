@@ -254,18 +254,30 @@ class DataCenterController < ApplicationController
 
   def assigned_tickets
     @team = Team.find(params[:team_id])
+
+    # Use the same date range logic as project_report
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+    else
+      start_date = 6.months.ago.to_date
+      end_date = Date.today
+    end
+
     if params[:user_id]
       @user = User.find(params[:user_id])
       @tickets = Ticket.joins(:statuses, :taggings, :project)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(taggings: { user_id: @user.id })
-        .order('projects.title').order('created_at DESC')
+                       .where.not(statuses: { name: %w[Resolved Closed Declined] })
+                       .where(taggings: { user_id: @user.id })
+                       .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+                       .order('projects.title').order('created_at DESC')
     else
       @tickets_by_user = Ticket.joins(:statuses, :taggings, :project)
-        .where.not(statuses: { name: %w[Resolved Closed Declined] })
-        .where(taggings: { user_id: @team.users.pluck(:id) })
-        .order('projects.title').order('created_at DESC')
-        .group_by(&:user)
+                               .where.not(statuses: { name: %w[Resolved Closed Declined] })
+                               .where(taggings: { user_id: @team.users.pluck(:id) })
+                               .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+                               .order('projects.title').order('created_at DESC')
+                               .group_by(&:user)
     end
   end
 
