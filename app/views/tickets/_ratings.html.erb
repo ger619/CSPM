@@ -8,10 +8,10 @@
   <button id="open-modal" class="review_btn">Submit A Review</button>
 
   <div id="rating-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-lg">
+    <div class="bg-white dark:bg-gray-700  rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-lg">
       <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
         <h5 class="text-lg font-semibold">Submit Review</h5>
-        <button id="close-modal" class="text-gray-400 hover:text-gray-600">&times;</button>
+        <button id="close-modal" class="text-gray-400 hover:text-gray-600">&timesX</button>
       </div>
       <div class="px-4 py-5">
         <%= form_with model: [@project, @ticket, Rating.new], local: true do |f| %>
@@ -27,8 +27,8 @@
             <% end %>
           </ul>
           <%= f.hidden_field :value, id: 'rating-value' %>
-          <%= f.text_area :ratings, class: 'form-control mt-3 w-full border border-gray-300 rounded-md p-2', placeholder: 'Leave a comment...' %>
-          <%= f.submit 'Submit', class: 'review_btn' %>
+          <%= f.text_area :comment, class: 'form-control mt-3 w-full bg-white dark:bg-gray-600 border border-gray-300 rounded-md p-2', placeholder: 'Leave a comment...' %>
+          <%= f.submit 'Submit', class: 'mt-1 review_btn' %>
         <% end %>
       </div>
     </div>
