@@ -1,6 +1,5 @@
 <div class="w-full">
   <%= render 'tickets/search_q' %>
-
   <div class="overflow-x-auto h-full">
     <table class="min-w-full divide-y">
       <thead class="">
@@ -44,17 +43,14 @@
                 <%=  ticket.unique_id %>
               <% end %>
             </td>
-       
             <!-- Issue Type 3 -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= ticket.issue %>
             </td>
-
             <!-- Severity  4 -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= render partial: 'tickets/priority_severity', locals: { ticket: ticket } %>
             </td>
-
             <!-- Summary 5 -->
             <td class="px-4 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
               <div class="flex-shrink-0">
