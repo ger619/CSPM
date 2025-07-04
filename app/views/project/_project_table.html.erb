@@ -9,7 +9,8 @@
       <th scope="col" class="px-4 px-2">Assignee</th>
       <th scope="col" class="px-4 px-2">Client</th>
       <th scope="col" class="px-4 px-2">Product Category</th>
-      <% if current_user.has_role? :admin %>
+      <th scope="col" class="px-4 px-2">VIEW</th>
+      <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
         <% if can? :edit, @project %>
           <th scope="col" class="px-4 px-2">EDIT</th>
         <% end %>
@@ -22,8 +23,8 @@
     <tbody>
     <% @project.each do |project| %>  <!-- Looping through each project -->
       <% if project.assigned_to?(current_user) || current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?(:agent)  %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center" style="cursor:pointer;" onclick="window.location='<%= project_path(project.id) %>'">          <td class="px-4 py-4 font-medium text-left">
-
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
+          <td class="px-4 py-4 font-medium text-left">
             <% if project.image.present? %>
               <%= link_to project_path(project.id) do %>
                 <%= image_tag(project.image, class: 'w-16') %>
@@ -58,7 +59,10 @@
                 <%= software.name %>
               <% end %>
           </td>
-          <% if current_user.has_role? :admin %>
+          <td class="px-4 py-4 text-left">
+            <%= link_to "VIEW", project_path(project.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' %>
+          </td>
+          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
             <% if can? :edit, project %>
               <td class="px-4 py-4 text-left">
                 <%= link_to 'Edit', edit_project_path(project), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100', id: 'button' %>
