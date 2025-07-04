@@ -1,11 +1,10 @@
 <% if ticket.statuses.present? %>
-<% ticket.statuses.each do |status| %>
     <% ticket.statuses.each do |status| %>
       <% case status.name %>
             <% when 'Resolved' %>
               <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-green-100 text-green-800">Resolved</span>
             <% when 'Closed' %>
-              <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Closed</span>
+              <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-200 text-gray-800">Closed</span>
             <% when 'Reopened' %>
               <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-red-100 text-red-800">Reopened</span>
             <% when 'New' %>
@@ -32,5 +31,4 @@
               <span class="px-2 py-1 text-sm font-semibold rounded-lg bg-gray-100 text-gray-800">Declined</span>
             <% end %>
     <% end %>
-  <% end %>
 <% end %>
