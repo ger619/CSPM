@@ -1,9 +1,7 @@
-<h1 class="flex justify-center text-2xl font-bold mb-4">Assigned Tickets for <%= @user.name %></h1>
-
-
-
+<h1 class="flex justify-center text-2xl font-bold mb-4">
+  Assigned Tickets for <%= @user.name %>
+</h1>
 <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-
   <!-- New table to show project names and ticket counts -->
   <table class="border-collapse border border-gray-300 w-full mb-4">
     <thead>
@@ -27,10 +25,8 @@
     <% end %>
     </tbody>
   </table>
-
-
-    <table class="border-collapse border border-gray-300 w-full mb-4">
-      <thead>
+  <table class="border-collapse border border-gray-300 w-full mb-4">
+    <thead>
       <tr>
         <th scope="col" class="border border-gray-300 px-4 py-2">Date of Creation</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">Name of the Project</th>
@@ -43,10 +39,9 @@
         <th scope="col" class="border border-gray-300 px-4 py-2">Reported By</th>
         <th scope="col" class="border border-gray-300 px-4 py-2">VIEW</th>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <% @tickets.each do |ticket| %>
-        <%# if ticket.users.any? { |u| u.name == @user.name } %>
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
@@ -81,7 +76,6 @@
             </td>
           </tr>
         <% end %>
-      <%# end %>
       </tbody>
     </table>
 </div>
