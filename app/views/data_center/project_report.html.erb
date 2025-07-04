@@ -88,6 +88,33 @@
       </tr>
       </thead>
       <tbody>
+      <% # Totals row %>
+      <% total_assigned = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Assigned'].to_i } %>
+      <% total_wip = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Work in Progress'].to_i } %>
+      <% total_ud = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Under Development'].to_i } %>
+      <% total_ccp = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Client Confirmation Pending'].to_i } %>
+      <% total_ab = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Awaiting Build'].to_i } %>
+      <% total_total = @team_members.sum { |user| (@organized_tickets[user.id] || {})[:total].to_i } %>
+      <% total_open = @team_members.sum { |user| (@tickets_chart_data[user.name] || 0).to_i } %>
+      <% total_sla_status = @team_members.sum { |user| (@sla_status[user.id] || 0).to_i } %>
+      <% total_sla_trd = @team_members.sum { |user| (@sla_target_response_deadline[user.id] || 0).to_i } %>
+      <% total_sla_rd = @team_members.sum { |user| (@sla_resolution_deadline[user.id] || 0).to_i } %>
+
+      <tr class="font-bold bg-gray-100">
+        <td class="border border-gray-300 px-4 py-2">Total</td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_total %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_open %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_assigned %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_wip %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_ud %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_ccp %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_ab %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_sla_status %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_sla_trd %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_sla_rd %></td>
+        <td class="border border-gray-300 px-4 py-2"></td>
+      </tr>
+
       <% sorted_team_members = @team_members.sort_by { |user| -(@tickets_chart_data[user.name] || 0) } %>
       <% sorted_team_members.each do |user| %>
         <% ticket_data = @organized_tickets[user.id] || {} %>
