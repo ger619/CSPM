@@ -1,6 +1,5 @@
 <div class="w-full">
   <%= render 'tickets/search_q' %>
-
   <div class="overflow-x-auto h-full">
     <table class="min-w-full divide-y">
       <thead class="">
@@ -33,28 +32,25 @@
                          when 'INCIDENT' then 'bg-[#F39C12]'
                          when 'CHANGE REQUEST' then 'bg-[#2ECC71]'
                          else ''
-                         end %>">
+                         end %>" style="cursor:pointer;" onclick="window.location='<%= project_ticket_path(ticket.project, ticket) %>'" >
             <!-- Date 1 -->
             <td class="px-2 py-2 whitespace-nowrap">
-              <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
+              <%= ticket.created_at.strftime("%d %b %Y") %>
             </td>
             <!-- Ticket ID 2 -->
             <td class="px-4 py-4 whitespace-nowrap font-medium uppercase">
               <% if ticket.unique_id.present? %>
-                <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) %>
+                <%=  ticket.unique_id %>
               <% end %>
             </td>
-       
             <!-- Issue Type 3 -->
             <td class="px-4 py-4 whitespace-nowrap">
-              <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
+              <%= ticket.issue %>
             </td>
-
             <!-- Severity  4 -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= render partial: 'tickets/priority_severity', locals: { ticket: ticket } %>
             </td>
-
             <!-- Summary 5 -->
             <td class="px-4 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
               <div class="flex-shrink-0">
