@@ -86,6 +86,11 @@ rspec
 - Twitter: [@ger_abol]()
 - LinkedIn: [David Ger](https://linkedin.com/in/david-ger-426b4576)
 
+👤 **Nemwel Boniface**
+
+- GitHub: [Nemwel-Boniface](https://github.com/Nemwel-Boniface)
+- LinkedIn: [Nemwel Boniface](https://www.linkedin.com/in/nemwel-nyandoro/)
+
 
 ## 🤝 Contributing
 
