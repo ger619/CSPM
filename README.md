@@ -87,6 +87,19 @@ rspec
 - LinkedIn: [David Ger](https://linkedin.com/in/david-ger-426b4576)
 
 
+👤 **Robert Kanyoro**
+
+- GitHub: [@Kanyorok](https://github.com/Kanyorok/)
+- Twitter: [@CarlosMbugua](https://twitter.com/CarlosMbugua/)
+- LinkedIn: [Robert Kanyoro](https://www.linkedin.com/in/robert-mbugua-kanyoro/)
+
+
+👤 **Nemwel Boniface**
+
+- GitHub: [Nemwel-Boniface](https://github.com/Nemwel-Boniface)
+- LinkedIn: [Nemwel Boniface](https://www.linkedin.com/in/nemwel-nyandoro/)
+
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
