@@ -13,9 +13,6 @@
     <th class="py-2 px-4 border-b">ASSIGNEE</th>
     <th class="py-2 px-4 border-b">STATUS</th>
     <th class="py-2 px-4 border-b">PROGRESS</th>
-
-    <th class="py-2 px-4 border-b">REPORTER</th>
-
     <th class="py-2 px-4 border-b">VIEW</th>
   </tr>
   </thead>
@@ -72,18 +69,9 @@
         </div>
       </td>
 
-      <!-- Reported by -->
-      <td class="px-2 py-2 capitalize">
-        <div class="relative w-full flex justify-center">
-          <%= ticket.user.name if ticket.user.name.present? %>
-        </div>
-      </td>
-
       <!-- View button -->
-      <td class="px-2 py-2">
-        <div class="relative w-full flex justify-center">
-          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-        </div>
+      <td class="px-4 py-4 whitespace-nowrap font-medium" data-controller="dropdown" data-dropdown-ticket-id-value="<%= ticket.id %>">
+        <%= render partial: 'tickets/action_dropdown', locals: { ticket: ticket } %>
       </td>
     </tr>
   <% end %>
