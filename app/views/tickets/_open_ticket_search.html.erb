@@ -1,4 +1,3 @@
-
 <div class="grid grid-cols-2 mb-4 ">
   <div class="grid col-span-1">
     <div class="flex gap-1">
@@ -21,27 +20,20 @@
   </div>
 </div>
 <% if flash[:prompt] %>
-  <div id="custom-alert" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div id="custom-alert" 
+       class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+       data-controller="open-ticket-search"
+       data-open-ticket-search-target="alert">
     <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
       <h2 class="text-xl font-semibold mb-4 text-gray-800">Notice</h2>
       <p class="text-gray-600"><%= flash[:prompt] %></p>
       <div class="mt-4 text-right">
-        <button id="close-alert" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <button id="close-alert" 
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                data-action="click->open-ticket-search#closeAlert">
           OK
         </button>
       </div>
     </div>
   </div>
-
-  <script type="text/javascript">
-    document.addEventListener("turbo:load", function() {
-      const alertBox = document.getElementById("custom-alert");
-      const closeButton = document.getElementById("close-alert");
-
-      closeButton.addEventListener("click", function() {
-        alertBox.remove(); // Completely removes the modal from the DOM
-      });
-    });
-  </script>
 <% end %>
-
