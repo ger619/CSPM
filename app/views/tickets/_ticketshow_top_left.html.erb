@@ -29,7 +29,7 @@
           <span class="text-gray-800 dark:text-gray-200 group-hover:text-blue-700 dark:group-hover:text-blue-400">
             <%= render partial: 'ticket_status', locals: { ticket: @ticket } %>
           </span>
-          <% unless (@ticket.statuses.first&.name == 'Closed' or @ticket.statuses.first&.name == 'Resolved') && !current_user.has_role?(:admin) %>
+          <% unless (@ticket.statuses.first&.name == 'Closed') && !current_user.has_role?(:admin) %>
 
           <button type="button"
                   class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
