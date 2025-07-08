@@ -8,7 +8,7 @@
         <%= label_tag :team_id, 'Select Team', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
         <div class="relative w-full">
           <input type="text" id="searchTeam" class="border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full" placeholder="Search Team..." onclick="showDropdown()" onkeyup="filterTeamDropdown()">
-          <div id="teamDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full">
+          <div id="teamDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full hidden">
             <% teams = Team.all %>
             <% teams.each do |team| %>
               <div class="dropdown-item px-4 py-2 bg-white hover:bg-gray-100 dark:bg-gray-500 dark:hover:bg-gray-700 cursor-pointer capitalize" data-team-id="<%= team.id %>" onclick="selectTeam(this)">

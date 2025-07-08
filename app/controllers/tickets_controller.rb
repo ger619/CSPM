@@ -460,6 +460,12 @@ class TicketsController < ApplicationController
   def non_breached_sla_tickets
     @project = Project.find(params[:project_id])
     @tickets = @project.tickets.joins(:sla_tickets).where("sla_tickets.sla_status = 'Not Breached'")
+
+    @per_page = 10
+    @page = (params[:page] || 1).to_i
+    @total_pages = (@tickets.count / @per_page.to_f).ceil
+    @tickets = @tickets.offset((@page - 1) * @per_page).limit(@per_page)
+
   end
 
   def modal_show
