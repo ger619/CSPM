@@ -8,7 +8,7 @@
         <%= label_tag :team_id, 'Select Team', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
         <div class="relative w-full">
           <input type="text" id="searchTeam" class="border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full" placeholder="Search Team..." onclick="showDropdown()" onkeyup="filterTeamDropdown()">
-          <div id="teamDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full">
+          <div id="teamDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full hidden">
             <% teams = Team.all %>
             <% teams.each do |team| %>
               <div class="dropdown-item px-4 py-2 bg-white hover:bg-gray-100 dark:bg-gray-500 dark:hover:bg-gray-700 cursor-pointer capitalize" data-team-id="<%= team.id %>" onclick="selectTeam(this)">
@@ -78,9 +78,13 @@
         <th class="border border-gray-300 px-4 py-2">Total Open Tickets</th>
         <th class="border border-gray-300 px-4 py-2">Assigned</th>
         <th class="border border-gray-300 px-4 py-2">Work in Progress</th>
+        <th class="border border-gray-300 px-4 py-2">QA Testing</th>
+        <th class="border border-gray-300 px-4 py-2">On Hold</th>
         <th class="border border-gray-300 px-4 py-2">Under Development</th>
         <th class="border border-gray-300 px-4 py-2">Client Confirmation Pending</th>
         <th class="border border-gray-300 px-4 py-2">Awaiting Build</th>
+        <th class="border border-gray-300 px-4 py-2">Reopened</th>
+
         <th class="border border-gray-300 px-4 py-2">Initial Response Breaches</th>
         <th class="border border-gray-300 px-4 py-2">Target Response Breaches</th>
         <th class="border border-gray-300 px-4 py-2">Target Resolution Breaches</th>
@@ -91,9 +95,12 @@
       <% # Totals row %>
       <% total_assigned = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Assigned'].to_i } %>
       <% total_wip = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Work in Progress'].to_i } %>
+      <% total_qa = @team_members.sum { |user| (@organized_tickets[user.id] || {})['QA Testing'].to_i } %>
+      <% total_oh = @team_members.sum { |user| (@organized_tickets[user.id] || {})['On-Hold'].to_i } %>
       <% total_ud = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Under Development'].to_i } %>
       <% total_ccp = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Client Confirmation Pending'].to_i } %>
       <% total_ab = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Awaiting Build'].to_i } %>
+      <% total_re = @team_members.sum { |user| (@organized_tickets[user.id] || {})['Reopened'].to_i } %>
       <% total_total = @team_members.sum { |user| (@organized_tickets[user.id] || {})[:total].to_i } %>
       <% total_open = @team_members.sum { |user| (@tickets_chart_data[user.name] || 0).to_i } %>
       <% total_sla_status = @team_members.sum { |user| (@sla_status[user.id] || 0).to_i } %>
@@ -106,9 +113,12 @@
         <td class="border border-gray-300 px-4 py-2"><%= total_open %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_assigned %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_wip %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_qa %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_oh %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_ud %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_ccp %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_ab %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= total_re %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_sla_status %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_sla_trd %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_sla_rd %></td>
@@ -124,9 +134,12 @@
           <td class="border border-gray-300 px-4 py-2"><%= @tickets_chart_data[user.name] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Assigned'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Work in Progress'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['QA Testing'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['On-Hold'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Under Development'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Client Confirmation Pending'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Awaiting Build'] || 0 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= ticket_data['Reopened'] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= @sla_status[user.id] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= @sla_target_response_deadline[user.id] || 0 %></td>
           <td class="border border-gray-300 px-4 py-2"><%= @sla_resolution_deadline[user.id] || 0 %></td>
