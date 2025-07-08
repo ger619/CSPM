@@ -12,28 +12,30 @@
       <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
       </th>
+
+      <!-- Priority -->
       <td class="px-2 py-2">
-        <% case ticket.priority %>
-        <% when 'SEVERITY 1' %>
-          <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% when 'SEVERITY 2' %>
-          <p class='bg-red-600 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% when 'SEVERITY 3' %>
-          <p class='bg-yellow-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% else %>
-          <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% end %>
+        <div class="relative w-full flex justify-center">
+          <%= render partial: "tickets/priority_severity", locals: { ticket: ticket } %>
+        </div>
       </td>
+
+      <!-- Assigned to -->
       <td class="px-2 py-2 font-bold">
-        <% ticket.users.each do |user| %>
-          <%= user.name if user.name.present? %>
-        <% end %>
+        <div class="relative w-full flex justify-center">
+            <% ticket.users.each do |user| %>
+            <%= user.name if user.name.present? %>
+            <% end %>
+        </div>
       </td>
+
+      <!-- Ticket Status -->
       <td class="px-2 py-2">
         <div class="relative w-full flex justify-center">
           <%= render partial: "tickets/ticket_status", locals: { ticket: ticket } %>
         </div>
       </td>
+
       <!-- Progress Bar -->
       <td class="pl-2 pr-2 py-2">
         <div class="relative w-full flex justify-center">
@@ -41,11 +43,18 @@
         </div>
       </td>
 
+      <!-- Reported by -->
       <td class="px-2 py-2 capitalize">
-        <%= ticket.user.name if ticket.user.name.present? %>
+        <div class="relative w-full flex justify-center">
+          <%= ticket.user.name if ticket.user.name.present? %>
+        </div>
       </td>
+
+      <!-- View button -->
       <td class="px-2 py-2">
-        <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
+        <div class="relative w-full flex justify-center">
+          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
+        </div>
       </td>
     </tr>
   <% end %>
