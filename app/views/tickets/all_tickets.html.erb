@@ -34,25 +34,24 @@
       <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
       </th>
+
+      <!-- Priority -->
       <td class="px-2 py-2">
-        <% case ticket.priority %>
-        <% when 'SEVERITY 1' %>
-          <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% when 'SEVERITY 2' %>
-          <p class='bg-red-600 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% when 'SEVERITY 3' %>
-          <p class='bg-yellow-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% else %>
-          <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-        <% end %>
+        <div class="relative w-full flex justify-center">
+          <%= render partial: "tickets/priority_severity", locals: { ticket: ticket } %>
+        </div>
       </td>
       <td class="px-2 py-2 truncate w-64">
-        <%= ticket.subject.truncate(50) if ticket.subject.present? %>
+        <div class="relative w-full flex justify-center">
+          <%= ticket.subject.truncate(50) if ticket.subject.present? %>
+        </div>
       </td>
       <td class="px-2 py-2 font-bold">
-        <% ticket.users.each do |user| %>
-          <%= user.name if user.name.present? %>
-        <% end %>
+        <div class="relative w-full flex justify-center">
+          <% ticket.users.each do |user| %>
+            <%= user.name if user.name.present? %>
+          <% end %>
+        </div>
       </td>
       <td class="px-2 py-2">
         <% ticket.statuses.each do |status| %>
