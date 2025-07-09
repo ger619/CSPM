@@ -2,13 +2,13 @@
   <table class="w-full text-sm text-left rtl:text-right">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th scope="col" class="px-6 py-3 w-1/4">  <!-- Adjusted width -->
+        <th scope="col" class="px-6 py-3 w-1/4"> 
           Name of the software
         </th>
-        <th scope="col" class="px-6 py-3 w-1/2">  <!-- Adjusted width -->
+        <th scope="col" class="px-6 py-3 w-1/2"> 
           Description of the software
         </th>
-        <th scope="col" class="px-6 py-3 w-1/4 text-right">  <!-- Adjusted width and alignment -->
+        <th scope="col" class="px-6 py-3 w-1/4 text-right">
           ACTIONS
         </th>
       </tr>
@@ -16,16 +16,18 @@
     <tbody>
       <% @software.each do |software| %>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-          <td class="px-6 py-4 font-medium whitespace-nowrap w-1/4">  <!-- Changed from th to td and added width -->
+          <td class="px-6 py-4 font-medium whitespace-nowrap w-1/4"> 
             <%= link_to software.name, software_path(software.id) %>
           </td>
-          <td class="px-6 py-4 w-1/2">  <!-- Added width -->
+          <td class="px-6 py-4 w-1/2">  
             <div class="truncate">
               <%= software.description %>
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>">  <!-- Added width and alignment -->
-            <div class="relative flex justify-end">  <!-- Changed to justify-end -->
+
+          <!-- Actions li -->
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>"> 
+            <div class="relative flex justify-end"> 
               <%= render partial: 'software/action_dropdown', locals: { software: software } %>
             </div>
           </td>
