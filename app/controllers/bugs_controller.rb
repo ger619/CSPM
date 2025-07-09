@@ -25,7 +25,11 @@ class BugsController < ApplicationController
 
   def show; end
 
-  def edit; end
+  def edit
+    @product = @defect.product
+    @bug.software_id = @product.softwares.first&.id if @product.softwares.any?
+    @bug.groupware_id = @product.groupwares.where(software_id: @bug.software_id).first&.id if @product.groupwares.any?
+  end
 
   def update
     if @bug.update(bug_params)
