@@ -4,12 +4,9 @@
     <th class="py-2 px-4 border-b">ID</th>
     <th class="py-2 px-4 border-b">Date</th>
     <th class="py-2 px-4 border-b">SERVICE DESK NAME</th>
-
     <th class="py-2 px-4 border-b">ISSUE</th>
-
     <th class="py-2 px-4 border-b">PRIORITY</th>
     <th class="py-2 px-4 border-b">SUBJECT</th>
-
     <th class="py-2 px-4 border-b">ASSIGNEE</th>
     <th class="py-2 px-4 border-b">STATUS</th>
     <th class="py-2 px-4 border-b">PROGRESS</th>
@@ -31,22 +28,18 @@
       <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
       </th>
-      
       <!-- Priority and severity -->
       <td class="px-2 py-2">
         <div class="relative w-full flex justify-center">
           <%= render partial: "tickets/priority_severity", locals: { ticket: ticket } %>
         </div>
       </td>
-
       <!-- Ticket subject -->
       <td class="px-2 py-2 truncate w-64">
         <div class="relative w-full flex justify-start text-left">
           <%= ticket.subject.truncate(50) if ticket.subject.present? %>
         </div>
       </td>
-
-
       <td class="px-2 py-2 font-bold">
         <div class="relative w-full flex justify-center">
           <% ticket.users.each do |user| %>
@@ -54,26 +47,22 @@
           <% end %>
         </div>
       </td>
-
       <!-- Ticket Status -->
       <td class="px-2 py-2">
         <div class="relative w-full flex justify-center">
           <%= render partial: "tickets/ticket_status", locals: { ticket: ticket } %>
         </div>
       </td>
-
       <!-- Progress Bar -->
       <td class="pl-2 pr-5 py-2">
         <div class="relative w-full flex justify-center">
             <%= render partial: "tickets/progress_bar", locals: { ticket: ticket } %>
         </div>
       </td>
-
       <!-- View button -->
       <td class="px-4 py-4 whitespace-nowrap font-medium" data-controller="dropdown" data-dropdown-ticket-id-value="<%= ticket.id %>">
         <%= render partial: 'tickets/action_dropdown', locals: { ticket: ticket } %>
       </td>
-
     </tr>
   <% end %>
   </tbody>
