@@ -103,16 +103,8 @@
         <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
           <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket)   %>
         </th>
-        <td class="px-2 py-2 ">
-          <% if ticket.priority == 'SEVERITY 1' %>
-            <p class='bg-red-900 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-          <% elsif ticket.priority == 'SEVERITY 2' %>
-            <p class='bg-red-600 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-          <% elsif ticket.priority == 'SEVERITY 3' %>
-            <p class='bg-yellow-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-          <% else %>
-            <p class='bg-blue-500 p-1 text-center text-white font-bold rounded'><%= ticket.priority %></p>
-          <% end %>
+        <td class="px-2 py-2">
+            <%= render partial: "tickets/priority_severity", locals: { ticket: ticket } %>
         </td>
 
         <td class="px-2 py-2 truncate w-64 ">
@@ -127,67 +119,8 @@
             <% end %>
           <% end %>
         </td>
-        <td class="px-2 py-2 ">
-          <% ticket.statuses.each do |status| %>
-            <% case status.name %>
-          <% when 'Resolved' %>
-              <p class='bg-green-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-green-600'>
-                <%= status.name %>
-              </p>
-            <% when 'Closed' %>
-              <p class='bg-gray-800 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-gray-900'>
-                <%= status.name %>
-              </p>
-            <% when 'Reopened' %>
-              <p class="bg-red-900 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-red-800">
-                <%= status.name %>
-              </p>
-            <% when 'New' %>
-              <p class="bg-red-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-red-600">
-                <%= status.name %>
-              </p>
-            <% when 'Under Development' %>
-              <p class='bg-blue-300 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-blue-400'>
-                <%= status.name %>
-              </p>
-            <% when 'Work in Progress' %>
-              <p class='bg-gray-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-gray-600'>
-                <%= status.name %>
-              </p>
-            <% when 'QA Testing' %>
-              <p class='bg-pink-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-pink-600'>
-                <%= status.name %>
-              </p>
-            <% when 'Awaiting Build' %>
-              <p class='text-center text-gray-900 dark:text-slate-100 font-semibold rounded p-1 border-black dark:border-slate-100 border border-b-4 border-r-2'>
-                <%= status.name %>
-              </p>
-            <% when 'Client Confirmation Pending' %>
-              <p class='bg-purple-500 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-purple-600'>
-                <%= status.name %>
-              </p>
-            <% when 'On-Hold' %>
-              <p class='bg-yellow-300 text-center text-black font-semibold rounded p-1 border-r-2 border-b-4 border-yellow-400'>
-                <%= status.name %>
-              </p>
-            <% when 'Assigned' %>
-              <p class='bg-blue-800 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-blue-900'>
-                <%= status.name %>
-              </p>
-            <% when 'Approved' %>
-              <p class='bg-green-800 text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
-                <%= status.name %>
-              </p>
-            <% when 'Pending' %>
-              <p class='bg-gradient-to-r from-green-800 to-black text-center text-slate-100 font-bold rounded p-1 border-r-2 border-b-4 border-green-900'>
-                <%= status.name %>
-              </p>
-            <% when 'Declined' %>
-              <p class='bg-gray-800 text-center text-slate-100 font-semibold rounded p-1 border-r-2 border-b-4 border-gray-900'>
-                <%= status.name %>
-              </p>
-            <% end %>
-          <% end %>
+        <td class="px-2 py-2">
+            <%= render partial: "tickets/ticket_status", locals: { ticket: ticket } %>
         </td>
         <!-- Progress Bar -->
         <td class="pl-2 pr-5 py-2">
@@ -223,24 +156,9 @@
             </div>
           </div>
         </td>
-        <td class="px-2 py-2 capitalize">
-          <% if ticket.user.name.present? %>
-            <%= ticket.user.name %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2">
-          <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 '  %>
-        </td>
 
-        <td class="px-2 py-2">
-          <% if can?(:edit, ticket) %>
-            <%= link_to 'EDIT', edit_project_ticket_path(ticket.project, ticket), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100 ' %>
-          <% end %>
-        </td>
-        <td class="px-2 py-2">
-          <% if can? :destroy, ticket %>
-            <%= button_to 'DELETE', [ticket.project, ticket], method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: ' bg-[#F65160] hover:bg-[#F65160] p-2 rounded-md font-bold rounded-lg text-slate-100'  %>
-          <% end %>
+        <td class="px-4 py-4 whitespace-nowrap font-medium" data-controller="dropdown" data-dropdown-ticket-id-value="<%= ticket.id %>">
+          <%= render partial: 'tickets/action_dropdown', locals: { ticket: ticket } %>
         </td>
         <% if current_user.has_role? :admin or current_user.has_role? :agent  or current_user.has_role?('project manager')%>
           <td class="px-2 py-2 text-center hide-on-sidebar">
