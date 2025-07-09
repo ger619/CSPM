@@ -6,6 +6,7 @@
     <th class="py-2 px-4 border-b">SERVICE DESK NAME</th>
     <th class="py-2 px-4 border-b">ISSUE</th>
     <th class="py-2 px-4 border-b">PRIORITY</th>
+    <th class="py-2 px-4 border-b">Summary</th>
     <th class="py-2 px-4 border-b">ASSIGNEE</th>
     <th class="py-2 px-4 border-b">STATUS</th>
     <th class="py-2 px-4 border-b">PROGRESS</th>
@@ -33,6 +34,28 @@
           <%= render partial: "tickets/priority_severity", locals: { ticket: ticket } %>
         </div>
       </td>
+      <td class="px-4 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <% if ticket.ticket_image.attached? %>
+            <%= image_tag ticket.ticket_image, class: "h-8 w-8 rounded-full object-cover" %>
+          <% else %>
+            <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+            </svg>
+          <% end %>
+        </div>
+        <div class="flex flex-col">
+          <div class="font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+            <%= ticket.subject.truncate(30) if ticket.subject.present? %>
+          </div>
+          <% if ticket.content.present? %>
+            <div class="mt-1 whitespace-nowrap overflow-hidden text-ellipsis">
+              <%= ticket.content.to_plain_text.truncate(30) %>
+            </div>
+          <% end %>
+        </div>
+      </td>
+
 
 
       <td class="px-2 py-2 font-bold">
