@@ -1,39 +1,32 @@
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg h-full">
   <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
-    <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+    <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
     <tr>
-      <th scope="col" class="px-6 py-3">Name of Team</th>
-      <th scope="col" class="px-6 py-3">Team Description</th>
-      <th scope="col" class="px-6 py-3">Members(Number of Users)</th>
-      <th scope="col" class="px-6 py-3">VIEW</th>
-      <th scope="col" class="px-6 py-3">EDIT</th>
-      <th scope="col" class="px-6 py-3">DELETE</th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap">Name of Team</th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap">Team Description</th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap">Members(Number of Users)</th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap">ACTIONS</th>
     </tr>
     </thead>
     <tbody>
     <% @team.each do |team|   %>
       <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) or current_user.has_role?('project manager')%>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
-          <td class="px-6 py-4 font-medium text-left">
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <td class="px-6 py-4 font-medium whitespace-nowrap">
             <%= link_to team.name, team_path(team.id) %>
           </td>
-          <td class="px-6 py-4 text-left">
+          <td class="px-6 py-4 whitespace-nowrap">
             <%= team.description.truncate(30) %>
           </td>
-          <td class="px-6 py-4 text-left">
+          <td class="px-6 py-4 whitespace-nowrap">
             <%= team.users.count %>
           </td>
-          <td class="px-6 py-4 text-left">
-            <%= link_to "VIEW", team_path(team.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
+          <!-- Actions li -->
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= team.id %>"> 
+            <div class="relative flex justify-end"> 
+              <%= render partial: 'team/action_dropdown', locals: { team: team } %>
+            </div>
           </td>
-          <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-            <td class="px-6 py-4 text-left">
-              <%= link_to 'Edit', edit_team_path(team), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
-            </td>
-            <td class="px-6 py-4 text-left">
-              <%= button_to 'delete', team, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold" %>
-            </td>
-          <% end %>
         </tr>
       <% end %>
     <% end %>
