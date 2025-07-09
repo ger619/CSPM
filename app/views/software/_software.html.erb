@@ -8,9 +8,11 @@
         <th scope="col" class="px-6 py-3 w-1/2"> 
           Description of the software
         </th>
-        <th scope="col" class="px-6 py-3 w-1/4 text-right">
-          ACTIONS
-        </th>
+        <% if can?(:edit, @software) || can?(:delete, @software) %>
+          <th scope="col" class="px-6 py-3 w-1/4 text-right">
+            ACTIONS
+          </th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
@@ -25,12 +27,14 @@
             </div>
           </td>
 
-          <!-- Actions li -->
-          <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>"> 
-            <div class="relative flex justify-end"> 
-              <%= render partial: 'software/action_dropdown', locals: { software: software } %>
-            </div>
-          </td>
+          <% if can?(:edit, software) || can?(:delete, software) %>
+            <!-- Actions li -->
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>"> 
+              <div class="relative flex justify-end"> 
+                <%= render partial: 'software/action_dropdown', locals: { software: software } %>
+              </div>
+            </td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

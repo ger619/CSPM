@@ -31,7 +31,7 @@
       <th scope="col" class="px-6 py-3">
         Client Contact Person Email
       </th>
-      <% if can? :edit, @client %>
+      <% if can?(:edit, @client) || can?(:delete, @client) %>
         <th scope="col" class="px-6 py-3">
           ACTIONS
         </th>
@@ -72,11 +72,14 @@
         </td>
 
         <!-- Actions li -->
-        <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>">
-          <div class="relative flex justify-end"> 
-            <%= render partial: 'client/action_dropdown', locals: { client: client } %>
-          </div>
-        </td>
+        <% if can?(:edit, client) || can?(:delete, client) %>
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>">
+            <div class="relative flex justify-end"> 
+              <%= render partial: 'client/action_dropdown', locals: { client: client } %>
+            </div>
+          </td>
+        <% end %>
+
       </tr>
     <% end %>
     </tbody>

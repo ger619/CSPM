@@ -10,7 +10,9 @@
       <th scope="col" class="px-4 px-2">Client</th>
       <th scope="col" class="px-4 px-2">Product Category</th>
       <% if current_user.has_role? :admin %>
-        <th scope="col" class="px-4 px-2">ACTIONS</th>
+        <% if can?(:edit, @project) || can?(:delete, @project) %>
+          <th scope="col" class="px-4 px-2">ACTIONS</th>
+        <% end %>
       <% end %>
     </tr>
     </thead>
@@ -51,12 +53,14 @@
             </td>
 
           <% if current_user.has_role? :admin %>
-            <!-- Actions li -->
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= project.id %>" onclick="event.stopPropagation()"> 
-              <div class="relative flex justify-end"> 
-                <%= render partial: 'project/action_dropdown', locals: { project: project } %>
-              </div>
-            </td>
+            <% if can?(:edit, project) || can?(:delete, project) %>
+              <!-- Actions li -->
+              <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= project.id %>" onclick="event.stopPropagation()"> 
+                <div class="relative flex justify-end"> 
+                  <%= render partial: 'project/action_dropdown', locals: { project: project } %>
+                </div>
+              </td>
+            <% end %>
           <% end %>
         </tr>
       <% end %>
