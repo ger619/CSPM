@@ -97,7 +97,7 @@
                   product_path(page: @page - 1, query: params[:query]),
                   class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
     <% end %>
-    <span class="text-sm font-medium text-gray-700">
+    <span class="text-sm font-medium">
       Page <%= @page %> of <%= @total_pages %>
     </span>
     <% if @page < @total_pages %>
