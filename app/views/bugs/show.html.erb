@@ -1,9 +1,12 @@
-<div class="grid grid-cols-3 gap-2 font-bold">
-  <div class="col-span-2">
+<div class="grid grid-cols-5 gap-2 font-bold">
+  <div class="col-span-4">
     <h1 class="text-3xl text-left mb-10"><%= @bug.summary %></h1>
     <div><%= render 'bugs/bugs_content' %></div>
   </div>
-  <div class="col-span-1 justify-end border border-l border-gray-300 p-6">
+  <div class="col-span-1 justify-end ">
+    <div class="flex flex-col gap-2">
+      <%= render 'bugs/bug_media' %>
+    </div>
     <div class="flex flex-row gap-2 items-center">
       STATUS   <%= render 'bugs/bug_status' %>
     </div>
@@ -36,4 +39,3 @@
     </div>
   </div>
 </div>
-<%= render 'bugs/bug_media' %>
