@@ -32,6 +32,7 @@ class ProductController < ApplicationController
 
       @boards = @product.boards
       @todo_board = @boards.find_by(status: 'TO DO') || @boards.first
+      @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
       # Show the count of the tasks per status in the product boards
       board_statuses = @product.boards.pluck(:status).uniq

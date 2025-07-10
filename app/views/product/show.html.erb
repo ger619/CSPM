@@ -42,6 +42,18 @@
           <p class="text-sm font-semibold"><%= @product.start_date.strftime("%d %b %y") %></p>
         </div>
       </div>
+
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Days Remaining</h2>
+          <p class="text-sm font-semibold"><%= @days_remaining %></p>
+        </div>
+      </div>
     </div>
     
     <!-- Second Column - Combined Status Cards -->
@@ -99,58 +111,35 @@
     </div>
 
     <!-- Third Column - Board numbers -->
-<div class="space-y-4 col-span-1">
-  <!-- Products Section -->
-  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-    <div class="grid grid-cols-[auto_1fr] items-center gap-3 mb-3">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75m-16.5 0v3.75m16.5 0v3.75m-16.5 0v3.75" />
-      </svg>
-      <h2 class="text-md font-light">Products</h2>
-    </div>
-    <div class="text-md font-semibold">
-      <% if @product.softwares.any? %>
-        <ul class="flex flex-wrap gap-2">
-          <% @product.softwares.each do |software| %>
-            <li class="bg-white dark:bg-gray-600 px-3 py-1 rounded-full text-sm">
-              <%= software.name %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p class="text-gray-600 dark:text-gray-300 text-sm">No sub-products present</p>
-      <% end %>
-    </div>
-  </div>
-
-  <!-- Board Status Counts Section -->
-  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-    <div class="grid grid-cols-[auto_1fr] items-center gap-3 mb-3">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-      </svg>
-      <h2 class="text-md font-light">Board Status</h2>
-    </div>
-    
-    <% if @product_tasks_per_board_status.any? %>
-      <ul class="space-y-3">
-        <% @product_tasks_per_board_status.each do |topic, count| %>
-          <li class="grid grid-cols-[1fr_auto] items-center">
-            <span class="font-medium text-gray-800 dark:text-gray-200"><%= topic %></span>
-            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
-              <%= count %> task(s)
-            </span>
-          </li>
+    <div class="space-y-4 col-span-1">
+      <!-- Board Status Counts Section -->
+      <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+        <div class="grid grid-cols-[auto_1fr] items-center gap-3 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+          </svg>
+          <h2 class="text-md font-light">Board Status Counts</h2>
+        </div>
+        
+        <% if @product_tasks_per_board_status.any? %>
+          <ul class="space-y-3">
+            <% @product_tasks_per_board_status.each do |topic, count| %>
+              <li class="grid grid-cols-[1fr_auto] items-center">
+                <span class="font-medium text-gray-800 dark:text-gray-200"><%= topic %></span>
+                <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+                  <%= count %> task(s)
+                </span>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            No boards created. <%= link_to 'Create one here', new_product_board_path(@product.id), 
+            class: 'text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300' %>.
+          </p>
         <% end %>
-      </ul>
-    <% else %>
-      <p class="text-gray-600 dark:text-gray-300 text-sm">
-        No boards created. <%= link_to 'Create one here', new_product_board_path(@product.id), 
-        class: 'text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300' %>.
-      </p>
-    <% end %>
-  </div>
-</div>
+      </div>
+    </div>
 
     <!-- Fourth Column -->
     <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
