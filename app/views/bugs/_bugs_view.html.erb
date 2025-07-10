@@ -94,7 +94,7 @@
   <div class="flex items-center gap-4 m-2">
     <% if @page > 1 %>
       <%= link_to 'Previous',
-                  product_path(page: @page - 1, query: params[:query]),
+                  defect_path(page: @page - 1, query: params[:query]),
                   class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
     <% end %>
     <span class="text-sm font-medium">
@@ -102,7 +102,7 @@
     </span>
     <% if @page < @total_pages %>
       <%= link_to 'Next',
-                  product_path(page: @page + 1, query: params[:query]),
+                  defect_path(page: @page + 1, query: params[:query]),
                   class: 'bg-blue-600 hover:bg-blue-500 px-4 rounded text-white text-sm font-semibold transition-all p-2 uppercase' %>
     <% end %>
   </div>
