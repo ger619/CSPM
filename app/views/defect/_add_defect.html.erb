@@ -7,7 +7,7 @@
         <input type="text" id="searchCraftUser" class="border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full" placeholder="Search User..." onkeyup="filterCraftDropdown()">
         <div id="craftDropdown" class="absolute w-full border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full hidden">
           <% @defect.craftsilicon_users.where.not(id: @defect.users.pluck(:id)).distinct.each do |user| %>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
+            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-500 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
               <%= user.name %>
             </div>
           <% end %>
@@ -34,7 +34,7 @@
           <!-- Dropdown List -->
           <div id="removeUserDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full hidden">
             <% @defect.users.each do |user| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-500 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectRemoveUser(this)">
                 <%= user.name %>
               </div>
             <% end %>
