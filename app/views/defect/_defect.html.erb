@@ -32,7 +32,7 @@
     <% if @defect.present? %>
       <% @defect.each do |defect|  %>
         <% if defect.assigned_to?(current_user) or current_user.has_role?(:admin) %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left" style="cursor:pointer;" onclick="window.location='<%= defect_path(defect.id) %>'">
             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
               <%= link_to defect.name, defect_path(defect.id) %>
             </th>
