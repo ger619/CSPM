@@ -65,8 +65,8 @@
               <%= defect.product.client&.name || "N/A" %>
             </td>
             <!-- Actions 11 -->
-            <td class="px-4 py-4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= defect.id %>">
-              <div class="relative w-full flex justify-center">
+            <td class="px-6 py-4 text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= defect.id %>">
+              <div class="relative w-full flex justify-start">
                 <%= render partial: 'defect/action_dropdown', locals: { defect: defect } %>
               </div>
             </td>
