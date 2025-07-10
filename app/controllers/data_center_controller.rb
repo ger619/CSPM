@@ -241,7 +241,8 @@ class DataCenterController < ApplicationController
       respond_to do |format|
         format.html
         team_name = @team.name
-        format.csv { send_data generate_project_report_csv(@tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
+        filtered_tickets = @tickets.where.not(statuses: { name: %w[Closed Resolved Declined] })
+        format.csv { send_data generate_project_report_csv(filtered_tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
       end
     else
       @team = nil
