@@ -113,6 +113,11 @@ Rails.application.routes.draw do
     resources :groupwares, only: :index
   end
   resources :product do
+    member do
+      get :manage_users
+      post :add_user
+      delete :remove_user
+    end
     resources :groupwares do
       collection do
         get 'show_product_groupware', to: 'groupwares#show_product_groupware'
