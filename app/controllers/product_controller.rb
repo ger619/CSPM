@@ -1,6 +1,6 @@
 class ProductController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_product, only: %i[show edit update destroy]
+  before_action :set_product, only: %i[show edit update destroy manage_users]
   load_and_authorize_resource
 
   def index
@@ -40,6 +40,15 @@ class ProductController < ApplicationController
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
+  end
+
+  def manage_users
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
+    
+    render layout: false
   end
 
   def new
