@@ -10,10 +10,6 @@
     <p class="capitalize text-sm text-balance">
       <%= @product.description.truncate(100) %>
     </p>
-    <div>
-      <%= render 'product/add_users' %>
-      <%= render 'product/remove_user' %>
-    </div>
     <% unless current_user.has_role?(:client) %>
     <div class="mt-2">
       <% new_board = Board.find_by(status: 'TO DO') %>
