@@ -37,10 +37,20 @@
 <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
   <% if @team %>
     <div class="flex justify-center gap-2">
-      <h2 class="p-2 font-bold">Team Report for <span class="capitalize"><%= @team.name %> </span></h2>
+      <h2 class="p-2 font-bold">
+        Team Report for
+        <span class="capitalize"><%= @team.name %></span>
+        <%= (params[:start_date].presence && Date.parse(params[:start_date]).strftime("%d-%m-%Y")) || 6.months.ago.to_date.strftime("%d %b %Y") %>
+        to
+        <%= (params[:end_date].presence && Date.parse(params[:end_date]).strftime("%d-%m-%Y")) || Date.today.strftime("%d %b %Y") %> at <%= Time.now.strftime("%I:%M %p") %>
+      </h2>
+      <%= link_to 'Download Open Tickets',
+                  project_report_path(format: :csv, team_id: @team.id, start_date: params[:start_date], end_date: params[:end_date]),
+                  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
 
-      <%= link_to 'Download CSV Report',
-                  project_report_path(format: :csv, team_id: @team.id, start_date: params[:start_date], end_date: params[:end_date]), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+      <%= link_to 'Download All Tickets',
+                  project_report_path(format: :csv, team_id: @team.id, start_date: params[:start_date], end_date: params[:end_date], all_tickets: true),
+                  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
     </div>
     <div class="flex justify-center w-full my-6 gap-10">
       <div class="flex justify-center gap-10">
