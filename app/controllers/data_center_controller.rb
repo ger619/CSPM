@@ -241,8 +241,18 @@ class DataCenterController < ApplicationController
       respond_to do |format|
         format.html
         team_name = @team.name
-        filtered_tickets = @tickets.where.not(statuses: { name: %w[Closed Resolved Declined] })
-        format.csv { send_data generate_project_report_csv(filtered_tickets), filename: "#{team_name}_report_#{Date.today}.csv" }
+        if params[:all_tickets]
+          csv_tickets = @tickets
+        else
+          csv_tickets = @tickets.where.not(statuses: { name: %w[Closed Resolved Declined] })
+        end
+        format.csv do
+          start_str = (params[:start_date].presence && Date.parse(params[:start_date]).strftime("%d-%m-%Y")) || 6.months.ago.to_date.strftime("%d-%m-%Y")
+          end_str = (params[:end_date].presence && Date.parse(params[:end_date]).strftime("%d-%m-%Y")) || Date.today.strftime("%d-%m-%Y")
+          time_str = Time.now.strftime("%I-%M_%p")
+          filename = "Team Report for #{team_name}_#{start_str}_to_#{end_str}_at_#{time_str}.csv"
+          send_data generate_project_report_csv(csv_tickets), filename: filename
+        end
       end
     else
       @team = nil
