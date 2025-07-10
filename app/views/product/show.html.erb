@@ -1,6 +1,201 @@
 <% provide(:title, "Project: #{@product.name}") %>
 
 <%= render 'product/product_show_topbar' %>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+<%= render 'layouts/alert' %>
+  <div class="grid grid-cols-4 gap-6">
+    <!-- First Column -->
+    <div class="space-y-2 col-span-1">
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Name of the Project</h2>
+          <p class="text-sm font-semibold"><%= @product.name || 'No Product Name Provided' %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Date Created</h2>
+          <p class="text-sm font-semibold"><%= @product.created_at.strftime("%I:%M %p at %d %b %y") %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Date to Commence</h2>
+          <p class="text-sm font-semibold"><%= @product.start_date.strftime("%d %b %y") %></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Second Column - Combined Status Cards -->
+    <div class="space-y-4 col-span-1">
+      <!-- All Open Projects -->
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">All Open Projects</h2>
+          <p class="text-md font-semibold"><%= %></p>
+        </div>
+        <div class="flex">
+          <%= link_to "View",
+                      class: "bg-blue-600 text-white font-medium rounded-md p-2 no-underline hover:bg-blue-700 transition" %>
+        </div>
+      </div>
+
+      <!-- All Closed Projects -->
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">All Closed Projects</h2>
+          <p class="text-md font-semibold"><%= %></p>
+        </div>
+        <div class="flex items-center justify-end">
+          <%= link_to "View",
+                      class: "bg-blue-600 text-white font-medium rounded p-2 no-underline hover:bg-blue-700 transition" %>
+        </div>
+      </div>
+
+      <!-- Awaiting Client Confirmation -->
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-md font-light">Awaiting Client Confirmation</h2>
+          <p class="text-md font-semibold"><%= %></p>
+        </div>
+        <div class="flex items-center justify-end">
+          <%= link_to "View",
+                      class: "bg-blue-600 text-white font-medium rounded p-2 no-underline hover:bg-blue-700 transition" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Third Column - Board numbers -->
+<div class="space-y-4 col-span-1">
+  <!-- Products Section -->
+  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-3 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75m-16.5 0v3.75m16.5 0v3.75m-16.5 0v3.75" />
+      </svg>
+      <h2 class="text-md font-light">Products</h2>
+    </div>
+    <div class="text-md font-semibold">
+      <% if @product.softwares.any? %>
+        <ul class="flex flex-wrap gap-2">
+          <% @product.softwares.each do |software| %>
+            <li class="bg-white dark:bg-gray-600 px-3 py-1 rounded-full text-sm">
+              <%= software.name %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-600 dark:text-gray-300 text-sm">No sub-products present</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Board Status Counts Section -->
+  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-3 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      </svg>
+      <h2 class="text-md font-light">Board Status</h2>
+    </div>
+    
+    <% if @product_tasks_per_board_status.any? %>
+      <ul class="space-y-3">
+        <% @product_tasks_per_board_status.each do |topic, count| %>
+          <li class="grid grid-cols-[1fr_auto] items-center">
+            <span class="font-medium text-gray-800 dark:text-gray-200"><%= topic %></span>
+            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+              <%= count %> task(s)
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-600 dark:text-gray-300 text-sm">
+        No boards created. <%= link_to 'Create one here', new_product_board_path(@product.id), 
+        class: 'text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300' %>.
+      </p>
+    <% end %>
+  </div>
+</div>
+
+    <!-- Fourth Column -->
+    <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
+      <div class="flex flex-col">
+        <h2 class="text-md font-light">Products</h2>
+        <div class="text-md font-semibold">
+          <% if @product.softwares.any? %>
+            <ul class="flex flex-wrap gap-4 items-center">
+              
+            </ul>
+          <% else %>
+            <p>No sub-product present</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- show added documents name and download button -->
+      <div class="flex">
+        <% if @product.documents.any? %>
+          <ul>
+            <% @product.documents.each do |document| %>
+              <li class="flex gap-2">
+                <h1 class="capitalize"><%= document.name %></h1>
+                <% if document.file.attached? %>
+                  - <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "text-blue-500" %>
+                <% else %>
+                  <span class="text-gray-400">No file</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 <div class="grid grid-cols-3 gap-4 mb-4">
   <div class="p-4 items-center justify-center rounded col-span-1 border-r-2">
     <%= render 'layouts/alert' %>
