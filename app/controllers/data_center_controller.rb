@@ -215,7 +215,7 @@ class DataCenterController < ApplicationController
         .count
 
       @sla_resolution_deadline = Ticket.joins(:statuses, :project, :taggings, :sla_tickets)
-        .where(sla_tickets: { sla_target_response_deadline: ['Breached'] })
+        .where(sla_tickets: { sla_resolution_deadline: ['Breached'] })
         .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
         .group('taggings.user_id')
         .count
