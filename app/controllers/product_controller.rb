@@ -30,6 +30,9 @@ class ProductController < ApplicationController
         boards
       end
 
+      @boards = @product.boards
+      @todo_board = @boards.find_by(status: 'TO DO') || @boards.first
+
       # Show the count of the tasks per status in the product boards
       board_statuses = @product.boards.pluck(:status).uniq
       task_counts = Task.joins(:board)

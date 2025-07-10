@@ -17,11 +17,14 @@
 
   <!-- Tickets topbar right side -->
   <div class="flex justify-end items-center gap-3">
-    <%= link_to new_product_path(@product), class: "flex items-center gap-2 border-2 border-[#3F8CFF] bg-[#3F8CFF] hover:bg-white hover:text-[#3F8CFF] px-4 py-2 rounded-lg text-white font-bold no-underline transition-colors duration-200" do %>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-      </svg>
-      <span>New Task</span>
+    <!-- If there is no board created that is todo, this will not show. Show create first board -->
+    <% todo_board = @boards.find_by(status: 'TO DO') %>
+    <% if todo_board %>
+      <%= link_to 'Add Task', new_product_board_task_path(@product.id, todo_board.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
+    <% elsif @boards.any? %>
+      <%= link_to 'Create TO DO Board', new_product_board_path(@product.id, status: 'TO DO'), class: 'bg-yellow-500 hover:bg-yellow-600 p-2 rounded font-bold rounded-lg text-slate-100' %>
+    <% else %>
+      <%= link_to 'Create First Board', new_product_board_path(@product.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
     <% end %>
 
     <% if current_user.has_role? :admin %>
