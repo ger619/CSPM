@@ -40,7 +40,48 @@ class ProductController < ApplicationController
         .where(boards: { product_id: @product.id })
         .group('boards.status')
         .count
+
+      # Define status groups
+      @open_statuses = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing',
+                        'Await Client Information', 'Reopened',
+                        'Awaiting Build', 'Support Testing', 'Awaiting Client API']
+      @closed_statuses = %w[Blocked Resolved Closed]
+      @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
+
+      # Apply filtering if status param is present
+      if params[:status].present?
+        case params[:status]
+        when 'open'
+          @tasks = @product.tasks.joins(:board).where(boards: { status: @open_statuses })
+        when 'closed'
+          @tasks = @product.tasks.joins(:board).where(boards: { status: @closed_statuses })
+        when 'awaiting_client'
+          @tasks = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses })
+        when 'my_open_tasks'
+          @tasks = @product.tasks
+            .joins(:board, :users)
+            .where(boards: { status: @open_statuses })
+            .where(users: { id: current_user.id })
+        end
+      else
+        @tasks = @product.tasks
+      end
+
+      # Group filtered tasks by board (always run this)
+      @filtered_tasks_by_board = @tasks.group_by(&:board_id)
+
+      # Get counts for each status group
+      @open_tasks_count = @product.tasks.joins(:board).where(boards: { status: @open_statuses }).count
+      @closed_tasks_count = @product.tasks.joins(:board).where(boards: { status: @closed_statuses }).count
+      @awaiting_client_tasks_count = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses }).count
+      @my_open_tasks = @product.tasks
+      .joins(:board, :users)
+      .where(boards: { status: @open_statuses })
+      .where(users: { id: current_user.id })
+      .count
+
       @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
+
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
