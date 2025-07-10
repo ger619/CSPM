@@ -50,7 +50,7 @@ class ProductController < ApplicationController
       format.html
       format.turbo_stream
     end
-    
+
     render layout: false
   end
 
