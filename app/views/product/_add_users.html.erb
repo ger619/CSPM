@@ -1,33 +1,18 @@
 <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
-  <div class="grid grid-cols-1 sm:grid-cols-2 mt-2 gap-2">
-    <div class="text-xs">
-      <%= form_with url: add_user_product_path(@product), local: true do %>
-        <%= label_tag :user_id, "SELECT USER", class: "block font-semibold" %>
-        <div class="flex flex-wrap gap-2">
-          <div class="w-full sm:max-w-[120px]">
-            <%= select_tag :user_id, options_from_collection_for_select(User.with_agent_role.where.not(id: @product.users.pluck(:id)).distinct, :id, :name), class: "w-full form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", required: true %>
-          </div>
-          <div class="flex justify-center w-full sm:w-auto">
-            <%= submit_tag "ADD USERS", class: 'w-full sm:w-auto text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold text-slate-100' %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="text-xs">
-      <% if @product.users.present? %>
-        <%= form_with url: remove_user_product_path(@product), method: :delete, local: true do %>
-          <%= label_tag :user_id, "REMOVE USER", class: "block font-semibold" %>
-          <div class="flex flex-wrap gap-2">
-            <div class="w-full sm:max-w-[120px]">
-              <%= select_tag :user_id, options_from_collection_for_select(@product.users, :id, :name), class: "w-full form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
-            </div>
-            <div class="flex justify-center w-full sm:w-auto">
-              <%= submit_tag "REMOVE USER", class: 'w-full sm:w-auto text-xs bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold text-slate-100' %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
+  <div>
+    <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-3">Add User</h4>
+    <%= form_with url: add_user_product_path(@product), local: true, class: "space-y-3" do %>
+      <div>
+        <%= label_tag :user_id, "Select User", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= select_tag :user_id, 
+            options_from_collection_for_select(User.with_agent_role.where.not(id: @product.users.pluck(:id)).distinct, :id, :name), 
+            class: "w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200 text-sm",
+            required: true %>
+      </div>
+      <div>
+        <%= submit_tag "Add User", 
+            class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600" %>
+      </div>
+    <% end %>
   </div>
 <% end %>
