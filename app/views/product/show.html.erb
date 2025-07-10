@@ -14,7 +14,7 @@
           </svg>
         </div>
         <div class="flex flex-col">
-          <h2 class="text-md font-light">Name of the Project</h2>
+          <h2 class="text-md font-light">Name of the Task</h2>
           <p class="text-sm font-semibold"><%= @product.name || 'No Product Name Provided' %></p>
         </div>
       </div>
@@ -58,7 +58,7 @@
     
     <!-- Second Column - Combined Status Cards -->
     <div class="space-y-4 col-span-1">
-      <!-- All Open Projects -->
+      <!-- All Open Tasks -->
       <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <div class="flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
@@ -66,7 +66,7 @@
           </svg>
         </div>
         <div class="flex flex-col">
-          <h2 class="text-md font-light">All Open Projects</h2>
+          <h2 class="text-md font-light">All Open Tasks</h2>
           <p class="text-md font-semibold"><%= %></p>
         </div>
         <div class="flex">
@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <!-- All Closed Projects -->
+      <!-- All Closed Tasks -->
       <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <div class="flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -83,7 +83,7 @@
           </svg>
         </div>
         <div class="flex flex-col">
-          <h2 class="text-md font-light">All Closed Projects</h2>
+          <h2 class="text-md font-light">All Closed Tasks</h2>
           <p class="text-md font-semibold"><%= %></p>
         </div>
         <div class="flex items-center justify-end">
@@ -92,7 +92,7 @@
         </div>
       </div>
 
-      <!-- Awaiting Client Confirmation -->
+      <!-- Awaiting Client -->
       <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <div class="flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -100,7 +100,7 @@
           </svg>
         </div>
         <div class="flex flex-col">
-          <h2 class="text-md font-light">Awaiting Client Confirmation</h2>
+          <h2 class="text-md font-light">Awaiting Client</h2>
           <p class="text-md font-semibold"><%= %></p>
         </div>
         <div class="flex items-center justify-end">
