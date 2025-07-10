@@ -9,7 +9,7 @@
           Description of the software
         </th>
         <% if can?(:edit, @software) || can?(:delete, @software) %>
-          <th scope="col" class="px-6 py-3 w-1/4 text-right">
+          <th scope="col" class="px-6 py-3">
             ACTIONS
           </th>
         <% end %>
@@ -29,8 +29,8 @@
 
           <% if can?(:edit, software) || can?(:delete, software) %>
             <!-- Actions li -->
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>"> 
-              <div class="relative flex justify-end"> 
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>"> 
+              <div class="relative flex justify-start"> 
                 <%= render partial: 'software/action_dropdown', locals: { software: software } %>
               </div>
             </td>

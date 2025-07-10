@@ -56,7 +56,7 @@
             <% if can?(:edit, project) || can?(:delete, project) %>
               <!-- Actions li -->
               <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= project.id %>" onclick="event.stopPropagation()"> 
-                <div class="relative flex justify-end"> 
+                <div class="relative flex justify-start"> 
                   <%= render partial: 'project/action_dropdown', locals: { project: project } %>
                 </div>
               </td>

@@ -73,8 +73,8 @@
 
         <!-- Actions li -->
         <% if can?(:edit, client) || can?(:delete, client) %>
-          <td class="px-6 py-4 whitespace-nowrap font-medium text-right w-1/4" data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>">
-            <div class="relative flex justify-end"> 
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>">
+            <div class="relative flex justify-start"> 
               <%= render partial: 'client/action_dropdown', locals: { client: client } %>
             </div>
           </td>
