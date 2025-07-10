@@ -75,10 +75,10 @@ class ProductController < ApplicationController
       @closed_tasks_count = @product.tasks.joins(:board).where(boards: { status: @closed_statuses }).count
       @awaiting_client_tasks_count = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses }).count
       @my_open_tasks = @product.tasks
-      .joins(:board, :users)
-      .where(boards: { status: @open_statuses })
-      .where(users: { id: current_user.id })
-      .count
+        .joins(:board, :users)
+        .where(boards: { status: @open_statuses })
+        .where(users: { id: current_user.id })
+        .count
 
       @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
 
