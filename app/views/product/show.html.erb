@@ -2,7 +2,7 @@
 
 <%= render 'product/product_show_topbar' %>
 
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+<div class="bg-white max-w-full dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
 <%= render 'layouts/alert' %>
   <div class="grid grid-cols-5 gap-6">
     <!-- First Column -->
@@ -82,10 +82,11 @@
 </div>
 
 
-<div class="relative  overflow-hidden flex justify-center">
-  <% if @product.added_to?(current_user) or current_user.has_role?(:admin) %>
-    <div class="overflow-auto transform origin-top scale-90 md:scale-100">
+<div class="relative max-w-full">
+  <% if @product.added_to?(current_user) || current_user.has_role?(:admin) %>
+    <div class="w-full overflow-x-auto transform origin-top scale-90 md:scale-100">
       <%= render 'boards/board_display' %>
     </div>
   <% end %>
 </div>
+
