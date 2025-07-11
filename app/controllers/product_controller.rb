@@ -49,8 +49,8 @@ class ProductController < ApplicationController
       @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
 
       # Apply filtering if status param is present
-      if params[:status].present?
-        case params[:status]
+      if params[:filter].present?
+        case params[:filter]
         when 'open'
           @tasks = @product.tasks.joins(:board).where(boards: { status: @open_statuses })
         when 'closed'

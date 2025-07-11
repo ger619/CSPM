@@ -60,8 +60,7 @@
     <div class="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
 
       <div class="">
-        <%= form_with url: product_path(@product), method: :get, local: true do %>
-          <!-- All Open Tasks -->
+        <!-- All Open Tasks -->
           <div class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
             <div class="flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
@@ -72,15 +71,14 @@
               <h2 class="text-md font-light">All Open Tasks</h2>
               <p class="text-md font-semibold"><%= @open_tasks_count %></p>
             </div>
-            <button type="submit" name="status" value="open" class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-              <div class="flex">
-                <span class="bg-blue-600 text-white font-medium rounded-md p-2">View</span>
+              <div class="flex items-center">
+                <%= link_to 'View', 
+                  product_path(@product, filter: 'open'), method: :get,
+                  class: 'bg-blue-600 text-white font-medium p-2 no-underline rounded-md hover:bg-blue-700 transition'
+                    %>
               </div>
-            </button>
           </div>
-        <% end %>
 
-        <%= form_with url: product_path(@product), method: :get, local: true do %>
           <!-- All Closed Tasks -->
           <div class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
             <div class="flex-shrink-0">
@@ -92,17 +90,16 @@
               <h2 class="text-md font-light">All Closed Tasks</h2>
               <p class="text-md font-semibold"><%= @closed_tasks_count %></p>
             </div>
-            <button type="submit" name="status" value="closed" class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-              <div class="flex items-center justify-end">
-                <span class="bg-blue-600 text-white font-medium rounded p-2">View</span>
+            <div class="flex items-center">
+                <%= link_to 'View', 
+                  product_path(@product, filter: 'closed'), method: :get,
+                  class: 'bg-blue-600 text-white font-medium p-2 no-underline rounded-md hover:bg-blue-700 transition'
+                    %>
               </div>
-            </button>
           </div>
-        <% end %>
       </div>
 
       <div class="">
-        <%= form_with url: product_path(@product), method: :get, local: true do %>
           <!-- Awaiting Client -->
           <div class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
             <div class="flex-shrink-0">
@@ -114,16 +111,15 @@
               <h2 class="text-md font-light">Awaiting Client</h2>
               <p class="text-md font-semibold"><%= @awaiting_client_tasks_count %></p>
             </div>
-            <button type="submit" name="status" value="awaiting_client" class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-              <div class="flex items-center justify-end">
-                <span class="bg-blue-600 text-white font-medium rounded p-2">View</span>
-              </div>
-            </button>
+            <div class="flex items-center">
+                <%= link_to 'View', 
+                  product_path(@product, filter: 'awaiting_client'), method: :get,
+                  class: 'bg-blue-600 text-white font-medium p-2 no-underline rounded-md hover:bg-blue-700 transition'
+                    %>
+            </div>
           </div>
-        <% end %>
 
 
-        <%= form_with url: product_path(@product), method: :get, local: true do %>
           <!-- My Open Tasks -->
           <div class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
             <div class="flex-shrink-0">
@@ -135,13 +131,13 @@
               <h2 class="text-md font-light">My Open Tasks</h2>
               <p class="text-md font-semibold"><%= @my_open_tasks %></p>
             </div>
-            <button type="submit" name="status" value="my_open_tasks" class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-              <div class="flex items-center justify-end">
-                <span class="bg-blue-600 text-white font-medium rounded p-2">View</span>
-              </div>
-            </button>
+            <div class="flex items-center">
+                <%= link_to 'View', 
+                  product_path(@product, filter: 'my_open_tasks'), method: :get,
+                  class: 'bg-blue-600 text-white font-medium p-2 no-underline rounded-md hover:bg-blue-700 transition'
+                    %>
+            </div>
           </div>
-        <% end %>
       </div>
 
       <!-- Clear Filters Button -->
