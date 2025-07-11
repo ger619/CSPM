@@ -95,6 +95,19 @@ class Ticket < ApplicationRecord
     'Breached' if res_sla_breached?
   end
 
+  def self.daily_summary
+    group('DATE(tickets.created_at)')
+      .select(
+        'DATE(tickets.created_at) AS date',
+        'COUNT(tickets.id) AS new_additions',
+        "SUM(CASE WHEN statuses.name NOT IN ('Closed', 'Resolved', 'Declined') THEN 1 ELSE 0 END) AS open_tickets",
+        "SUM(CASE WHEN statuses.name = 'Closed' THEN 1 ELSE 0 END) AS closed",
+        "SUM(CASE WHEN statuses.name = 'Resolved' THEN 1 ELSE 0 END) AS resolved",
+        "SUM(CASE WHEN statuses.name IN ('On-Hold', 'Client Confirmation Pending') THEN 1 ELSE 0 END) AS with_client"
+      )
+      .order('date ASC')
+  end
+
   def progress_percentage
     # Example logic to calculate progress percentage
     status = statuses.first
