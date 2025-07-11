@@ -117,7 +117,7 @@
       <% total_sla_trd = @team_members.sum { |user| (@sla_target_response_deadline[user.id] || 0).to_i } %>
       <% total_sla_rd = @team_members.sum { |user| (@sla_resolution_deadline[user.id] || 0).to_i } %>
 
-      <tr class="font-bold bg-gray-100">
+      <tr class="font-bold">
         <td class="border border-gray-300 px-4 py-2">Total</td>
         <td class="border border-gray-300 px-4 py-2"><%= total_total %></td>
         <td class="border border-gray-300 px-4 py-2"><%= total_open %></td>
