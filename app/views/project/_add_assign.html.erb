@@ -29,7 +29,7 @@
         <div class="relative space-y-2">
           <input type="text" id="searchCraftUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300" placeholder="Search User..." onkeyup="filterCraftDropdown()">
 
-          <div id="craftDropdown" class="hidden absolute w-full dark:bg-gray-500 border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
+          <div id="craftDropdown" class="hidden absolute w-full bg-white dark:bg-gray-500 border rounded mt-1 shadow-md max-h-40 overflow-y-auto z-10">
             <% @project.craftsilicon_users.where.not(id: @project.users.pluck(:id)).distinct.each do |user| %>
               <div class="dropdown-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" data-user-id="<%= user.id %>" onclick="selectCraftUser(this)">
                 <%= user.name %>
