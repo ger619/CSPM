@@ -81,6 +81,10 @@
   </div>
 </div>
 
+<div class="">
+  <%= render 'product/product_show_search' %>
+</div>
+
 
 <div class="relative max-w-full">
   <% if @product.added_to?(current_user) || current_user.has_role?(:admin) %>
