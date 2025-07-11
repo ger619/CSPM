@@ -1,0 +1,37 @@
+<div class="flex items-center justify-between w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 mb-4 bg-white dark:bg-gray-700">
+  <!-- Search Form -->
+  <div class="flex-1 flex items-center">
+    <%= form_with url: product_path(@product), method: :get, class: 'flex w-full max-w-xl gap-2' do |f| %>
+      <div class="relative flex-grow">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <%= f.text_field :query, 
+              class: "block w-full p-2 pl-10 text-sm border-gray-300 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200 border rounded-lg focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300",
+              placeholder: "Search tasks..." %>
+      </div>
+      <%= f.submit "Search", 
+            class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] px-4 py-2 rounded-lg font-medium text-white text-sm transition-colors' %>
+    <% end %>
+  </div>
+
+  <!-- Clear Filters Button -->
+  <div class="ml-4">
+    <%= form_with url: product_path(@product), method: :get, class: 'contents' do |f| %>
+      <%= f.submit "Clear Filters", 
+            class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] text-white dark:text-slate-100 px-4 py-2 rounded-lg font-medium text-sm transition-colors whitespace-nowrap' %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('query')) {
+      const input = document.querySelector('input[name="query"]');
+      if (input) input.value = '';
+    }
+  });
+</script>

@@ -30,8 +30,10 @@ class ProductController < ApplicationController
         boards
       end
 
-      @boards = @product.boards
-      @todo_board = @boards.find_by(status: 'TO DO') || @boards.first
+      # Only override if no search query is present:
+      @boards = @product.boards unless params[:query].present?
+
+      @todo_board = @boards.find { |board| board.status == 'TO DO' } || @boards.first
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
       # Show the count of the tasks per status in the product boards
@@ -49,8 +51,8 @@ class ProductController < ApplicationController
       @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
 
       # Apply filtering if status param is present
-      if params[:status].present?
-        case params[:status]
+      if params[:filter].present?
+        case params[:filter]
         when 'open'
           @tasks = @product.tasks.joins(:board).where(boards: { status: @open_statuses })
         when 'closed'

@@ -18,7 +18,7 @@
   <!-- Tickets topbar right side -->
   <div class="flex justify-end items-center gap-3">
     <!-- If there is no board created that is todo, this will not show. Show create first board -->
-    <% todo_board = @boards.find_by(status: 'TO DO') %>
+    <% todo_board = @boards.find { |board| board.status == 'TO DO' } %>
     <% if todo_board %>
       <%= link_to 'Add Task', new_product_board_task_path(@product.id, todo_board.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
     <% elsif @boards.any? %>

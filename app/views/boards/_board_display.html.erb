@@ -1,8 +1,8 @@
-<div class="p-2 overflow-x-auto">
-  <div class="flex gap-2 md:gap-4 overflow-x-auto">
+<div class="p-2">
+  <div class="flex flex-nowrap gap-2 md:gap-4 overflow-x-auto">
   <% @boards.each do |board| %>
   <% tasks_for_board = @filtered_tasks_by_board[board.id] || [] %>
-    <div class="bg-white rounded px-2 py-2 w-full sm:w-[100px] md:w-[300px] lg:w-[400px]">
+    <div class="bg-white rounded px-2 py-2 min-w-[300px] md:min-w-[400px]">
       <!-- Board category header -->
       <div class="flex justify-between items-center mb-2 mx-1 bg-gray-400 p-1 rounded min-w-[200px]">
         <div class="flex items-center">
