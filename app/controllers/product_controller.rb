@@ -13,7 +13,7 @@ class ProductController < ApplicationController
                end
     @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
-    @per_page = 1
+    @per_page = 12
     @page = (params[:page] || 1).to_i
     @total_pages = (@product.count / @per_page.to_f).ceil
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
