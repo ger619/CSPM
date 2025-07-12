@@ -1,0 +1,38 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <% @product.each do |product| %>
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg ">
+      <div>
+        <div class="flex justify-between mb-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-t-lg">
+          <div class="flex items-center gap-4">
+          <% if product.image.present? %>
+            <%= image_tag(product.image, class: 'w-8 h-8 rounded-full') %>
+          <% else %>
+            <%= image_tag 'default.png', class: 'w-8 h-8 rounded-full' %>
+          <% end %>
+            <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
+          </div>
+          <div class="rounded-full border p-2 border-white">
+            <p class="text-sm font-semibold"><%= product.name %></p>
+          </div>
+        </div>
+        <div class="p-4">
+          <p class="text-sm text-gray-500">Assigned to: <%= product.user.name %></p>
+          <p class="text-sm text-gray-500">Client: <%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
+        </div>
+
+      </div>
+      <div class="p-2">
+        <hr>
+      </div>
+      <div class="p-4">
+        <p class="text-sm text-gray-500">Description: <%= product.description.truncate(50) %></p>
+        <p class="text-sm text-gray-500">Start Date: <%= product.start_date.strftime("%d-%b-%y") %></p>
+        <p class="text-sm text-gray-500">End Date: <%= product.end_date.present? ? product.end_date.strftime("%d-%b-%y") : 'No End Date' %></p>
+        <p class="text-sm text-gray-500">Tickets: <%#= product.boards.task.count %></p>
+        <p class="text-sm text-gray-500">Assigned to: <%= product.user.name %></p>
+        <p class="text-sm text-gray-500">Client: <%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
+      </div>
+    </div>
+  <% end %>
+  
+</div>
