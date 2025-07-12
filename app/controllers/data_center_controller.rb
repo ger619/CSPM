@@ -266,6 +266,28 @@ class DataCenterController < ApplicationController
     end
   end
 
+  # app/controllers/data_center_controller.rb
+  def daily_summary_report
+    authorize! :generate, :report
+
+    if params[:team_id].present?
+      @team = Team.find(params[:team_id])
+      user_ids = @team.users.pluck(:id)
+      start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : 6.months.ago.to_date
+      end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.today
+
+      tickets_scope = Ticket.joins(:statuses, :taggings)
+        .where(taggings: { user_id: user_ids })
+        .where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
+
+      @daily_summary = tickets_scope.merge(Ticket.daily_summary)
+    else
+      @team = nil
+      @daily_summary = []
+      flash[:alert] = 'Please select a team to view daily summary.'
+    end
+  end
+
   def assigned_tickets
     @team = Team.find(params[:team_id])
 

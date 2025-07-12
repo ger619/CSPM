@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   get 'breach_report', to: 'data_center#breach_report', as: 'breach_report'
   get 'user_report', to: 'data_center#user_report', as: 'user_report'
   get 'project_report', to: 'data_center#project_report', as: 'project_report'
+  get 'daily_summary_report', to: 'data_center#daily_summary_report', as: 'daily_summary_report'
   get 'orm_report', to: 'data_center#orm_report', as: 'orm_report'
   get 'orm_team_report', to: 'data_center#orm_team_report', as: 'orm_team_report'
   get 'sod_report', to: 'data_center#sod_report', as: 'sod_report'

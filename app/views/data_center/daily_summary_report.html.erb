@@ -1,0 +1,112 @@
+<% provide(:title, "Daily Ticket Summary") %>
+
+<h1 class="text-2xl font-bold text-center mb-4">📅 Daily Ticket Summary</h1>
+
+<div class="p-2 w-full">
+  <%= form_with url: daily_summary_report_path, method: :get, local: true do %>
+    <div class="flex flex-wrap justify-center gap-2">
+      <div class="flex flex-col gap-2">
+        <%= label_tag :team_id, 'Select Team', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+        <div class="relative w-full">
+          <input type="text" id="searchTeam" class="border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full" placeholder="Search Team..." onclick="showDropdown()" onkeyup="filterTeamDropdown()">
+          <div id="teamDropdown" class="absolute border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full hidden">
+            <% Team.all.each do |team| %>
+              <div class="dropdown-item px-4 py-2 bg-white hover:bg-gray-100 dark:bg-gray-500 dark:hover:bg-gray-700 cursor-pointer capitalize" data-team-id="<%= team.id %>" onclick="selectTeam(this)">
+                <%= team.name %>
+              </div>
+            <% end %>
+          </div>
+          <input type="hidden" id="selectedTeamId" name="team_id" required>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+        <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full" %>
+      </div>
+      <div class="flex flex-col gap-2">
+        <%= label_tag :end_date, 'End Date', class: "capitalize text-sm font-bold w-full align-middle pt-2" %>
+        <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100 w-full" %>
+      </div>
+      <div class="flex flex-col gap-2 pt-9">
+        <%= submit_tag 'Get Summary', class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold text-slate-100 w-full sm:w-auto' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @daily_summary.present? %>
+  <div class="mt-6">
+    <h2 class="text-xl font-bold text-center mb-4">Summary for <%= @team.name %></h2>
+    <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
+      <thead>
+      <tr>
+        <th class="border border-gray-300 px-4 py-2">Date</th>
+        <th class="border border-gray-300 px-4 py-2">Open Tickets</th>
+        <th class="border border-gray-300 px-4 py-2">New Additions</th>
+        <th class="border border-gray-300 px-4 py-2">Resolved</th>
+        <th class="border border-gray-300 px-4 py-2">Closed</th>
+        <th class="border border-gray-300 px-4 py-2">With Client</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @daily_summary.each do |entry| %>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2"><%= entry.date.strftime('%d-%m-%Y') %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= entry.open_tickets %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= entry.new_additions %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= entry.resolved %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= entry.closed %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= entry.with_client %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<script>
+  function showDropdown() {
+    document.getElementById("teamDropdown").classList.remove("hidden");
+  }
+
+  function filterTeamDropdown() {
+    let input = document.getElementById("searchTeam").value.toLowerCase();
+    let dropdown = document.getElementById("teamDropdown");
+    let items = dropdown.getElementsByClassName("dropdown-item");
+
+    dropdown.classList.remove("hidden");
+
+    let hasMatch = false;
+    for (let item of items) {
+      let text = item.textContent.toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = "block";
+        hasMatch = true;
+      } else {
+        item.style.display = "none";
+      }
+    }
+
+    if (!hasMatch) {
+      dropdown.classList.add("hidden");
+    }
+  }
+
+  function selectTeam(element) {
+    let teamName = element.textContent.trim();
+    let teamId = element.getAttribute("data-team-id");
+
+    document.getElementById("searchTeam").value = teamName;
+    document.getElementById("selectedTeamId").value = teamId;
+    document.getElementById("teamDropdown").classList.add("hidden");
+  }
+
+  document.addEventListener("click", function(event) {
+    let dropdown = document.getElementById("teamDropdown");
+    let searchInput = document.getElementById("searchTeam");
+
+    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
