@@ -238,9 +238,6 @@ class DataCenterController < ApplicationController
         .group('projects.title')
         .count
 
-      # Daily Ticket Briefing
-      @daily_ticket_summary = @tickets.merge(Ticket.daily_summary)
-
       respond_to do |format|
         format.html
         team_name = @team.name

@@ -81,32 +81,6 @@
       </div>
     </div>
 
-    <h2 class="text-xl font-bold mt-10 mb-4 text-center">📅 Daily Ticket Summary</h2>
-    <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
-      <thead>
-      <tr>
-        <th class="border border-gray-300 px-4 py-2">Date</th>
-        <th class="border border-gray-300 px-4 py-2">Open Tickets</th>
-        <th class="border border-gray-300 px-4 py-2">New Additions</th>
-        <th class="border border-gray-300 px-4 py-2">Resolved</th>
-        <th class="border border-gray-300 px-4 py-2">Closed</th>
-        <th class="border border-gray-300 px-4 py-2">With Client</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @daily_ticket_summary.each do |entry| %>
-        <tr>
-          <td class="border border-gray-300 px-4 py-2"><%= entry.date.strftime('%d-%m-%Y') %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= entry.open_tickets %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= entry.new_additions %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= entry.resolved %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= entry.closed %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= entry.with_client %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-
     <table class="table-auto w-full border-collapse border border-gray-300">
       <thead>
       <tr>
