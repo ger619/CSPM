@@ -1,6 +1,6 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
   <% @product.each do |product| %>
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg ">
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg" style="cursor:pointer;" onclick="window.location='<%= product_path(product.id) %>'">
       <div>
         <div class="flex justify-between mb-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-t-lg">
           <div class="flex items-center gap-4">
@@ -19,20 +19,35 @@
           <p class="text-sm text-gray-500">Assigned to: <%= product.user.name %></p>
           <p class="text-sm text-gray-500">Client: <%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
         </div>
-
       </div>
       <div class="p-2">
         <hr>
       </div>
+
+
       <div class="p-4">
-        <p class="text-sm text-gray-500">Description: <%= product.description.truncate(50) %></p>
-        <p class="text-sm text-gray-500">Start Date: <%= product.start_date.strftime("%d-%b-%y") %></p>
-        <p class="text-sm text-gray-500">End Date: <%= product.end_date.present? ? product.end_date.strftime("%d-%b-%y") : 'No End Date' %></p>
-        <p class="text-sm text-gray-500">Tickets: <%#= product.boards.task.count %></p>
-        <p class="text-sm text-gray-500">Assigned to: <%= product.user.name %></p>
-        <p class="text-sm text-gray-500">Client: <%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
+        <!-- All users assigned to the product show first 5 only-->
+        <div class="flex flex-wrap gap-2 items-center">
+          <% if product.users.any? %>
+            <% product.users.first(5).each do |user| %>
+              <% if user.profile_picture.attached? %>
+                <%= image_tag user.profile_picture, class: 'w-10 h-10 rounded-md' %>
+              <% elsif user.name_initials.present? %>
+              <span class="w-10 h-10 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  <%= user.name_initials %>
+                </span>
+              <% else %>
+                <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <p class="text-gray-600 dark:text-gray-300">No users assigned to this product yet.</p>
+          <% end %>
+        </div>
       </div>
-    </div>
+
+
+
+      </div>
   <% end %>
-  
 </div>
