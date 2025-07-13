@@ -15,9 +15,8 @@
             <p class="text-sm font-semibold"><%= product.name %></p>
           </div>
         </div>
-        <div class="p-4">
-          <p class="text-sm text-gray-500">Assigned to: <%= product.user.name %></p>
-          <p class="text-sm text-gray-500">Client: <%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
+        <div class="p-2">
+          <%= render partial: 'product/task_budget' , locals: { product: product } %>
         </div>
       </div>
       <div class="p-2">
