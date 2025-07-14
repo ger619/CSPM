@@ -28,13 +28,6 @@ class ProductController < ApplicationController
 
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
-      # Show the count of the tasks per status in the product boards
-      @product.boards.pluck(:status).uniq
-      # task_counts = Task.joins(:board)
-      #  .where(boards: { product_id: @product.id })
-      #  .group('boards.status')
-      #  .count
-
       # Define status groups
       @open_statuses = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing',
                         'Await Client Information', 'Reopened',
@@ -61,20 +54,6 @@ class ProductController < ApplicationController
         @tasks = @product.tasks
       end
 
-      # Group filtered tasks by board (always run this)
-      # @filtered_tasks_by_board = @tasks.group_by(&:board_id)
-
-      # Get counts for each status group
-      # @open_tasks_count = @product.tasks.joins(:board).where(boards: { status: @open_statuses }).count
-      # @closed_tasks_count = @product.tasks.joins(:board).where(boards: { status: @closed_statuses }).count
-      # @awaiting_client_tasks_count = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses }).count
-      # @my_open_tasks = @product.tasks
-      # .joins(:board, :users)
-      #  .where(boards: { status: @open_statuses })
-      #  .where(users: { id: current_user.id })
-      #   .count
-
-      # @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
       @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || 'Uncategorized' }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
