@@ -47,9 +47,10 @@
 
     <!-- Fourth Column -->
     <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
-      <div class="flex flex-col">
-        <%= render partial: 'product/add_statuses' %>
-
+      <div class="flex w-full">
+        <% if current_user.has_role? :admin %>
+          <%= render partial: 'product/add_statuses' %>
+        <% end %>
       </div>
     </div>
   </div>

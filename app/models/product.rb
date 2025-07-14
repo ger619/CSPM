@@ -53,5 +53,4 @@ class Product < ApplicationRecord
     # and display it
     Product.count
   end
-
 end
