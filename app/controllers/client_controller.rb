@@ -52,7 +52,7 @@ class ClientController < ApplicationController
   def update
     respond_to do |format|
       if @client.update(client_params)
-        format.html { redirect_to client_index_path, notice: 'Product was successfully updated.' }
+        format.html { redirect_to client_index_path, notice: 'Client was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end
