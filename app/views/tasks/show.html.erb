@@ -78,6 +78,14 @@
         </div>
       </div>
     </div>
+    <div>
+      <div class="flex items-center">
+        <h5 class="block mt-2 text-2xl font-semibold mr-2">Task End Date:</h5>
+        <span class="mt-2  text-xl capitalize">
+          <%= @task.end_date.strftime("%d %b %Y") %>
+        </span>
+      </div>
+    </div>
 
     <div>
       <div class="flex items-center">

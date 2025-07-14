@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_14_123446) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_14_144657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -413,6 +413,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_14_123446) do
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
     t.index ["user_id"], name: "index_statuses_on_user_id"
+  end
+
+  create_table "statuses_tasks", id: false, force: :cascade do |t|
+    t.uuid "task_id", null: false
+    t.uuid "status_id", null: false
+    t.index ["status_id", "task_id"], name: "index_statuses_tasks_on_status_id_and_task_id"
+    t.index ["task_id", "status_id"], name: "index_statuses_tasks_on_task_id_and_status_id"
   end
 
   create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

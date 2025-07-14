@@ -73,10 +73,10 @@
   <% if @product.added_to?(current_user) || current_user.has_role?(:admin) %>
     <div class="w-full overflow-x-auto transform origin-top scale-90 md:scale-100">
       <% @product.tasks.each do |task| %>
-        <div class="w-full min-w-0">
-          <%= render partial: 'tasks/card', locals: { task: task } %>
-        </div>
+          <div class="w-full min-w-0">
+            <%= render partial: 'tasks/card', locals: { task: task } %>
+          </div>
       <% end %>
+    </div>
   <% end %>
 </div>
-
