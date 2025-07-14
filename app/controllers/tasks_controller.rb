@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy add_task remove_task add_state]
 
   def index
-    @tasks = @board.tasks
+    @tasks = @product.tasks
   end
 
   def new
@@ -79,15 +79,17 @@ class TasksController < ApplicationController
   end
 
   def add_state
-    @task = @board.tasks.find(params[:id])
+    status = Status.find(params[:status_id])
 
-    if @task.board_id == params[:status].to_i
-      redirect_to product_path(@product), alert: 'The task is already in the selected state.'
+    if status.nil?
+      respond_to do |format|
+        format.html { redirect_to product_task_path(@product, @task), alert: 'Invalid status ID' }
+      end
       return
     end
 
-    @task.board_id = params[:status]
-    @task.save
+    @task.statuses.clear
+    @task.statuses << status
 
     UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
     # @product.users.each do |product_user|
