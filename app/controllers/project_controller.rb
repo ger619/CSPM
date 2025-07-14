@@ -166,14 +166,14 @@ class ProjectController < ApplicationController
         elsif @project.save
           @project.users << @project.user if @project.users.empty?
           current_user.add_role :creator, @project
-          format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
+          format.html { redirect_to project_path(@project), notice: 'Support Desk was successfully created.' }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
       else
         # Render an unauthorized error
         format.html do
-          render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a project.'
+          render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a Support Desk.'
         end
       end
     end
@@ -184,7 +184,7 @@ class ProjectController < ApplicationController
     respond_to do |format|
       if @project.update(project_params)
         current_user.add_role :editor, @project
-        format.html { redirect_to project_path(@project), notice: 'Project was successfully updated.' }
+        format.html { redirect_to project_path(@project), notice: 'Support Desk was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end
@@ -197,7 +197,7 @@ class ProjectController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to project_url, notice: 'Project was successfully destroyed.' }
+      format.html { redirect_to project_url, notice: 'Support Desk was successfully destroyed.' }
     end
   end
 
