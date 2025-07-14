@@ -182,6 +182,14 @@ class ProductController < ApplicationController
     end
   end
 
+  def product_status
+    @product = Product.find(params[:id])
+    status = Status.find(params[:status_id])
+    @product.statuses.clear
+    @product.statuses << status
+    redirect_to @product, notice: 'Product status was successfully updated.'
+  end
+
   def remove_user
     @product = Product.find(params[:id])
     user = User.find(params[:user_id])

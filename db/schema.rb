@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_14_060633) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_14_082922) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -300,6 +300,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_14_060633) do
     t.uuid "software_id", null: false
     t.index ["product_id", "software_id"], name: "index_products_softwares_on_product_id_and_software_id", unique: true
     t.index ["software_id", "product_id"], name: "index_products_softwares_on_software_id_and_product_id", unique: true
+  end
+
+  create_table "products_statuses", id: false, force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.uuid "status_id", null: false
+    t.index ["product_id", "status_id"], name: "index_products_statuses_on_product_id_and_status_id"
+    t.index ["status_id", "product_id"], name: "index_products_statuses_on_status_id_and_product_id"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -12,7 +12,7 @@
             <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
           </div>
           <div class="rounded-full border p-2 border-white">
-            <p class="text-sm font-semibold"><%= product.name %></p>
+            <p class="text-sm font-semibold"><%= product.statuses.first&.name %></p>
           </div>
         </div>
         <div class="p-2">
