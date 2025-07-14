@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_14_082922) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_14_123446) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -434,8 +434,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_14_082922) do
     t.datetime "updated_at", null: false
     t.date "start_date"
     t.date "end_date"
-    t.uuid "board_id", null: false
-    t.index ["board_id"], name: "index_tasks_on_board_id"
     t.index ["product_id"], name: "index_tasks_on_product_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
@@ -609,7 +607,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_14_082922) do
   add_foreign_key "statuses", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
-  add_foreign_key "tasks", "boards"
   add_foreign_key "tasks", "products"
   add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "groupwares"
