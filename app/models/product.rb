@@ -22,11 +22,16 @@ class Product < ApplicationRecord
 
   has_many :addusers
   has_many :users, through: :addusers, dependent: :destroy
+  has_and_belongs_to_many :statuses, dependent: :destroy
 
   validate :end_date_after_start_date
 
   def added_to?(user)
     users.include?(user)
+  end
+
+  def craftsilicon_users
+    User.where('email LIKE ANY (array[?, ?, ?]) AND active = ?', '%@craftsilicon.com', '%@craftsilicon.co.tz', '%@little.africa', true)
   end
 
   private

@@ -79,6 +79,7 @@ Rails.application.routes.draw do
     member do
       post :add_user
       delete :remove_user
+      post :product_status
     end
     resources :boards do
       resources :tasks do
