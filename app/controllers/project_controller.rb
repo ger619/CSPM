@@ -212,7 +212,7 @@ class ProjectController < ApplicationController
 
   def assign_user
     if @project.users.include?(User.find(params[:user_id]))
-      redirect_to @project, notice: 'User has already been assigned.'
+      redirect_to @project, notice: "#{user.name}  has already been assigned."
     else
       @project = Project.find(params[:id])
       user = User.find(params[:user_id])
@@ -230,7 +230,7 @@ class ProjectController < ApplicationController
       #  UserMailer.assignment_email(project_user, @project, current_user, assigned_user).deliver_later
       #  end
 
-      redirect_to @project, notice: 'User was successfully assigned.'
+      redirect_to @project, notice: "#{user.name} was successfully assigned."
     end
   end
 
@@ -264,7 +264,7 @@ class ProjectController < ApplicationController
     @project = Project.find(params[:id])
     user = User.find(params[:user_id])
     @project.users.delete(user)
-    redirect_to @project, notice: 'User was successfully unassigned.'
+    redirect_to @project, notice: "#{user.name}  was successfully unassigned."
   end
 
   def groupwares
