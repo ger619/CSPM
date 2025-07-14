@@ -69,14 +69,14 @@
                                 id: "groupware-select",
                                 multiple: true %>
       </div>
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :categories, ('Sub Modules *'), class: "capitalize block mb-1 text-sm font-medium" %>
-        <%= f.collection_select :script_ids, @product.scripts, :id, :name,
-                                { prompt: "Select Script", include_hidden: false },
-                                class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                id: "script-select",
-                                multiple: true %>
-      </div>
+    </div>
+    <!-- Name Field -->
+    <div class="relative z-0 w-full mb-6 group">
+      <%= f.label :name, ('Budget*'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+      <%= f.number_field :budget, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+      <% if @product.errors[:budget].any? %>
+        <div class="text-red-500 text-sm"><%= @product.errors[:budget].join(', ') %></div>
+      <% end %>
     </div>
 
     <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
