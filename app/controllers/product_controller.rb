@@ -75,7 +75,7 @@ class ProductController < ApplicationController
       #   .count
 
       # @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
-      @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || "Uncategorized" }
+      @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || 'Uncategorized' }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
