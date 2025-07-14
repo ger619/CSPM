@@ -178,7 +178,7 @@ class ProductController < ApplicationController
       # UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to @product, notice: 'User was successfully assigned.'
+      redirect_to @product, notice: "#{user.name}  was successfully assigned."
     end
   end
 
@@ -194,7 +194,7 @@ class ProductController < ApplicationController
     @product = Product.find(params[:id])
     user = User.find(params[:user_id])
     @product.users.delete(user)
-    redirect_to @product, notice: 'User was successfully removed.'
+    redirect_to @product, notice: "#{user.name}  was successfully removed."
   end
 
   def destroy

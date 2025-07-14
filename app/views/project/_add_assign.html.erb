@@ -2,7 +2,7 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
     <!-- Assign Client -->
     <div>
-      <%= form_with url: assign_user_project_path(@project), local: true do %>
+      <%= form_with url: assign_user_project_path(@project), data: { turbo: false }, class: "space-y-3" do %>
         <label for="searchClientUser" class="block mb-1 text-sm font-medium">Clients</label>
         <div class="relative space-y-2">
           <input type="text" id="searchClientUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300" placeholder="Search User..." onkeyup="filterClientUserDropdown()">
@@ -24,7 +24,7 @@
 
     <!-- Assign Craft Silicon Staff -->
     <div>
-      <%= form_with url: assign_user_project_path(@project, data: { turbo: false }), local: true do %>
+      <%= form_with url: assign_user_project_path(@project), data: { turbo: false }, class: "space-y-3" do %>
         <label for="searchCraftUser" class="block mb-1 text-sm font-medium">Craft Silicon Users</label>
         <div class="relative space-y-2">
           <input type="text" id="searchCraftUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300" placeholder="Search User..." onkeyup="filterCraftDropdown()">
@@ -47,7 +47,7 @@
     <!-- Remove Assigned User -->
     <div>
       <% if @project.users.present? %>
-        <%= form_with url: unassign_user_project_path(@project), method: :delete, local: true do %>
+        <%= form_with url: unassign_user_project_path(@project), method: :delete, data: { turbo: false }, class: "space-y-3" do %>
           <label for="searchRemoveUser" class="block mb-1 text-sm font-medium text-gray-700">Remove User</label>
           <div class="relative space-y-2">
             <input type="text" id="searchRemoveUser" class="w-full border border-gray-300 dark:bg-gray-500 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-300" placeholder="Search User..." onkeyup="filterRemoveUserDropdown()">
