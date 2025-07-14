@@ -25,15 +25,7 @@ class ProductController < ApplicationController
 
   def show
     if current_user.has_role?(:admin) || @product.users.include?(current_user)
-      # @boards = preferred_order.flat_map do |status|
-      boards = @product.boards.includes(:tasks).where(status: status)
-      boards.joins(:tasks).where('tasks.name ILIKE ?', "%#{params[:query]}%") if params[:query].present?
-      # end
 
-      # Only override if no search query is present:
-      @boards = @product.boards unless params[:query].present?
-
-      @todo_board = @boards.find { |board| board.status == 'TO DO' } || @boards.first
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
       # Show the count of the tasks per status in the product boards
@@ -83,7 +75,7 @@ class ProductController < ApplicationController
       #   .count
 
       # @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
-
+      @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || "Uncategorized" }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
