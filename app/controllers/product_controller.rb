@@ -17,7 +17,7 @@ class ProductController < ApplicationController
     @page = (params[:page] || 1).to_i
     @total_pages = (@product.count / @per_page.to_f).ceil
     # show the count for the page
-    @start_count = (@page - 1) * @per_page + 1
+    @start_count = ((@page - 1) * @per_page) + 1
     @end_count = [@page * @per_page, @product.count].min
     @total_count = @product.count
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
