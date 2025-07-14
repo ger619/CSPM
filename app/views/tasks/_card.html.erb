@@ -28,9 +28,9 @@
           <%= task.name %>
         </h3>
         <p class="my-4">
-        <% if task.description.nil? %>
-        <%= sanitize raw (task.description.to_trix_html) %>
-<% end %>
+          <% if task.description.nil? %>
+            <%= sanitize raw (task.description.to_trix_html) %>
+          <% end %>
         </p>
         <div class="text-xs text-gray-500 dark:text-gray-400">
           <%= task.topic %>
@@ -56,6 +56,9 @@
               <%= truncate(user.email, length: 15, omission: '...') %>
             <% end %>
           <% end %>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          <span class="font-semibold">Status:</span> <%= task.statuses.first&.name %>
         </div>
       </figcaption>
     </figure>
