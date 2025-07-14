@@ -1,5 +1,15 @@
 <% provide(:title, "Project: #{@product.name}") %>
 
+<% if flash[:notice] %>
+  <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
+    <p><%= flash[:notice] %></p>
+  </div>
+<% elsif flash[:alert] %>
+  <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
+    <p><%= flash[:alert] %></p>
+  </div>
+<% end %>
+
 <%= render 'product/product_show_topbar' %>
 
 <div class="bg-white max-w-full dark:bg-gray-800 rounded-lg shadow p-6 mb-6">

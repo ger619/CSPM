@@ -1,7 +1,7 @@
 <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
   <div>
     <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-3">Remove User</h4>
-    <%= form_with url: remove_user_product_path(@product), method: :delete, local: true, class: "space-y-3" do %>
+    <%= form_with url: remove_user_product_path(@product), method: :delete, data: { turbo: false }, class: "space-y-3" do %>
       <div>
         <%= label_tag :user_id, "Select User", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
         <%= select_tag :user_id, 
