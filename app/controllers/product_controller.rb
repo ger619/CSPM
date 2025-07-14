@@ -104,6 +104,7 @@ class ProductController < ApplicationController
 
   def new
     @product = Product.new
+    render layout: false if turbo_frame_request?
   end
 
   def create
