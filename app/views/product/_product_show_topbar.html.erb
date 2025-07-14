@@ -18,18 +18,7 @@
   <!-- Tickets topbar right side -->
   <div class="flex justify-end items-center gap-3">
     <!-- If there is no board created that is todo, this will not show. Show create first board -->
-    <% todo_board = @boards.find { |board| board.status == 'TO DO' } %>
-    <% if todo_board %>
-      <%= link_to 'Add Task', new_product_board_task_path(@product.id, todo_board.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
-    <% elsif @boards.any? %>
-      <%= link_to 'Create TO DO Board', new_product_board_path(@product.id, status: 'TO DO'), class: 'bg-yellow-500 hover:bg-yellow-600 p-2 rounded font-bold rounded-lg text-slate-100' %>
-    <% else %>
-      <%= link_to 'Create First Board', new_product_board_path(@product.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
-    <% end %>
-
-    <% if current_user.has_role? :admin %>
-      <%= button_to 'Add New Status +', new_product_board_path(@product.id), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-    <% end %>
+      <%= link_to 'Add Task', new_product_task_path(@product), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
     
     <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
       <%= link_to manage_users_product_path(@product), data: { turbo_frame: "modal" }, class: "flex items-center gap-2 border-2 border-blue-500 bg-white hover:bg-blue-500 px-4 py-2 rounded-lg text-blue-500 hover:text-white font-medium transition-colors duration-200" do %>

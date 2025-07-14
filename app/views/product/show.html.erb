@@ -32,34 +32,41 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
           </svg>
-          <h2 class="text-md font-light">Board Status Counts</h2>
+          <h2 class="text-md font-light">Status Counts</h2>
         </div>
-        
-        <% if @product_tasks_per_board_status.any? %>
-          <ul class="space-y-3">
-            <% @product_tasks_per_board_status.each do |topic, count| %>
-              <li class="grid grid-cols-[1fr_auto] items-center">
-                <span class="font-medium text-gray-800 dark:text-gray-200"><%= topic %></span>
-                <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
-                  <%= count %> task(s)
-                </span>
-              </li>
-            <% end %>
-          </ul>
-        <% else %>
-          <p class="text-gray-600 dark:text-gray-300 text-sm">
-            No boards created. <%= link_to 'Create one here', new_product_board_path(@product.id), 
-            class: 'text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300' %>.
-          </p>
-        <% end %>
       </div>
     </div>
 
     <!-- Fourth Column -->
     <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
-      <div class="flex w-full">
-        <% if current_user.has_role? :admin %>
-          <%= render partial: 'product/add_statuses' %>
+      <div class="flex flex-col">
+        <h2 class="text-md font-light">Products</h2>
+        <div class="text-md font-semibold">
+          <% if @product.softwares.any? %>
+            <ul class="flex flex-wrap gap-4 items-center">
+
+            </ul>
+          <% else %>
+            <p>No sub-product present</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- show added documents name and download button -->
+      <div class="flex">
+        <% if @product.documents.any? %>
+          <ul>
+            <% @product.documents.each do |document| %>
+              <li class="flex gap-2">
+                <h1 class="capitalize"><%= document.name %></h1>
+                <% if document.file.attached? %>
+                  - <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "text-blue-500" %>
+                <% else %>
+                  <span class="text-gray-400">No file</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
         <% end %>
       </div>
     </div>
@@ -74,9 +81,30 @@
 
 <div class="relative max-w-full">
   <% if @product.added_to?(current_user) || current_user.has_role?(:admin) %>
-    <div class="w-full overflow-x-auto transform origin-top scale-90 md:scale-100">
-      <%= render 'boards/board_display' %>
-    </div>
-  <% end %>
-</div>
+    <div class="h-screen p-2 overflow-x-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 min-w-full">
 
+        <% @tasks_by_status.each do |status, tasks| %>
+          <div class="bg-white dark:bg-gray-700 rounded px-2 py-2 min-w-[280px]">
+            <!-- Board Header -->
+            <div class="flex justify-between items-center mb-2 mx-1">
+              <div class="flex items-center">
+                <h2 class="bg-gray-200 text-sm w-max px-2 py-1 rounded text-gray-700 capitalize"><%= status %></h2>
+                <p class="text-gray-400 text-sm ml-2"><%= tasks.count %></p>
+              </div>
+              <div class="text-gray-300 text-2xl">+</div>
+            </div>
+
+            <!-- Board Cards -->
+            <div class="grid gap-2">
+              <% tasks.each do |task| %>
+                <%= render partial: 'tasks/card', locals: { task: task } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+<% end %>
+</div>

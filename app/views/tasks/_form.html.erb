@@ -1,5 +1,5 @@
 
-  <%= form_with(model: [product, board, board.tasks.build]) do |f| %>
+  <%= form_with(model: [product, product.tasks.build ]) do |f| %>
 
     <div class="gap-2 m-2">
       <%= link_to product_path(@product.id), method: :get, class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' do %>
@@ -27,9 +27,7 @@
         <%= f.file_field :file, accept: '*/*', class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '' %>
       </div>
 
-      <% new_board = Board.find_by(status: 'TO DO') %>
-      <%= f.hidden_field :board_id, value: new_board.id %>
-    </div>
+
     <% if flash[:alert] %>
       <div class="alert alert-danger">
         <%= flash[:alert] %>
