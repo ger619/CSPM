@@ -119,12 +119,12 @@ class ProductController < ApplicationController
     respond_to do |format|
       if (current_user.has_role?(:admin) || current_user.has_role?('project_manager')) && @product.errors.empty?
         case params[:commit]
-        when "create"
-          @product.status = "published"
-        when "draft"
-          @product.status = "draft"
+        when 'create'
+          @product.status = 'published'
+        when 'draft'
+          @product.status = 'draft'
         end
-        
+
         if @product.save
           # Save the selected software
           @product.softwares = Software.where(id: params[:product][:software_ids])
@@ -144,7 +144,7 @@ class ProductController < ApplicationController
           end
 
           current_user.add_role :creator, @product
-          format.html { redirect_to product_path(@product), notice: "Project was successfully #{ @product.status == 'draft' ? 'saved as draft' : 'created' }." }
+          format.html { redirect_to product_path(@product), notice: "Project was successfully #{@product.status == 'draft' ? 'saved as draft' : 'created'}." }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
