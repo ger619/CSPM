@@ -187,6 +187,6 @@ class ProductController < ApplicationController
   def product_params
     params.require(:product).permit(:status, :name, :description, :start_date, :end_date, :document_name, :image, :content,
                                     :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
-                                                          documents_attributes: [:id, :name, :file, :_destroy])
+                                                          documents_attributes: %i[id name file _destroy])
   end
 end
