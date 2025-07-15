@@ -20,19 +20,6 @@
 
     <!-- Fourth Column -->
     <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
-      <div class="flex flex-col">
-        <h2 class="text-md font-light">Products</h2>
-        <div class="text-md font-semibold">
-          <% if @product.softwares.any? %>
-            <ul class="flex flex-wrap gap-4 items-center">
-
-            </ul>
-          <% else %>
-            <p>No sub-product present</p>
-          <% end %>
-        </div>
-      </div>
-
       <!-- show added documents name and download button -->
       <div class="flex">
         <% if @product.documents.any? %>
