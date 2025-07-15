@@ -71,6 +71,8 @@ class ProductController < ApplicationController
 
   def new
     @product = Product.new
+    @product.documents.build
+    render layout: false if turbo_frame_request?
   end
 
   def create
@@ -84,6 +86,13 @@ class ProductController < ApplicationController
 
     respond_to do |format|
       if (current_user.has_role?(:admin) || current_user.has_role?('project_manager')) && @product.errors.empty?
+        case params[:commit]
+        when 'create'
+          @product.status = 'published'
+        when 'draft'
+          @product.status = 'draft'
+        end
+
         if @product.save
           # Save the selected software
           @product.softwares = Software.where(id: params[:product][:software_ids])
@@ -103,7 +112,7 @@ class ProductController < ApplicationController
           end
 
           current_user.add_role :creator, @product
-          format.html { redirect_to product_path(@product), notice: 'Product was successfully created.' }
+          format.html { redirect_to product_path(@product), notice: "Project was successfully #{@product.status == 'draft' ? 'saved as draft' : 'created'}." }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
@@ -176,7 +185,7 @@ class ProductController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :description, :start_date, :end_date, :document_name, :image, :content,
+    params.require(:product).permit(:status, :name, :description, :start_date, :end_date, :document_name, :image, :content,
                                     :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
                                                           documents_attributes: %i[id name file _destroy])
   end

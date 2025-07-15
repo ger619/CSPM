@@ -18,39 +18,8 @@
     <!-- First Column -->
     <%= render 'product/product_show_first_column' %>
 
-    
-    <!-- Second Column - Combined Status Cards -->
-     <%= render 'product/product_show_second_column' %>
-
-
-    <!-- Third Column - Board numbers -->
-    <div class="space-y-4 col-span-1">
-      <!-- Board Status Counts Section -->
-      <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-        <div class="grid grid-cols-[auto_1fr] items-center gap-3 mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-          </svg>
-          <h2 class="text-md font-light">Status Counts</h2>
-        </div>
-      </div>
-    </div>
-
     <!-- Fourth Column -->
     <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
-      <div class="flex flex-col">
-        <h2 class="text-md font-light">Products</h2>
-        <div class="text-md font-semibold">
-          <% if @product.softwares.any? %>
-            <ul class="flex flex-wrap gap-4 items-center">
-
-            </ul>
-          <% else %>
-            <p>No sub-product present</p>
-          <% end %>
-        </div>
-      </div>
-
       <!-- show added documents name and download button -->
       <div class="flex">
         <% if @product.documents.any? %>
@@ -66,6 +35,8 @@
               </li>
             <% end %>
           </ul>
+        <% else %>
+          <p> There are no documents for this product</p>
         <% end %>
       </div>
     </div>
