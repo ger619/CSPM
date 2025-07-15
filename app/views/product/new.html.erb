@@ -91,22 +91,13 @@
             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Attachments (PDF/DOC)</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- FSD Document -->
+              <!-- Add Document -->
               <div class="relative z-0 w-full group">
                 <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
-                <div id="fsd-documents-container">
+                <div id="documents-container">
                   
                 </div>
-                <button type="button" id="add-fsd-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add FSD Document(s)</button>
-              </div>
-
-              <!-- API Documentation -->
-              <div class="relative z-0 w-full group">
-                <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
-                <div id="api-documents-container">
-                  
-                </div>
-                <button type="button" id="add-api-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add API Document(s)</button>
+                <button type="button" id="add-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add Document(s)</button>
               </div>
             </div>
           </div>
@@ -184,8 +175,8 @@
 <% end %>
 
 <script>
-  document.getElementById('add-fsd-document-button').addEventListener('click', function() {
-  const container = document.getElementById('fsd-documents-container');
+  document.getElementById('add-document-button').addEventListener('click', function() {
+  const container = document.getElementById('documents-container');
   const timestamp = Date.now(); // Unique identifier for each field set
   const newField = document.createElement('div');
   newField.classList.add('document-field', 'flex', 'flex-col', 'mb-4', 'p-3', 'border', 'rounded');
