@@ -166,14 +166,14 @@ class ProjectController < ApplicationController
         elsif @project.save
           @project.users << @project.user if @project.users.empty?
           current_user.add_role :creator, @project
-          format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
+          format.html { redirect_to project_path(@project), notice: 'Support Desk was successfully created.' }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
       else
         # Render an unauthorized error
         format.html do
-          render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a project.'
+          render :new, status: :unprocessable_entity, notice: 'You are not authorized to create a Support Desk.'
         end
       end
     end
@@ -184,7 +184,7 @@ class ProjectController < ApplicationController
     respond_to do |format|
       if @project.update(project_params)
         current_user.add_role :editor, @project
-        format.html { redirect_to project_path(@project), notice: 'Project was successfully updated.' }
+        format.html { redirect_to project_path(@project), notice: 'Support Desk was successfully updated.' }
       else
         format.html { render 'edit', status: :unprocessable_entity }
       end
@@ -197,7 +197,7 @@ class ProjectController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to project_url, notice: 'Project was successfully destroyed.' }
+      format.html { redirect_to project_url, notice: 'Support Desk was successfully destroyed.' }
     end
   end
 
@@ -212,7 +212,7 @@ class ProjectController < ApplicationController
 
   def assign_user
     if @project.users.include?(User.find(params[:user_id]))
-      redirect_to @project, notice: 'User has already been assigned.'
+      redirect_to @project, notice: "#{user.name}  has already been assigned."
     else
       @project = Project.find(params[:id])
       user = User.find(params[:user_id])
@@ -230,7 +230,7 @@ class ProjectController < ApplicationController
       #  UserMailer.assignment_email(project_user, @project, current_user, assigned_user).deliver_later
       #  end
 
-      redirect_to @project, notice: 'User was successfully assigned.'
+      redirect_to @project, notice: "#{user.name} was successfully assigned."
     end
   end
 
@@ -264,7 +264,7 @@ class ProjectController < ApplicationController
     @project = Project.find(params[:id])
     user = User.find(params[:user_id])
     @project.users.delete(user)
-    redirect_to @project, notice: 'User was successfully unassigned.'
+    redirect_to @project, notice: "#{user.name}  was successfully unassigned."
   end
 
   def groupwares

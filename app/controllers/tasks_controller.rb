@@ -1,20 +1,18 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_product
-  before_action :set_board
   before_action :set_task, only: %i[show edit update destroy add_task remove_task add_state]
 
   def index
-    @tasks = @board.tasks
+    @tasks = @product.tasks
   end
 
   def new
-    @task = @board.tasks.new
+    @task = @product.tasks.new
   end
 
   def create
-    @task = @board.tasks.new(task_params)
-    @task.product_id = params[:product_id]
+    @task = @product.tasks.new(task_params)
     @task.user = current_user
 
     respond_to do |format|
@@ -22,15 +20,17 @@ class TasksController < ApplicationController
         current_user.add_role :creator, @task
         format.html { redirect_to product_path(@product), notice: 'Task was successfully created.' }
       else
+        Sentry.capture_message("Task creation failed: #{@task.errors.full_messages.join(', ')}")
+        Rails.logger.error("Task creation failed: #{@task.errors.full_messages.join(', ')}")
         format.html do
-          redirect_to new_product_board_task_path(@product, @board, @task), notice: 'Task was not created.'
+          redirect_to new_product_task_path(@product), notice: 'Task was not created.'
         end
       end
     end
   end
 
   def show
-    @task = @board.tasks.find(params[:id])
+    @task = @product.tasks.find(params[:id])
   end
 
   def edit; end
@@ -52,9 +52,9 @@ class TasksController < ApplicationController
 
   def add_task
     if @task.users.include?(User.find(params[:user_id]))
-      redirect_to product_board_task_path(@product, @board, @task), notice: 'User has already been assigned.'
+      redirect_to product_tasks_path(@product, @task), notice: 'User has already been assigned.'
     else
-      @task = @board.tasks.find(params[:id])
+      @task = @product.tasks.find(params[:id])
       @task.user = current_user
       user = User.find(params[:user_id])
       @task.users.clear
@@ -69,25 +69,27 @@ class TasksController < ApplicationController
       #   UserMailer.task_assignment_email(product_user, @task, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully assigned.'
+      redirect_to product_tasks_path(@product, @task), notice: 'Task was successfully assigned.'
     end
   end
 
   def remove_task
     @task.users.delete(User.find(params[:user_id]))
-    redirect_to product_board_task_path(@product, @board, @task), notice: 'Task was successfully unassigned.'
+    redirect_to product_task_path(@product, @task), notice: 'Task was successfully unassigned.'
   end
 
   def add_state
-    @task = @board.tasks.find(params[:id])
+    status = Status.find(params[:status_id])
 
-    if @task.board_id == params[:status].to_i
-      redirect_to product_path(@product), alert: 'The task is already in the selected state.'
+    if status.nil?
+      respond_to do |format|
+        format.html { redirect_to product_task_path(@product, @task), alert: 'Invalid status ID' }
+      end
       return
     end
 
-    @task.board_id = params[:status]
-    @task.save
+    @task.statuses.clear
+    @task.statuses << status
 
     UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
     # @product.users.each do |product_user|
@@ -104,16 +106,11 @@ class TasksController < ApplicationController
     @product = Product.find(params[:product_id])
   end
 
-  def set_board
-    @board = @product.boards.find(params[:board_id])
-  end
-
   def set_task
-    @task = @board.tasks.find(params[:id])
+    @task = @product.tasks.find(params[:id])
   end
 
   def task_params
-    params.require(:task).permit(:name, :topic, :description, :start_date, :end_date, :image, :file, :board_id,
-                                 :user_id)
+    params.require(:task).permit(:name, :topic, :description, :start_date, :end_date, :image, :file, :user_id)
   end
 end

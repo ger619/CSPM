@@ -1,5 +1,15 @@
 <% provide(:title, "Location Details") %>
 
+<% if flash[:notice] %>
+  <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
+    <p><%= flash[:notice] %></p>
+  </div>
+<% elsif flash[:alert] %>
+  <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
+    <p><%= flash[:alert] %></p>
+  </div>
+<% end %>
+
 <div class="overflow-x-auto shadow-md sm:rounded-lg w-[100%] ">
   <table class="w-full text-sm text-left rtl:text-right">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
