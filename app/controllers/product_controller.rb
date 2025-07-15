@@ -25,27 +25,8 @@ class ProductController < ApplicationController
 
   def show
     if current_user.has_role?(:admin) || @product.users.include?(current_user)
-      preferred_order = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing', 'Blocked',
-                         'Await Client Information', 'Reopened', 'Awaiting Build', 'Support Testing',
-                         'Awaiting Client API', 'Resolved', 'Closed']
-      @boards = preferred_order.flat_map do |status|
-        boards = @product.boards.includes(:tasks).where(status: status)
-        boards = boards.joins(:tasks).where('tasks.name ILIKE ?', "%#{params[:query]}%") if params[:query].present?
-        boards
-      end
 
-      # Only override if no search query is present:
-      @boards = @product.boards unless params[:query].present?
-
-      @todo_board = @boards.find { |board| board.status == 'TO DO' } || @boards.first
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
-
-      # Show the count of the tasks per status in the product boards
-      board_statuses = @product.boards.pluck(:status).uniq
-      task_counts = Task.joins(:board)
-        .where(boards: { product_id: @product.id })
-        .group('boards.status')
-        .count
 
       # Define status groups
       @open_statuses = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing',
@@ -73,21 +54,7 @@ class ProductController < ApplicationController
         @tasks = @product.tasks
       end
 
-      # Group filtered tasks by board (always run this)
-      @filtered_tasks_by_board = @tasks.group_by(&:board_id)
-
-      # Get counts for each status group
-      @open_tasks_count = @product.tasks.joins(:board).where(boards: { status: @open_statuses }).count
-      @closed_tasks_count = @product.tasks.joins(:board).where(boards: { status: @closed_statuses }).count
-      @awaiting_client_tasks_count = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses }).count
-      @my_open_tasks = @product.tasks
-        .joins(:board, :users)
-        .where(boards: { status: @open_statuses })
-        .where(users: { id: current_user.id })
-        .count
-
-      @product_tasks_per_board_status = board_statuses.index_with { |status| task_counts[status] || 0 }
-
+      @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || 'Uncategorized' }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
@@ -186,7 +153,7 @@ class ProductController < ApplicationController
       # UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to @product, notice: 'User was successfully assigned.'
+      redirect_to @product, notice: "#{user.name}  was successfully assigned."
     end
   end
 
@@ -202,7 +169,7 @@ class ProductController < ApplicationController
     @product = Product.find(params[:id])
     user = User.find(params[:user_id])
     @product.users.delete(user)
-    redirect_to @product, notice: 'User was successfully removed.'
+    redirect_to @product, notice: "#{user.name}  was successfully removed."
   end
 
   def destroy

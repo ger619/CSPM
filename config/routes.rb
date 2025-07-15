@@ -81,14 +81,12 @@ Rails.application.routes.draw do
       delete :remove_user
       post :product_status
     end
-    resources :boards do
-      resources :tasks do
-        member do
-          post :add_task
-          delete :remove_task
-          post :add_state
-          delete :remove_state
-        end
+    resources :tasks do
+      member do
+        post :add_task
+        delete :remove_task
+        post :add_state
+        delete :remove_state
       end
     end
   end

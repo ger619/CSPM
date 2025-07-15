@@ -1,4 +1,15 @@
 <%= turbo_frame_tag "modal" do %>
+
+  <% if flash[:notice] %>
+    <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
+      <p><%= flash[:notice] %></p>
+    </div>
+  <% elsif flash[:alert] %>
+    <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
+      <p><%= flash[:alert] %></p>
+    </div>
+  <% end %>
+  
   <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-2xl relative">
       <!-- Close Button -->

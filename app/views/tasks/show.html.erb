@@ -11,10 +11,10 @@
         <!-- Delete Button -->
 
         <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-          <%= button_to edit_product_board_task_path(@product, @board, @task), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
+          <%= button_to edit_product_task_path(@product, @task), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
             Edit
           <% end %>
-          <%= button_to product_board_task_path(@product, @board), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
+          <%= button_to product_task_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
           Delete Task
         <% end %>
           </div>
@@ -28,7 +28,7 @@
       <%= link_to "Download #{@task.file.filename}", url_for(@task.file), target: "_blank", class: "text-blue-600 hover:underline" %>
 
     <% else %>
-      This task does not have an uploaded file. If you need to add a file, kindly <%= link_to "edit", edit_product_board_task_path(@product, @board, @task), method: :get, class: 'underline text-[#3F8CFF]' %> the task to include it.
+      This task does not have an uploaded file. If you need to add a file, kindly <%= link_to "edit", edit_product_task_path(@product, @task), method: :get, class: 'underline text-[#3F8CFF]' %> the task to include it.
     <% end %>
     <div class="flex flex-row">
       <%= render 'tasks/add_task' %>
@@ -78,12 +78,20 @@
         </div>
       </div>
     </div>
-
     <div>
       <div class="flex items-center">
         <h5 class="block mt-2 text-2xl font-semibold mr-2">Task End Date:</h5>
         <span class="mt-2  text-xl capitalize">
           <%= @task.end_date.strftime("%d %b %Y") %>
+        </span>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center">
+        <h5 class="block mt-2 text-2xl font-semibold mr-2">Status:</h5>
+        <span class="mt-2  text-xl capitalize">
+          <%= @task.statuses.first&.name %>
         </span>
       </div>
     </div>

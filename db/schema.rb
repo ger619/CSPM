@@ -416,6 +416,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
     t.index ["user_id"], name: "index_statuses_on_user_id"
   end
 
+  create_table "statuses_tasks", id: false, force: :cascade do |t|
+    t.uuid "task_id", null: false
+    t.uuid "status_id", null: false
+    t.index ["status_id", "task_id"], name: "index_statuses_tasks_on_status_id_and_task_id"
+    t.index ["task_id", "status_id"], name: "index_statuses_tasks_on_task_id_and_status_id"
+  end
+
   create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "ticket_id", null: false
     t.uuid "user_id", null: false
@@ -435,8 +442,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
     t.datetime "updated_at", null: false
     t.date "start_date"
     t.date "end_date"
-    t.uuid "board_id", null: false
-    t.index ["board_id"], name: "index_tasks_on_board_id"
     t.index ["product_id"], name: "index_tasks_on_product_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
@@ -609,7 +614,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
   add_foreign_key "statuses", "users"
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
-  add_foreign_key "tasks", "boards"
   add_foreign_key "tasks", "products"
   add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "groupwares"

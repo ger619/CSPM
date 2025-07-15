@@ -62,7 +62,7 @@ class DefectController < ApplicationController
     else
       user = User.find(params[:user_id])
       @defect.users << user
-      redirect_to defect_path(@defect), notice: "#{@defect.users.name} was successfully assigned."
+      redirect_to defect_path(@defect), notice: "#{user.name}  was successfully assigned."
     end
   end
 
