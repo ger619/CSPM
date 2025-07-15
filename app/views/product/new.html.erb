@@ -93,14 +93,36 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- FSD Document -->
               <div class="relative z-0 w-full group">
-                <%= f.label :fsd_document, 'FSD Document', class: "capitalize block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-                <%= f.file_field :fsd_document, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+                <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
+                <div id="fsd-documents-container">
+                  <%= f.fields_for :documents do |doc| %>
+                    <div class="document-field flex flex-row mb-4">
+                      <%= doc.label :name, "Document Name", class: "block mb-1 text-sm font-medium" %>
+                      <%= doc.text_field :name, class: "border rounded-lg p-2.5 mb-2", placeholder: "Document Name" %>
+                      <%= doc.label :file, "Upload File", class: "block mb-1 text-sm font-medium" %>
+                      <%= doc.file_field :file, class: "border rounded-lg p-2.5" %>
+                      <%= link_to "Remove", "#", class: "remove-document text-red-500" %>
+                    </div>
+                  <% end %>
+                </div>
+                <button type="button" id="add-fsd-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add FSD Document(s)</button>
               </div>
 
               <!-- API Documentation -->
               <div class="relative z-0 w-full group">
-                <%= f.label :api_documentation, 'API Documentation', class: "capitalize block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-                <%= f.file_field :api_documentation, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+                <!-- Documents Field (use :documents with multiple: true for ActiveStorage) -->
+                <div id="api-documents-container">
+                  <%= f.fields_for :documents do |doc| %>
+                    <div class="document-field flex flex-row mb-4">
+                      <%= doc.label :name, "Document Name", class: "block mb-1 text-sm font-medium" %>
+                      <%= doc.text_field :name, class: "border rounded-lg p-2.5 mb-2", placeholder: "Document Name" %>
+                      <%= doc.label :file, "Upload File", class: "block mb-1 text-sm font-medium" %>
+                      <%= doc.file_field :file, class: "border rounded-lg p-2.5" %>
+                      <%= link_to "Remove", "#", class: "remove-document text-red-500" %>
+                    </div>
+                  <% end %>
+                </div>
+                <button type="button" id="add-api-document-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Add API Document(s)</button>
               </div>
             </div>
           </div>
@@ -178,6 +200,36 @@
 <% end %>
 
 <script>
+  // Add multiple FSD documents
+  document.getElementById('add-fsd-document-button').addEventListener('click', function () {
+    const container = document.getElementById('fsd-documents-container');
+    const newField = document.createElement('div');
+    newField.classList.add('document-field');
+    newField.innerHTML = `
+      <label class="block mb-1 text-sm font-medium">Document Name</label>
+      <input type="text" name="product[documents_attributes][][name]" class="border rounded-lg p-2.5 mb-2" placeholder="Document Name">
+      <label class="block mb-1 text-sm font-medium">Upload File</label>
+      <input type="file" name="product[documents_attributes][][file]" class="border rounded-lg p-2.5">
+      <a href="#" class="remove-document text-red-500">Remove</a>
+    `;
+    container.appendChild(newField);
+  });
+
+  // Add multiple documents
+  document.getElementById('add-api-document-button').addEventListener('click', function () {
+    const container = document.getElementById('api-documents-container');
+    const newField = document.createElement('div');
+    newField.classList.add('document-field');
+    newField.innerHTML = `
+      <label class="block mb-1 text-sm font-medium">Document Name</label>
+      <input type="text" name="product[documents_attributes][][name]" class="border rounded-lg p-2.5 mb-2" placeholder="Document Name">
+      <label class="block mb-1 text-sm font-medium">Upload File</label>
+      <input type="file" name="product[documents_attributes][][file]" class="border rounded-lg p-2.5">
+      <a href="#" class="remove-document text-red-500">Remove</a>
+    `;
+    container.appendChild(newField);
+  });
+
   // Character counter for description
   document.addEventListener('DOMContentLoaded', function() {
     const contentField = document.querySelector('[data-text-limit-target="content"]');
