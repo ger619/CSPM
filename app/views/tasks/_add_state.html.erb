@@ -4,9 +4,18 @@
       <div class="col-span-1 text-xs">
         <%= form_with url: add_state_product_task_path(@product, @task), local: true do %>
           <%= label_tag :status, "SELECT STATE" %>
-          <div class="flex">
+          <div class="flex w-full">
             <div>
-              <%= select_tag :status_id, options_for_select(Status.where(name: ['TO DO', 'Closed', 'Await Client Information']).pluck(:name, :id)), class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+              <% available_statuses = Status.where(name: ['TO DO', 'Closed', 'Await Client Information', 'Blocked',
+                                                          'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing',
+                                                          'Reopened', 'Awaiting Build', 'Support Testing',
+                                                          'Awaiting Client API', 'Resolved', 'Closed']) %>
+              <% if available_statuses %>
+                <%= select_tag :status_id,
+                               options_for_select(available_statuses.pluck(:name, :id)),
+                               class: "mr-1 form-select block rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm",
+                               required: true %>
+              <% end %>
             </div>
             <div class=" col-span-1">
               <%= submit_tag "STATUS CHANGE", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
