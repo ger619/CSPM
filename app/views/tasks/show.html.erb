@@ -1,3 +1,4 @@
+<%= render partial: 'tasks/top_task_bar' %>
 <div class="flex flex-col sm:flex-row w-full mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 p-2 overflow-y-auto">
 
   <div class="p-2 grid grid-cols-5">
@@ -7,6 +8,7 @@
 
     <div class="col-span-1 p-2">
       <div class="flex flex-wrap gap-1 justify-between mb-2">
+        <div class="mb-2">
         <% if @task.image.present? %>
           <%= image_tag(@task.image, class: 'rounded object-cover w-full h-[400px]') %>
         <% end %>
@@ -17,9 +19,39 @@
         <% else %>
           This task does not have an uploaded file. If you need to add a file, kindly <%= link_to "edit", edit_product_task_path(@product, @task), method: :get, class: 'underline text-[#3F8CFF]' %> the task to include it.
         <% end %>
+      </div>
+        <div class="mb-2.5 font-bold capitalize flex">Status:
+          <span class="font-medium ml-1">
+            <%= render partial: 'tasks/task_status', locals: { task: @task } %>
+          </span>
+        </div>
+        <div class="mb-2.5 font-bold capitalize flex">Assignee:
+
+          <div class="ml-1">
+            <% @task.users.each do |user| %>
+              <% if user.profile_picture.attached? %>
+                <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
+              <% elsif user.name_initials.present? %>
+                <p class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize">
+                  <%= user.name_initials %>
+                </p>
+              <% else %>
+                <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="ml-2 min-w-3 gap-2 col-span-1 content-center">
+            <% @task.users.each do |user| %>
+              <% if user.name.present? %>
+                <%= user.name %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+
         <div class="">
-          <%= render 'tasks/add_task' %>
           <%= render 'tasks/add_state' %>
+          <%= render 'tasks/add_task' %>
         </div>
 
       </div>
@@ -36,15 +68,12 @@
           </div>
 
           <div class="flex">
-            <h5 class="block sm:mt-2 text-2xl font-semibold mr-2">
-              Assignee:
-            </h5>
-            <div class="mt-2 text-xl">
+            <div class="mt-2">
               <% @task.users.each do |user| %>
                 <% if user.profile_picture.attached? %>
                   <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
                 <% elsif user.name_initials.present? %>
-                  <p class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize">
+                  <p class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize">
                     <%= user.name_initials %>
                   </p>
                 <% else %>
@@ -56,8 +85,6 @@
               <% @task.users.each do |user| %>
                 <% if user.name.present? %>
                   <%= user.name %>
-                <% else %>
-                  <%= truncate(user.email, length: 15, omission: '...') %>
                 <% end %>
               <% end %>
             </div>

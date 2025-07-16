@@ -49,7 +49,7 @@
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket, data: { turbo: false }), local: true do %>
           <div class="mb-4">
             <%= label_tag :user_id, "Select User", class: "block text-sm font-medium mb-1" %>
-            <% available_users = User.with_assigned_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)).distinct %>
+            <% available_users = User.with_assigned_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)).order(:first_name).distinct %>
             <% if available_users.any? %>
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email),
                   class: "mt-1 block w-full pl-3 pr-10 py-2 text-base dark:bg-gray-700 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>

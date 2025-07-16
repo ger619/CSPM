@@ -1,17 +1,33 @@
-<div>
-  <%= button_to  product_path(@product), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  do %>
-    &#8656; Back
-  <% end %>
-</div>
-<div class="flex flex-row gap-2">
-  <!-- Delete Button -->
-  <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-    <%= button_to edit_product_task_path(@product, @task), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
-      Edit
-    <% end %>
-    <%= button_to product_task_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
-      Delete Task
-    <% end %>
+<div class="grid grid-cols-2 ">
+  <div class="col-span-1 flex">
+    <div class="flex flex-wrap gap-1 m-2 ">
+      <button onclick="history.back()" class="bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 h-12 items-center rounded font-bold rounded-md text-slate-100">
+        &#8656; Back
+      </button>
+    </div>
+    <div class="flex items-center gap-3 sm:gap-4">
 
-  <% end %>
+      <div class="flex flex-row gap-4">
+        <h1 class="text-lg sm:text-xl md:text-2xl font-semibold capitalize">
+          <%= link_to @product.name, product_path(@product.id) %>
+        </h1>
+        <p class="text-xs sm:text-sm md:text-base">
+          <span class="font-medium">
+          </span>
+        </p>
+      </div>
+    </div>
   </div>
+  <!-- Search on the right -->
+  <div class="grid col-span-1 justify-end">
+    <div class="flex flex-col md:flex-row items-start md:items-center w-full">
+      <%= form_with url: product_task_path(@product, @task), method: :get, class: 'flex gap-2' do |f| %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border bg-white dark:bg-gray-800  border-[#3F8CFF] p-1 hover:border-[#3A81EB] border-2 rounded-lg" %>
+        <%= f.submit "Search", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
+      <% end %>
+      <%= form_with url: product_task_path(@product, @task), method: :get, class: 'flex' do |f| %>
+        <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+    </div>
+  </div>
+</div>
