@@ -69,7 +69,7 @@ class TasksController < ApplicationController
       #   UserMailer.task_assignment_email(product_user, @task, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to product_tasks_path(@product, @task), notice: 'Task was successfully assigned.'
+      redirect_to product_task_path(@product, @task), notice: 'Task was successfully assigned.'
     end
   end
 
@@ -97,7 +97,7 @@ class TasksController < ApplicationController
 
     #   UserMailer.add_state_email(product_user, @task, current_user).deliver_later
     # end
-    redirect_to product_path(@product)
+    redirect_to product_task_path(@product, @task)
   end
 
   private

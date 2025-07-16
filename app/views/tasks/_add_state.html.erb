@@ -3,7 +3,7 @@
     <div class="grid grid-cols-2 mt-2 gap-2">
       <div class="col-span-1 text-xs">
         <%= form_with url: add_state_product_task_path(@product, @task), local: true do %>
-          <%= label_tag :status, "SELECT STATE" %>
+          <%= label_tag :status, "SELECT STATUS" %>
           <div class="flex w-full">
             <div>
               <% available_statuses = Status.where(name: ['TO DO', 'Closed', 'Await Client Information', 'Blocked',
