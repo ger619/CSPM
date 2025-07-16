@@ -6,7 +6,6 @@ class Task < ApplicationRecord
   has_many :messages, dependent: :destroy
   before_create :set_default_status
 
-
   resourcify
 
   has_many :role_users, through: :roles, class_name: 'User', source: :user
@@ -21,7 +20,6 @@ class Task < ApplicationRecord
   has_and_belongs_to_many :statuses, dependent: :destroy
   has_many :bugs
   has_rich_text :description
-
 
   def set_default_status
     status = Status.find_by(name: 'TO DO')
