@@ -25,6 +25,10 @@
             <%= render partial: 'tasks/task_status', locals: { task: @task } %>
           </span>
         </div>
+
+        <%= render 'tasks/add_state' %>
+
+
         <div class="mb-2.5 font-bold capitalize flex">Assignee:
 
           <div class="ml-1">
@@ -50,64 +54,8 @@
         </div>
 
         <div class="">
-          <%= render 'tasks/add_state' %>
           <%= render 'tasks/add_task' %>
         </div>
-
-      </div>
-
-      <div class="sm:p-4 p-2 flex flex-col">
-        <div>
-          <div class="flex items-center">
-            <h4 class="block mt-2 text-2xl font-semibold mr-2">
-              Task Name:
-            </h4>
-            <p class="block sm:mt-2 text-xl">
-              <%= @task.name %>
-            </p>
-          </div>
-
-          <div class="flex">
-            <div class="mt-2">
-              <% @task.users.each do |user| %>
-                <% if user.profile_picture.attached? %>
-                  <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
-                <% elsif user.name_initials.present? %>
-                  <p class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize">
-                    <%= user.name_initials %>
-                  </p>
-                <% else %>
-                  <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
-                <% end %>
-              <% end %>
-            </div>
-            <div class="p-2 min-w-3 gap-2 col-span-1 rounded mt-2">
-              <% @task.users.each do |user| %>
-                <% if user.name.present? %>
-                  <%= user.name %>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <h5 class="block mt-2 text-2xl font-semibold mr-2">Task End Date:</h5>
-            <span class="mt-2  text-xl capitalize">
-              <%= @task.end_date.strftime("%d %b %Y") %>
-            </span>
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center">
-            <h5 class="block mt-2 text-2xl font-semibold mr-2">Status:</h5>
-            <span class="mt-2  text-xl capitalize">
-              <%= @task.statuses.first&.name %>
-            </span>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
