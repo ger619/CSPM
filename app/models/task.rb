@@ -4,6 +4,7 @@ class Task < ApplicationRecord
   has_one_attached :image
   has_one_attached :file
   has_many :messages, dependent: :destroy
+  before_create :set_default_status
 
   resourcify
 
@@ -19,6 +20,11 @@ class Task < ApplicationRecord
   has_and_belongs_to_many :statuses, dependent: :destroy
   has_many :bugs
   has_rich_text :description
+
+  def set_default_status
+    status = Status.find_by(name: 'TO DO')
+    statuses << status if status
+  end
 
   private
 
