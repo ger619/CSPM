@@ -1,7 +1,7 @@
   <div class="flex-shrink-0">
     <% if ticket.ticket_image.attached? %>
       <%= image_tag ticket.ticket_image, class: "h-8 w-8 rounded-md object-cover" %>
-    <% elsif @project.image.present? %>
+    <% elsif @project&.image.present? %>
       <%= image_tag @project.image, class: 'h-8 w-8 rounded-md object-cover' %>
     <% else %>
       <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

@@ -1,0 +1,17 @@
+<div>
+  <%= button_to  product_path(@product), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  do %>
+    &#8656; Back
+  <% end %>
+</div>
+<div class="flex flex-row gap-2">
+  <!-- Delete Button -->
+  <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
+    <%= button_to edit_product_task_path(@product, @task), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
+      Edit
+    <% end %>
+    <%= button_to product_task_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' do %>
+      Delete Task
+    <% end %>
+
+  <% end %>
+  </div>
