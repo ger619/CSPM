@@ -1,0 +1,2 @@
+class CommonlySelectedClientsController < ApplicationController
+end
