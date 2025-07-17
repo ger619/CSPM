@@ -1,0 +1,15 @@
+<%= form_with url: commonly_selected_clients_path, data: { turbo: false }, class: "space-y-3" do |f| %>
+  <div>
+    <%= label_tag :client_id, "Select Client", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+    <%= select_tag :client_id, 
+        options_from_collection_for_select(@available_clients, :id, :name),
+        include_blank: "Select a client...",
+        class: "w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200 text-sm",
+        required: true %>
+  </div>
+  <div>
+    <%= submit_tag "Add Client", 
+        class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600",
+        data: { disable_with: "Adding..." } %>
+  </div>
+<% end %>

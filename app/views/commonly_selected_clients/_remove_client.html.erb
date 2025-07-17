@@ -1,0 +1,32 @@
+<div>
+  <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-3">Remove Client</h4>
+  <%= form_with url: remove_client_commonly_selected_clients_path, 
+                method: :delete,
+                data: { turbo_stream: true },
+                class: "space-y-3 remove-client-form" do |f| %>
+    <div>
+      <%= label_tag :client_id, "Select Client", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+      <%= select_tag :client_id, 
+          options_from_collection_for_select(current_user.common_clients, :id, :name),
+          include_blank: "Select a client to remove",
+          class: "w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200 text-sm",
+          required: true %>
+    </div>
+    <div>
+      <%= submit_tag "Remove Client", 
+          class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-red-700 dark:hover:bg-red-600" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  const form = document.querySelector('.remove-client-form');
+  const select = form.querySelector('select[name="client_id"]');
+  
+  select.addEventListener('change', function() {
+    const clientId = this.value;
+    form.action = form.action.replace(/\/0$/, /${clientId});
+  });
+});
+</script>
