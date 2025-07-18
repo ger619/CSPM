@@ -154,7 +154,7 @@ class ProductController < ApplicationController
       # UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to @product, notice: "#{user.name}  was successfully assigned."
+      redirect_to product_path(@product), notice: "#{user.name}  was successfully assigned."
     end
   end
 
@@ -163,7 +163,7 @@ class ProductController < ApplicationController
     status = Status.find(params[:status_id])
     @product.statuses.clear
     @product.statuses << status
-    redirect_to @product, notice: 'Product status was successfully updated.'
+    redirect_to product_path(@product), notice: 'Product status was successfully updated.'
   end
 
   def remove_user
