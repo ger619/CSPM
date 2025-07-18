@@ -18,6 +18,12 @@ class DashboardsController < ApplicationController
       tickets_from_inception = Ticket.joins(:users, :statuses)
         .where(users: { id: user_ids })
         .where.not(statuses: { name: %w[Declined Closed] })
+        .distinct
+
+      tickets_from_inception_count = tickets_from_inception.count
+
+      tickets_from_inception_by_status = tickets_from_inception
+        .group('statuses.name')
         .count
 
       tickets_last_30_days = Ticket.joins(:users)
@@ -128,7 +134,8 @@ class DashboardsController < ApplicationController
         breached_tickets_resolved_per_assignee: breached_tickets_resolved_per_assignee,
         breached_resolution_resolved_tickets_per_project: breached_resolution_resolved_tickets_per_project,
         ticket_details: ticket_details,
-        tickets_from_inception: tickets_from_inception
+        tickets_from_inception: tickets_from_inception_count,
+        tickets_from_inception_by_status: tickets_from_inception_by_status
 
       }
 
@@ -219,17 +226,20 @@ class DashboardsController < ApplicationController
   private
 
   def default_stats
-    # Default statistics, assuming 'Default Team' is the default team
     default_team = Team.find_by(name: 'Default Team')
 
     if default_team
       user_ids = default_team.users.pluck(:id)
       {
-        total_tickets_last_30_days: Ticket.where(user_id: user_ids).where('created_at >= ?', 30.days.ago).count
+        total_tickets_last_30_days: Ticket.where(user_id: user_ids).where('created_at >= ?', 30.days.ago).count,
+        tickets_from_inception: 0,
+        tickets_from_inception_by_status: {}
       }
     else
       {
-        total_tickets_last_30_days: 0
+        total_tickets_last_30_days: 0,
+        tickets_from_inception: 0,
+        tickets_from_inception_by_status: {}
       }
     end
   end
