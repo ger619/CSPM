@@ -54,7 +54,7 @@
         <tbody>
         <% entries.each do |entry| %>
           <tr>
-            <td class="border border-gray-300 px-4 py-2"><%= entry.date.strftime('%d-%m-%Y') %></td>
+            <td class="border border-gray-300 px-4 py-2"><%= entry.date.strftime('%A, %d-%m-%Y') %></td>
             <td class="border border-gray-300 px-4 py-2"><%= entry.new_additions %></td>
             <td class="border border-gray-300 px-4 py-2"><%= entry.open_tickets %></td>
             <td class="border border-gray-300 px-4 py-2"><%= entry.with_client %></td>
