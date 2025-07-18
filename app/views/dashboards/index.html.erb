@@ -92,7 +92,18 @@
     <!-- target repair time not breach -->
       <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
         <a href="#" class="stat-card-link" data-type="tickets_from_inception" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception')">
-          <%= render 'dashboards/stat_card', title: "Tickets from Inception (That are not Closed or Declined)", value: @stats[:tickets_from_inception], id: "tickets_from_inception"%>
+          <%= render 'dashboards/stat_card', title: "Total Open Tickets", value: @stats[:tickets_from_inception], id: "tickets_from_inception"%>
+          <div class="mt-2 text-sm" data-type="tickets_from_inception_by_status" id="tickets_from_inception_by_status">
+            <% if @stats[:tickets_from_inception_by_status].present? %>
+              <% @stats[:tickets_from_inception_by_status].each do |status, count| %>
+                <div>
+                  <span class="font-semibold"><%= status %>:</span> <%= count %>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="text-gray-400">No status breakdown available.</div>
+            <% end %>
+          </div>
         </a>
       </div>
 
@@ -254,6 +265,34 @@
         document.getElementById("target_resolution_time_breached_closed").innerText = data.resolution_breached_closed_last_30_days;
         document.getElementById("no_sla_population").innerText = data.no_sla_tickets_last_30_days;
         document.getElementById("tickets_from_inception").innerText = data.tickets_from_inception;
+
+        const container = document.getElementById("tickets_from_inception_by_status");
+        container.innerHTML = ""; // Clear existing content
+
+        const statusData = data.tickets_from_inception_by_status;
+
+        if (statusData && Object.keys(statusData).length > 0) {
+          let statuses = Object.keys(statusData);
+          let counts = Object.values(statusData);
+
+          let html = `
+              <table class="min-w-full border text-center">
+                <thead>
+                  <tr>
+                    ${statuses.map(status => `<th class="px-2 py-1 border-b font-semibold">${status}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    ${counts.map(count => `<td class="px-2 py-1 border-b">${count}</td>`).join('')}
+                  </tr>
+                </tbody>
+              </table>
+            `;
+          container.innerHTML = html;
+        } else {
+          container.innerHTML = `<div class="text-gray-400">No status breakdown available.</div>`;
+        }
 
 
         // Refresh charts
