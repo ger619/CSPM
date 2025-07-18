@@ -23,6 +23,13 @@
 
   <!-- Stats Section -->
   <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8 mt-6">
+
+    <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+      <a href="#" class="stat-card-link" data-type="tickets_from_inception" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception')">
+        <%= render 'dashboards/stat_card', title: "Tickets from Inception (That are not Closed or Declined)", value: @stats[:tickets_from_inception], id: "tickets_from_inception"%>
+      </a>
+    </div>
+
     <!-- initial Breach -->
     <a href="#" class="stat-card-link" data-type="initial_response_time_breached" onclick="fetchTicketDetails('<%= @selected_team %>', 'initial_response_time_breached')">
       <%= render 'dashboards/stat_card', title: "Initial Response Time - Breached", value: @stats[:breached_tickets_last_30_days], id: "initial_response_time_breached", class: 'col-span-1' %>
@@ -233,6 +240,8 @@
         document.getElementById("target_resolution_time_breached_open").innerText = data.resolution_breached_open_last_30_days;
         document.getElementById("target_resolution_time_breached_closed").innerText = data.resolution_breached_closed_last_30_days;
         document.getElementById("no_sla_population").innerText = data.no_sla_tickets_last_30_days;
+        document.getElementById("tickets_from_inception").innerText = data.tickets_from_inception;
+
 
         // Refresh charts
         document.getElementById("responseTimeChart").innerHTML = "";
