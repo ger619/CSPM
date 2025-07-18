@@ -15,6 +15,11 @@ class DashboardsController < ApplicationController
       session[:team_id] = team.id # Store the team ID in the session
       user_ids = team.users.pluck(:id)
 
+      tickets_from_inception = Ticket.joins(:users, :statuses)
+        .where(users: { id: user_ids })
+        .where.not(statuses: { name: %w[Declined Closed] })
+        .count
+
       tickets_last_30_days = Ticket.joins(:users)
         .where(users: { id: user_ids })
         .where('tickets.created_at >= ?', 30.days.ago)
@@ -101,11 +106,6 @@ class DashboardsController < ApplicationController
         .where(sla_tickets: { sla_resolution_deadline: 'Breached' })
         .joins(:project)
         .group('projects.title')
-        .count
-
-      tickets_from_inception = Ticket.joins(:users, :statuses)
-        .where(users: { id: user_ids })
-        .where.not(statuses: { name: %w[Declined Closed] })
         .count
 
       ticket_details = tickets_last_30_days.select(:issue, :subject, :created_at)
