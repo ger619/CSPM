@@ -92,12 +92,12 @@
     <!-- target repair time not breach -->
       <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
         <a href="#" class="stat-card-link" data-type="tickets_from_inception" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception')">
-          <%= render 'dashboards/stat_card', title: "Total Open Tickets", value: @stats[:tickets_from_inception], id: "tickets_from_inception"%>
+          <%= render 'dashboards/stat_card', title: "Total Open Tickets from Inceptions( Minus Closed, Resolved or Decline)", value: @stats[:tickets_from_inception], id: "tickets_from_inception"%>
           <div class="mt-2 text-sm" data-type="tickets_from_inception_by_status" id="tickets_from_inception_by_status">
             <% if @stats[:tickets_from_inception_by_status].present? %>
               <% @stats[:tickets_from_inception_by_status].each do |status, count| %>
-                <div>
-                  <span class="font-semibold"><%= status %>:</span> <%= count %>
+                <div class="text-lg font-bold mb-2">
+                  <span class="text-lg font-bold mb-2"><%= status %>:</span> <%= count %>
                 </div>
               <% end %>
             <% else %>
@@ -279,12 +279,12 @@
               <table class="min-w-full border text-center">
                 <thead>
                   <tr>
-                    ${statuses.map(status => `<th class="px-2 py-1 border-b font-semibold">${status}</th>`).join('')}
+                    ${statuses.map(status => `<th class="px-2 py-1 border-b font-bold text-md">${status}</th>`).join('')}
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    ${counts.map(count => `<td class="px-2 py-1 border-b">${count}</td>`).join('')}
+                    ${counts.map(count => `<td class="px-2 py-1 border-b font-bold text-xl">${count}</td>`).join('')}
                   </tr>
                 </tbody>
               </table>
