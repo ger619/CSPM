@@ -26,18 +26,23 @@
                   class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
 
       <% if current_user.has_role?(:admin) %>
-        <%= link_to "Team Tickets (EOD)",
-                    daily_report_path(team_name: params[:team_name], report_type: params[:report_type]),
-                    method: :get,
-                    class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-                    data: { confirm: "Are you sure you want to email the tickets to the team?" } %>
-
-        <%= link_to "Morning Tickets(SOD)",
+        <% if params[:report_type] == "closed" %>
+          <%= link_to "Team Tickets (EOD)",
+                      daily_report_path(team_name: params[:team_name], report_type: params[:report_type]),
+                      method: :get,
+                      class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
+                      data: { confirm: "Are you sure you want to email the tickets to the team?" }
+          %>
+        <% end %>
+        <% if params[:report_type] == "sod" %>
+          <%= link_to "Morning Tickets(SOD)",
                     send_team_ticket_emails_path(team_name: params[:team_name], report_type: params[:report_type]),
                     method: :get,
                     class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-                    data: { confirm: "Are you sure you want to email the tickets to the team?" } %>
+                    data: { confirm: "Are you sure you want to email the tickets to the team?" }
+          %>
         <% end %>
+      <% end %>
 
     </div>
     <table class="min-w-full mt-4">
