@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_21_071715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
     t.uuid "groupware_id"
     t.uuid "script_id"
     t.string "label"
-    t.uuid "defect_id", null: false
+    t.uuid "defect_id"
     t.index ["defect_id"], name: "index_bugs_on_defect_id"
     t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
     t.index ["script_id"], name: "index_bugs_on_script_id"
@@ -155,6 +155,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "commonly_selected_clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_commonly_selected_clients_on_client_id"
+    t.index ["user_id"], name: "index_commonly_selected_clients_on_user_id"
   end
 
   create_table "defects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -434,7 +443,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
 
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
-    t.string "topic"
     t.string "description"
     t.uuid "product_id", null: false
     t.uuid "user_id", null: false
@@ -442,6 +450,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
     t.datetime "updated_at", null: false
     t.date "start_date"
     t.date "end_date"
+    t.string "priority"
     t.index ["product_id"], name: "index_tasks_on_product_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
@@ -526,7 +535,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
     t.uuid "client_id"
     t.boolean "active", default: true
     t.uuid "location_id"
-    t.string "position"
     t.index ["client_id"], name: "index_users_on_client_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -578,6 +586,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_15_074454) do
   add_foreign_key "comments", "projects"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
+  add_foreign_key "commonly_selected_clients", "clients"
+  add_foreign_key "commonly_selected_clients", "users"
   add_foreign_key "defects", "products"
   add_foreign_key "defects", "users"
   add_foreign_key "documents", "products"

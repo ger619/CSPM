@@ -37,7 +37,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to product_path(@product), notice: 'Task was successfully created.'
+      redirect_to product_path(@product), notice: 'Task was successfully updated.'
     else
       render :edit
     end
@@ -111,6 +111,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :topic, :description, :start_date, :end_date, :image, :file, :user_id)
+    params.require(:task).permit(:name, :description, :start_date, :end_date, :image, :file, :user_id, :priority)
   end
 end
