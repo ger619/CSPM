@@ -4,7 +4,9 @@ class ProductController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @product = Product.all
+    @product = Product.includes(softwares: :groupwares)
+    @chosen_software_id = params[:software_id]&.to_i
+    @selected_groupware_id = params[:groupware_id]&.to_i
 
     @product = if params[:query].present?
                  @product.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
@@ -105,11 +107,6 @@ class ProductController < ApplicationController
           end
 
           # Save the select script onlyd if it is elected
-          if params[:product][:script_ids].present?
-            @product.scripts = Script.where(id: params[:product][:script_ids])
-          else
-            @product.scripts.clear
-          end
 
           current_user.add_role :creator, @product
           format.html { redirect_to product_path(@product), notice: "Project was successfully #{@product.status == 'draft' ? 'saved as draft' : 'created'}." }

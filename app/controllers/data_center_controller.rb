@@ -605,12 +605,12 @@ class DataCenterController < ApplicationController
               'Status Updated At', 'Last Comment Updated At', 'Summary', 'Resolution', 'Due Date']
       tickets.each do |ticket|
         csv << [
-          ticket.project.client.name.gsub('–', '-'),
-          ticket.unique_id.gsub('–', '-'),
+          ticket.project.client.name.gsub('–', '-') || '',
+          ticket.unique_id.gsub('–', '-') || '',
           ticket.issue,
-          ticket.users.map(&:name).select(&:present?).join(', '),
-          ticket.user.name,
-          ticket.priority,
+          ticket.users.map(&:name).select(&:present?).join(', ') || '',
+          ticket.user.name || '',
+          ticket.priority || '',
           ticket.statuses.first&.name || 'N/A',
           ticket.created_at.strftime('%d/%b/%Y %I:%M:%S %p'),
           ticket.updated_at.strftime('%d/%b/%Y %I:%M:%S %p'),
