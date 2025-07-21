@@ -11,4 +11,8 @@
 <% end %>
 
 <%= render 'product/topbar_product' %>
-<%= render 'product/product_grid' %>
+<%= render partial: 'product/product_grid', locals: {
+  product: @product,
+  chosen_software_id: @chosen_software_id,
+  selected_groupware_id: @selected_groupware_id
+} %>

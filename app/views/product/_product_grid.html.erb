@@ -11,17 +11,7 @@
           <% end %>
             <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p> -
             <p class="text-sm font-semibold uppercase">
-              <% if product.softwares.any? %>
-                <% software = product.softwares.first %>
-                <% groupware = software.groupwares.first %>
-                <% if groupware %>
-                  <%= groupware.name %>
-                <% else %>
-                  No groupware present
-                <% end %>
-              <% else %>
-                No sub-product present
-              <% end %>
+                <%=  product.groupware_id %>
             </p>
 
           </div>
