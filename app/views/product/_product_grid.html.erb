@@ -11,7 +11,8 @@
           <% end %>
             <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p> -
             <p class="text-sm font-semibold uppercase">
-                <%=  product.groupware_id %>
+              <%= product.groupwares.map(&:name).join(', ') %>
+
             </p>
 
           </div>
