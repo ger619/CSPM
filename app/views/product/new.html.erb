@@ -176,41 +176,37 @@
 
 <script>
   document.getElementById('add-document-button').addEventListener('click', function() {
-  const container = document.getElementById('documents-container');
-  const timestamp = Date.now(); // Unique identifier for each field set
-  const newField = document.createElement('div');
-  newField.classList.add('document-field', 'flex', 'flex-col', 'mb-4', 'p-3', 'border', 'rounded');
-  
-  newField.innerHTML = `
-    <label class="block mb-1 text-sm font-medium">Document Name</label>
-    <input type="text" name="product[documents_attributes][${timestamp}][name]" 
-           class="border rounded-lg p-2 mb-2" placeholder="Document Name">
-    <label class="block mb-1 text-sm font-medium">Upload File</label>
-    <input type="file" name="product[documents_attributes][${timestamp}][file]" 
-           class="border rounded-lg p-2">
-    <a href="#" class="remove-document text-red-500 mt-2 block">Remove</a>
-  `;
-  container.appendChild(newField);
-});
+    const container = document.getElementById('documents-container');
+    const timestamp = Date.now(); // Unique identifier for each field set
+    const newField = document.createElement('div');
+    
+    newField.classList.add('document-field', 'flex', 'flex-col', 'mb-4', 'p-3', 'border', 'rounded');
+    newField.id = timestamp;
+    
+    newField.innerHTML = `
+      <label class="block mb-1 text-sm font-medium">Document Name</label>
+      <input type="text" name="product[documents_attributes][${timestamp}][name]" 
+            class="border rounded-lg p-2 mb-2" placeholder="Document Name">
+      <label class="block mb-1 text-sm font-medium">Upload File</label>
+      <input type="file" name="product[documents_attributes][${timestamp}][file]" 
+            class="border rounded-lg p-2">
+      <a href="#" class="remove-document text-red-500 mt-2 block" data-id="document-${timestamp}">Remove</a>
+    `;
 
-// Add multiple API documents
-document.getElementById('add-api-document-button').addEventListener('click', function() {
-  const container = document.getElementById('api-documents-container');
-  const timestamp = Date.now(); // Unique identifier for each field set
-  const newField = document.createElement('div');
-  newField.classList.add('document-field', 'flex', 'flex-col', 'mb-4', 'p-3', 'border', 'rounded');
-  
-  newField.innerHTML = `
-    <label class="block mb-1 text-sm font-medium">Document Name</label>
-    <input type="text" name="product[documents_attributes][${timestamp}][name]" 
-           class="border rounded-lg p-2 mb-2" placeholder="Document Name">
-    <label class="block mb-1 text-sm font-medium">Upload File</label>
-    <input type="file" name="product[documents_attributes][${timestamp}][file]" 
-           class="border rounded-lg p-2">
-    <a href="#" class="remove-document text-red-500 mt-2 block">Remove</a>
-  `;
-  container.appendChild(newField);
-});
+    container.appendChild(newField);
+  });
+
+  // Functionality to remove an upload document block based on the ID
+  document.addEventListener('click', (e) => {
+    if(e.target.classList.contains("remove-document")) {
+      e.preventDefault();
+      const id = e.target.getAttribute("data-id");
+      const element = document.getElementById(id);
+      if(element) {
+        element.remove();
+      }
+    }
+  })
 
   // Character counter for description
   document.addEventListener('DOMContentLoaded', function() {
@@ -235,21 +231,6 @@ document.getElementById('add-api-document-button').addEventListener('click', fun
       const initialLength = contentField.textContent.length;
       charCount.textContent = `${initialLength}/3000`;
     }
-    
-    // Document upload functionality
-    document.getElementById('add-document-button')?.addEventListener('click', function () {
-      const container = document.getElementById('documents-container');
-      const newField = document.createElement('div');
-      newField.classList.add('document-field', 'flex', 'flex-col', 'mb-4', 'bg-gray-100', 'dark:bg-gray-700', 'p-3', 'rounded-lg');
-      newField.innerHTML = `
-        <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Document Name</label>
-        <input type="text" name="product[documents_attributes][][name]" class="border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Document Name">
-        <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Upload File</label>
-        <input type="file" name="product[documents_attributes][][file]" class="border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2">
-        <button type="button" class="remove-document text-red-500 text-sm font-medium hover:text-red-700 dark:hover:text-red-400 text-left">Remove Document</button>
-      `;
-      container.appendChild(newField);
-    });
 
     document.addEventListener('click', function (e) {
       if (e.target.classList.contains('remove-document')) {
