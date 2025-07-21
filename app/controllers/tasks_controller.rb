@@ -37,7 +37,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to product_path(@product), notice: 'Task was successfully created.'
+      redirect_to product_path(@product), notice: 'Task was successfully updated.'
     else
       render :edit
     end
