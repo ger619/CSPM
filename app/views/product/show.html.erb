@@ -13,8 +13,8 @@
 <%= render 'product/product_show_topbar' %>
 
 <div class="bg-white max-w-full dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-<%= render 'layouts/alert' %>
-  <div class="gap-6">
+  <%= render 'layouts/alert' %>
+  <div class="gap-6 flex justify-between">
     <!-- First Column -->
 
     <!-- Fourth Column -->
@@ -39,6 +39,12 @@
         <% end %>
       </div>
     </div>
+    <% if current_user.has_role?(:admin) %>
+      <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
+        <!-- show added documents name and download button -->
+       <%= render partial: 'product/add_statuses', locals: { product: @product } %>
+      </div>
+    <% end %>
   </div>
 </div>
 
