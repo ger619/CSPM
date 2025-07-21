@@ -32,9 +32,7 @@
             <%= sanitize raw (task.description.to_trix_html) %>
           <% end %>
         </p>
-        <div class="text-xs text-gray-500 dark:text-gray-400">
-          <%= task.topic %>
-        </div>
+        
       </blockquote>
       <figcaption class="flex flex-wrap items-center justify-center gap-2">
         <% task.users.each do |user| %>
