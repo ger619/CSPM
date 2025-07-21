@@ -39,12 +39,32 @@
             </div>
           </div>
           
-          <!-- Status Filter -->
-          <div>
-            <%= label_tag :status, 'Status', class: 'block font-medium mb-1 text-sm border-gray-300 dark:bg-gray-500' %>
-            <%= select_tag :status, options_for_select(@statuses.map { |s| [s.capitalize, s] }, params[:status]), 
-                         include_blank: 'All Statuses',
-                         class: "w-full p-1 text-sm border-gray-300 dark:bg-gray-500 rounded" %>
+          <!-- Status Filter (Made as a checkbox drop down) -->
+          <div class="relative inline-block text-left">
+            <button type="button"
+                    id="statusDropdownButton"
+                    class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                    onclick="document.getElementById('statusDropdown').classList.toggle('hidden')">
+              Filter by Status
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+
+            <div id="statusDropdown"
+                class="absolute z-10 mt-2 bg-white border border-gray-200 rounded-md shadow-lg w-56 hidden">
+              <div class="p-2 max-h-60 overflow-y-auto space-y-2">
+                <% @statuses.each do |status| %>
+                  <div class="flex items-center">
+                    <%= check_box_tag 'status[]', status, Array(params[:status]).include?(status),
+                                      id: "status_#{status.parameterize}",
+                                      class: "mr-2" %>
+                    <%= label_tag "status_#{status.parameterize}", status.capitalize, class: "text-sm" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
           </div>
           
           <!-- Priority Filter -->
