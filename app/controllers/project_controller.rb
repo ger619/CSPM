@@ -63,7 +63,10 @@ class ProjectController < ApplicationController
         @ticket = @ticket.where('tickets.created_at::date <= ?', params[:end_date])
       end
 
-      @ticket = @ticket.where('statuses.name ILIKE ?', params[:status]) if params[:status].present?
+      if params[:status].present?
+        statuses = Array(params[:status])
+        @ticket = @ticket.where(statuses: { name: statuses })
+      end
       @ticket = @ticket.where('priority ILIKE ?', params[:priority]) if params[:priority].present?
       @ticket = @ticket.where('issue ILIKE ?', params[:issue]) if params[:issue].present?
       @ticket = @ticket.where(users: { id: params[:user_id] }) if params[:user_id].present?
