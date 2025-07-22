@@ -13,7 +13,7 @@ class ProductController < ApplicationController
                else
                  @product.order('created_at DESC')
                end
-    @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
+    @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer, :hod)
 
     @per_page = 12
     @page = (params[:page] || 1).to_i
