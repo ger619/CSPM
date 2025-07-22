@@ -10,10 +10,10 @@
     </div>
     <div class="flex flex-col">
       <h1 class="text-lg sm:text-xl md:text-2xl font-semibold"><%= @product.client.name %></h1>
-      <p class="text-xs sm:text-sm md:text-base"><%= @product.groupwares.map(&:name).join(', ') || "Client Description if any" %>
+      <p class="text-xs sm:text-sm md:text-base"><%= @product.groupwares.map(&:name).join(', ').presence || "Client Description if any" %>
     </div>
     <div class="flex flex-row items-center gap-2">
-      <h1 class="text-md">Due date: <%= @product.start_date.strftime("%d %b %Y") %></h1>
+      <h1 class="text-md">Due date: <%= @product.end_date.strftime("%d %b %Y") %></h1>
       <p class="text-md <%= 'text-red-500' if @days_remaining.to_i < 10 %>">
         <%= pluralize(@days_remaining, 'day') %> remaining
       </p>
