@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <h1 class="text-3xl font-bold">All Stats Within Last 30 Days</h1>
+    <h1 class="text-3xl font-bold">All Tickets from Inception</h1>
 
     <button type="button"
             onclick="refreshStats()"
@@ -24,6 +24,26 @@
   <!-- Stats Section -->
   <div class="grid sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-5 gap-6 mb-8 mt-6">
 
+    <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
+      <a href="#" class="stat-card-link" data-type="tickets_from_inception_count" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception_count')">
+        <%= render 'dashboards/stat_card', title: "Total Open Tickets from Inceptions( Minus Closed, Resolved or Decline)", value: @stats[:tickets_from_inception], id: "tickets_from_inception_count"%>
+        <div class="mt-2 text-sm" data-type="tickets_from_inception_by_status" id="tickets_from_inception_by_status">
+          <% if @stats[:tickets_from_inception_by_status].present? %>
+            <% @stats[:tickets_from_inception_by_status].each do |status, count| %>
+              <div class="text-lg font-bold mb-2">
+                <span class="text-lg font-bold mb-2"><%= status %>:</span> <%= count %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-gray-400">No status breakdown available.</div>
+          <% end %>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
+      <h1 class="text-3xl font-bold text-center">All Stats Within Last 30 Days</h1>
+    </div>
     <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
       <a href="#" class="stat-card-link" data-type="total_tickets_last_30_days" onclick="fetchTicketDetails('<%= @selected_team %>', 'total_tickets_last_30_days')">
         <%= render 'dashboards/stat_card', title: "Total Tickets Last 30 days", value: @stats[:total_tickets_last_30_days], id: "total_tickets_last_30_days"%>
@@ -90,23 +110,6 @@
         </div>
       </div>
     <!-- target repair time not breach -->
-      <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
-        <a href="#" class="stat-card-link" data-type="tickets_from_inception_count" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception_count')">
-          <%= render 'dashboards/stat_card', title: "Total Open Tickets from Inceptions( Minus Closed, Resolved or Decline)", value: @stats[:tickets_from_inception], id: "tickets_from_inception_count"%>
-          <div class="mt-2 text-sm" data-type="tickets_from_inception_by_status" id="tickets_from_inception_by_status">
-            <% if @stats[:tickets_from_inception_by_status].present? %>
-              <% @stats[:tickets_from_inception_by_status].each do |status, count| %>
-                <div class="text-lg font-bold mb-2">
-                  <span class="text-lg font-bold mb-2"><%= status %>:</span> <%= count %>
-                </div>
-              <% end %>
-            <% else %>
-              <div class="text-gray-400">No status breakdown available.</div>
-            <% end %>
-          </div>
-        </a>
-      </div>
-
 
   </div>
 
