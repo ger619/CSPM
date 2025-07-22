@@ -82,8 +82,6 @@ class ProductController < ApplicationController
     @product.user_id = current_user.id
 
     # Validate presence of name, description, and content (subject)
-    @product.errors.add(:name, "can't be blank") if @product.name.blank?
-    @product.errors.add(:description, "can't be blank") if @product.description.blank?
     @product.errors.add(:content, "can't be blank") if @product.content.blank?
 
     respond_to do |format|
@@ -182,7 +180,7 @@ class ProductController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:status, :name, :description, :start_date, :end_date, :document_name, :image, :content,
+    params.require(:product).permit(:status, :start_date, :end_date, :document_name, :image, :content,
                                     :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
                                                           documents_attributes: %i[id name file _destroy])
   end

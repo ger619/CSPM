@@ -12,16 +12,6 @@
     </div>
   <% end %>
 
-  <!-- Name -->
-  <%= f.label :name, 'Name*', class: "block font-medium mb-1" %>
-  <%= f.text_field :name, required: true, class: "w-full mb-4 p-2 border rounded" %>
-  <div class="grid grid-cols-2 gap-2">
-  <!-- Description -->
-    <div class="relative z-0 w-full mb-6 group">
-  <%= f.label :description, 'Product Description*', class: "block font-medium mb-1" %>
-  <%= f.text_field :description, required: true, class: "w-full mb-4 p-2 border rounded" %>
-    </div>
-
   <!-- Assignee -->
     <div class="relative z-0 w-full mb-6 group">
   <%= f.label :user_id, 'Assignee*', class: "block font-medium mb-1" %>
