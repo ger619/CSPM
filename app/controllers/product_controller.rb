@@ -26,7 +26,7 @@ class ProductController < ApplicationController
   end
 
   def show
-    if current_user.has_role?(:admin) || @product.users.include?(current_user)
+    if current_user.has_role?(:admin) || @product.users.include?(current_user) || current_user.has_role?(:hod)
 
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
