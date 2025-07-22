@@ -137,7 +137,7 @@ class DashboardsController < ApplicationController
         breached_tickets_resolved_per_assignee: breached_tickets_resolved_per_assignee,
         breached_resolution_resolved_tickets_per_project: breached_resolution_resolved_tickets_per_project,
         ticket_details: ticket_details,
-        tickets_from_inception: tickets_from_inception_count,
+        tickets_from_inception_count: tickets_from_inception_count,
         tickets_from_inception_by_status: tickets_from_inception_by_status
 
       }
@@ -195,6 +195,9 @@ class DashboardsController < ApplicationController
           .where(statuses: { name: %w[Closed Resolved] })
       when 'target_resolution_time_not_breached'
         @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
+      when 'tickets_from_inception_by_status'
+        @tickets = Status.left_outer_joins(tickets: [:users]).where(users: { id: user_ids }).where.not(statuses: { name: %w[Declined Closed Resolved] }).group('statuses.name')
+
       when 'total_tickets_last_30_days'
         # No additional filtering needed
       end

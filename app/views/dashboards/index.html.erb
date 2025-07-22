@@ -91,8 +91,8 @@
       </div>
     <!-- target repair time not breach -->
       <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
-        <a href="#" class="stat-card-link" data-type="tickets_from_inception" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception')">
-          <%= render 'dashboards/stat_card', title: "Total Open Tickets from Inceptions( Minus Closed, Resolved or Decline)", value: @stats[:tickets_from_inception], id: "tickets_from_inception"%>
+        <a href="#" class="stat-card-link" data-type="tickets_from_inception_count" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception_count')">
+          <%= render 'dashboards/stat_card', title: "Total Open Tickets from Inceptions( Minus Closed, Resolved or Decline)", value: @stats[:tickets_from_inception], id: "tickets_from_inception_count"%>
           <div class="mt-2 text-sm" data-type="tickets_from_inception_by_status" id="tickets_from_inception_by_status">
             <% if @stats[:tickets_from_inception_by_status].present? %>
               <% @stats[:tickets_from_inception_by_status].each do |status, count| %>
@@ -264,7 +264,7 @@
         document.getElementById("target_resolution_time_breached_open").innerText = data.resolution_breached_open_last_30_days;
         document.getElementById("target_resolution_time_breached_closed").innerText = data.resolution_breached_closed_last_30_days;
         document.getElementById("no_sla_population").innerText = data.no_sla_tickets_last_30_days;
-        document.getElementById("tickets_from_inception").innerText = data.tickets_from_inception;
+        document.getElementById("tickets_from_inception_count").innerText = data.tickets_from_inception_count;
 
         const container = document.getElementById("tickets_from_inception_by_status");
         container.innerHTML = ""; // Clear existing content
@@ -276,7 +276,7 @@
           let counts = Object.values(statusData);
 
           let html = `
-              <table class="min-w-full border text-center">
+              <table class="min-w-full border text-center bg-white dark:bg-gray-700">
                 <thead>
                   <tr>
                     ${statuses.map(status => `<th class="px-2 py-1 border-b font-bold text-md">${status}</th>`).join('')}
