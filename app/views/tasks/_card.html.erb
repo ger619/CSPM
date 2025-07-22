@@ -1,64 +1,67 @@
 <%= link_to product_task_path(task.product, task) do %>
-  <div class="m-2 border border-gray-200 rounded shadow-sm dark:border-gray-700 w-full">
-    <figure class="flex flex-col items-center justify-center p-2 text-center bg-white border-b border-gray-200 rounded-md md:border-e dark:bg-gray-800 dark:border-gray-700">
-      <blockquote class="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto mb-4 text-gray-500 dark:text-gray-400">
-      <% due_date = task.end_date %>
-      <% days_left = (due_date - Date.today).to_i %>
-      <% due_date_class = case
-                          when days_left > 14
-                            'bg-green-500 text-white'
-                          when days_left <= 7 && days_left > 3
-                            'bg-yellow-500 text-white'
-                          when days_left <= 3 && days_left >= 0
-                            'bg-orange-500 text-white'
-                          else
-                            'bg-red-500 text-white'
-                          end %>
-      <h3 class="text-xs font-semibold rounded-t-lg <%= due_date_class %> p-2">
-        Due Date: <%= task.end_date %>
-      </h3>
-      <div class="flex justify-center">
-        <% if task.image.attached? %>
-          <div class="mb-4">
-            <%= image_tag(task.image, class: 'object-cover w-full max-w-xs h-auto rounded') %>
-          </div>
-        <% end %>
-      </div>
-        <h3 class="text-xs font-semibold">
-          <%= task.name %>
-        </h3>
-        <p class="my-4">
-          <% if task.description.nil? %>
-            <%= sanitize raw (task.description.to_trix_html) %>
-          <% end %>
-        </p>
-        
-      </blockquote>
-      <figcaption class="flex flex-wrap items-center justify-center gap-2">
-        <% task.users.each do |user| %>
-          <% if user.profile_picture.attached? %>
-            <%= image_tag user.profile_picture, class: 'w-10 h-10 rounded-full' %>
-          <% elsif user.name_initials.present? %>
-            <p class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize">
-              <%= user.name_initials %>
-            </p>
-          <% else %>
-            <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
-          <% end %>
-        <% end %>
-        <div class="text-sm font-medium dark:text-white text-center mt-2 w-full">
-          <% task.users.each do |user| %>
-            <% if user.name.present? %>
-              <%= user.name %>
-            <% else %>
-              <%= truncate(user.email, length: 15, omission: '...') %>
-            <% end %>
-          <% end %>
-        </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-          <span class="font-semibold">Status:</span> <%= task.statuses.first&.name %>
-        </div>
-      </figcaption>
-    </figure>
-  </div>
 <% end %>
+
+<div class="product-task-top p-2 w-full min-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden" style="max-width: 42rem;">
+  <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white"><%= @product.client.name %></h3>
+    <%= render partial: "tasks/action_dropdown", locals: { product: @product, task: task } %>
+  </div>
+
+  <div class="p-4">
+    <div class="mb-3">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white"><%= task.name %></h2>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <div class="product-task-middle-bottom-left">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+          High
+        </span>
+      </div>
+      <div class="product-task-middle-bottom-right flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
+        <% due_date = task.end_date %>
+        <% days_left = (due_date - Date.today).to_i %>
+        <% due_date_class = case
+          when days_left > 14
+            'bg-green-500 text-white'
+          when days_left <= 7 && days_left > 3
+            'bg-yellow-500 text-white'
+          when days_left <= 3 && days_left >= 0
+            'bg-orange-500 text-white'
+          else
+            'bg-red-500 text-white'
+        end %>
+
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
+        <span><%= task.end_date.strftime("%b %d, %Y") %></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 items-center gap-4">
+    <!-- Users Column -->
+    <div class="flex items-center space-x-2 overflow-x-auto">
+      <% task.users.each do |user| %>
+        <% if user.profile_picture.attached? %>
+          <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full flex-shrink-0' %>
+        <% elsif user.name_initials.present? %>
+          <p class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-300 text-gray-800 capitalize flex-shrink-0">
+            <%= user.name_initials %>
+          </p>
+        <% else %>
+          <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full flex-shrink-0' %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Messages Column -->
+    <div class="flex items-center justify-center space-x-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+      </svg>
+      <p class="text-sm"><%= task.messages.count %></p>
+    </div>
+  </div>
+</div>
