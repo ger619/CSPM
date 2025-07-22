@@ -1,7 +1,7 @@
-<div class="bg-white dark:bg-gray-800 shadow-md rounded-lg" style="cursor: pointer; max-width: 42rem;">
+<div class="bg-white dark:bg-gray-800 shadow-md rounded-lg border" style="cursor: pointer; ">
   <div class="flex justify-between mb-2 bg-gray-200 dark:bg-gray-700 p-4 rounded-t-lg">
     <div class="flex items-center gap-4">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white"><%= @product.client.name %></h3>
+      <h3 class="text-lg font-semibold"><%= @product.client.name %></h3>
     </div>
     <div>
       <%= render partial: "tasks/action_dropdown", locals: { product: @product, task: task } %>
@@ -10,14 +10,12 @@
 
   <div class="p-4">
     <div class="mb-4">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white"><%= task.name %></h2>
+      <h2 class="text-xs font-bold"><%= task.name %></h2>
     </div>
 
     <div class="flex items-center justify-between mb-4">
-      <div>
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-          High
-        </span>
+      <div class="text-xs">
+        <%= render partial: 'tasks/priority', locals: { task: task } %>
       </div>
       <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">

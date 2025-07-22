@@ -9,7 +9,7 @@
 
       <div class="flex flex-row gap-4">
         <h1 class="text-lg sm:text-xl md:text-2xl font-semibold">
-          <%= link_to @product.client.name, product_path(@product.id) %> / <span class="text-md font-light"> <%= @task.name %> </span>
+          <%= link_to @product.client.name, product_path(@product.id) %> / <span class="text-md font-light"> <%= render partial: 'tasks/priority', locals: { task: @task } %> </span>
           <span class="text-sm"> from <%= @task.start_date %> to <%= @task.start_date %> </span>
         </h1>
         <p class="text-xs sm:text-sm md:text-base">
