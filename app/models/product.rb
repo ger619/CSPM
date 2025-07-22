@@ -11,6 +11,7 @@ class Product < ApplicationRecord
   accepts_nested_attributes_for :documents, allow_destroy: true
   has_one_attached :image
   has_many :defects, dependent: :nullify
+  before_create :set_default_status
 
   has_rich_text :content
 
@@ -32,6 +33,11 @@ class Product < ApplicationRecord
 
   def craftsilicon_users
     User.where('email LIKE ANY (array[?, ?, ?]) AND active = ?', '%@craftsilicon.com', '%@craftsilicon.co.tz', '%@little.africa', true)
+  end
+
+  def set_default_status
+    status = Status.find_by(name: 'Development')
+    statuses << status if status
   end
 
   private
