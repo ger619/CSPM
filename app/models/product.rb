@@ -15,8 +15,6 @@ class Product < ApplicationRecord
 
   has_rich_text :content
 
-  validates :name, presence: true, uniqueness: true, length: { maximum: 100 }
-
   resourcify
   has_many :users, through: :roles, class_name: 'User', source: :users
   has_many :creators, -> { where(roles: { name: :admin }) }, class_name: 'User', through: :roles, source: :users
