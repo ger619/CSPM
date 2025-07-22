@@ -82,7 +82,7 @@ class UsersController < ApplicationController
   end
 
   def manager_active
-    per_page = 1
+    per_page = 50
     page = params[:page].to_i.positive? ? params[:page].to_i : 1
 
     @active_users_manager = User.joins(:roles)
