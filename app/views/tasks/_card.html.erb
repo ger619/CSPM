@@ -68,6 +68,18 @@
 <div class="product-task-top">
   <div class="product-task-top p-4 border-2 rounded-l-md rounded-r-md border-gray-300 dark:border-gray-600">
     <h3><%= @product.client.name %></h3>
+    <button
+      type="button"
+      class="inline-flex justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+      id="menu-button-<%= @product.id %>"
+      aria-expanded="false"
+      aria-haspopup="true"
+      data-action="click->dropdown#toggle">
+      
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+      </svg>
+    </button>
   </div>
 
   <div class="product-task-middle">
