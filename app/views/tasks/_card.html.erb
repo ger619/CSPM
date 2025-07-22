@@ -62,3 +62,11 @@
     </figure>
   </div>
 <% end %>
+
+<%= link_to product_task_path(task.product, task) do %>
+<% end %>
+<div class="product-task-top">
+  <div class="product-task-top p-4 border-2 rounded-l-md rounded-r-md border-gray-300 dark:border-gray-600">
+    <h3><%= @product.client.name %></h3>
+  </div>
+</div>
