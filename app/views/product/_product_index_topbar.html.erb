@@ -14,16 +14,15 @@
     
     <!-- Category Dropdown -->
     <div class="relative group" data-controller="product-topbar-dropdown">
-      <button 
-        class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md transition-colors"
-        data-action="click->product-topbar-dropdown#toggle"
-      >
-        <span>Category</span>
-        <span class="font-medium" data-product-topbar-dropdown-target="display">All</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+      <%= form_with url: product_index_path, method: :get, local: true do |f| %>
+        <div 
+        class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md transition-colors">
+            <%= f.label :status, "Category" %>
+            <%= select_tag :status, options_for_select(['All', *@used_statuses.sort], selected: params[:status]),
+                onchange: 'this.form.submit()',
+                class: "px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 text-sm" %>
+        </div>
+      <% end %>
       
       <div 
         class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600"

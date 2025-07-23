@@ -8,25 +8,30 @@ class ProductController < ApplicationController
     @chosen_software_id = params[:software_id]&.to_i
     @selected_groupware_id = params[:groupware_id]&.to_i
 
-    @product = if params[:query].present?
-                 @product.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
-               else
-                 @product.order('created_at DESC')
-               end
+    if params[:query].present?
+      @product = @product.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+    else
+      @product = @product.order('created_at DESC')
+    end
+
+    if params[:status].present? && params[:status] != 'All'
+      @product = @product.joins(:statuses).where(statuses: { name: params[:status] })
+    end
+
     @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer, :hod)
 
     @per_page = 12
     @page = (params[:page] || 1).to_i
     @total_pages = (@product.count / @per_page.to_f).ceil
-    # show the count for the page
     @start_count = ((@page - 1) * @per_page) + 1
     @end_count = [@page * @per_page, @product.count].min
     @total_count = @product.count
+
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
 
-    # Get only used statuses from visible products
     @used_statuses = @product.map { |p| p.statuses.first&.name }.compact.uniq
   end
+
 
   def show
     if current_user.has_role?(:admin) || @product.users.include?(current_user) || current_user.has_role?(:hod)
