@@ -7,10 +7,22 @@ class ProductController < ApplicationController
     # Base product query
     @product = Product.includes(softwares: :groupwares)
 
-    # Optional search
+    # Search functionality for rich text content
     if params[:query].present?
-      @product = @product.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+      search_query = "%#{params[:query].strip}%"
+      
+      # Search in both topic (if exists) and rich text content
+      @product = if Product.column_names.include?('content')
+                    @product.joins(:rich_text_content)
+                            .where('product.content ILIKE ? OR action_text_rich_texts.body ILIKE ?', 
+                                  search_query, search_query)
+                  else
+                    @product.joins(:rich_text_content)
+                            .where('action_text_rich_texts.body ILIKE ?', search_query)
+                  end
     end
+
+
 
     # Sort by dropdown (before pagination!)
     case params[:sort_by]
@@ -18,10 +30,8 @@ class ProductController < ApplicationController
       @product = @product.order(end_date: :asc)
     when 'recent'
       @product = @product.order(created_at: :desc)
-    when 'alphabetical'
-      @product = @product.order(topic: :asc)
     else
-      @product = @product.order(created_at: :desc) # Default sort
+      @product = @product.order(created_at: :desc)
     end
 
     # Filter by status

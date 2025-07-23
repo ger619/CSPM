@@ -3,13 +3,34 @@
   <div class="flex items-center space-x-4">
     <!-- Projects search form -->
     <div class="relative group flex flex-col md:flex-row items-start md:items-center w-full">
-      <%= form_with url: product_index_path, method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: "border border-gray-300 px-5 pr-10 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100" %>
-        <%= f.submit "Search",  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-      <% end %>
-      <%= form_with url: product_index_path, method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'ml-2 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-      <% end %>
+        <%= form_with url: product_index_path, 
+                        method: :get, 
+                        class: 'flex gap-2 w-full',
+                        data: { controller: 'search-form', 
+                                action: 'submit->search-form#submit' } do |f| %>
+            
+            <!-- Hidden fields to preserve other params -->
+            <%= hidden_field_tag :sort_by, params[:sort_by] if params[:sort_by].present? %>
+            <%= hidden_field_tag :status, params[:status] if params[:status].present? %>
+            
+            <!-- Search input with clear button -->
+            <div class="relative flex-grow">
+            <%= f.text_field :query, 
+                    value: params[:query],
+                    placeholder: "Search by topic or description...", 
+                    class: "w-full border border-gray-300 px-4 py-2 rounded-md font-medium placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
+                    data: { 'search-form-target': 'input' } %>
+            
+            
+            </div>
+            
+            <%= f.submit "Search", class: 'bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-bold text-white' %>
+        <% end %>
+        
+        <% if params[:query].present? || params[:status].present? || params[:sort_by].present? %>
+            <%= link_to 'Clear all', product_index_path, 
+                        class: 'ml-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md font-medium text-gray-700 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white' %>
+        <% end %>
     </div>
     
     <!-- Category Dropdown -->
@@ -64,7 +85,7 @@
         data-product-topbar-dropdown-target="menu"
       >
         <% current_sort = params[:sort_by].to_s %>
-        <% ['Upcoming', 'Recent', 'Alphabetical'].each do |sort_option| %>
+        <% ['Upcoming', 'Recent'].each do |sort_option| %>
         <% sort_key = sort_option.downcase %>
         <button 
             class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors <%= 'bg-gray-100 dark:bg-gray-600' if current_sort == sort_key %>"
