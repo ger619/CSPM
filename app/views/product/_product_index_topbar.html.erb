@@ -35,7 +35,7 @@
         data-transition-leave-from="transform opacity-100 scale-100"
         data-transition-leave-to="transform opacity-0 scale-95"
       >
-        <% ['All', 'Initialized', 'Development', 'QA', 'User Acceptance Test', 'Pilot', 'Go Live'].each do |category| %>
+        <% ['All', *@used_statuses.sort].each do |category| %>
           <button 
             class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
             data-action="click->product-topbar-dropdown#select"

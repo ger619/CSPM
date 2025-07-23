@@ -23,6 +23,9 @@ class ProductController < ApplicationController
     @end_count = [@page * @per_page, @product.count].min
     @total_count = @product.count
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
+
+    # Get only used statuses from visible products
+    @used_statuses = @product.map { |p| p.statuses.first&.name }.compact.uniq
   end
 
   def show
