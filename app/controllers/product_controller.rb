@@ -10,39 +10,31 @@ class ProductController < ApplicationController
     # Search functionality for rich text content
     if params[:query].present?
       search_query = "%#{params[:query].strip}%"
-      
+
       # Search in both topic (if exists) and rich text content
       @product = if Product.column_names.include?('content')
-                    @product.joins(:rich_text_content)
-                            .where('product.content ILIKE ? OR action_text_rich_texts.body ILIKE ?', 
-                                  search_query, search_query)
-                  else
-                    @product.joins(:rich_text_content)
-                            .where('action_text_rich_texts.body ILIKE ?', search_query)
-                  end
+                   @product.joins(:rich_text_content)
+                     .where('product.content ILIKE ? OR action_text_rich_texts.body ILIKE ?',
+                            search_query, search_query)
+                 else
+                   @product.joins(:rich_text_content)
+                     .where('action_text_rich_texts.body ILIKE ?', search_query)
+                 end
     end
-
-
 
     # Sort by dropdown (before pagination!)
-    case params[:sort_by]
-    when 'upcoming'
-      @product = @product.order(end_date: :asc)
-    when 'recent'
-      @product = @product.order(created_at: :desc)
-    else
-      @product = @product.order(created_at: :desc)
-    end
+    @product = case params[:sort_by]
+               when 'upcoming'
+                 @product.order(end_date: :asc)
+               else
+                 @product.order(created_at: :desc)
+               end
 
     # Filter by status
-    if params[:status].present? && params[:status] != 'All'
-      @product = @product.joins(:statuses).where(statuses: { name: params[:status] })
-    end
+    @product = @product.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present? && params[:status] != 'All'
 
     # Filter by user role
-    unless current_user.has_any_role?(:admin, :observer, :hod)
-      @product = @product.joins(:users).where(users: { id: current_user.id })
-    end
+    @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer, :hod)
 
     # Pagination (AFTER all filters and sorts)
     @per_page = 12
@@ -56,9 +48,7 @@ class ProductController < ApplicationController
 
     # Used statuses
     @used_statuses = @product.map { |p| p.statuses.first&.name }.compact.uniq
-
   end
-
 
   def show
     if current_user.has_role?(:admin) || @product.users.include?(current_user) || current_user.has_role?(:hod)
