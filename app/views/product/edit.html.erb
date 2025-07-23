@@ -1,4 +1,4 @@
-<% provide(:title, "Edit Project: #{@product.name}") %>
+<% provide(:title, "Edit Project: #{@product.topic}") %>
 
 <%= form_with model: @product, url: product_path(@product), method: :patch, local: true, data: { turbo: false } do |f| %>
   <% if @product.errors.any? %>

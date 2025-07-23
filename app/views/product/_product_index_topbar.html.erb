@@ -1,6 +1,17 @@
 <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
   <!-- Left side - Category and Sort by dropdowns -->
   <div class="flex items-center space-x-4">
+    <!-- Projects search form -->
+    <div class="relative group flex flex-col md:flex-row items-start md:items-center w-full">
+      <%= form_with url: product_index_path, method: :get, class: 'flex gap-2' do |f| %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border border-gray-300 px-5 pr-10 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100" %>
+        <%= f.submit "Search",  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+      <%= form_with url: product_index_path, method: :get, class: 'flex' do |f| %>
+        <%= f.submit "Clear", class: 'ml-2 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+    </div>
+    
     <!-- Category Dropdown -->
     <div class="relative group" data-controller="product-topbar-dropdown">
       <button 
@@ -24,7 +35,7 @@
         data-transition-leave-from="transform opacity-100 scale-100"
         data-transition-leave-to="transform opacity-0 scale-95"
       >
-        <% ['All', 'Initialized', 'Development', 'QA', 'UATs', 'Pilot', 'Go Live'].each do |category| %>
+        <% ['All', 'Initialized', 'Development', 'QA', 'User Acceptance Test', 'Pilot', 'Go Live'].each do |category| %>
           <button 
             class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
             data-action="click->product-topbar-dropdown#select"
@@ -63,16 +74,6 @@
           </button>
         <% end %>
       </div>
-    </div>
-
-    <div class="relative group flex flex-col md:flex-row items-start md:items-center w-full">
-      <%= form_with url: product_index_path, method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: "border border-gray-300 px-5 pr-10 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100" %>
-        <%= f.submit "Search",  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-      <% end %>
-      <%= form_with url: product_index_path, method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'ml-2 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-      <% end %>
     </div>
   </div>
 
