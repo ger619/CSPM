@@ -4,25 +4,50 @@ class ProductController < ApplicationController
   load_and_authorize_resource
 
   def index
+    # Base product query
     @product = Product.includes(softwares: :groupwares)
-    @chosen_software_id = params[:software_id]&.to_i
-    @selected_groupware_id = params[:groupware_id]&.to_i
 
-    @product = if params[:query].present?
-                 @product.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+    # Search functionality for rich text content
+    if params[:query].present?
+      search_query = "%#{params[:query].strip}%"
+
+      # Search in both topic (if exists) and rich text content
+      @product = if Product.column_names.include?('content')
+                   @product.joins(:rich_text_content)
+                     .where('product.content ILIKE ? OR action_text_rich_texts.body ILIKE ?',
+                            search_query, search_query)
+                 else
+                   @product.joins(:rich_text_content)
+                     .where('action_text_rich_texts.body ILIKE ?', search_query)
+                 end
+    end
+
+    # Sort by dropdown (before pagination!)
+    @product = case params[:sort_by]
+               when 'upcoming'
+                 @product.order(end_date: :asc)
                else
-                 @product.order('created_at DESC')
+                 @product.order(created_at: :desc)
                end
+
+    # Filter by status
+    @product = @product.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present? && params[:status] != 'All'
+
+    # Filter by user role
     @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer, :hod)
 
+    # Pagination (AFTER all filters and sorts)
     @per_page = 12
     @page = (params[:page] || 1).to_i
     @total_pages = (@product.count / @per_page.to_f).ceil
-    # show the count for the page
     @start_count = ((@page - 1) * @per_page) + 1
     @end_count = [@page * @per_page, @product.count].min
     @total_count = @product.count
+
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
+
+    # Used statuses
+    @used_statuses = @product.map { |p| p.statuses.first&.name }.compact.uniq
   end
 
   def show
