@@ -1,0 +1,87 @@
+<div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+  <!-- Left side - Category and Sort by dropdowns -->
+  <div class="flex items-center space-x-4">
+    <!-- Category Dropdown -->
+    <div class="relative group" data-controller="product-topbar-dropdown">
+      <button 
+        class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md transition-colors"
+        data-action="click->product-topbar-dropdown#toggle"
+      >
+        <span>Category</span>
+        <span class="font-medium" data-product-topbar-dropdown-target="display">All</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      <div 
+        class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600"
+        data-product-topbar-dropdown-target="menu"
+        data-transition-enter="transition ease-out duration-100"
+        data-transition-enter-from="transform opacity-0 scale-95"
+        data-transition-enter-to="transform opacity-100 scale-100"
+        data-transition-leave="transition ease-in duration-75"
+        data-transition-leave-from="transform opacity-100 scale-100"
+        data-transition-leave-to="transform opacity-0 scale-95"
+      >
+        <% ['All', 'Initialized', 'Development', 'QA', 'UATs', 'Pilot', 'Go Live'].each do |category| %>
+          <button 
+            class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            data-action="click->product-topbar-dropdown#select"
+            data-category="<%= category %>"
+          >
+            <%= category %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Sort by Dropdown -->
+    <div class="relative group" data-controller="product-topbar-dropdown">
+      <button 
+        class="flex items-center space-x-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 px-3 py-2 rounded-md transition-colors"
+        data-action="click->product-topbar-dropdown#toggle"
+      >
+        <span>Sort by</span>
+        <span class="font-medium" data-product-topbar-dropdown-target="display">Upcoming</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      <div 
+        class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600"
+        data-product-topbar-dropdown-target="menu"
+      >
+        <% ['Upcoming', 'Recent', 'Alphabetical', 'Priority'].each do |sort_option| %>
+          <button 
+            class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            data-action="click->product-topbar-dropdown#select"
+            data-category="<%= sort_option %>"
+          >
+            <%= sort_option %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="relative group flex flex-col md:flex-row items-start md:items-center w-full">
+      <%= form_with url: product_index_path, method: :get, class: 'flex gap-2' do |f| %>
+        <%= f.text_field :query, placeholder: "Search ", class: "border border-gray-300 px-5 pr-10 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100" %>
+        <%= f.submit "Search",  class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+      <%= form_with url: product_index_path, method: :get, class: 'flex' do |f| %>
+        <%= f.submit "Clear", class: 'ml-2 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Right side - Add New Project button -->
+  <div class="flex items-center space-x-4">
+    <!-- Add Task button -->
+    <button class="flex items-center space-x-1 bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100">
+      <span>十</span>
+      <span>Add New Project</span>
+    </button>
+  </div>
+</div>
