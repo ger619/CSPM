@@ -63,14 +63,16 @@
         class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600"
         data-product-topbar-dropdown-target="menu"
       >
-        <% ['Upcoming', 'Recent', 'Alphabetical', 'Priority'].each do |sort_option| %>
-          <button 
-            class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+        <% current_sort = params[:sort_by].to_s %>
+        <% ['Upcoming', 'Recent', 'Alphabetical'].each do |sort_option| %>
+        <% sort_key = sort_option.downcase %>
+        <button 
+            class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors <%= 'bg-gray-100 dark:bg-gray-600' if current_sort == sort_key %>"
             data-action="click->product-topbar-dropdown#select"
             data-category="<%= sort_option %>"
-          >
+        >
             <%= sort_option %>
-          </button>
+        </button>
         <% end %>
       </div>
     </div>
