@@ -20,10 +20,8 @@
     </button>
   </div>
 
-
   <!-- Stats Section -->
   <div class="grid sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-5 gap-6 mb-8 mt-6">
-
     <div class="col-span-1 sm:col-span-5 md:col-span-5 lg:col-span-5">
       <a href="#" class="stat-card-link" data-type="tickets_from_inception_count" onclick="fetchTicketDetails('<%= @selected_team %>', 'tickets_from_inception_count')">
         <%= render 'dashboards/stat_card', title: "Total Open Tickets from Inceptions( Minus Closed, Resolved or Decline)", value: @stats[:tickets_from_inception], id: "tickets_from_inception_count"%>
@@ -110,9 +108,7 @@
         </div>
       </div>
     <!-- target repair time not breach -->
-
   </div>
-
   <!-- Charts Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="bg-white dark:bg-gray-700 p-4 shadow-md rounded-lg">

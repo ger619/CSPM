@@ -197,7 +197,11 @@ class DashboardsController < ApplicationController
         @tickets = @tickets.where(sla_tickets: { sla_resolution_deadline: ['Not Breached', nil] })
       when 'tickets_from_inception_by_status'
         @tickets = Status.left_outer_joins(tickets: [:users]).where(users: { id: user_ids }).where.not(statuses: { name: %w[Declined Closed Resolved] }).group('statuses.name')
-
+      when 'tickets_from_inception_count'
+        # Show all tickets from the team that are not closed, resolved or declined
+        @tickets = Ticket.joins(:statuses, :users, :taggings)
+          .where(users: { id: user_ids })
+          .where.not(statuses: { name: %w[Declined Closed Resolved] })
       when 'total_tickets_last_30_days'
         # No additional filtering needed
       end
