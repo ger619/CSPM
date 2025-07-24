@@ -23,8 +23,8 @@ export default class extends Controller {
       document.addEventListener('click', this.boundClose);
     }
 
-    const svg = this.buttonTarget.querySelector('svg')
-    svg.classList.toggle('rotate-180')
+    const svg = this.buttonTarget.querySelector('svg');
+    svg.classList.toggle('rotate-180');
   }
 
   close(event) {
@@ -39,9 +39,9 @@ export default class extends Controller {
 
   hide(event) {
     if (!this.element.contains(event.target) && !this.menuTarget.classList.contains('hidden')) {
-      this.menuTarget.classList.add('hidden')
-      const svg = this.buttonTarget.querySelector('svg')
-      svg.classList.remove('rotate-180')
+      this.menuTarget.classList.add('hidden');
+      const svg = this.buttonTarget.querySelector('svg');
+      svg.classList.remove('rotate-180');
     }
   }
 }
