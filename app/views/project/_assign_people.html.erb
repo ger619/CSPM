@@ -12,9 +12,7 @@
         
         <!-- Full list (hidden by default) -->
         <div class="hidden mt-2" data-expandable-list-target="fullList">
-          <% @craft_silicon_users.each do |user| %>
-            <div class="py-1"><%= user.name %></div>
-          <% end %>
+          <%= @craft_silicon_users.map(&:name).join(", ") %>
         </div>
         
         <!-- Toggle button (only shows if more than 5 users) -->
@@ -46,9 +44,7 @@
         
         <!-- Full list (hidden by default) -->
         <div class="hidden mt-2" data-expandable-list-target="fullList">
-          <% @non_craft_silicon_users.each do |user| %>
-            <div class="py-1"><%= user.name %></div>
-          <% end %>
+          <%= @non_craft_silicon_users.map(&:name).join(", ") %>
         </div>
         
         <!-- Toggle button (only shows if more than 5 users) -->
