@@ -11,15 +11,32 @@ class ProductController < ApplicationController
     if params[:query].present?
       search_query = "%#{params[:query].strip}%"
 
-      # Search in both topic (if exists) and rich text content
-      @product = if Product.column_names.include?('content')
-                   @product.joins(:rich_text_content)
-                     .where('product.content ILIKE ? OR action_text_rich_texts.body ILIKE ?',
-                            search_query, search_query)
-                 else
-                   @product.joins(:rich_text_content)
-                     .where('action_text_rich_texts.body ILIKE ?', search_query)
-                 end
+      @product = @product
+        .joins("LEFT JOIN action_text_rich_texts ON action_text_rich_texts.record_id = products.id AND action_text_rich_texts.record_type = 'Product'")
+        .joins("LEFT JOIN products_statuses ON products_statuses.product_id = products.id")
+        .joins("LEFT JOIN statuses ON statuses.id = products_statuses.status_id")
+        .where(
+          "products.document_name ILIKE :q OR 
+          statuses.name ILIKE :q OR 
+          products.budget ILIKE :q OR
+          action_text_rich_texts.body ILIKE :q OR
+          EXISTS (
+            SELECT 1 FROM clients 
+            WHERE clients.id = products.client_id 
+            AND clients.name ILIKE :q
+          ) OR
+          EXISTS (
+            SELECT 1 FROM softwares 
+            WHERE softwares.id = products.software_id 
+            AND softwares.name ILIKE :q
+          ) OR
+          EXISTS (
+            SELECT 1 FROM groupwares 
+            WHERE groupwares.id = products.groupware_id 
+            AND groupwares.name ILIKE :q
+          )",
+          q: search_query
+        )
     end
 
     # Sort by dropdown (before pagination!)
