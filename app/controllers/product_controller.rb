@@ -73,8 +73,8 @@ class ProductController < ApplicationController
 
       # Define status groups
       @open_statuses = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing',
-                      'Await Client Information', 'Reopened',
-                      'Awaiting Build', 'Support Testing', 'Awaiting Client API']
+                        'Await Client Information', 'Reopened',
+                        'Awaiting Build', 'Support Testing', 'Awaiting Client API']
       @closed_statuses = %w[Blocked Resolved Closed]
       @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
 
@@ -92,8 +92,8 @@ class ProductController < ApplicationController
           @tasks = @tasks.joins(:board).where(boards: { status: @awaiting_client_statuses })
         when 'my_open_tasks'
           @tasks = @tasks.joins(:board, :users)
-                        .where(boards: { status: @open_statuses })
-                        .where(users: { id: current_user.id })
+            .where(boards: { status: @open_statuses })
+            .where(users: { id: current_user.id })
         end
       end
 
@@ -101,8 +101,8 @@ class ProductController < ApplicationController
       if params[:query].present?
         search_query = "%#{params[:query].strip}%"
         @tasks = @tasks.left_joins(:users).where(
-          "tasks.name ILIKE ? OR 
-          tasks.description ILIKE ? OR 
+          "tasks.name ILIKE ? OR
+          tasks.description ILIKE ? OR
           tasks.priority ILIKE ? OR
           users.first_name ILIKE ?",
           search_query, search_query, search_query, search_query
