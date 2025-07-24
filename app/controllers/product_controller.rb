@@ -69,36 +69,47 @@ class ProductController < ApplicationController
 
   def show
     if current_user.has_role?(:admin) || @product.users.include?(current_user) || current_user.has_role?(:hod)
-
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
       # Define status groups
       @open_statuses = ['TO DO', 'In Progress', 'On-Hold', 'Failed-QA', 'QA-testing',
-                        'Await Client Information', 'Reopened',
-                        'Awaiting Build', 'Support Testing', 'Awaiting Client API']
+                      'Await Client Information', 'Reopened',
+                      'Awaiting Build', 'Support Testing', 'Awaiting Client API']
       @closed_statuses = %w[Blocked Resolved Closed]
       @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
+
+      # Base tasks query with all necessary includes
+      @tasks = @product.tasks.includes(:statuses, :users)
 
       # Apply filtering if status param is present
       if params[:filter].present?
         case params[:filter]
         when 'open'
-          @tasks = @product.tasks.joins(:board).where(boards: { status: @open_statuses })
+          @tasks = @tasks.joins(:board).where(boards: { status: @open_statuses })
         when 'closed'
-          @tasks = @product.tasks.joins(:board).where(boards: { status: @closed_statuses })
+          @tasks = @tasks.joins(:board).where(boards: { status: @closed_statuses })
         when 'awaiting_client'
-          @tasks = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses })
+          @tasks = @tasks.joins(:board).where(boards: { status: @awaiting_client_statuses })
         when 'my_open_tasks'
-          @tasks = @product.tasks
-            .joins(:board, :users)
-            .where(boards: { status: @open_statuses })
-            .where(users: { id: current_user.id })
+          @tasks = @tasks.joins(:board, :users)
+                        .where(boards: { status: @open_statuses })
+                        .where(users: { id: current_user.id })
         end
-      else
-        @tasks = @product.tasks
       end
 
-      @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || 'Uncategorized' }
+      # Apply search query if present
+      if params[:query].present?
+        search_query = "%#{params[:query].strip}%"
+        @tasks = @tasks.left_joins(:users).where(
+          "tasks.name ILIKE ? OR 
+          tasks.description ILIKE ? OR 
+          tasks.priority ILIKE ? OR
+          users.first_name ILIKE ?",
+          search_query, search_query, search_query, search_query
+        ).distinct
+      end
+
+      @tasks_by_status = @tasks.group_by { |task| task.statuses.first&.name || 'Uncategorized' }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
