@@ -626,14 +626,18 @@ class DataCenterController < ApplicationController
   end
 
   def generate_orm_team_report_csv(tickets, ticket_counts, project_status_counts)
+    all_statuses = project_status_counts.keys.map { |(_project_id, status)| status }.uniq
     CSV.generate(headers: true) do |csv|
-      csv << ['Project Name', 'Total Number of Tickets', 'Status', 'Count']
+      csv << (['Project Name', 'Total Number of Tickets'] + all_statuses)
       ticket_counts.each do |project_id, total_count|
         project = Project.find(project_id)
-        csv << [project.title, total_count, '', '']
-        project_status_counts.select { |k, _| k.first == project_id }.each do |(_proj_id, status), count|
-          csv << ['', '', status, count]
+
+        # Build a hash for statuses of the current project
+        status_counts = all_statuses.map do |status|
+          project_status_counts.fetch([project_id, status], 0)
         end
+
+        csv << ([project.title, total_count] + status_counts)
       end
 
       csv << []
