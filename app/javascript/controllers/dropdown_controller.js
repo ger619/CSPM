@@ -22,6 +22,9 @@ export default class extends Controller {
     if (!this.menuTarget.classList.contains('hidden')) {
       document.addEventListener('click', this.boundClose);
     }
+
+    const svg = this.buttonTarget.querySelector('svg')
+    svg.classList.toggle('rotate-180')
   }
 
   close(event) {
@@ -31,6 +34,14 @@ export default class extends Controller {
     if (!button.contains(event.target) && !dropdown.contains(event.target)) {
       dropdown.classList.add('hidden');
       document.removeEventListener('click', this.boundClose);
+    }
+  }
+
+  hide(event) {
+    if (!this.element.contains(event.target) && !this.menuTarget.classList.contains('hidden')) {
+      this.menuTarget.classList.add('hidden')
+      const svg = this.buttonTarget.querySelector('svg')
+      svg.classList.remove('rotate-180')
     }
   }
 }
