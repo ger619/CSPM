@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-6">
   <% @product.each do |product| %>
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg" style="cursor:pointer;" onclick="window.location='<%= product_path(product.id) %>'">
       <div>
@@ -13,7 +13,6 @@
             <p class="text-sm font-semibold uppercase">
               <%= product.groupwares.map(&:name).join(', ') %>
             </p>
-
           </div>
           <div class="rounded-full border border-2 p-2 border-white bg-white dark:bg-gray-700">
             <p class="text-sm font-semibold"><%= product.statuses.first&.name %></p>

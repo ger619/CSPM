@@ -38,9 +38,9 @@
         <%# Page numbers %>
         <% (1..@total_pages).each do |p| %>
           <% if p == @page %>
-            <span aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20"><%= p %></span>
+            <span aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold focus:z-20"><%= p %></span>
           <% elsif p == 1 || p == @total_pages || (p >= @page - 2 && p <= @page + 2) %>
-            <%= link_to p, product_index_path(page: p, query: params[:query]), class: "relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20" %>
+            <%= link_to p, product_index_path(page: p, query: params[:query]), class: "relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-gray-300 ring-inset hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-20" %>
           <% elsif p == @page - 3 || p == @page + 3 %>
             <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-gray-300 ring-inset">...</span>
           <% end %>
