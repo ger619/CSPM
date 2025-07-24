@@ -53,25 +53,36 @@
     <table id="orm_report" class="table-auto w-full mb-4">
       <thead>
       <tr>
-        <th class="border border-black px-4 py-2">Project Name</th>
-        <th class="border border-black px-4 py-2">Total Number of Tickets</th>
-        <th class="border border-black px-4 py-2">Status</th>
-        <th class="border border-black px-4 py-2">Count</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Project Name</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Total Number of Tickets</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Status</th>
       </tr>
       </thead>
       <tbody>
       <% @ticket_counts.each do |project_id, total_count| %>
         <% project = Project.find(project_id) %>
         <tr>
-          <td class="capitalize border border-black px-4 py-2" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= project.title %></td>
-          <td class="border border-black px-4 py-2 text-center" rowspan="<%= @project_status_counts.select { |k, _| k.first == project_id }.size + 1 %>"><%= total_count %></td>
+          <td class="capitalize border border-black px-4  dark:border-gray-100 py-2"><%= project.title %></td>
+          <td class="border border-black dark:border-gray-100 px-4 py-2 text-center"><%= total_count %></td>
+          <td class="border border-black dark:border-gray-100 text-center p-0">
+            <table class="table-auto w-full mb-0">
+              <thead>
+              <tr>
+                <% @project_status_counts.select { |k, _| k.first == project_id }.each do |(proj_id, status), count| %>
+                  <th class="border-r border-black dark:border-gray-100 text-center"><%= status %></th>
+                <% end %>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <% @project_status_counts.select { |k, _| k.first == project_id }.each do |(proj_id, status), count| %>
+                  <td class="border-r border-t border-black dark:border-gray-100 text-center"><%= count %></td>
+                <% end %>
+              </tr>
+              </tbody>
+            </table>
+          </td>
         </tr>
-        <% @project_status_counts.select { |k, _| k.first == project_id }.each do |(proj_id, status), count| %>
-          <tr>
-            <td class="border border-black px-4 py-2 text-center"><%= status %></td>
-            <td class="border border-black px-4 py-2 text-center"><%= count %></td>
-          </tr>
-        <% end %>
       <% end %>
       </tbody>
     </table>
@@ -79,17 +90,17 @@
     <table id="orm_report" class="table-auto w-full">
       <thead>
       <tr>
-        <th class="border border-black px-4 py-2">Ticket ID</th>
-        <th class="border border-black px-4 py-2">Issue Type</th>
-        <th class="border border-black px-4 py-2">Assignee</th>
-        <th class="border border-black px-4 py-2">Reporter</th>
-        <th class="border border-black px-4 py-2">Priority</th>
-        <th class="border border-black px-4 py-2">Status</th>
-        <th class="border border-black px-4 py-2">Created at</th>
-        <th class="border border-black px-4 py-2">updated at</th>
-        <th class="border border-black px-4 py-2">Summary</th>
-        <th class="border border-black px-4 py-2">Last Comment Updated At</th>
-        <th class="border border-black px-4 py-2">Due Date</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Ticket ID</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Issue Type</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Assignee</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Reporter</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Priority</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Status</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Created at</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">updated at</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Summary</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Last Comment Updated At</th>
+        <th class="border border-black dark:border-gray-100 px-4 py-2">Due Date</th>
       </tr>
       </thead>
       <tbody>
