@@ -13,7 +13,6 @@
             <p class="text-sm font-semibold uppercase">
               <%= product.groupwares.map(&:name).join(', ') %>
             </p>
-
           </div>
           <div class="rounded-full border border-2 p-2 border-white bg-white dark:bg-gray-700">
             <p class="text-sm font-semibold"><%= product.statuses.first&.name %></p>

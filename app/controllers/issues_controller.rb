@@ -1,4 +1,6 @@
 class IssuesController < ApplicationController
+
+
   include ActionView::RecordIdentifier
   before_action :set_project
   before_action :set_ticket
