@@ -22,14 +22,9 @@
         </div>
       </div>
     <% end %>
-    <%= %>
-
     <%= column_chart @chart_data_per_user, colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], library: { legend: { position: 'bottom' }, plugins: { datalabels: { align: 'end', anchor: 'end' } } } %>
     <div class="flex justify-center mt-4">
       <p class="text-lg font-semibold">Total Tickets: <%= @total_tickets_per_project.values.sum %></p>
     </div>
   </div>
-
-
-
 <% end %>
