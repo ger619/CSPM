@@ -32,4 +32,10 @@ class CommonlySelectedClientsController < ApplicationController
 
     render partial: "commonly_selected_clients/manage", formats: [:html]
   end
+
+  def ids
+    client_ids = current_user.common_clients.pluck(:id)
+    render json: { client_ids: client_ids }
+  end
+
 end

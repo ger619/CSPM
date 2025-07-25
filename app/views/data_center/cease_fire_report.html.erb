@@ -39,34 +39,43 @@
         <!-- Hidden Input to store multiple selected statuses -->
         <div id="selectedStatusesWrapper"></div>
       </div>
+
+      <!-- CLients dropdown -->
       <% if !current_user.has_role?(:ceo) %>
-      <div class="flex flex-col relative gap-2">
-        <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
-        <!-- Searchable Input -->
-        <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
-        <!-- Dropdown List -->
-        <!-- Dropdown List with Checkboxes -->
-        <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
-          <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
-            <label>
-              <input type="checkbox" value="" data-client-name="All Clients" class="client-checkbox mr-2">
-              All Clients
-            </label>
+        <div class="flex flex-col relative gap-2">
+          <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
+
+          <div class="flex gap-2">
+            <!-- Search Input -->
+            <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
+
+            <!-- NEW BUTTON -->
+            <button type="button" id="precheckCommonClientsBtn" class="text-sm border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white px-3 py-2 rounded-lg transition duration-200">
+              Preselect Common Clients
+            </button>
           </div>
-          <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
+
+          <!-- Dropdown List -->
+          <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
             <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
               <label>
-                <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox mr-2 capitalize">
-                <%= client.name %>
+                <input type="checkbox" value="" data-client-name="All Clients" class="client-checkbox mr-2">
+                All Clients
               </label>
             </div>
-          <% end %>
+            <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
+              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+                <label>
+                  <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox mr-2 capitalize">
+                  <%= client.name %>
+                </label>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Hidden Input to store multiple selected client IDs -->
+          <div id="selectedClientsWrapper"></div>
         </div>
-
-        <!-- Hidden Input to store multiple selected client IDs -->
-        <div id="selectedClientsWrapper"></div>
-
-      </div>
       <% end %>
 
 
@@ -158,6 +167,28 @@
         }
       });
     }
+
+        // Handle Precheck Common Clients button
+    document.getElementById("precheckCommonClientsBtn").addEventListener("click", async () => {
+      try {
+        const response = await fetch("/commonly_selected_clients/ids");
+        const data = await response.json();
+        const commonIds = data.client_ids.map(id => id.toString());
+
+        document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
+          checkbox.checked = commonIds.includes(checkbox.value);
+        });
+
+        // Trigger the updateSelections function to refresh hidden inputs + input value
+        updateSelections("searchClient", "selectedClientsWrapper", "client-checkbox", "client_ids[]", "clientName");
+
+        // Show the dropdown so the user sees them prechecked
+        document.getElementById("clientDropdown").classList.remove("hidden");
+      } catch (err) {
+        alert("Failed to load common clients.");
+      }
+    });
+
 
     // Setup for "Status" dropdown
     setupDropdown(

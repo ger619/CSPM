@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # These Ids will be used when a user clicks on prepopulate clients drop down
+  get '/commonly_selected_clients/ids', to: 'commonly_selected_clients#ids'
   resources :commonly_selected_clients, only: [:index, :create] do
     collection do
       delete :remove_client
