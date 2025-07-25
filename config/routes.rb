@@ -21,12 +21,13 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  resources :commonly_selected_clients, only: [:index, :create, :destroy] do
+  resources :commonly_selected_clients, only: [:index, :create] do
     collection do
-      get :manage
       delete :remove_client
     end
   end
+
+
   get 'cease_fire_report', to: 'data_center#cease_fire_report', as: 'cease_fire_report'
   get 'email_report', to: 'data_center#email_report'
   get 'daily_report', to: 'data_center#daily_report', as: 'daily_report'
