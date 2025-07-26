@@ -178,22 +178,39 @@
       });
     }
 
-        // Handle Precheck Common Clients button
+    let commonClientsPreselected = false;
+
     document.getElementById("precheckCommonClientsBtn").addEventListener("click", async () => {
+      const button = document.getElementById("precheckCommonClientsBtn");
+
       try {
         const response = await fetch("/commonly_selected_clients/ids");
         const data = await response.json();
         const commonIds = data.client_ids.map(id => id.toString());
 
         document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
-          checkbox.checked = commonIds.includes(checkbox.value);
+          if (commonIds.includes(checkbox.value)) {
+            checkbox.checked = !commonClientsPreselected; // Toggle checked based on current state
+          }
         });
 
-        // Trigger the updateSelections function to refresh hidden inputs + input value
+        // Update hidden fields + display input
         updateSelections("searchClient", "selectedClientsWrapper", "client-checkbox", "client_ids[]", "clientName");
 
-        // Show the dropdown so the user sees them prechecked
+        // Show dropdown
         document.getElementById("clientDropdown").classList.remove("hidden");
+
+        // Toggle state and button text/style
+        commonClientsPreselected = !commonClientsPreselected;
+        if (commonClientsPreselected) {
+          button.textContent = "Deselect Common Clients";
+          button.classList.remove("border-green-500", "text-green-600", "hover:bg-green-600");
+          button.classList.add("border-red-500", "text-red-600", "hover:bg-red-600");
+        } else {
+          button.textContent = "Preselect Common Clients";
+          button.classList.remove("border-red-500", "text-red-600", "hover:bg-red-600");
+          button.classList.add("border-green-500", "text-green-600", "hover:bg-green-600");
+        }
       } catch (err) {
         alert("Failed to load common clients.");
       }
