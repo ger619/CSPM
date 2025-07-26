@@ -4,28 +4,71 @@ class ProductController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @product = Product.all
+    # Base product query
+    @product = Product.includes(softwares: :groupwares)
 
-    @product = if params[:query].present?
-                 @product.where('name ILIKE ? OR description ILIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+    # Search functionality for rich text content
+    if params[:query].present?
+      search_query = "%#{params[:query].strip}%"
+
+      @product = @product
+        .joins("LEFT JOIN action_text_rich_texts ON action_text_rich_texts.record_id = products.id AND action_text_rich_texts.record_type = 'Product'")
+        .joins('LEFT JOIN products_statuses ON products_statuses.product_id = products.id')
+        .joins('LEFT JOIN statuses ON statuses.id = products_statuses.status_id')
+        .where(
+          "products.document_name ILIKE :q OR
+          statuses.name ILIKE :q OR
+          products.budget ILIKE :q OR
+          action_text_rich_texts.body ILIKE :q OR
+          EXISTS (
+            SELECT 1 FROM clients
+            WHERE clients.id = products.client_id
+            AND clients.name ILIKE :q
+          ) OR
+          EXISTS (
+            SELECT 1 FROM softwares
+            WHERE softwares.id = products.software_id
+            AND softwares.name ILIKE :q
+          ) OR
+          EXISTS (
+            SELECT 1 FROM groupwares
+            WHERE groupwares.id = products.groupware_id
+            AND groupwares.name ILIKE :q
+          )",
+          q: search_query
+        )
+    end
+
+    # Sort by dropdown (before pagination!)
+    @product = case params[:sort_by]
+               when 'upcoming'
+                 @product.order(end_date: :asc)
                else
-                 @product.order('created_at DESC')
+                 @product.order(created_at: :desc)
                end
-    @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
+    # Filter by status
+    @product = @product.joins(:statuses).where(statuses: { name: params[:status] }) if params[:status].present? && params[:status] != 'All'
+
+    # Filter by user role
+    @product = @product.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer, :hod)
+
+    # Pagination (AFTER all filters and sorts)
     @per_page = 12
     @page = (params[:page] || 1).to_i
     @total_pages = (@product.count / @per_page.to_f).ceil
-    # show the count for the page
     @start_count = ((@page - 1) * @per_page) + 1
     @end_count = [@page * @per_page, @product.count].min
     @total_count = @product.count
+
     @product = @product.offset((@page - 1) * @per_page).limit(@per_page)
+
+    # Used statuses
+    @used_statuses = @product.map { |p| p.statuses.first&.name }.compact.uniq
   end
 
   def show
-    if current_user.has_role?(:admin) || @product.users.include?(current_user)
-
+    if current_user.has_role?(:admin) || @product.users.include?(current_user) || current_user.has_role?(:hod)
       @days_remaining = (@product.end_date - Date.today).to_i if @product.end_date.present?
 
       # Define status groups
@@ -35,26 +78,38 @@ class ProductController < ApplicationController
       @closed_statuses = %w[Blocked Resolved Closed]
       @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
 
+      # Base tasks query with all necessary includes
+      @tasks = @product.tasks.includes(:statuses, :users)
+
       # Apply filtering if status param is present
       if params[:filter].present?
         case params[:filter]
         when 'open'
-          @tasks = @product.tasks.joins(:board).where(boards: { status: @open_statuses })
+          @tasks = @tasks.joins(:board).where(boards: { status: @open_statuses })
         when 'closed'
-          @tasks = @product.tasks.joins(:board).where(boards: { status: @closed_statuses })
+          @tasks = @tasks.joins(:board).where(boards: { status: @closed_statuses })
         when 'awaiting_client'
-          @tasks = @product.tasks.joins(:board).where(boards: { status: @awaiting_client_statuses })
+          @tasks = @tasks.joins(:board).where(boards: { status: @awaiting_client_statuses })
         when 'my_open_tasks'
-          @tasks = @product.tasks
-            .joins(:board, :users)
+          @tasks = @tasks.joins(:board, :users)
             .where(boards: { status: @open_statuses })
             .where(users: { id: current_user.id })
         end
-      else
-        @tasks = @product.tasks
       end
 
-      @tasks_by_status = @product.tasks.includes(:statuses).group_by { |task| task.statuses.first&.name || 'Uncategorized' }
+      # Apply search query if present
+      if params[:query].present?
+        search_query = "%#{params[:query].strip}%"
+        @tasks = @tasks.left_joins(:users).where(
+          "tasks.name ILIKE ? OR
+          tasks.description ILIKE ? OR
+          tasks.priority ILIKE ? OR
+          users.first_name ILIKE ?",
+          search_query, search_query, search_query, search_query
+        ).distinct
+      end
+
+      @tasks_by_status = @tasks.group_by { |task| task.statuses.first&.name || 'Uncategorized' }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
     end
@@ -80,8 +135,6 @@ class ProductController < ApplicationController
     @product.user_id = current_user.id
 
     # Validate presence of name, description, and content (subject)
-    @product.errors.add(:name, "can't be blank") if @product.name.blank?
-    @product.errors.add(:description, "can't be blank") if @product.description.blank?
     @product.errors.add(:content, "can't be blank") if @product.content.blank?
 
     respond_to do |format|
@@ -105,11 +158,6 @@ class ProductController < ApplicationController
           end
 
           # Save the select script onlyd if it is elected
-          if params[:product][:script_ids].present?
-            @product.scripts = Script.where(id: params[:product][:script_ids])
-          else
-            @product.scripts.clear
-          end
 
           current_user.add_role :creator, @product
           format.html { redirect_to product_path(@product), notice: "Project was successfully #{@product.status == 'draft' ? 'saved as draft' : 'created'}." }
@@ -154,7 +202,7 @@ class ProductController < ApplicationController
       # UserMailer.assign_product_email(product_user, @product, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to @product, notice: "#{user.name}  was successfully assigned."
+      redirect_to product_path(@product), notice: "#{user.name}  was successfully assigned."
     end
   end
 
@@ -163,7 +211,7 @@ class ProductController < ApplicationController
     status = Status.find(params[:status_id])
     @product.statuses.clear
     @product.statuses << status
-    redirect_to @product, notice: 'Product status was successfully updated.'
+    redirect_to product_path(@product), notice: 'Product status was successfully updated.'
   end
 
   def remove_user
@@ -185,7 +233,7 @@ class ProductController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:status, :name, :description, :start_date, :end_date, :document_name, :image, :content,
+    params.require(:product).permit(:status, :start_date, :end_date, :document_name, :image, :content,
                                     :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
                                                           documents_attributes: %i[id name file _destroy])
   end

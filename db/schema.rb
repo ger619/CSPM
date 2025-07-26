@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_17_064510) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_23_112926) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -275,9 +275,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_17_064510) do
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "topic"
-    t.string "description"
     t.date "start_date"
     t.date "end_date"
     t.uuid "user_id", null: false
@@ -292,7 +289,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_17_064510) do
     t.string "status", default: "draft"
     t.index ["client_id"], name: "index_products_on_client_id"
     t.index ["groupware_id"], name: "index_products_on_groupware_id"
-    t.index ["name"], name: "index_products_on_name", unique: true
     t.index ["script_id"], name: "index_products_on_script_id"
     t.index ["software_id"], name: "index_products_on_software_id"
     t.index ["user_id"], name: "index_products_on_user_id"
@@ -443,7 +439,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_17_064510) do
 
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
-    t.string "topic"
     t.string "description"
     t.uuid "product_id", null: false
     t.uuid "user_id", null: false
@@ -451,6 +446,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_17_064510) do
     t.datetime "updated_at", null: false
     t.date "start_date"
     t.date "end_date"
+    t.string "priority"
     t.index ["product_id"], name: "index_tasks_on_product_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end

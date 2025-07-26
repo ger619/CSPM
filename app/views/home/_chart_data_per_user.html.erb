@@ -4,32 +4,27 @@
       <div class="flex justify-center gap-2">
         <div class="flex gap-2">
           <%= label_tag :start_date, 'Start Date', class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-          <%= date_field_tag :start_date, params[:start_date], class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+          <%= date_field_tag :start_date, params[:start_date], class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] bg-white dark:bg-gray-700 border-2 rounded-lg" %>
         </div>
         <div class="flex gap-2">
           <%= label_tag :end_date, 'End Date', class: "capitalize text-sm font-bold w-full pt-3" %>
-          <%= date_field_tag :end_date, params[:end_date], class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+          <%= date_field_tag :end_date, params[:end_date], class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] bg-white dark:bg-gray-700 border-2 rounded-lg" %>
         </div>
         <div class="flex gap-2">
           <%= label_tag :grouping_period, 'Time Period', class: "capitalize text-sm font-bold pt-3" %>
-          <%= select_tag :grouping_period, options_for_select([%w[Day day], %w[Month month], %w[Year year]], params[:grouping_period]), class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+          <%= select_tag :grouping_period, options_for_select([%w[Day day], %w[Month month], %w[Year year]], params[:grouping_period]), class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB]  bg-white dark:bg-gray-700 border-2 rounded-lg" %>
         </div>
         <%= label :user_id, "Select User", class: "capitalize text-sm font-bold pt-3" %>
         <% assigned_user = User.with_assigned_role %>
-        <%= select_tag :user_id, options_from_collection_for_select(assigned_user, :id, :name), include_blank: true, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg" %>
+        <%= select_tag :user_id, options_from_collection_for_select(assigned_user, :id, :name), include_blank: true, class: " h-12 border border-[#3F8CFF] hover:border-[#3A81EB] bg-white dark:bg-gray-700 border-2 rounded-lg" %>
         <div>
           <%= submit_tag 'Search', class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'  %>
         </div>
       </div>
     <% end %>
-    <%= %>
-
     <%= column_chart @chart_data_per_user, colors: %w[#3B82F6 #EF4444 #10B981 #F97316 #8B5CF6 #34D399 #F43F5E #A3E635 #6366F1 #EC4899], library: { legend: { position: 'bottom' }, plugins: { datalabels: { align: 'end', anchor: 'end' } } } %>
     <div class="flex justify-center mt-4">
       <p class="text-lg font-semibold">Total Tickets: <%= @total_tickets_per_project.values.sum %></p>
     </div>
   </div>
-
-
-
 <% end %>

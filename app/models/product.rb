@@ -2,7 +2,7 @@ class Product < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :softwares
   has_and_belongs_to_many :groupwares
-  has_and_belongs_to_many :scripts
+
   belongs_to :client
   # has_many :bugs
   has_many :boards, dependent: :destroy
@@ -11,10 +11,9 @@ class Product < ApplicationRecord
   accepts_nested_attributes_for :documents, allow_destroy: true
   has_one_attached :image
   has_many :defects, dependent: :nullify
+  before_create :set_default_status
 
   has_rich_text :content
-
-  validates :name, presence: true, uniqueness: true, length: { maximum: 100 }
 
   resourcify
   has_many :users, through: :roles, class_name: 'User', source: :users
@@ -32,6 +31,11 @@ class Product < ApplicationRecord
 
   def craftsilicon_users
     User.where('email LIKE ANY (array[?, ?, ?]) AND active = ?', '%@craftsilicon.com', '%@craftsilicon.co.tz', '%@little.africa', true)
+  end
+
+  def set_default_status
+    status = Status.find_by(name: 'Development')
+    statuses << status if status
   end
 
   private

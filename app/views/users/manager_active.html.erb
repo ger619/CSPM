@@ -2,8 +2,8 @@
   <h1 class="text-2xl font-bold mb-4">Active Users</h1>
 
   <% if @active_users_manager.any? %>
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-left">
+      <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-6 py-3">First Name</th>
           <th scope="col" class="px-6 py-3">Last Name</th>
@@ -26,17 +26,13 @@
     <!-- Pagination Controls -->
     <div class="mt-4 flex justify-between items-center">
       <% if @current_page > 1 %>
-        <%= link_to "Previous", active_users_path(page: @current_page - 1), class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
-      <% else %>
-        <span class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Previous</span>
+        <%= link_to "Previous", active_manager_users_path(page: @current_page - 1), class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
       <% end %>
 
       <span>Page <%= @current_page %> of <%= @total_pages %></span>
 
       <% if @current_page < @total_pages %>
-        <%= link_to "Next", active_users_path(page: @current_page + 1), class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
-      <% else %>
-        <span class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Next</span>
+        <%= link_to "Next", active_manager_users_path(page: @current_page + 1), class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
       <% end %>
     </div>
   <% else %>

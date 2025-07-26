@@ -1,21 +1,24 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-6">
   <% @product.each do |product| %>
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg" style="cursor:pointer;" onclick="window.location='<%= product_path(product.id) %>'">
       <div>
-        <div class="flex justify-between mb-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-t-lg">
+        <div class="flex justify-between mb-2 bg-gray-200 dark:bg-gray-700 p-2 rounded-t-lg">
           <div class="flex items-center gap-4">
           <% if product.image.present? %>
-            <%= image_tag(product.image, class: 'w-8 h-8 rounded-full') %>
+            <%= image_tag(product.image, class: 'w-8 h-8 rounded-md') %>
           <% else %>
-            <%= image_tag 'default.png', class: 'w-8 h-8 rounded-full' %>
+            <%= image_tag 'default.png', class: 'w-8 h-8 rounded-md' %>
           <% end %>
-            <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p>
+            <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p> -
+            <p class="text-sm font-semibold uppercase">
+              <%= product.groupwares.map(&:name).join(', ') %>
+            </p>
           </div>
-          <div class="rounded-full border p-2 border-white">
+          <div class="rounded-full border border-2 p-2 border-white bg-white dark:bg-gray-700">
             <p class="text-sm font-semibold"><%= product.statuses.first&.name %></p>
           </div>
         </div>
-        <div class="p-2">
+        <div>
           <%= render partial: 'product/task_budget' , locals: { product: product } %>
         </div>
       </div>
