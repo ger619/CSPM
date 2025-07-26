@@ -4,5 +4,5 @@ class CommonlySelectedClient < ApplicationRecord
   belongs_to :client
 
   # Validations to ensure that no two records of the same client are input in the resource
-  validates :client_id, uniqueness: { scope: :user_id, message: "is already in your common list" }
+  validates :client_id, uniqueness: { scope: :user_id, message: 'is already in your common list' }
 end

@@ -5,7 +5,7 @@ class CommonlySelectedClientsController < ApplicationController
     @common_clients = current_user.common_clients
     @available_clients = Client.where.not(id: @common_clients.pluck(:id))
 
-    render partial: "commonly_selected_clients/manage", formats: [:html]
+    render partial: 'commonly_selected_clients/manage', formats: [:html]
   end
 
   def create
@@ -14,12 +14,12 @@ class CommonlySelectedClientsController < ApplicationController
     @available_clients = Client.where.not(id: @common_clients.pluck(:id))
 
     if @common_client.save
-      flash.now[:notice] = "Client added to your common list."
+      flash.now[:notice] = 'Client added to your common list.'
     else
       flash.now[:alert] = @common_client.errors.full_messages.to_sentence
     end
 
-    render partial: "commonly_selected_clients/manage", formats: [:html]
+    render partial: 'commonly_selected_clients/manage', formats: [:html]
   end
 
   def remove_client
@@ -28,14 +28,13 @@ class CommonlySelectedClientsController < ApplicationController
 
     @common_clients = current_user.common_clients
     @available_clients = Client.where.not(id: @common_clients.pluck(:id))
-    flash.now[:notice] = "Client removed from your common list."
+    flash.now[:notice] = 'Client removed from your common list.'
 
-    render partial: "commonly_selected_clients/manage", formats: [:html]
+    render partial: 'commonly_selected_clients/manage', formats: [:html]
   end
 
   def ids
     client_ids = current_user.common_clients.pluck(:id)
     render json: { client_ids: client_ids }
   end
-
 end
