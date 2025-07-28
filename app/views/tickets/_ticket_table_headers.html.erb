@@ -10,8 +10,8 @@
         <th scope="col" class="p-2 text-left text-sm font-medium uppercase tracking-wider">Reported By</th>
         <th scope="col" class="p-2 text-left text-sm font-medium uppercase tracking-wider">Last Updated</th>
         <th scope="col" class="p-2 text-right text-sm font-medium uppercase tracking-wider">Actions</th>
-        <% if current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') %>
-          <th scope="col" class="p-2 text-left text-sm font-medium uppercase tracking-wider hide-on-sidebar">Edits</th>
-          <th scope="col" class="p-2 text-left text-sm font-medium uppercase tracking-wider hide-on-sidebar">Last Edit</th>
+        <% if current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
+            <th scope="col" class="p-2 text-left text-sm font-medium uppercase tracking-wider hide-on-sidebar">Edits</th>
+            <th scope="col" class="p-2 text-left text-sm font-medium uppercase tracking-wider hide-on-sidebar">Last Edit</th>
         <% end %>
       </tr>
