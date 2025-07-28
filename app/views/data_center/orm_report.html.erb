@@ -132,7 +132,24 @@
           <td class="border border-black  dark:border-slate-100 px-4 py-2"><%= ticket.project.client.name %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.unique_id %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.issue %></td>
-          <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.users.map(&:name).select(&:present?).join(', ') %></td>
+          <td class="border border-black dark:border-slate-100 px-4 py-2">
+            <div class="flex flex-col gap-2">
+              <% ticket.users.each do |user| %>
+                <% if user.name.present? %>
+                  <span class="font-medium">
+                    <%= user.name %>
+                  </span>
+                  <span class="font-semibold">
+                    <% if user.teams.any? %>
+                      (<%= user.teams.map(&:name).join(', ') %>)
+                    <% else %>
+                      (No Team Assigned)
+                    <% end %>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.user.name %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.priority %></td>
           <td class="border border-black dark:border-slate-100 px-4 py-2"><%= ticket.statuses.first&.name || 'N/A' %></td>
