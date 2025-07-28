@@ -28,7 +28,15 @@ class Task < ApplicationRecord
   end
 
   def self.prerequisite_tasks(product_id)
-    where(product_id: product_id)
+    resolved_status = Status.find_by(name: 'Resolved')
+    if resolved_status
+      joins(:statuses)
+        .where(product_id: product_id)
+        .where.not(statuses: { id: resolved_status.id })
+        .distinct
+    else
+      where(product_id: product_id)
+    end
   end
 
   private
