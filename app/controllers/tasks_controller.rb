@@ -9,6 +9,7 @@ class TasksController < ApplicationController
 
   def new
     @task = @product.tasks.new
+    @prerequisite_tasks = Task.prerequisite_tasks(@product.id)
   end
 
   def create
