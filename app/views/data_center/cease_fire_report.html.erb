@@ -58,11 +58,6 @@
           <div class="flex gap-2">
             <!-- Search Input -->
             <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
-
-            <!-- Preselect commonly selected clients button -->
-            <button type="button" id="precheckCommonClientsBtn" class="text-sm border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white px-3 py-2 rounded-lg transition duration-200">
-              Preselect Common Clients
-            </button>
           </div>
 
           <!-- Dropdown List -->
@@ -107,7 +102,11 @@
                      class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
 
       </div>
-      <div class="flex  flex-col gap-2 pt-10">
+      <div class="flex  flex-cols-2 gap-2 pt-10">
+        <!-- Preselect commonly selected clients button -->
+        <button type="button" id="precheckCommonClientsBtn" class="text-sm border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white px-3 py-2 rounded-lg transition duration-200">
+          Preselect Common Clients
+        </button>
         <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
       </div>
     </div>
