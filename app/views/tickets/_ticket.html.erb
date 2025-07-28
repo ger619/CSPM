@@ -2,9 +2,9 @@
   <%= render 'tickets/search_q' %>
 
   <div class="overflow-x-auto h-full">
-    <table class="min-w-full divide-y">
-      <thead class="">
-        <%= render partial: "tickets/ticket_table_headers" %>
+    <table class="min-w-full divide-y" aria-label="Tickets Table">
+      <thead>
+      <%= render partial: "tickets/ticket_table_headers" %>
       </thead>
       <tbody class="text-sm">
       <% @ticket.each do |ticket| %>
@@ -18,66 +18,76 @@
                          when 'CHANGE REQUEST' then 'bg-[#2ECC71]'
                          else ''
                          end %>">
-            <!-- Date 1 -->
+            <!-- Date -->
             <td class="px-2 py-2 whitespace-nowrap">
               <%= link_to ticket.created_at.strftime("%d %b %Y"), project_ticket_path(ticket.project, ticket) %>
             </td>
-            <!-- Ticket ID 2 -->
+
+            <!-- Ticket ID -->
             <td class="px-4 py-4 whitespace-nowrap font-medium uppercase">
               <% if ticket.unique_id.present? %>
                 <%= link_to ticket.unique_id, project_ticket_path(ticket.project, ticket) %>
               <% end %>
             </td>
 
-            <!-- Issue Type 3 -->
+            <!-- Issue Type -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= link_to ticket.issue, project_ticket_path(ticket.project, ticket) %>
             </td>
 
-            <!-- Severity  4 -->
+            <!-- Severity -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= render partial: 'tickets/priority_severity', locals: { ticket: ticket } %>
             </td>
 
-            <!-- Summary 5 -->
+            <!-- Summary -->
             <td class="px-4 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
               <%= render partial: 'tickets/summary', locals: { ticket: ticket } %>
             </td>
 
-            <!-- Assigned To 6 -->
+            <!-- Assigned To -->
             <td class="px-4 py-4 whitespace-nowrap">
-              <% ticket.users.each do |user| %>
-                <% if user.name.present? %>
-                  <%= user.name %>
+              <div class="flex flex-col gap-2">
+                <% ticket.users.each do |user| %>
+                  <% if user.name.present? %>
+                      <span class="font-medium"><%= user.name %></span>
+                      <span class="font-semibold">
+                        <% if user.teams.any? %>
+                          (<%= user.teams.map(&:name).join(', ') %>)
+                        <% else %>
+                          (No Team Assigned)
+                        <% end %>
+                      </span>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
             </td>
 
-            <!-- Status 7 -->
+            <!-- Status -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= render partial: 'tickets/ticket_status', locals: { ticket: ticket }  %>
             </td>
 
-            <!-- Progress Bar 8 -->
+            <!-- Progress Bar -->
             <td class="px-4 py-4 whitespace-nowrap">
               <%= render partial: 'tickets/progress_bar', locals: { ticket: ticket } %>
             </td>
 
-            <!-- Reported By 9 -->
+            <!-- Reported By -->
             <td class="px-4 py-4 whitespace-nowrap">
               <% if ticket.user.name.present? %>
                 <%= ticket.user.name %>
               <% end %>
             </td>
 
-            <!-- Last Updated 10 -->
+            <!-- Last Updated -->
             <td class="px-4 py-4 whitespace-nowrap text-sm">
               <% if ticket.add_statuses.present? %>
                 <%= ticket.add_statuses.first.updated_at.strftime('%H:%M %d %b %Y') %>
               <% end %>
             </td>
 
-            <!-- Actions 11 -->
+            <!-- Actions -->
             <td class="px-4 py-4 whitespace-nowrap font-medium" data-controller="dropdown" data-dropdown-ticket-id-value="<%= ticket.id %>">
               <%= render partial: 'tickets/action_dropdown', locals: { ticket: ticket } %>
             </td>
