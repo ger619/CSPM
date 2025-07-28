@@ -13,6 +13,7 @@
     <span class="text-xs text-red mt-1">
       (Leave the date field blank if you want all the data from inception to date*)
     </span>
+    <div id="flash-container"></div>
   </div>
 
   <!-- Right: Manage Button (admin only) -->
@@ -104,10 +105,10 @@
       </div>
       <div class="flex  flex-cols-2 gap-2 pt-10">
         <!-- Preselect commonly selected clients button -->
-        <button type="button" id="precheckCommonClientsBtn" class="text-sm border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white px-3 py-2 rounded-lg transition duration-200">
+        <button type="button" id="precheckCommonClientsBtn" class="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white p-2 rounded-lg transition duration-200">
           Preselect Common Clients
         </button>
-        <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
+        <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
       </div>
     </div>
   <% end %>
@@ -187,19 +188,21 @@
         const data = await response.json();
         const commonIds = data.client_ids.map(id => id.toString());
 
+        if (commonIds.length === 0) {
+          showFlashNotice("No commonly selected clients found. Please click 'Manage common clients' to add them first.");
+          return; // stop execution
+        }
+
         document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
           if (commonIds.includes(checkbox.value)) {
-            checkbox.checked = !commonClientsPreselected; // Toggle checked based on current state
+            checkbox.checked = !commonClientsPreselected;
           }
         });
 
-        // Update hidden fields + display input
         updateSelections("searchClient", "selectedClientsWrapper", "client-checkbox", "client_ids[]", "clientName");
-
-        // Show dropdown
         document.getElementById("clientDropdown").classList.remove("hidden");
 
-        // Toggle state and button text/style
+        // Toggle state and button appearance
         commonClientsPreselected = !commonClientsPreselected;
         if (commonClientsPreselected) {
           button.textContent = "Deselect Common Clients";
@@ -214,6 +217,21 @@
         alert("Failed to load common clients.");
       }
     });
+
+    // Helper function to display flash-like notice
+    function showFlashNotice(message) {
+      const flashDiv = document.createElement("div");
+      flashDiv.className = "flash-notice bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-2 rounded mt-4";
+      flashDiv.textContent = message;
+
+      const target = document.getElementById("flash-container") || document.body;
+      target.prepend(flashDiv);
+
+      setTimeout(() => {
+        flashDiv.remove();
+      }, 5000);
+    }
+
 
 
     // Setup for "Status" dropdown
