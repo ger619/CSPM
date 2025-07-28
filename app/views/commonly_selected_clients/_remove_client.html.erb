@@ -1,0 +1,13 @@
+<%= form_with url: remove_client_commonly_selected_clients_path, method: :delete do |f| %>
+  <div>
+    <%= label_tag :client_id, "Select Client to Remove" %>
+    <%= select_tag :client_id,
+        options_from_collection_for_select(@common_clients, :id, :name),
+        include_blank: "Select client...",
+        required: true,
+        class: "w-full border p-2" %>
+  </div>
+  <div class="mt-2">
+    <%= submit_tag "Remove Client", class: "bg-red-600 text-white px-4 py-2 rounded" %>
+  </div>
+<% end %>

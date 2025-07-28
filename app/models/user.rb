@@ -39,6 +39,10 @@ class User < ApplicationRecord
   has_many :projects, through: :assignees
   has_many :notifications, dependent: :destroy
 
+  # Associations for the commonly accessed clients in the ceasefire report
+  has_many :commonly_selected_clients, dependent: :destroy
+  has_many :common_clients, through: :commonly_selected_clients, source: :client
+
   after_initialize :set_default_profile_completed, if: :new_record?
   validate :email_domain_must_be_certified, on: %i[create invitation_create skip_invitation]
 
