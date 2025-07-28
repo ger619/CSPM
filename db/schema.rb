@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_23_112926) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_28_134312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_23_112926) do
     t.uuid "groupware_id"
     t.uuid "script_id"
     t.string "label"
-    t.uuid "defect_id"
+    t.uuid "defect_id", null: false
     t.index ["defect_id"], name: "index_bugs_on_defect_id"
     t.index ["groupware_id"], name: "index_bugs_on_groupware_id"
     t.index ["script_id"], name: "index_bugs_on_script_id"
@@ -447,7 +447,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_23_112926) do
     t.date "start_date"
     t.date "end_date"
     t.string "priority"
+    t.uuid "tasks_id"
     t.index ["product_id"], name: "index_tasks_on_product_id"
+    t.index ["tasks_id"], name: "index_tasks_on_tasks_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -531,6 +533,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_23_112926) do
     t.uuid "client_id"
     t.boolean "active", default: true
     t.uuid "location_id"
+    t.string "position"
     t.index ["client_id"], name: "index_users_on_client_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -622,6 +625,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_23_112926) do
   add_foreign_key "taggings", "tickets"
   add_foreign_key "taggings", "users"
   add_foreign_key "tasks", "products"
+  add_foreign_key "tasks", "tasks", column: "tasks_id"
   add_foreign_key "tasks", "users"
   add_foreign_key "tickets", "groupwares"
   add_foreign_key "tickets", "projects"

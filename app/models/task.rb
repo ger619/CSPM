@@ -20,10 +20,23 @@ class Task < ApplicationRecord
   has_and_belongs_to_many :statuses, dependent: :destroy
   has_many :bugs
   has_rich_text :description
+  scope :for_product, ->(product_id) { where(product_id: product_id) }
 
   def set_default_status
     status = Status.find_by(name: 'TO DO')
     statuses << status if status
+  end
+
+  def self.prerequisite_tasks(product_id)
+    resolved_status = Status.find_by(name: 'Resolved')
+    if resolved_status
+      joins(:statuses)
+        .where(product_id: product_id)
+        .where.not(statuses: { id: resolved_status.id })
+        .distinct
+    else
+      where(product_id: product_id)
+    end
   end
 
   private
