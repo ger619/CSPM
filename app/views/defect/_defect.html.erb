@@ -18,9 +18,6 @@
         Assignee
       </th>
       <th scope="col" class="px-6 py-3">
-        Product Category
-      </th>
-      <th scope="col" class="px-6 py-3">
         Clients
       </th>
       <th scope="col" class="px-6 py-3 ">
@@ -57,9 +54,6 @@
             </td>
             <td class="px-6 py-4">
               <%= defect.users.first&.first_name  %>
-            </td>
-            <td class="px-6 py-4">
-              <%= defect.product.name %>
             </td>
             <td class="px-6 py-4">
               <%= defect.product.client&.name || "N/A" %>

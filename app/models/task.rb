@@ -4,7 +4,10 @@ class Task < ApplicationRecord
   has_one_attached :image
   has_one_attached :file
   has_many :messages, dependent: :destroy
-  before_create :set_default_status
+  before_create :set_default_state
+  # app/models/task.rb
+
+  belongs_to :prerequisite_task, class_name: 'Task', optional: true
 
   resourcify
 
@@ -14,6 +17,7 @@ class Task < ApplicationRecord
   validate :end_date_after_start_date
   validate :image_must_be_an_image
   validate :file_must_be_a_file
+  validate :prerequisite_task_must_be_resolved, on: :update
 
   has_many :add_tasks
   has_many :users, through: :add_tasks, dependent: :destroy
@@ -22,7 +26,7 @@ class Task < ApplicationRecord
   has_rich_text :description
   scope :for_product, ->(product_id) { where(product_id: product_id) }
 
-  def set_default_status
+  def set_default_state
     status = Status.find_by(name: 'TO DO')
     statuses << status if status
   end
@@ -37,6 +41,16 @@ class Task < ApplicationRecord
     else
       where(product_id: product_id)
     end
+  end
+
+  # if task has a prerequisite task, the prerequisite task should have status resolved
+  # if not it one should not be able to update status
+  def prerequisite_task_must_be_resolved
+    return unless prerequisite_task.present?
+
+    return if prerequisite_task.statuses.exists?(name: 'Resolved')
+
+    errors.add(:base, "Prerequisite task must be resolved before updating this task's status.")
   end
 
   private
