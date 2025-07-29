@@ -81,7 +81,7 @@ class TasksController < ApplicationController
   end
 
   def add_state
-    status = Status.find(params[:status_id])
+    status = Status.find_by(id: params[:status_id])
 
     if status.nil?
       respond_to do |format|
@@ -90,15 +90,14 @@ class TasksController < ApplicationController
       return
     end
 
-    # Correct check: look at prerequisite_task's statuses
     if @task.prerequisite_task.present? && !@task.prerequisite_task.statuses.exists?(name: 'Resolved')
-      redirect_to product_task_path(@product, @task), alert: 'Cannot update. Prerequisite task is not resolved.'
-    else
-      @task.statuses.clear
-      @task.statuses << status
-      UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
-      redirect_to product_task_path(@product, @task), notice: 'Task status updated.'
+      return redirect_to product_task_path(@product, @task), notice: 'Cannot update. Prerequisite task is already resolved.'
     end
+
+    @task.statuses.clear
+    @task.statuses << status
+    UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
+    redirect_to product_task_path(@product, @task), notice: 'Task status updated.'
   end
 
   private
@@ -112,6 +111,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :start_date, :end_date, :image, :file, :user_id, :priority)
+    params.require(:task).permit(:name, :start_date, :end_date, :image, :file, :user_id, :priority, :tasks_id)
   end
 end

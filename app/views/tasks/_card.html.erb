@@ -10,6 +10,16 @@
 
   <div class="p-4">
     <div class="mb-4">
+      <h2 class="text-xs font-bold">
+        <% if task.prerequisite_task.present? %>
+          <%= task.prerequisite_task.name %>
+        <% else %>
+          No prerequisite
+        <% end %>
+      </h2>
+
+    </div>
+    <div class="mb-4">
       <h2 class="text-xs font-bold"><%= task.name %></h2>
     </div>
 
