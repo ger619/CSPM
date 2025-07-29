@@ -32,6 +32,7 @@ class TasksController < ApplicationController
 
   def show
     @task = @product.tasks.find(params[:id])
+    @prerequisite_task = @task
   end
 
   def edit; end
@@ -89,16 +90,15 @@ class TasksController < ApplicationController
       return
     end
 
-    @task.statuses.clear
-    @task.statuses << status
-
-    UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
-    # @product.users.each do |product_user|
-    #   next if product_user == current_user
-
-    #   UserMailer.add_state_email(product_user, @task, current_user).deliver_later
-    # end
-    redirect_to product_task_path(@product, @task)
+    # Correct check: look at prerequisite_task's statuses
+    if @task.prerequisite_task.present? && !@task.prerequisite_task.statuses.exists?(name: 'Resolved')
+      redirect_to product_task_path(@product, @task), alert: 'Cannot update. Prerequisite task is not resolved.'
+    else
+      @task.statuses.clear
+      @task.statuses << status
+      UserMailer.add_state_email(@task.user, @task, current_user).deliver_later
+      redirect_to product_task_path(@product, @task), notice: 'Task status updated.'
+    end
   end
 
   private
@@ -112,6 +112,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :description, :start_date, :end_date, :image, :file, :user_id, :priority)
+    params.require(:task).permit(:name, :start_date, :end_date, :image, :file, :user_id, :priority)
   end
 end

@@ -79,7 +79,7 @@ class ProductController < ApplicationController
       @awaiting_client_statuses = ['Await Client Information', 'Awaiting Client API']
 
       # Base tasks query with all necessary includes
-      @tasks = @product.tasks.includes(:statuses, :users)
+      @tasks = @product.tasks.includes(:statuses, :users).order(created_at: 'desc')
 
       # Apply filtering if status param is present
       if params[:filter].present?

@@ -77,7 +77,7 @@ class UserMailer < ApplicationMailer
     @task = task
     @current_user = current_user
     @assigned_user = assigned_user
-    @url = product_board_task_url(@task.board.product, @task.board, @task)
+    @url = product_tasks_url(@task.product, @task)
     mail(to: @user.email, subject: 'You have been assigned to a new task')
   end
 
@@ -85,7 +85,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @task = task
     @current_user = current_user
-    @url = product_board_task_url(@task.board.product, @task.board, @task)
+    @url = product_task_url(@task.product, @task)
     mail(to: @user.email, subject: 'Task State Updated')
   end
 
