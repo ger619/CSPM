@@ -7,8 +7,7 @@ class Task < ApplicationRecord
   before_create :set_default_state
   # app/models/task.rb
 
-  belongs_to :prerequisite_task, class_name: 'Task', optional: true
-
+  belongs_to :prerequisite_task, class_name: 'Task', foreign_key: 'tasks_id', optional: true
   resourcify
 
   has_many :role_users, through: :roles, class_name: 'User', source: :user
