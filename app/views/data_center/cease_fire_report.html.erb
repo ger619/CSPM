@@ -104,10 +104,12 @@
 
       </div>
       <div class="flex  flex-cols-2 gap-2 pt-10">
-        <!-- Preselect commonly selected clients button -->
-        <button type="button" id="precheckCommonClientsBtn" class="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white p-2 rounded-lg transition duration-200">
-          Preselect Common Clients
-        </button>
+        <% if current_user.has_role? :admin %>
+          <!-- Preselect commonly selected clients button -->
+          <button type="button" id="precheckCommonClientsBtn" class="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white p-2 rounded-lg transition duration-200">
+            Preselect Common Clients
+          </button>
+        <% end %>
         <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
       </div>
     </div>
@@ -179,6 +181,7 @@
     }
 
     let commonClientsPreselected = false;
+    let originalDropdownOrder = null; // Store the original dropdown order
 
     document.getElementById("precheckCommonClientsBtn").addEventListener("click", async () => {
       const button = document.getElementById("precheckCommonClientsBtn");
@@ -196,40 +199,62 @@
           return;
         }
 
-        // Reorder dropdown items - common clients first
-        const dropdownItems = Array.from(clientDropdown.querySelectorAll(".dropdown-item"));
-        const commonClientItems = dropdownItems.filter(item => {
-          return commonIds.includes(item.querySelector(".client-checkbox").value);
-        });
-        const otherClientItems = dropdownItems.filter(item => {
-          return !commonIds.includes(item.querySelector(".client-checkbox").value);
-        });
-
-        clientDropdown.innerHTML = '';
-        
-        // Add common clients first with a separator
-        if (commonClientItems.length > 0) {
-          const header = document.createElement("div");
-          header.className = "px-4 py-2 font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700";
-          header.textContent = "Common Clients";
-          clientDropdown.appendChild(header);
-          
-          commonClientItems.forEach(item => clientDropdown.appendChild(item));
-          
-          const separator = document.createElement("div");
-          separator.className = "border-t border-gray-200 dark:border-gray-600 my-1";
-          clientDropdown.appendChild(separator);
+        // Store original dropdown order on first click if not already stored
+        if (!originalDropdownOrder) {
+          originalDropdownOrder = clientDropdown.innerHTML;
         }
-        
-        // Add other clients
-        otherClientItems.forEach(item => clientDropdown.appendChild(item));
 
-        // Toggle checkboxes
-        document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
-          if (commonIds.includes(checkbox.value)) {
-            checkbox.checked = !commonClientsPreselected;
+        if (!commonClientsPreselected) {
+          // When selecting common clients (original behavior)
+          const dropdownItems = Array.from(clientDropdown.querySelectorAll(".dropdown-item"));
+          const commonClientItems = dropdownItems.filter(item => {
+            return commonIds.includes(item.querySelector(".client-checkbox").value);
+          });
+          const otherClientItems = dropdownItems.filter(item => {
+            return !commonIds.includes(item.querySelector(".client-checkbox").value);
+          });
+
+          clientDropdown.innerHTML = '';
+          
+          // Add common clients first with a separator
+          if (commonClientItems.length > 0) {
+            const header = document.createElement("div");
+            header.className = "px-4 py-2 font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700";
+            header.textContent = "Common Clients";
+            clientDropdown.appendChild(header);
+            
+            commonClientItems.forEach(item => {
+              item.classList.add("common-client");
+              clientDropdown.appendChild(item);
+            });
+            
+            const separator = document.createElement("div");
+            separator.className = "border-t border-gray-200 dark:border-gray-600 my-1";
+            clientDropdown.appendChild(separator);
           }
-        });
+          
+          // Add other clients
+          otherClientItems.forEach(item => clientDropdown.appendChild(item));
+
+          // Check common client checkboxes
+          document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
+            if (commonIds.includes(checkbox.value)) {
+              checkbox.checked = true;
+            }
+          });
+
+          searchInput.value = commonClientNames.map(c => c[0]).join(", ");
+        } else {
+          // When deselecting - restore original order
+          clientDropdown.innerHTML = originalDropdownOrder;
+          
+          // Uncheck all checkboxes
+          document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+
+          searchInput.value = "";
+        }
 
         updateSelections("searchClient", "selectedClientsWrapper", "client-checkbox", "client_ids[]", "clientName");
         clientDropdown.classList.remove("hidden");
@@ -240,12 +265,10 @@
           button.textContent = "Deselect Common Clients";
           button.classList.remove("border-green-500", "text-green-600", "hover:bg-green-600");
           button.classList.add("border-red-500", "text-red-600", "hover:bg-red-600");
-          searchInput.value = commonClientNames.map(c => c[0]).join(", ");
         } else {
           button.textContent = "Preselect Common Clients";
           button.classList.remove("border-red-500", "text-red-600", "hover:bg-red-600");
           button.classList.add("border-green-500", "text-green-600", "hover:bg-green-600");
-          searchInput.value = "";
         }
       } catch (err) {
         console.error("Failed to load common clients:", err);
