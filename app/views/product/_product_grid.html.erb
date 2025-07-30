@@ -10,8 +10,8 @@
             <%= image_tag 'default.png', class: 'w-8 h-8 rounded-md' %>
           <% end %>
             <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p> -
-            <p class="text-sm font-semibold uppercase">
-              <%= product.groupwares.map(&:name).join(', ') %>
+            <p class="text-sm font-semibold">
+              <%= truncate(product.content.to_plain_text.capitalize, length: 30) %>
             </p>
           </div>
           <div class="rounded-full border border-2 p-2 border-white bg-white dark:bg-gray-700">
