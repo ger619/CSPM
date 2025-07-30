@@ -33,7 +33,7 @@ class MessagesController < ApplicationController
 
   def update
     if @message.update(message_params)
-      redirect_to product_task_path(@task.product, @task), notice: 'Message was successfully updated.'
+      redirect_to product_task_path(@product, @task), notice: 'Message was successfully updated.'
     else
       render :edit
     end

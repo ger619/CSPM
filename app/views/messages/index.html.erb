@@ -53,16 +53,16 @@
                           <%= link_to attachment.attachable.filename.to_s, rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), target: "_blank", download: true, class: "text-blue-600 hover:underline pl-2" %>
                         <% end %>
                       <% elsif attachment.attachable.is_a?(ActiveStorage::Blob) %>
-                        <% if attachment.attachable.previewable? %>
-                          <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>
-                            <img src="<%= rails_representation_url(attachment.attachable.variant(resize_to_limit: [300, 300])) %>" alt="Attachment Preview" class="max-w-xs cursor-pointer pl-2">
-                          </a>
-                          <br>
-                          <%= link_to attachment.filename.to_s, rails_blob_path(attachment.attachable, only_path: true), target: "_blank", class: "text-blue-600 hover:underline pl-2" %>
+                        <% if attachment.attachable.variable? %>
+                            <a href="<%= rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true) %>" download>
+                              <img src="<%= rails_representation_url(attachment.attachable.variant(resize_to_limit: [300, 300])) %>" alt="Attachment Preview" class="max-w-xs cursor-pointer pl-2">
+                            </a>
+                        <% elsif attachment.attachable.previewable? %>
+                          <%= link_to 'Download previewable file', rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), class: "text-blue-600 hover:underline pl-2" %>
                         <% else %>
                           <%= link_to attachment.filename.to_s, rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), class: "text-blue-600 hover:underline pl-2" %>
                         <% end %>
-                      <% else %>
+                    <% else %>
                         <p>Attachment: <%= attachment.filename.to_s %></p>
                         <%= link_to attachment.filename.to_s, rails_blob_path(attachment.attachable, disposition: 'attachment', only_path: true), class: "text-blue-600 hover:underline pl-2" %>
                       <% end %>
