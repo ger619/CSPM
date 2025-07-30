@@ -92,7 +92,7 @@ Rails.application.routes.draw do
     end
     resources :tasks do
       member do
-        post :add_task
+        post :assign_user
         delete :remove_task
         post :add_state
         delete :remove_state

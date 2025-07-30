@@ -1,0 +1,21 @@
+<div class="flex flex-wrap gap-2 mt-2">
+  <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role? :agent %>
+    <div class="w-full">
+      <%= form_with url: assign_user_product_task_path(@product, @task), local: true, data: { turbo: false } do %>
+        <%= label_tag :user_id, "SELECT USER", class: "sr-only" %>
+        <div class="flex flex-col gap-2">
+          <div>
+            <% available_users = User.with_agent_role.where.not(id: @task.users.pluck(:id)).where(id: @product.users.pluck(:id)).distinct %>
+            <% if available_users %>
+              <%= select_tag :user_id, 
+                           options_from_collection_for_select(available_users, :id, :name || :email),
+                           class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                           required: true %>
+            <% end %>
+          </div>
+          <%= submit_tag "ASSIGN USER", class: 'w-full font-semibold bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg' %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
