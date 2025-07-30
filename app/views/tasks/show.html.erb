@@ -25,13 +25,16 @@
             This task does not have an uploaded file. If you need to add a file, kindly <%= link_to "edit", edit_product_task_path(@product, @task), method: :get, class: 'underline text-[#3F8CFF]' %> the task to include it.
           <% end %>
         </div>
-        <div class="mb-2.5 font-bold capitalize flex">Status:
-          <span class="font-medium ml-1">
-            <%= render partial: 'tasks/task_status', locals: { task: @task } %>
-          </span>
+        <div>
+          <div class="mb-2.5 font-bold capitalize">Status:
+            <span class="font-medium ml-1">
+              <%= render partial: 'tasks/task_status', locals: { task: @task } %>
+            </span>
+          </div>
+          <div>
+            <%= render 'tasks/add_state' %>
+          </div>
         </div>
-
-        <%= render 'tasks/add_state' %>
 
 
 
