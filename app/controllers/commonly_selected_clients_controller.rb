@@ -34,7 +34,10 @@ class CommonlySelectedClientsController < ApplicationController
   end
 
   def ids
-    client_ids = current_user.common_clients.pluck(:id)
-    render json: { client_ids: client_ids }
+    @common_clients = current_user.common_clients.order(:name)
+    render json: {
+      client_ids: @common_clients.pluck(:id),
+      client_names: @common_clients.pluck(:name, :id)
+    }
   end
 end
