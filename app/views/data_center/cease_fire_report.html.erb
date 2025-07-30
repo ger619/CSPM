@@ -104,10 +104,12 @@
 
       </div>
       <div class="flex  flex-cols-2 gap-2 pt-10">
-        <!-- Preselect commonly selected clients button -->
-        <button type="button" id="precheckCommonClientsBtn" class="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white p-2 rounded-lg transition duration-200">
-          Preselect Common Clients
-        </button>
+        <% if current_user.has_role? :admin %>
+          <!-- Preselect commonly selected clients button -->
+          <button type="button" id="precheckCommonClientsBtn" class="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white p-2 rounded-lg transition duration-200">
+            Preselect Common Clients
+          </button>
+        <% end %>
         <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
       </div>
     </div>
@@ -179,28 +181,83 @@
     }
 
     let commonClientsPreselected = false;
+    let originalDropdownOrder = null; // Store the original dropdown order
 
     document.getElementById("precheckCommonClientsBtn").addEventListener("click", async () => {
       const button = document.getElementById("precheckCommonClientsBtn");
+      const clientDropdown = document.getElementById("clientDropdown");
+      const searchInput = document.getElementById("searchClient");
 
       try {
         const response = await fetch("/commonly_selected_clients/ids");
         const data = await response.json();
         const commonIds = data.client_ids.map(id => id.toString());
+        const commonClientNames = data.client_names;
 
         if (commonIds.length === 0) {
           showFlashNotice("No commonly selected clients found. Please click 'Manage common clients' to add them first.");
-          return; // stop execution
+          return;
         }
 
-        document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
-          if (commonIds.includes(checkbox.value)) {
-            checkbox.checked = !commonClientsPreselected;
+        // Store original dropdown order on first click if not already stored
+        if (!originalDropdownOrder) {
+          originalDropdownOrder = clientDropdown.innerHTML;
+        }
+
+        if (!commonClientsPreselected) {
+          // When selecting common clients (original behavior)
+          const dropdownItems = Array.from(clientDropdown.querySelectorAll(".dropdown-item"));
+          const commonClientItems = dropdownItems.filter(item => {
+            return commonIds.includes(item.querySelector(".client-checkbox").value);
+          });
+          const otherClientItems = dropdownItems.filter(item => {
+            return !commonIds.includes(item.querySelector(".client-checkbox").value);
+          });
+
+          clientDropdown.innerHTML = '';
+          
+          // Add common clients first with a separator
+          if (commonClientItems.length > 0) {
+            const header = document.createElement("div");
+            header.className = "px-4 py-2 font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700";
+            header.textContent = "Common Clients";
+            clientDropdown.appendChild(header);
+            
+            commonClientItems.forEach(item => {
+              item.classList.add("common-client");
+              clientDropdown.appendChild(item);
+            });
+            
+            const separator = document.createElement("div");
+            separator.className = "border-t border-gray-200 dark:border-gray-600 my-1";
+            clientDropdown.appendChild(separator);
           }
-        });
+          
+          // Add other clients
+          otherClientItems.forEach(item => clientDropdown.appendChild(item));
+
+          // Check common client checkboxes
+          document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
+            if (commonIds.includes(checkbox.value)) {
+              checkbox.checked = true;
+            }
+          });
+
+          searchInput.value = commonClientNames.map(c => c[0]).join(", ");
+        } else {
+          // When deselecting - restore original order
+          clientDropdown.innerHTML = originalDropdownOrder;
+          
+          // Uncheck all checkboxes
+          document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+
+          searchInput.value = "";
+        }
 
         updateSelections("searchClient", "selectedClientsWrapper", "client-checkbox", "client_ids[]", "clientName");
-        document.getElementById("clientDropdown").classList.remove("hidden");
+        clientDropdown.classList.remove("hidden");
 
         // Toggle state and button appearance
         commonClientsPreselected = !commonClientsPreselected;
@@ -214,6 +271,7 @@
           button.classList.add("border-green-500", "text-green-600", "hover:bg-green-600");
         }
       } catch (err) {
+        console.error("Failed to load common clients:", err);
         alert("Failed to load common clients.");
       }
     });

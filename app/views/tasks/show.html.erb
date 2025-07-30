@@ -6,43 +6,48 @@
       <%= render 'tasks/content_for_task' %>
     </div>
 
-    <div class="col-span-1 p-2">
-      <div class="flex flex-wrap gap-1 justify-between mb-2">
-        <div class="mb-4 font-bold capitalize">
-          <% if @task.image.present? %>
-            <p> Click to Enlarge</p>
-            <%= image_tag @task.image, class: 'zoomable-image w-48 object-cover' %>
-          <% elsif @product.image.present? %>
-            <%= image_tag @product.image, class: 'w-16' %>
-          <% else %>
-            <%= image_tag 'default.png', class: 'w-16' %>
-          <% end %>
+    <div class="col-span-1 space-y-4 p-2">
+      <!-- Image/File Section -->
+      <div class="space-y-2">
+        <% if @task.image.present? %>
+          <p class="font-bold capitalize">Click to Enlarge</p>
+          <%= image_tag @task.image, class: 'zoomable-image w-48 object-cover' %>
+        <% elsif @product.image.present? %>
+          <%= image_tag @product.image, class: 'w-16' %>
+        <% else %>
+          <%= image_tag 'default.png', class: 'w-16' %>
+        <% end %>
 
-          <% if @task.file.present? %>
-            <%= link_to "Download #{@task.file.filename}", url_for(@task.file), target: "_blank", class: "text-blue-600 hover:underline" %>
+        <% if @task.file.present? %>
+          <%= link_to "Download #{@task.file.filename}", url_for(@task.file), target: "_blank", class: "text-blue-600 hover:underline block mt-2" %>
+        <% else %>
+          <p class="text-sm">
+            This task does not have an uploaded file. If you need to add a file, kindly 
+            <%= link_to "edit", edit_product_task_path(@product, @task), method: :get, class: 'underline text-[#3F8CFF]' %> 
+            the task to include it.
+          </p>
+        <% end %>
+      </div>
 
-          <% else %>
-            This task does not have an uploaded file. If you need to add a file, kindly <%= link_to "edit", edit_product_task_path(@product, @task), method: :get, class: 'underline text-[#3F8CFF]' %> the task to include it.
-          <% end %>
+      <!-- Status Section -->
+      <div class="space-y-2">
+        <div class="font-bold capitalize">
+          Status:
+          <span class="font-medium ml-1">
+            <%= render partial: 'tasks/task_status', locals: { task: @task } %>
+          </span>
         </div>
         <div>
-          <div class="mb-2.5 font-bold capitalize">Status:
-            <span class="font-medium ml-1">
-              <%= render partial: 'tasks/task_status', locals: { task: @task } %>
-            </span>
-          </div>
-          <div>
-            <%= render 'tasks/add_state' %>
-          </div>
+          <%= render 'tasks/add_state' %>
         </div>
+      </div>
 
-
-
-
-        <div class="pt-2.5 mb-2.5 font-bold capitalize flex">
-
-          <div class="ml-1">
-            <% @task.users.each do |user| %>
+      <!-- Assigned Users Section -->
+      <div class="space-y-2">
+        <div class="font-bold capitalize">Assigned To:</div>
+        <div class="flex items-center space-x-2">
+          <% @task.users.each do |user| %>
+            <div class="flex items-center">
               <% if user.profile_picture.attached? %>
                 <%= image_tag user.profile_picture, class: 'object-cover h-10 w-10 rounded-full' %>
               <% elsif user.name_initials.present? %>
@@ -52,20 +57,15 @@
               <% else %>
                 <%= image_tag 'default.png', class: 'w-10 h-10 rounded-full' %>
               <% end %>
-            <% end %>
-          </div>
-          <div class="ml-2 min-w-3 gap-2 col-span-1 content-center">
-            <% @task.users.each do |user| %>
-              <% if user.name.present? %>
-                <%= user.name %>
-              <% end %>
-            <% end %>
-          </div>
+              <span class="ml-2"><%= user.name if user.name.present? %></span>
+            </div>
+          <% end %>
         </div>
+      </div>
 
-        <div class="">
-          <%= render 'tasks/assign_user' %>
-        </div>
+      <!-- Assign User Form -->
+      <div class="space-y-2">
+        <%= render 'tasks/assign_user' %>
       </div>
     </div>
   </div>
