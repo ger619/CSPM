@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_product
-  before_action :set_task, only: %i[show edit update destroy add_task remove_task add_state]
+  before_action :set_task, only: %i[show edit update destroy assign_user remove_task add_state]
 
   def index
     @tasks = @product.tasks
@@ -52,7 +52,7 @@ class TasksController < ApplicationController
 
   # Assigning User a Task
 
-  def add_task
+  def assign_user
     if @task.users.include?(User.find(params[:user_id]))
       redirect_to product_tasks_path(@product, @task), notice: 'User has already been assigned.'
     else
@@ -71,7 +71,7 @@ class TasksController < ApplicationController
       #   UserMailer.task_assignment_email(product_user, @task, current_user, assigned_user).deliver_later
       # end
 
-      redirect_to product_task_path(@product, @task), notice: 'Task was successfully assigned.'
+      redirect_to product_task_path(@product, @task), notice: "#{assigned_user.name} was successfully assigned."
     end
   end
 
