@@ -1,4 +1,4 @@
-<% provide(:title, "Edit Project: #{@product.topic}") %>
+<% provide(:title, "Edit Project: #{@product.client.name}") %>
 
 <%= form_with model: @product, url: product_path(@product), method: :patch, local: true, data: { turbo: false } do |f| %>
   <% if @product.errors.any? %>
@@ -12,16 +12,17 @@
     </div>
   <% end %>
 
-  <!-- Assignee -->
-    <div class="relative z-0 w-full mb-6 group">
-  <%= f.label :user_id, 'Assignee*', class: "block font-medium mb-1" %>
-  <%= f.select :user_id,
-               User.with_agent_project_manager_role.order(:first_name, :last_name).map { |u| [u.name, u.id] },
-               { prompt: 'Assign User' },
-               class: "w-full mb-4 p-2 border rounded" %>
-  </div>
+  <div class="relative z-0 w-full mb-6 group">
+    <!-- Client -->
+    <%= f.label :client_id, 'Client Available*', class: "block font-medium mb-1" %>
+    <%= f.collection_select :client_id, Client.all, :id, :name,
+                            { prompt: "Select Client" },
+                            class: "w-full mb-4 p-2 border rounded" %>
   </div>
 
+
+
+  <!-- Assignee -->
 
   <div class="grid grid-cols-2 gap-2">
     <div class="relative z-0 w-full mb-6 group">
@@ -31,11 +32,11 @@
     </div>
     <!-- Description -->
     <div class="relative z-0 w-full mb-6 group">
-      <!-- Client -->
-      <%= f.label :client_id, 'Client Available*', class: "block font-medium mb-1" %>
-      <%= f.collection_select :client_id, Client.all, :id, :name,
-                              { prompt: "Select Client" },
-                              class: "w-full mb-4 p-2 border rounded" %>
+      <%= f.label :user_id, 'Assignee*', class: "block font-medium mb-1" %>
+      <%= f.select :user_id,
+                   User.with_agent_project_manager_role.order(:first_name, :last_name).map { |u| [u.name, u.id] },
+                   { prompt: 'Assign User' },
+                   class: "w-full mb-4 p-2 border rounded" %>
     </div>
   </div>
   <div class="grid grid-cols-2 gap-2">
@@ -45,14 +46,14 @@
       <%= f.label :software_ids, 'Product Categories *', class: "block font-medium mb-1" %>
       <%= f.collection_select :software_ids, Software.all, :id, :name,
                               { prompt: "Select Product" },
-                              { multiple: true, class: "w-full mb-4 p-2 border rounded" } %>
+                              { class: "w-full mb-4 p-2 border rounded" } %>
     </div>
     <div class="relative z-0 w-full mb-6 group">
       <!-- Groupware Subcategories -->
       <%= f.label :groupware_ids, 'Sub Categories *', class: "block font-medium mb-1" %>
       <%= f.collection_select :groupware_ids, Groupware.all, :id, :name,
                               { prompt: "Select Sub Product" },
-                              { multiple: true, class: "w-full mb-4 p-2 border rounded" } %>
+                              { class: "w-full mb-4 p-2 border rounded" } %>
     </div>
   </div>
 

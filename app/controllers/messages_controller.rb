@@ -33,7 +33,7 @@ class MessagesController < ApplicationController
 
   def update
     if @message.update(message_params)
-      redirect_to product_board_task_path(@task.product, @task.board, @task), notice: 'Message was successfully updated.'
+      redirect_to product_task_path(@product, @task), notice: 'Message was successfully updated.'
     else
       render :edit
     end
@@ -41,7 +41,7 @@ class MessagesController < ApplicationController
 
   def destroy
     @message.destroy
-    redirect_to product_board_task_path(@task.product, @task.board, @task), notice: 'Message deleted successfully.'
+    redirect_to product_task_path(@task.product, @task), notice: 'Message deleted successfully.'
   end
 
   private
