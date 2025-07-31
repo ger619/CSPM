@@ -18,7 +18,7 @@ class ProductController < ApplicationController
         .where(
           "products.document_name ILIKE :q OR
           statuses.name ILIKE :q OR
-          products.budget ILIKE :q OR
+          CAST(products.budget AS TEXT) ILIKE :q OR
           action_text_rich_texts.body ILIKE :q OR
           EXISTS (
             SELECT 1 FROM clients
