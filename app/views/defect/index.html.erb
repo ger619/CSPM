@@ -14,12 +14,12 @@
 <div class="mb-4">
   <%= render 'defect/top_bar' %>
 </div>
-<div class="mb-4 h-full">
-  <%= render 'defect/defect' %>
-</div>
 
-<%= render partial: 'defect/product_defects_grid', locals: {
-  product: @products_in_qa,
-  chosen_software_id: @chosen_software_id,
-  selected_groupware_id: @selected_groupware_id
-} %>
+<!-- Projects showing in the Quality Assurance section Section -->
+<div class="mb-4 h-full">
+  <%= render partial: 'defect/product_defects_grid', locals: {
+    product: @products_in_qa,
+    chosen_software_id: @chosen_software_id,
+    selected_groupware_id: @selected_groupware_id
+  } %>
+</div>
