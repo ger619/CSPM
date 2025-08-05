@@ -34,6 +34,13 @@ class DefectController < ApplicationController
 
   def new
     @defect = Defect.new
+    @products_and_clients_defects = Product.includes(:client, :groupwares, :statuses)
+    .select { |product| product.statuses.any? { |status| status.name == "Quality Assurance"  } }
+    .map do |product|
+      client_name = product.client&.name || "No Client"
+      groupware_names = product.groupwares.any? ? product.groupwares.map(&:name).join(", ") : "No Software"
+      ["#{client_name} - #{groupware_names}", product.id]
+    end
   end
 
   def edit; end
