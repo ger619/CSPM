@@ -23,7 +23,7 @@ class Product < ApplicationRecord
   has_many :users, through: :addusers, dependent: :destroy
   has_and_belongs_to_many :statuses, dependent: :destroy
 
-  scope :with_quality_assurance_status, -> {
+  scope :with_quality_assurance_status, lambda {
     joins(:statuses).where(statuses: { name: 'Quality Assurance' }).distinct
   }
 

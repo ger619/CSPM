@@ -6,8 +6,8 @@ class DefectController < ApplicationController
     @defect = @defect.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
     @products_in_qa = Product.with_quality_assurance_status
-                           .includes(:statuses, :client) # Add others as needed
-                           .order(updated_at: :desc)
+      .includes(:statuses, :client) # Add others as needed
+      .order(updated_at: :desc)
 
     # Pagination
     @per_page = 12
