@@ -4,13 +4,13 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :groupwares
 
   belongs_to :client
-  # has_many :bugs
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :documents, dependent: :destroy
   accepts_nested_attributes_for :documents, allow_destroy: true
   has_one_attached :image
   has_many :defects, dependent: :nullify
+  has_many :bugs, through: :defects
   before_create :set_default_status
 
   has_rich_text :content
@@ -38,7 +38,7 @@ class Product < ApplicationRecord
   end
 
   def set_default_status
-    status = Status.find_by(name: 'Development')
+    status = Status.find_by(name: 'Initiation')
     statuses << status if status
   end
 
