@@ -5,10 +5,6 @@ class DefectController < ApplicationController
     @defect = Defect.all
     @defect = @defect.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
-    @products_in_qa = Product.with_quality_assurance_status
-      .includes(:statuses, :client) # Add others as needed
-      .order(updated_at: :desc)
-
     # Pagination
     @per_page = 12
     @page = (params[:page] || 1).to_i
@@ -43,7 +39,15 @@ class DefectController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @products_and_clients_defects = Product.includes(:client, :groupwares, :statuses)
+      .select { |product| product.statuses.any? { |status| status.name == 'Quality Assurance' } }
+      .map do |product|
+      client_name = product.client&.name || 'No Client'
+      groupware_names = product.groupwares.any? ? product.groupwares.map(&:name).join(', ') : 'No Software'
+      ["#{client_name} - #{groupware_names}", product.id]
+    end
+  end
 
   def create
     @defect = Defect.new(defect_params)
