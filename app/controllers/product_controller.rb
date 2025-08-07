@@ -109,10 +109,6 @@ class ProductController < ApplicationController
         ).distinct
       end
 
-      @bugs = @product.bugs
-        .includes(:users, :statuses)
-        .order(priority: :desc)
-
       @tasks_by_status = @tasks.group_by { |task| task.statuses.first&.name || 'Uncategorized' }
     else
       redirect_to root_path, alert: 'You are not authorized to view this content.'
