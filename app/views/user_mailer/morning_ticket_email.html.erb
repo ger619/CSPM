@@ -45,6 +45,7 @@
       <th>Service Desk</th>
       <th>Summary</th>
       <th>Status</th>
+      <th>Time Taken</th>
     </tr>
     </thead>
     <tbody>
@@ -56,6 +57,19 @@
         <td><%= ticket.project.title %></td>
         <td><%= ticket.subject %></td>
         <td><%= ticket.statuses.first&.name || 'N/A' %></td>
+        <td>
+          <% closed_status = ticket.add_statuses.joins(:status).where(statuses: { name: %w[Closed Resolved Declined] }).order(updated_at: :desc).first %>
+          <% if ticket.created_at %>
+            <% if closed_status %>
+              <%= distance_of_time_in_words(ticket.created_at, closed_status.updated_at).gsub('about ', '') %>
+            <% else %>
+              <%= distance_of_time_in_words(ticket.created_at, Time.current).gsub('about ', '') %>
+            <% end %>
+          <% else %>
+            N/A
+          <% end %>
+        </td>
+
       </tr>
     <% end %>
     </tbody>
