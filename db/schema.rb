@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_30_093856) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_07_094641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -175,6 +175,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_30_093856) do
     t.datetime "updated_at", null: false
     t.uuid "product_id", null: false
     t.uuid "user_id", null: false
+    t.string "submodule"
     t.index ["product_id"], name: "index_defects_on_product_id"
     t.index ["user_id"], name: "index_defects_on_user_id"
   end
@@ -261,6 +262,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_30_093856) do
     t.datetime "updated_at", null: false
     t.index ["task_id"], name: "index_messages_on_task_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "milestones", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "product_id", null: false
+    t.uuid "status_id", null: false
+    t.decimal "percentage", precision: 5, scale: 2
+    t.integer "amount"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_milestones_on_product_id"
+    t.index ["status_id"], name: "index_milestones_on_status_id"
   end
 
   create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -598,6 +611,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_30_093856) do
   add_foreign_key "issues", "users"
   add_foreign_key "messages", "tasks"
   add_foreign_key "messages", "users"
+  add_foreign_key "milestones", "products"
+  add_foreign_key "milestones", "statuses"
   add_foreign_key "notifications", "tickets"
   add_foreign_key "notifications", "users"
   add_foreign_key "products", "clients"

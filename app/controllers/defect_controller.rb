@@ -5,11 +5,19 @@ class DefectController < ApplicationController
     @defect = Defect.all
     @defect = @defect.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
+    @products_in_qa = Product.with_quality_assurance_status
+      .includes(:statuses, :client) # Add others as needed
+      .order(updated_at: :desc)
+
     # Pagination
-    @per_page = 10
+    @per_page = 12
     @page = (params[:page] || 1).to_i
-    @total_pages = (@defect.count / @per_page.to_f).ceil
-    @defect = @defect.offset((@page - 1) * @per_page).limit(@per_page)
+    @total_pages = (@products_in_qa.count / @per_page.to_f).ceil
+    @start_count = ((@page - 1) * @per_page) + 1
+    @end_count = [@page * @per_page, @products_in_qa.count].min
+    @total_count = @products_in_qa.count
+
+    @products_in_qa = @products_in_qa.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def show
@@ -26,9 +34,24 @@ class DefectController < ApplicationController
 
   def new
     @defect = Defect.new
+    @products_and_clients_defects = Product.includes(:client, :groupwares, :statuses)
+      .select { |product| product.statuses.any? { |status| status.name == 'Quality Assurance' } }
+      .map do |product|
+      client_name = product.client&.name || 'No Client'
+      groupware_names = product.groupwares.any? ? product.groupwares.map(&:name).join(', ') : 'No Software'
+      ["#{client_name} - #{groupware_names}", product.id]
+    end
   end
 
-  def edit; end
+  def edit
+    @products_and_clients_defects = Product.includes(:client, :groupwares, :statuses)
+      .select { |product| product.statuses.any? { |status| status.name == 'Quality Assurance' } }
+      .map do |product|
+      client_name = product.client&.name || 'No Client'
+      groupware_names = product.groupwares.any? ? product.groupwares.map(&:name).join(', ') : 'No Software'
+      ["#{client_name} - #{groupware_names}", product.id]
+    end
+  end
 
   def create
     @defect = Defect.new(defect_params)
@@ -80,6 +103,6 @@ class DefectController < ApplicationController
   end
 
   def defect_params
-    params.require(:defect).permit(:name, :description, :start_date, :end_date, :product_id, :user_id)
+    params.require(:defect).permit(:name, :description, :start_date, :end_date, :product_id, :user_id, :submodule)
   end
 end

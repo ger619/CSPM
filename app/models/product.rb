@@ -3,8 +3,11 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :softwares
   has_and_belongs_to_many :groupwares
 
+  # Milestones associations
+  has_many :milestones, dependent: :destroy
+  accepts_nested_attributes_for :milestones, allow_destroy: true
+  
   belongs_to :client
-  # has_many :bugs
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :documents, dependent: :destroy
@@ -22,6 +25,10 @@ class Product < ApplicationRecord
   has_many :addusers
   has_many :users, through: :addusers, dependent: :destroy
   has_and_belongs_to_many :statuses, dependent: :destroy
+
+  scope :with_quality_assurance_status, lambda {
+    joins(:statuses).where(statuses: { name: 'Quality Assurance' }).distinct
+  }
 
   validate :end_date_after_start_date
 

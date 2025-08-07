@@ -1,4 +1,7 @@
-<%= form_with  model: @defect, url: defect_index_url, method: :post, data: { turbo: true }, local: true do |f| %>
+<% provide(:title, "Edit QA") %>
+
+<%= form_with model: @defect, data: { turbo: true }, local: true do |f| %>
+
   <div class="md:gap-6">
     <div class="grid grid-cols-2 gap-2">
       <div class="relative z-0 w-full mb-6 group">

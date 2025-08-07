@@ -15,9 +15,33 @@
 <div class="bg-white max-w-full dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
   <%= render 'layouts/alert' %>
   <div class="gap-6 flex justify-between">
-    <!-- First Column -->
+    <!-- First Column: List milestones -->
+    <div class="px-16 grid grid-cols-1 gap-4 col-span-1 w-1/2">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Milestones</h2>
+      <% if @product.milestones.any? %>
+        <ul class="space-y-3">
+          <% @product.milestones.each do |milestone| %>
+            <li class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md shadow-sm">
+              <p class="text-sm text-gray-800 dark:text-white">
+                <strong>Status:</strong> <%= milestone.status&.name || 'N/A' %>
+              </p>
+              <p class="text-sm text-gray-800 dark:text-white">
+                <strong>Percentage:</strong> <%= milestone.percentage %>%
+              </p>
+              <% if @product.budget.present? %>
+                <p class="text-sm text-gray-800 dark:text-white">
+                  <strong>Amount:</strong> KES <%= number_with_precision(@product.budget * milestone.percentage.to_f / 100, precision: 2) %>
+                </p>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-500 dark:text-gray-400">No milestones available for this product.</p>
+      <% end %>
+    </div>
 
-    <!-- Fourth Column -->
+    <!-- Fourth Column: Documents -->
     <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
       <!-- show added documents name and download button -->
       <div class="flex">
@@ -25,28 +49,30 @@
           <ul>
             <% @product.documents.each do |document| %>
               <li class="flex gap-2">
-                <h1 class="capitalize"><%= document.name %></h1>
+                <h1 class="capitalize text-gray-800 dark:text-white"><%= document.name %></h1>
                 <% if document.file.attached? %>
-                  - <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "text-blue-500" %>
+                  - <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "text-blue-500 dark:text-blue-400" %>
                 <% else %>
-                  <span class="text-gray-400">No file</span>
+                  <span class="text-gray-400 dark:text-gray-300">No file</span>
                 <% end %>
               </li>
             <% end %>
           </ul>
         <% else %>
-          <p> There are no documents for this product</p>
+          <p class="text-gray-500 dark:text-gray-400">There are no documents for this product.</p>
         <% end %>
       </div>
     </div>
+
+    <!-- Admin Only Section -->
     <% if current_user.has_role?(:admin) %>
       <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-1">
-        <!-- show added documents name and download button -->
-       <%= render partial: 'product/add_statuses', locals: { product: @product } %>
+        <%= render partial: 'product/add_statuses', locals: { product: @product } %>
       </div>
     <% end %>
   </div>
 </div>
+
 
 <!-- The products search form partial -->
 <div class="">
