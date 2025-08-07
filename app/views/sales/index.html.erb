@@ -1,4 +1,14 @@
-<div>
-  <h1 class="font-bold text-4xl">Sales#index</h1>
-  <p>Find me in app/views/sales/index.html.erb</p>
-</div>
+<% provide(:title, "Sales") %>
+
+<% if flash[:notice] %>
+  <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
+    <p><%= flash[:notice] %></p>
+  </div>
+<% elsif flash[:alert] %>
+  <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
+    <p><%= flash[:alert] %></p>
+  </div>
+<% end %>
+
+<%= render 'sales/product_index_topbar' %>
+
