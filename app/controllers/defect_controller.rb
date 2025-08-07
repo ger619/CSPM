@@ -5,6 +5,10 @@ class DefectController < ApplicationController
     @defect = Defect.all
     @defect = @defect.joins(:users).where(users: { id: current_user.id }) unless current_user.has_any_role?(:admin, :observer)
 
+    @products_in_qa = Product.with_quality_assurance_status
+      .includes(:statuses, :client) # Add others as needed
+      .order(updated_at: :desc)
+
     # Pagination
     @per_page = 12
     @page = (params[:page] || 1).to_i
@@ -99,6 +103,6 @@ class DefectController < ApplicationController
   end
 
   def defect_params
-    params.require(:defect).permit(:name, :description, :start_date, :end_date, :product_id, :user_id)
+    params.require(:defect).permit(:name, :description, :start_date, :end_date, :product_id, :user_id, :submodule)
   end
 end
