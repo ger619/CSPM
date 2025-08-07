@@ -3,6 +3,10 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :softwares
   has_and_belongs_to_many :groupwares
 
+  # Milestones associations
+  has_many :milestones, dependent: :destroy
+  accepts_nested_attributes_for :milestones, allow_destroy: true
+  
   belongs_to :client
   has_many :boards, dependent: :destroy
   has_many :tasks, dependent: :destroy
