@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :sales, only: [:index]
+
   get 'users/active', to: 'users#active', as: 'active_users'
   get 'users/client_active', to: 'users#client_active', as: 'active_client_users'
   get 'users/manager_active', to: 'users#manager_active', as: 'active_manager_users'
