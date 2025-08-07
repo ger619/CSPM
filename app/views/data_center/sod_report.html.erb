@@ -61,6 +61,7 @@
           <th class="border border-black px-4 py-2">Comment Added At</th> <!-- New Column -->
           <th class="border border-black px-4 py-2">Comment</th>
           <th class="border border-black px-4 py-2">Due Date</th>
+          <th class="border border-black px-4 py-2">Date from Creation</th>
           <th class="border border-black px-4 py-2">View</th>
 
         </tr>
@@ -107,7 +108,19 @@
             <td class="border border-black px-4 py-2"><%= ticket.issues.order(created_at: :desc).first&.created_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
             <td class="border border-black px-4 py-2"><%= ticket.issues.order(created_at: :desc).first&.content&.to_plain_text&.truncate(800) || 'N/A' %></td>
             <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
-            <td class="border border-black px-4 py-2">
+          <td class="border border-black px-4 py-2">
+            <% closed_status = ticket.add_statuses.joins(:status).where(statuses: { name: %w[Closed Resolved Declined] }).order(updated_at: :desc).first %>
+            <% if ticket.created_at %>
+              <% if closed_status %>
+                <%= distance_of_time_in_words(ticket.created_at, closed_status.updated_at).gsub('about ', '') %>
+              <% else %>
+                <%= distance_of_time_in_words(ticket.created_at, Time.current).gsub('about ', '') %>
+              <% end %>
+            <% else %>
+              N/A
+            <% end %>
+          </td>
+          <td class="border border-black px-4 py-2">
               <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
             </td>
         </tr>
