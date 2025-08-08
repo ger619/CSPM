@@ -1,0 +1,16 @@
+<!-- app/views/user_mailer/assign_product_email.html.erb -->
+<p>Hello <%= @product.client.name %></p>
+
+<p> has been assigned to the project: by
+  <%= @product.client.name %>
+  for  <%= @product.groupwares.map(&:name).join(', ') %>
+  for milestone
+  <% @product.milestones.each do |milestone| %>
+    <%= milestone.status&.name || 'N/A' %>
+    <%= number_with_precision(@product.budget * milestone.percentage.to_f / 100, precision: 2) %><
+  <% end %>
+<p>Assigned user: <%= @assigned_user.first_name %> <%= @assigned_user.last_name %></p>
+<p>Click <a href="<%= @url %>">here</a> to view the project.</p>
+
+<p>Best regards,</p>
+<p>Your Team</p>

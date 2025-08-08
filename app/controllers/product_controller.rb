@@ -213,9 +213,9 @@ class ProductController < ApplicationController
     @product.statuses << status
 
     # Send an email to the developers and select the
-    assigned_user = @product.users
+    assigned_user = @product.users.pluck(:id)
 
-    UserMailer.finance_sales_email(@product, current_user, assigned_user).deliver_later if (status.name = 'Development')
+    UserMailer.finance_sales_email(@product, current_user, assigned_user).deliver_later if status.name == 'Development'
     redirect_to product_path(@product), notice: 'Product status was successfully updated.'
   end
 
