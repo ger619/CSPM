@@ -20,7 +20,16 @@
         <%= number_with_precision(milestone.amount || (@product.budget * milestone.percentage.to_f / 100), precision: 2) %>
       <% end %>
     <% end %>
+  <% elsif @product.statuses.first&.name == 'Quality Assurance' %>
+    for  <%= @product.groupwares.map(&:name).join(', ') %>
+    for milestone
+    <% @product.milestones.each do |milestone| %>
+      <% if milestone.status&.name == 'Quality Assurance' %>
+        <%= milestone.status.name %>
+        <%= number_with_precision(milestone.amount || (@product.budget * milestone.percentage.to_f / 100), precision: 2) %>
+      <% end %>
     <% end %>
+  <% end %>
 <p>Assigned user: <%= @assigned_user.first_name %> <%= @assigned_user.last_name %></p>
 <p>Click <a href="<%= @url %>">here</a> to view the project.</p>
 <p>Best regards,</p>
