@@ -163,9 +163,14 @@ class UserMailer < ApplicationMailer
     end
   end
 
-
-  def finance_sales_email(product, user, mail_options = {})
-    mail
-
+  def finance_sales_email(user, product, assigned_user)
+    @user = user
+    @product = product
+    @assigned_user = assigned_user
+    @url = product_url(@product)
+    mail(to: @user.email, subject: "Project Payment Status for #{@product.client.name} for milestone ") do |format|
+      format.html { render 'finance_sales_email' }
+      format.text { render plain: "Project Payment Status for #{@product.client.name} for milestone " }
+    end
   end
 end
