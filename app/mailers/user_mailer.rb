@@ -162,4 +162,10 @@ class UserMailer < ApplicationMailer
       format.text { render plain: "Morning Ticket Report for #{@user.name}" }
     end
   end
+
+
+  def finance_sales_email(product, user, mail_options = {})
+    mail
+
+  end
 end
