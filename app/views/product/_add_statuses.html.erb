@@ -2,7 +2,7 @@
 <% current_status = @product.statuses.first&.name %>
 
 <% status_options =
-     if current_status.nil? || current_status == 'Initial'
+     if current_status.nil? || current_status == 'Initiation'
              Status.where(name: ['Development']).pluck(:name, :id)
      elsif current_status == 'Development'
              Status.where(name: ['Quality Assurance']).pluck(:name, :id)

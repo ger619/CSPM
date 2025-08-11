@@ -210,6 +210,7 @@ class ProductController < ApplicationController
     @product = Product.find(params[:id])
     status = Status.find(params[:status_id])
     @product.statuses.clear
+    @product.user = current_user
     @product.statuses << status
 
     # Send an email to the developers and select the
