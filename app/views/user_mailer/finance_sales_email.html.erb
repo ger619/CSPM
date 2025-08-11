@@ -30,7 +30,7 @@
       <% end %>
     <% end %>
   <% elsif @product.statuses.first&.name == 'Deploy' %>
-    for  <%= @product.groupwares.map(&:name).join(', ') %>
+    for  <%= @product.groupware s.map(&:name).join(', ') %>
     for milestone
     <% @product.milestones.each do |milestone| %>
       <% if milestone.status&.name == 'Deploy' %>
