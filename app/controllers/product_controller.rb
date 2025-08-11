@@ -210,7 +210,13 @@ class ProductController < ApplicationController
     @product = Product.find(params[:id])
     status = Status.find(params[:status_id])
     @product.statuses.clear
+    @product.user = current_user
     @product.statuses << status
+
+    # Send an email to the developers and select the
+    assigned_user = @product.users.pluck(:id)
+
+    UserMailer.finance_sales_email(@product, current_user, assigned_user).deliver_later
     redirect_to product_path(@product), notice: 'Product status was successfully updated.'
   end
 
