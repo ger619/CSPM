@@ -236,6 +236,6 @@ class ProductController < ApplicationController
     params.require(:product).permit(:status, :start_date, :end_date, :document_name, :image, :content, :budget,
                                     :user_id, :client_id, images: [], software_ids: [], groupware_ids: [],
                                                           documents_attributes: %i[id name file _destroy],
-                                                          milestones_attributes: %i[id status_id percentage amount position _destroy])
+                                                          milestones_attributes: %i[id status_id percentage amount paid position _destroy])
   end
 end
