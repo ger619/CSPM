@@ -84,14 +84,7 @@ rspec
 
 - GitHub: [@ger619](https://github.com/ger619)
 - Twitter: [@ger_abol]()
-- LinkedIn: [David Ger](https://linkedin.com/in/david-ger-426b4576)
-
-
-👤 **Robert Kanyoro**
-
-- GitHub: [@Kanyorok](https://github.com/Kanyorok/)
-- Twitter: [@CarlosMbugua](https://twitter.com/CarlosMbugua/)
-- LinkedIn: [Robert Kanyoro](https://www.linkedin.com/in/robert-mbugua-kanyoro/)
+- LinkedIn: [David Ger](https://www.linkedin.com/in/abolger/)
 
 
 👤 **Nemwel Boniface**
