@@ -77,7 +77,7 @@
 
           <div class="min-w-0">
             <p class="truncate text-sm font-semibold text-slate-900 dark:text-white"><%= current_user.email %></p>
-            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+            <p class="truncate mt-0.5 text-xs text-slate-500 dark:text-slate-400">
               <% if current_user.has_role?(:admin) %>
                 Administrator
               <% elsif current_user.has_role?(:observer) %>
@@ -345,7 +345,7 @@
       <div class="shrink-0 border-t border-slate-200 p-4 dark:border-slate-800">
         <div class="flex items-center gap-2 rounded-lg bg-[#0D9C67]/5 px-3 py-2">
           <span class="h-2 w-2 rounded-full bg-[#0D9C67] shadow-sm shadow-[#0D9C67]/50"></span>
-          <span class="text-xs font-medium text-[#0D9C67]">System operational</span>
+          <span class="text-xs font-medium text-[#0D9C67] truncate">System operational</span>
         </div>
       </div>
     </aside>
