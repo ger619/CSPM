@@ -10,3 +10,10 @@ eagerLoadControllersFrom('controllers', application);
 // Lazy controllers as they appear in the DOM(remember not to preload controllers in import map!)
 // import { lazyLoadControllersFrom } from "@hotwred/stimulus-loading"
 // lazyLoadControllersFrom("controllers", application)
+
+import SidebarController from "./sidebar_controller"
+
+application.register(
+  "sidebar",
+  SidebarController
+)
