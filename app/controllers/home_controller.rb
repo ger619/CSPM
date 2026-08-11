@@ -59,28 +59,8 @@ class HomeController < ApplicationController
         .count(' issues.id') # NOTE: extra space in ' issues.id' may cause issues
 
       # Count tickets by status across all projects
-      @status_data = current_user.projects.joins(tickets: :statuses).group('statuses.name').count
-      @total_tickets = @status_data.values.sum
-      @status_data = { 'Total' => @total_tickets }.merge(@status_data) # Add total at the start
-
       # Count tickets by status per project
-      @status_per_project = current_user.projects.joins(tickets: :statuses).group('projects.title', 'statuses.name').count
-
       # Count total tickets per project
-      @total_tickets_per_project = current_user.projects
-        .joins(:tickets)
-        .group('projects.title')
-        .count('tickets.id')
-
-      # Calculate total tickets across all projects
-      total_tickets = @total_tickets_per_project.values.sum
-      @total_tickets_per_project = { 'All Projects' => total_tickets }.merge(@total_tickets_per_project)
-
-      # Count closed and reopened tickets, and add total
-      @closed_and_reopened_tickets = current_user.projects.joins(tickets: :statuses).group('statuses.name').count
-      @closed_and_reopened_tickets = { 'Closed' => @closed_and_reopened_tickets['Closed'] || 0,
-                                       'Reopened' => @closed_and_reopened_tickets['Reopened'] || 0 }
-      @closed_and_reopened_tickets = { 'All Tickets' => total_tickets }.merge(@closed_and_reopened_tickets)
 
       # Prepare tickets for time-based grouping
       @tickets = current_user.projects.joins(:tickets)
@@ -103,7 +83,6 @@ class HomeController < ApplicationController
                       @tickets.group_by_year('tickets.created_at').count
                     end
 
-      @total_tickets_per_project.values.sum # (Unused, can be removed)
 
       # Prepare tickets for user-based charting
       @tickets_user = Ticket.all
@@ -135,9 +114,6 @@ class HomeController < ApplicationController
                              when 'year'
                                @tickets_user.group("CONCAT(users.first_name, ' ', users.last_name)").group_by_year('tickets.created_at').count
                              end
-
-      @total_tickets_per_project = @tickets_user.group('projects.title').count('tickets.id')
-      @total_tickets_per_project.values.sum # (Unused, can be removed)
 
       # Count SLA-breached tickets per project
       @sla_breaches_per_project = current_user.projects
