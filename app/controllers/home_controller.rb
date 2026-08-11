@@ -71,18 +71,8 @@ class HomeController < ApplicationController
       end
 
       # Determine grouping period for charts
-      grouping_period = params[:grouping_period] || 'day'
 
       # Group tickets by day, month, or year for charting
-      @chart_data = case grouping_period
-                    when 'day'
-                      @tickets.group_by_day('tickets.created_at', time_zone: 'UTC', format: '%Y-%m-%d').count
-                    when 'month'
-                      @tickets.group_by_month('tickets.created_at').count
-                    when 'year'
-                      @tickets.group_by_year('tickets.created_at').count
-                    end
-
 
       # Prepare tickets for user-based charting
       @tickets_user = Ticket.all
@@ -114,22 +104,6 @@ class HomeController < ApplicationController
                              when 'year'
                                @tickets_user.group("CONCAT(users.first_name, ' ', users.last_name)").group_by_year('tickets.created_at').count
                              end
-
-      # Count SLA-breached tickets per project
-      @sla_breaches_per_project = current_user.projects
-        .joins(:tickets)
-        .joins('INNER JOIN sla_tickets ON sla_tickets.ticket_id = tickets.id')
-        .where("sla_tickets.sla_status = 'Breached'")
-        .group('projects.title')
-        .count
-
-      # Count non-breached (or missing SLA) tickets per project
-      @non_breached_tickets_per_project = current_user.projects
-        .joins(:tickets)
-        .joins('LEFT JOIN sla_tickets ON sla_tickets.ticket_id = tickets.id')
-        .where("sla_tickets.sla_status = 'Not Breached' OR sla_tickets.ticket_id IS NULL")
-        .group('projects.title')
-        .count
 
       # Count ticket statuses per project
       @ticket_statuses_per_project = current_user.projects
