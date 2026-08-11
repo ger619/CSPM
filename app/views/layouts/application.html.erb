@@ -30,7 +30,7 @@
 <main class="flex">
   <!-- Sidebar -->
   <% if current_user && user_signed_in?  %>
-    <div id="sidebar" class="h-screen transition-all duration-300 w-0 lg:w-[280px]">
+    <div id="sidebar" class="h-screen shrink-0 transition-all duration-300 w-0">
       <%= render "layouts/sidebar" %>
     </div>
 
