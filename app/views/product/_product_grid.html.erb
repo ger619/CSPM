@@ -7,7 +7,7 @@
           <% if product.image.present? %>
             <%= image_tag(product.image, class: 'w-8 h-8 rounded-md') %>
           <% else %>
-            <%= image_tag 'default.png', class: 'w-8 h-8 rounded-md' %>
+            <%= image_tag 'logo-mark.png', class: 'w-8 h-8 rounded-md' %>
           <% end %>
             <p class="text-sm font-semibold uppercase"><%= product.client.present? ? product.client.name : 'No Client Assigned' %></p> -
             <p class="text-sm font-semibold capitalize">
@@ -19,7 +19,7 @@
           </div>
           <% if current_user.has_role?(:admin) && can?(:edit, product) %>
             <div class="flex justify-end">
-              <%= link_to edit_product_path(product), 
+              <%= link_to edit_product_path(product),
                           class: "p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400",
                           data: { turbo: false } do %>
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

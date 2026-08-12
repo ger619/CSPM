@@ -24,7 +24,7 @@
               <% if project.image.present? %>
                   <%= image_tag(project.image, class: 'w-16') %>
               <% else %>
-                  <%= image_tag 'default.png', class: 'w-16' %>
+                  <%= image_tag 'logo-mark.png', class: 'w-16' %>
               <% end %>
             </td>
             <td class="px-4 py-4 font-medium text-left">
@@ -55,8 +55,8 @@
           <% if current_user.has_role? :admin %>
             <% if can?(:edit, project) || can?(:delete, project) %>
               <!-- Actions li -->
-              <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= project.id %>" onclick="event.stopPropagation()"> 
-                <div class="relative flex justify-start"> 
+              <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= project.id %>" onclick="event.stopPropagation()">
+                <div class="relative flex justify-start">
                   <%= render partial: 'project/action_dropdown', locals: { project: project } %>
                 </div>
               </td>
