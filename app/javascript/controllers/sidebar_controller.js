@@ -1,20 +1,27 @@
 import { Controller } from '@hotwired/stimulus';
 
+// Mounted on #sidebar in the app layout (NOT inside the partial), so
+// `this.element` is the actual flex spacer that reserves layout space
+// next to #mainContent. Handles: mobile slide-in/out, desktop icon-rail
+// collapse (persisted, resize-aware), and the "Data Center" accordion.
 export default class extends Controller {
-  static targets = ['sidebar', 'overlay', 'reports', 'reportChevron'];
+  static targets = ['sidebar', 'overlay', 'reports', 'reportChevron', 'collapseIcon']
 
   connect() {
     this.handleResize = this.handleResize.bind(this);
-    this.restoreState();
+    this.handleKeydown = this.handleKeydown.bind(this);
     window.addEventListener('resize', this.handleResize);
+    document.addEventListener('keydown', this.handleKeydown);
+    this.restoreState();
   }
 
   disconnect() {
     window.removeEventListener('resize', this.handleResize);
+    document.removeEventListener('keydown', this.handleKeydown);
   }
 
   // ============================================================
-  // MOBILE
+  // MOBILE — the <aside> slides in as an overlay drawer
   // ============================================================
 
   open() {
@@ -29,54 +36,74 @@ export default class extends Controller {
     document.body.classList.remove('overflow-hidden');
   }
 
+  handleKeydown(event) {
+    if (event.key === 'Escape') this.close();
+  }
+
   // ============================================================
   // DESKTOP COLLAPSE
   // ============================================================
 
   toggle() {
     const collapsed = localStorage.getItem('greatercare.sidebar.collapsed') === 'true';
-    const newState = !collapsed;
-
-    localStorage.setItem('greatercare.sidebar.collapsed', String(newState));
-    this.applyDesktopState(newState);
+    const next = !collapsed;
+    localStorage.setItem('greatercare.sidebar.collapsed', String(next));
+    this.applyDesktopState(next);
   }
 
+  // Single source of truth for collapse visuals:
+  // - sets data-state on the <aside>, which every `group-data-[state=collapsed]/side:`
+  //   utility in the partial keys off (labels, badges, icon centering, logo swap...)
+  // - resizes this.element (the #sidebar spacer div) so #mainContent reflows
+  // - mirrors the width into --sidebar-width, for anything that prefers a
+  //   CSS var over relying on the flex spacer
   applyDesktopState(collapsed) {
-    const spacer = document.getElementById('sidebar');
+    this.sidebarTarget.dataset.state = collapsed ? 'collapsed' : 'expanded';
+
+    if (this.hasCollapseIconTarget) {
+      this.collapseIconTarget.classList.toggle('rotate-180', collapsed);
+    }
 
     if (window.innerWidth < 1024) {
-      if (spacer) {
-        spacer.classList.remove('w-[280px]', 'w-[80px]');
-        spacer.classList.add('w-0');
-      }
+      // Mobile: the sidebar overlays content — never reserve horizontal space.
+      this.element.style.width = '0px';
+      document.documentElement.style.setProperty('--sidebar-width', '0px');
       return;
     }
 
-    const expandedWidth = 'w-[280px]';
-    const collapsedWidth = 'w-[80px]';
-    const nextWidth = collapsed ? collapsedWidth : expandedWidth;
-    const prevWidth = collapsed ? expandedWidth : collapsedWidth;
+    const width = collapsed ? '84px' : '280px';
+    this.element.style.width = width;
+    document.documentElement.style.setProperty('--sidebar-width', width);
 
-    this.sidebarTarget.classList.remove(prevWidth);
-    this.sidebarTarget.classList.add(nextWidth);
+    if (collapsed) this.closeReports();
+  }
 
-    if (spacer) {
-      spacer.classList.remove(prevWidth, 'w-0');
-      spacer.classList.add(nextWidth);
+  // ============================================================
+  // REPORTS ACCORDION
+  // ============================================================
+
+  toggleReports() {
+    // Auto-expand the rail first so the panel has room to render legibly.
+    const collapsed = localStorage.getItem('greatercare.sidebar.collapsed') === 'true';
+    if (collapsed) {
+      localStorage.setItem('greatercare.sidebar.collapsed', 'false');
+      this.applyDesktopState(false);
+    }
+    this.reportsTarget.classList.toggle('hidden');
+    if (this.hasReportChevronTarget) {
+      this.reportChevronTarget.classList.toggle('rotate-180');
+    }
+  }
+
+  closeReports() {
+    this.reportsTarget.classList.add('hidden');
+    if (this.hasReportChevronTarget) {
+      this.reportChevronTarget.classList.remove('rotate-180');
     }
   }
 
   // ============================================================
-  // REPORTS
-  // ============================================================
-
-  toggleReports() {
-    this.reportsTarget.classList.toggle('hidden');
-    this.reportChevronTarget.classList.toggle('rotate-180');
-  }
-
-  // ============================================================
-  // RESTORE STATE
+  // RESTORE + RESPONSIVE
   // ============================================================
 
   restoreState() {
@@ -84,17 +111,13 @@ export default class extends Controller {
     this.applyDesktopState(collapsed);
   }
 
-  // ============================================================
-  // RESPONSIVE
-  // ============================================================
-
   handleResize() {
-    this.close();
-
+    this.close(); // always reset the mobile drawer on breakpoint change
     if (window.innerWidth >= 1024) {
       this.restoreState();
     } else {
-      this.applyDesktopState(false);
+      this.element.style.width = '0px';
+      document.documentElement.style.setProperty('--sidebar-width', '0px');
     }
   }
 }

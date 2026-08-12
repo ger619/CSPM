@@ -1,12 +1,19 @@
 <% if current_user && user_signed_in? %>
-  <div data-controller="sidebar" class="relative">
-    <!-- =========================================================
-         MOBILE MENU BUTTON
-         ========================================================= -->
+  <%#
+    NOTE: data-controller="sidebar" lives on the #sidebar div in the
+    application layout (the flex spacer), not here — this partial just
+    renders into it. Every data-sidebar-target/action below resolves
+    against that controller since this is all inside it in the DOM.
+  %>
+
+  <!-- =========================================================
+       MOBILE TOPBAR
+       ========================================================= -->
+  <header class="fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur dark:border-slate-800 dark:bg-[#0B1020]/90 lg:hidden">
     <button
       type="button"
       data-action="click->sidebar#open"
-      class="fixed left-4 top-4 z-40 flex h-11 w-11 items-center justify-center rounded-xl bg-[#131D58] text-white shadow-lg transition hover:bg-[#0D9C67] lg:hidden"
+      class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#131D58] text-white shadow-sm transition hover:bg-[#0D9C67]"
       aria-label="Open navigation"
     >
       <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -14,340 +21,380 @@
       </svg>
     </button>
 
-    <!-- =========================================================
-         MOBILE OVERLAY
-         ========================================================= -->
-    <div
-      data-sidebar-target="overlay"
-      data-action="click->sidebar#close"
-      class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm lg:hidden"
-    ></div>
+    <%= link_to(current_user.has_role?(:ceo) ? cease_fire_report_path : root_path, class: "flex items-center") do %>
+      <%= image_tag("logo.png", alt: "GreaterCare", class: "h-8 w-auto object-contain") %>
+    <% end %>
 
-    <!-- =========================================================
-         SIDEBAR
-         ========================================================= -->
-    <aside
-      data-sidebar-target="sidebar"
-      class="fixed inset-y-0 left-0 z-50 flex w-[280px] -translate-x-full flex-col border-r border-slate-200 bg-white shadow-2xl transition-all duration-300 ease-in-out dark:border-slate-800 dark:bg-[#0B1020] lg:translate-x-0 lg:shadow-none"
+    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#131D58] text-xs font-bold text-white">
+      <%= current_user.email.to_s.first.upcase %>
+    </div>
+  </header>
+  <%# Mobile top clearance is handled by #mainContent's pt-20 in the layout,
+      not here — this partial has no size in the #sidebar flex item on mobile. %>
+
+  <!-- =========================================================
+       MOBILE OVERLAY
+       ========================================================= -->
+  <div
+    data-sidebar-target="overlay"
+    data-action="click->sidebar#close"
+    class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm lg:hidden"
+  ></div>
+
+  <!-- =========================================================
+       SIDEBAR
+       ========================================================= -->
+  <aside
+    data-sidebar-target="sidebar"
+    data-state="expanded"
+    class="group/side fixed inset-y-0 left-0 z-50 flex w-[280px] -translate-x-full flex-col border-r border-slate-200 bg-white shadow-2xl transition-all duration-300 ease-in-out dark:border-slate-800 dark:bg-[#0B1020] lg:translate-x-0 lg:shadow-none lg:w-[280px] lg:data-[state=collapsed]:w-[84px]"
+  >
+    <!-- =======================================================
+         BRAND HEADER
+         ======================================================= -->
+    <div class="flex h-[78px] shrink-0 items-center justify-between border-b border-slate-200 px-5 dark:border-slate-800 lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0">
+
+      <%= link_to(
+            current_user.has_role?(:ceo) ? cease_fire_report_path : root_path,
+            class: "flex items-center"
+          ) do %>
+        <%= image_tag("logo.png", alt: "GreaterCare", class: "h-12 w-auto object-contain lg:group-data-[state=collapsed]/side:hidden") %>
+        <%= image_tag("logo-mark.png", alt: "GreaterCare", class: "hidden h-9 w-9 object-contain lg:group-data-[state=collapsed]/side:block") %>
+      <% end %>
+
+      <!-- Desktop collapse -->
+      <button
+        type="button"
+        data-action="click->sidebar#toggle"
+        class="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67] lg:flex lg:group-data-[state=collapsed]/side:hidden"
+        aria-label="Collapse sidebar"
+        title="Collapse sidebar"
+      >
+        <svg data-sidebar-target="collapseIcon" class="h-5 w-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7M18 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Mobile close -->
+      <button
+        type="button"
+        data-action="click->sidebar#close"
+        class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 lg:hidden"
+        aria-label="Close navigation"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Collapsed-only expand handle: full toggle button becomes an icon in the rail -->
+    <button
+      type="button"
+      data-action="click->sidebar#toggle"
+      class="hidden lg:group-data-[state=collapsed]/side:mx-auto lg:group-data-[state=collapsed]/side:mt-3 lg:group-data-[state=collapsed]/side:flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]"
+      aria-label="Expand sidebar"
+      title="Expand sidebar"
     >
-      <!-- =======================================================
-           BRAND HEADER
-           ======================================================= -->
-      <div class="flex h-[78px] shrink-0 items-center justify-between border-b border-slate-200 px-5 dark:border-slate-800">
-        <%= link_to(
-              current_user.has_role?(:ceo) ? cease_fire_report_path : root_path,
-              class: "flex items-center"
-            ) do %>
-          <%= image_tag("logo.png", alt: "GreaterCare", class: "h-12 w-auto object-contain") %>
-        <% end %>
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M6 5l7 7-7 7" />
+      </svg>
+    </button>
 
-        <!-- Desktop collapse -->
-        <button
-          type="button"
-          data-action="click->sidebar#toggle"
-          class="hidden h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67] lg:flex"
-          aria-label="Collapse sidebar"
-        >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+    <!-- =======================================================
+         USER CARD
+         ======================================================= -->
+    <div class="px-4 pt-4 lg:group-data-[state=collapsed]/side:px-2">
+      <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/70 lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:border-0 lg:group-data-[state=collapsed]/side:bg-transparent lg:group-data-[state=collapsed]/side:p-0 dark:lg:group-data-[state=collapsed]/side:bg-transparent">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#131D58] text-sm font-bold text-white" title="<%= current_user.email %>">
+          <%= current_user.email.to_s.first.upcase %>
+        </div>
 
-        <!-- Mobile close -->
-        <button
-          type="button"
-          data-action="click->sidebar#close"
-          class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 lg:hidden"
-          aria-label="Close navigation"
-        >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- =======================================================
-           USER CARD
-           ======================================================= -->
-      <div class="px-4 pt-4">
-        <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/70">
-          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#131D58] text-sm font-bold text-white">
-            <%= current_user.email.to_s.first.upcase %>
-          </div>
-
-          <div class="min-w-0">
-            <p class="truncate text-sm font-semibold text-slate-900 dark:text-white"><%= current_user.email %></p>
-            <p class="truncate mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-              <% if current_user.has_role?(:admin) %>
-                Administrator
-              <% elsif current_user.has_role?(:observer) %>
-                Observer
-              <% elsif current_user.has_role?(:agent) %>
-                Agent
-              <% elsif current_user.has_role?(:client) %>
-                Client
-              <% else %>
-                User
-              <% end %>
-            </p>
-          </div>
+        <div class="min-w-0 lg:group-data-[state=collapsed]/side:hidden">
+          <p class="truncate text-sm font-semibold text-slate-900 dark:text-white"><%= current_user.email %></p>
+          <p class="truncate mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+            <% if current_user.has_role?(:admin) %>
+              Administrator
+            <% elsif current_user.has_role?(:observer) %>
+              Observer
+            <% elsif current_user.has_role?(:agent) %>
+              Agent
+            <% elsif current_user.has_role?(:client) %>
+              Client
+            <% else %>
+              User
+            <% end %>
+          </p>
         </div>
       </div>
+    </div>
 
-      <!-- =======================================================
-           NAVIGATION
-           ======================================================= -->
-      <nav class="flex-1 overflow-y-auto px-3 py-5">
-        <% unless current_user.has_role?(:ceo) %>
-          <!-- ===================================================
-               WORKSPACE
-               =================================================== -->
-          <div class="mb-7">
-            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Workspace</p>
+    <!-- =======================================================
+         NAVIGATION
+         ======================================================= -->
+    <nav class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-5 lg:group-data-[state=collapsed]/side:px-2">
+      <% unless current_user.has_role?(:ceo) %>
+        <!-- ===================================================
+             WORKSPACE
+             =================================================== -->
+        <div class="mb-7">
+          <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 lg:group-data-[state=collapsed]/side:hidden">Workspace</p>
+          <div class="hidden lg:group-data-[state=collapsed]/side:block mx-2 mb-3 border-t border-slate-200 dark:border-slate-800"></div>
 
-            <div class="space-y-1">
-              <!-- Dashboard -->
-              <%= link_to(
-                    root_path,
-                    class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(root_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
-                  ) do %>
+          <div class="space-y-1">
+            <!-- Dashboard -->
+            <%= link_to(
+                  root_path,
+                  title: "Dashboard",
+                  class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(root_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
+                ) do %>
                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 10.5L12 3l9 7.5M5 9v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V9" />
                   </svg>
                 </span>
-                <span>Dashboard</span>
-              <% end %>
+              <span class="lg:group-data-[state=collapsed]/side:hidden">Dashboard</span>
+            <% end %>
 
-              <!-- Support Desk -->
-              <%= link_to(
-                    project_index_path,
-                    class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(project_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
-                  ) do %>
-                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+            <!-- Support Desk -->
+            <%= link_to(
+                  project_index_path,
+                  title: "Support Desk",
+                  class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(project_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
+                ) do %>
+                <span class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 8h8M8 12h5M8 16h3" />
                   </svg>
+                  <span class="absolute -right-1 -top-1 hidden h-2 w-2 rounded-full bg-[#0D9C67] lg:group-data-[state=collapsed]/side:block"></span>
                 </span>
-                <span class="flex-1">Support Desk</span>
-                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]">
-                  <% if current_user.projects.exists? %>
-                    <%= current_user.projects.count %>
-                  <% elsif current_user.has_role?(:admin) %>
-                    <%= Project.count %>
-                  <% else %>
-                    0
-                  <% end %>
-                </span>
-              <% end %>
+              <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Support Desk</span>
+              <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden">
+                <% if current_user.projects.exists? %>
+                  <%= current_user.projects.count %>
+                <% elsif current_user.has_role?(:admin) %>
+                  <%= Project.count %>
+                <% else %>
+                  0
+                <% end %>
+              </span>
+            <% end %>
 
-              <!-- Project -->
-              <% unless current_user.has_role?(:client) %>
-                <%= link_to(
-                      product_index_path,
-                      class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(product_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
-                    ) do %>
+            <!-- Project -->
+            <% unless current_user.has_role?(:client) %>
+              <%= link_to(
+                    product_index_path,
+                    title: "Projects",
+                    class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(product_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
+                  ) do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h10M4 17h16" />
                     </svg>
                   </span>
-                  <span class="flex-1">Projects</span>
-                <% end %>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Projects</span>
+              <% end %>
 
-                <!-- Quality Assurance -->
-                <%= link_to(
-                      defect_index_path,
-                      class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(defect_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
-                    ) do %>
+              <!-- Quality Assurance -->
+              <%= link_to(
+                    defect_index_path,
+                    title: "Quality Assurance",
+                    class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(defect_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
+                  ) do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3l8 4v5c0 4.5-3.4 7.8-8 9-4.6-1.2-8-4.5-8-9V7l8-4z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4" />
                     </svg>
                   </span>
-                  <span class="flex-1">Quality Assurance</span>
-                  <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]">
-                    <% if current_user.defects.exists? %>
-                      <%= current_user.defects.count %>
-                    <% elsif current_user.has_role?(:admin) %>
-                      <%= Defect.count %>
-                    <% else %>
-                      0
-                    <% end %>
-                  </span>
-                <% end %>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Quality Assurance</span>
+                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden">
+                  <% if current_user.defects.exists? %>
+                    <%= current_user.defects.count %>
+                  <% elsif current_user.has_role?(:admin) %>
+                    <%= Defect.count %>
+                  <% else %>
+                    0
+                  <% end %>
+                </span>
               <% end %>
-            </div>
+            <% end %>
           </div>
+        </div>
 
-          <!-- ===================================================
-               MANAGEMENT
-               =================================================== -->
-          <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
-            <div class="mb-7">
-              <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Management</p>
-              <div class="space-y-1">
-                <%= link_to(software_index_path, class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(software_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
+        <!-- ===================================================
+             MANAGEMENT
+             =================================================== -->
+        <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
+          <div class="mb-7">
+            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 lg:group-data-[state=collapsed]/side:hidden">Management</p>
+            <div class="hidden lg:group-data-[state=collapsed]/side:block mx-2 mb-3 border-t border-slate-200 dark:border-slate-800"></div>
+
+            <div class="space-y-1">
+              <%= link_to(software_index_path, title: "CS Products", class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(software_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 7h14M5 12h14M5 17h9" />
                     </svg>
                   </span>
-                  <span class="flex-1">CS Products</span>
-                  <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]"><%= Software.count %></span>
-                <% end %>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">CS Products</span>
+                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden"><%= Software.count %></span>
+              <% end %>
 
-                <%= link_to(client_index_path, class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(client_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
+              <%= link_to(client_index_path, title: "Clients", class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(client_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
                     </svg>
                   </span>
-                  <span class="flex-1">Clients</span>
-                  <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]"><%= Client.count %></span>
-                <% end %>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Clients</span>
+                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden"><%= Client.count %></span>
+              <% end %>
 
-                <%= link_to(status_index_path, class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(status_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
+              <%= link_to(status_index_path, title: "Status", class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(status_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 19V5h10v14M14 9h6v10h-6" />
                     </svg>
                   </span>
-                  <span class="flex-1">Status</span>
-                  <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]"><%= Status.count %></span>
-                <% end %>
-              </div>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Status</span>
+                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden"><%= Status.count %></span>
+              <% end %>
             </div>
-          <% end %>
+          </div>
+        <% end %>
 
-          <!-- ===================================================
-               PEOPLE
-               =================================================== -->
-          <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
-            <div class="mb-7">
-              <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">People</p>
-              <div class="space-y-1">
-                <%= link_to(team_index_path, class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(team_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
+        <!-- ===================================================
+             PEOPLE
+             =================================================== -->
+        <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
+          <div class="mb-7">
+            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 lg:group-data-[state=collapsed]/side:hidden">People</p>
+            <div class="hidden lg:group-data-[state=collapsed]/side:block mx-2 mb-3 border-t border-slate-200 dark:border-slate-800"></div>
+
+            <div class="space-y-1">
+              <%= link_to(team_index_path, title: "Teams", class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(team_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M10 10a4 4 0 100-8 4 4 0 000 8zM21 20v-2a4 4 0 00-3-3.87M17 3.13a4 4 0 010 7.75" />
                     </svg>
                   </span>
-                  <span class="flex-1">Teams</span>
-                  <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]"><%= Team.count %></span>
-                <% end %>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Teams</span>
+                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden"><%= Team.count %></span>
+              <% end %>
 
-                <%= link_to(users_path, class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition #{current_page?(users_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
+              <%= link_to(users_path, title: "Users", class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(users_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}") do %>
                   <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z" />
                     </svg>
                   </span>
-                  <span class="flex-1">Users</span>
-                  <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67]"><%= User.where(active: true).count %></span>
-                <% end %>
+                <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Users</span>
+                <span class="rounded-full bg-[#0D9C67]/10 px-2 py-0.5 text-[11px] font-bold text-[#0D9C67] lg:group-data-[state=collapsed]/side:hidden"><%= User.where(active: true).count %></span>
+              <% end %>
 
-                <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
-                  <%= link_to(
-                        new_user_invitation_path,
-                        class: "group flex min-h-[44px] items-center gap-3 rounded-xl border border-[#0D9C67]/20 bg-[#0D9C67]/5 px-3 py-2.5 text-sm font-medium text-[#0D9C67] transition hover:bg-[#0D9C67]/10"
-                      ) do %>
+              <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) %>
+                <%= link_to(
+                      new_user_invitation_path,
+                      title: "Add New User",
+                      class: "group flex min-h-[44px] items-center gap-3 rounded-xl border border-[#0D9C67]/20 bg-[#0D9C67]/5 px-3 py-2.5 text-sm font-medium text-[#0D9C67] transition hover:bg-[#0D9C67]/10 lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0"
+                    ) do %>
                     <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                       <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 5v14M5 12h14" />
                       </svg>
                     </span>
-                    <span>Add New User</span>
-                  <% end %>
+                  <span class="lg:group-data-[state=collapsed]/side:hidden">Add New User</span>
                 <% end %>
-              </div>
+              <% end %>
             </div>
-          <% end %>
+          </div>
+        <% end %>
 
-          <!-- ===================================================
-               REPORTING / DATA CENTER
-               =================================================== -->
-          <div class="mb-7">
-            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Reporting</p>
+        <!-- ===================================================
+             REPORTING / DATA CENTER
+             =================================================== -->
+        <div class="mb-7">
+          <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 lg:group-data-[state=collapsed]/side:hidden">Reporting</p>
+          <div class="hidden lg:group-data-[state=collapsed]/side:block mx-2 mb-3 border-t border-slate-200 dark:border-slate-800"></div>
 
-            <button
-              type="button"
-              data-action="click->sidebar#toggleReports"
-              class="flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
-            >
+          <button
+            type="button"
+            data-action="click->sidebar#toggleReports"
+            title="Data Center"
+            class="flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0"
+          >
               <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 19V5m0 14h16M8 16v-5m4 5V7m4 9v-8" />
                 </svg>
               </span>
 
-              <span class="flex-1 text-left">Data Center</span>
+            <span class="flex-1 text-left lg:group-data-[state=collapsed]/side:hidden">Data Center</span>
 
-              <svg data-sidebar-target="reportChevron" class="h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
+            <svg data-sidebar-target="reportChevron" class="h-4 w-4 shrink-0 transition-transform duration-200 lg:group-data-[state=collapsed]/side:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
 
-            <div data-sidebar-target="reports" class="hidden space-y-1 pl-4 pt-1">
-              <%= link_to(cease_fire_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]") do %>
-                Tickets Status
+          <div data-sidebar-target="reports" class="hidden space-y-1 pl-4 pt-1 lg:group-data-[state=collapsed]/side:pl-0">
+            <%= link_to(cease_fire_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]") do %>
+              Tickets Status
+            <% end %>
+
+            <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.has_role?('project manager') %>
+              <%= link_to user_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                User Report
               <% end %>
 
-              <% if current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.has_role?('project manager') %>
-                <%= link_to user_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  User Report
-                <% end %>
-
-                <%= link_to project_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  Workload Report
-                <% end %>
-
-                <%= link_to daily_summary_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  Daily Report
-                <% end %>
-
-                <%= link_to dashboard_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  SLA Report
-                <% end %>
+              <%= link_to project_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                Workload Report
               <% end %>
 
-              <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.has_role?('project manager') %>
-                <%= link_to breach_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  Breach Report
-                <% end %>
-
-                <%= link_to orm_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  ORM Report
-                <% end %>
-
-                <%= link_to orm_team_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  ORM Team Report
-                <% end %>
-
-                <%= link_to sod_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  Start/End of Day Report
-                <% end %>
-
-                <%= link_to cbk_groupware_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
-                  CBK Report
-                <% end %>
+              <%= link_to daily_summary_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                Daily Report
               <% end %>
-            </div>
+
+              <%= link_to dashboard_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                SLA Report
+              <% end %>
+            <% end %>
+
+            <% if current_user.has_role?(:agent) || current_user.has_role?(:admin) || current_user.has_role?(:observer) || current_user.has_role?('project manager') %>
+              <%= link_to breach_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                Breach Report
+              <% end %>
+
+              <%= link_to orm_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                ORM Report
+              <% end %>
+
+              <%= link_to orm_team_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                ORM Team Report
+              <% end %>
+
+              <%= link_to sod_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                Start/End of Day Report
+              <% end %>
+
+              <%= link_to cbk_groupware_report_path, class: "flex rounded-lg px-3 py-2 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#0D9C67] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#0D9C67]" do %>
+                CBK Report
+              <% end %>
+            <% end %>
           </div>
-        <% end %>
-      </nav>
-
-      <!-- =======================================================
-           FOOTER
-           ======================================================= -->
-      <div class="shrink-0 border-t border-slate-200 p-4 dark:border-slate-800">
-        <div class="flex items-center gap-2 rounded-lg bg-[#0D9C67]/5 px-3 py-2">
-          <span class="h-2 w-2 rounded-full bg-[#0D9C67] shadow-sm shadow-[#0D9C67]/50"></span>
-          <span class="text-xs font-medium text-[#0D9C67] truncate">System operational</span>
         </div>
+      <% end %>
+    </nav>
+
+    <!-- =======================================================
+         FOOTER
+         ======================================================= -->
+    <div class="shrink-0 border-t border-slate-200 p-4 dark:border-slate-800 lg:group-data-[state=collapsed]/side:px-2">
+      <div class="flex items-center gap-2 rounded-lg bg-[#0D9C67]/5 px-3 py-2 lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 lg:group-data-[state=collapsed]/side:bg-transparent">
+        <span class="h-2 w-2 shrink-0 rounded-full bg-[#0D9C67] shadow-sm shadow-[#0D9C67]/50" title="System operational"></span>
+        <span class="text-xs font-medium text-[#0D9C67] truncate lg:group-data-[state=collapsed]/side:hidden">System operational</span>
       </div>
-    </aside>
-  </div>
+    </div>
+  </aside>
 <% end %>
