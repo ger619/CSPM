@@ -131,7 +131,7 @@
                   <%= current_user.name_initials %>
                 </span>
               <% else %>
-                <%= image_tag "default.png", class: "h-9 w-9 rounded-xl object-cover" %>
+                <%= image_tag "logo-mark.png", class: "h-9 w-9 rounded-xl object-cover" %>
               <% end %>
 
               <span class="hidden text-left sm:block">
@@ -161,11 +161,11 @@
                 <% end %>
               </li>
               <li>
-                <%= link_to destroy_user_session_path,
+                <%= button_to destroy_user_session_path,
                             method: :delete,
                             data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-                            class: "flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50" do %>
-                  Sign Out
+                            class: "flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50" do %>
+                 Sign Out
                 <% end %>
               </li>
             </ul>
