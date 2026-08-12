@@ -62,7 +62,7 @@
         <% elsif @project.image.present? %>
           <%= image_tag @project.image, class: 'w-16' %>
         <% else %>
-          <%= image_tag 'default.png', class: 'w-16' %>
+          <%= image_tag 'logo-mark.png', class: 'w-16' %>
         <% end %>
       </div>
       <div id="imageModal" class="modal" data-controller="image-modal" data-image-modal-target="modal">
