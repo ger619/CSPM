@@ -1,103 +1,378 @@
 <% provide(:title, "Add Support Desk") %>
 
-<div class="grid grid-cols-2 ">
-  <div class="grid col-span-1">
-    <div class="flex gap-1">
-      <%= button_to project_index_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'  do %>
-        &#8656; Back
+<div class="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-[#3F8CFF]">Support Desk</p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          Add Support Desk
+        </h1>
+        <p class="mt-2 max-w-2xl text-sm text-slate-500">
+          Complete the details below to create a new support desk request.
+        </p>
+      </div>
+
+      <%= link_to project_index_path,
+                  class: "inline-flex items-center justify-center rounded-xl border border-[#3F8CFF]/20 bg-white px-4 py-3 text-sm font-bold text-[#3F8CFF] shadow-sm transition hover:bg-[#3F8CFF] hover:text-white focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/20" do %>
+        <span class="mr-2 text-lg leading-none">&#8656;</span>
+        Back
+      <% end %>
+    </div>
+
+    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
+      <div class="bg-gradient-to-r from-[#1a237e] via-[#2563eb] to-[#3F8CFF] px-5 py-6 sm:px-8">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-white">Project Information</h2>
+            <p class="mt-1 text-sm text-blue-100">
+              Fields marked with <span class="font-bold">*</span> are required.
+            </p>
+          </div>
+
+          <div class="rounded-2xl bg-white/15 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
+            New Request
+          </div>
+        </div>
+      </div>
+
+      <%= form_with model: @project,
+                    url: project_index_url,
+                    method: :post,
+                    data: { turbo: false },
+                    local: true,
+                    html: { class: "p-5 sm:p-8" } do |f| %>
+
+        <div class="mb-8">
+          <h3 class="text-base font-bold text-slate-900">Basic Details</h3>
+          <p class="mt-1 text-sm text-slate-500">
+            Add the main title, description, and an optional image.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div>
+            <%= f.label :title, "Title *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <%= f.text_field :title,
+                             class: "block w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15",
+                             placeholder: "Enter support desk title",
+                             required: true %>
+          </div>
+
+          <div>
+            <%= f.label :image, "Profile Picture", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <%= f.file_field :image,
+                             class: "block w-full cursor-pointer rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 shadow-sm transition file:mr-4 file:rounded-xl file:border-0 file:bg-[#3F8CFF] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15" %>
+          </div>
+
+          <div class="lg:col-span-2">
+            <%= f.label :description, "Project Description *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <%= f.text_field :description,
+                             class: "block w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15",
+                             placeholder: "Briefly describe this support desk request",
+                             required: true %>
+          </div>
+        </div>
+
+        <div class="my-8 border-t border-slate-200"></div>
+
+        <div class="mb-8">
+          <h3 class="text-base font-bold text-slate-900">Assignment & Categories</h3>
+          <p class="mt-1 text-sm text-slate-500">
+            Choose who will handle this request and the related product categories.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div>
+            <%= f.label :user_id, "Assignee *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <%= f.select :user_id,
+                         User.with_agent_project_manager_role.order(:first_name, :last_name).map { |user| [user.name, user.id] },
+                         { prompt: "Select assignee" },
+                         class: "block w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15",
+                         required: true %>
+          </div>
+
+          <div>
+            <%= f.label :client_id, "Client Available *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <%= f.collection_select :client_id,
+                                    Client.all,
+                                    :id,
+                                    :name,
+                                    { prompt: "Select client" },
+                                    class: "block w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15",
+                                    required: true %>
+          </div>
+          <div>
+            <%= f.label :software_ids, "Product Categories *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <p class="mb-2 text-xs text-slate-500">Select one or more products.</p>
+
+            <details class="group relative" id="software-dropdown">
+              <summary class="flex min-h-[52px] w-full cursor-pointer list-none items-center justify-between rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15">
+                <span id="software-selected-text">Select products</span>
+                <span class="text-[#3F8CFF] transition group-open:rotate-180">
+                  &#9662;
+                </span>
+              </summary>
+
+              <div class="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-200">
+                <%= f.collection_check_boxes :software_ids, Software.order(:name), :id, :name do |b| %>
+                  <label class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-sm text-slate-700 transition hover:bg-[#3F8CFF]/10">
+                    <%= b.check_box class: "software-checkbox h-4 w-4 rounded border-slate-300 text-[#3F8CFF] focus:ring-[#3F8CFF]",
+                                    data: {
+                                      software_id: b.object.id,
+                                      software_name: b.object.name
+                                    } %>
+                    <span class="font-medium"><%= b.text %></span>
+                  </label>
+                <% end %>
+              </div>
+            </details>
+          </div>
+
+          <div>
+            <%= f.label :groupware_ids, "Sub Categories *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <p class="mb-2 text-xs text-slate-500">Only sub products connected to the selected product will show.</p>
+
+            <details class="group relative" id="groupware-dropdown">
+              <summary class="flex min-h-[52px] w-full cursor-pointer list-none items-center justify-between rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15">
+                <span id="groupware-selected-text">Select sub products</span>
+                <span class="text-[#3F8CFF] transition group-open:rotate-180">
+                  &#9662;
+                </span>
+              </summary>
+
+              <div id="groupware-select" class="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-200">
+                <div id="groupware-empty-message" class="rounded-xl bg-slate-50 px-3 py-4 text-center text-sm font-medium text-slate-500">
+                  Select a product first to see related sub products.
+                </div>
+
+                <%= f.collection_check_boxes :groupware_ids, Groupware.includes(:software).order(:name), :id, :name do |b| %>
+                  <label class="groupware-option hidden cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-sm text-slate-700 transition hover:bg-[#3F8CFF]/10"
+                         data-groupware-software-id="<%= b.object.software_id %>">
+                    <%= b.check_box class: "groupware-checkbox h-4 w-4 rounded border-slate-300 text-[#3F8CFF] focus:ring-[#3F8CFF]",
+                                    data: {
+                                      groupware_name: b.object.name
+                                    } %>
+                    <span class="font-medium"><%= b.text %></span>
+                  </label>
+                <% end %>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="my-8 border-t border-slate-200"></div>
+
+        <div class="mb-8">
+          <h3 class="text-base font-bold text-slate-900">Schedule & Priority</h3>
+          <p class="mt-1 text-sm text-slate-500">
+            Set the start date and mark whether this is a special service.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div>
+            <%= f.label :start_date, "Start Date *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+            <%= f.date_field :start_date,
+                             class: "block w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15",
+                             required: true %>
+          </div>
+
+          <div class="flex items-center rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <%= f.check_box :special,
+                            class: "h-5 w-5 rounded border-slate-300 text-[#3F8CFF] focus:ring-[#3F8CFF]" %>
+            <div class="ml-3">
+              <%= f.label :special, "Special Service", class: "block text-sm font-bold text-slate-800" %>
+              <p class="text-xs text-slate-500">
+                Enable this if the request needs special attention.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="my-8 border-t border-slate-200"></div>
+
+        <div class="mb-5">
+          <h3 class="text-base font-bold text-slate-900">Subject & Full Details</h3>
+          <p class="mt-1 text-sm text-slate-500">
+            Add the full support desk content below. Maximum 3000 characters.
+          </p>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+          <%= f.label :content, "Subject *", class: "mb-2 block text-sm font-bold text-slate-700" %>
+
+          <div data-controller="text-limit" data-text-limit-limit-value="3000">
+            <div class="mb-3 flex items-center justify-between gap-3">
+              <p class="text-xs font-medium text-slate-500">
+                Use clear details so the assigned team can respond quickly.
+              </p>
+              <p id="char-count" class="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#3F8CFF] shadow-sm">
+                0/3000
+              </p>
+            </div>
+
+            <%= f.rich_text_area :content,
+                                 id: "content",
+                                 data: { text_limit_target: "content" },
+                                 class: "min-h-[260px] rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-sm focus:border-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/15 sm:min-h-[320px] #{'border-red-500' if @project.errors[:content].any?}",
+                                 required: true %>
+
+            <p id="content-error" class="mt-2 hidden text-sm font-semibold text-red-600">
+              Subject details cannot be blank.
+            </p>
+
+            <% if @project.errors[:content].any? %>
+              <p class="mt-2 text-sm font-semibold text-red-600">
+                <%= @project.errors[:content].join(", ") %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-end">
+          <%= link_to "Cancel",
+                      project_index_path,
+                      class: "inline-flex h-12 items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-200" %>
+
+          <%= f.submit "Create Support Desk",
+                       class: "inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-[#3F8CFF] px-6 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-[#3A81EB] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/25" %>
+        </div>
       <% end %>
     </div>
   </div>
-</div>
-<div class="p-4 border border-dashed rounded">
-  <%= form_with  model: @project, url: project_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
-    <div class="md:gap-6">
-      <div class="grid grid-cols-2 gap-2">
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :title, ('Title *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white", required: true  %><br />
-          <%= f.text_field :title, class: "border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :title, ('Profile Picture'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white", required: true  %><br />
-          <%= f.file_field :image, class: "border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        </div>
-      </div>
-    </div>
-
-      <div class="grid grid-cols-2 gap-2">
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :title, ('Project Description *'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
-          <%= f.text_field :description, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :Assignee, ('Assignee *'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-          <%= f.select :user_id, User.with_agent_project_manager_role.order(:first_name, :last_name).map { |user| [user.name, user.id] }, {},class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: 'Assign User', required: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :categories, ('Product Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
-          <%= f.collection_select :software_ids, Software.all, :id, :name,
-                                  { prompt: "Select Product", include_hidden: false },
-                                  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                  data: { action: "change->form#updateGroupwareOptions" },
-                                  multiple: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :categories, ('Sub Categories *'), class: "capitalize block mb-1 text-sm font-medium" %>
-          <%= f.collection_select :groupware_ids, @project.groupwares.where(software_id: @project.software_ids), :id, :name,
-                                  { prompt: "Select Sub Product", include_hidden: false },
-                                  class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                  id: "groupware-select",
-                                  multiple: true %>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :client, ('Client Available *'), class: "capitalize block mb-6 text-sm font-medium" %>
-          <%= f.collection_select :client_id, Client.all, :id, :name, { prompt: "Select Client" }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", required: true %>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-          <%= f.label :start_date, 'Start Date *', class: "capitalize block mb-1 text-sm font-medium"  %><br />
-          <%= f.date_field :start_date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-        </div>
-        <div class="flex items-center mb-6">
-          <%= f.label :special, 'Special Service *', class: "capitalize block mb-1 text-sm font-bold mr-3 text-red" %>
-          <%= f.check_box :special, class: "mr-2" %>
-        </div>
-      </div>
-      <div class="relative z-0 w-full mb-6 group">
-        <%= f.label :title, ('Subject *'), class: "capitalize block mb-1 text-sm font-medium" %><br />
-        <div data-controller="text-limit" data-text-limit-limit-value="3000">
-          <p id="char-count">0/3000</p>
-          <%= f.rich_text_area :content, id: "content",
-                               data: { text_limit_target: "content" },
-                               class: "min-h-[300px] #{'border-red-500' if @project.errors[:content].any?}",
-                               required: true %>
-          <% if @project.errors[:content].any? %>
-            <p class="text-red-500"><%= @project.errors[:content].join(', ') %></p>
-          <% end %>
-        </div>
-      </div>
-    <%= f.submit  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button'   %>
-  <% end %>
 </div>
 
 <script>
   document.addEventListener('turbo:load', () => {
     const form = document.querySelector('form');
-    const contentField = document.querySelector('[data-trix-editor]'); // Select the rich text editor container
+    const contentField = document.querySelector('[data-trix-editor]');
     const errorMessage = document.getElementById('content-error');
 
-    form.addEventListener('submit', (event) => {
-      const editorContent = contentField.editor.getDocument().toString().trim(); // Use Trix editor API to get the text content
+    const softwareCheckboxes = Array.from(document.querySelectorAll('.software-checkbox'));
+    const groupwareOptions = Array.from(document.querySelectorAll('.groupware-option'));
+    const groupwareCheckboxes = Array.from(document.querySelectorAll('.groupware-checkbox'));
 
-      if (!editorContent) {
-        event.preventDefault(); // Stop form submission
-        errorMessage.classList.remove('hidden'); // Show the error message
-        contentField.classList.add('border-red-500'); // Add red border
+    const softwareSelectedText = document.getElementById('software-selected-text');
+    const groupwareSelectedText = document.getElementById('groupware-selected-text');
+    const groupwareEmptyMessage = document.getElementById('groupware-empty-message');
+    const groupwareDropdown = document.getElementById('groupware-dropdown');
+
+    const getSelectedSoftwareIds = () => {
+      return softwareCheckboxes
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.dataset.softwareId);
+    };
+
+    const updateSoftwareSelectedText = () => {
+      if (!softwareSelectedText) return;
+
+      const selectedNames = softwareCheckboxes
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.dataset.softwareName);
+
+      if (selectedNames.length === 0) {
+        softwareSelectedText.textContent = 'Select products';
+      } else if (selectedNames.length === 1) {
+        softwareSelectedText.textContent = selectedNames[0];
       } else {
-        errorMessage.classList.add('hidden'); // Hide error message
-        contentField.classList.remove('border-red-500'); // Remove red border
+        softwareSelectedText.textContent = `${selectedNames.length} products selected`;
       }
+    };
+
+    const updateGroupwareSelectedText = () => {
+      if (!groupwareSelectedText) return;
+
+      const selectedNames = groupwareCheckboxes
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.dataset.groupwareName);
+
+      if (selectedNames.length === 0) {
+        groupwareSelectedText.textContent = 'Select sub products';
+      } else if (selectedNames.length === 1) {
+        groupwareSelectedText.textContent = selectedNames[0];
+      } else {
+        groupwareSelectedText.textContent = `${selectedNames.length} sub products selected`;
+      }
+    };
+
+    const hideGroupwareOption = (option) => {
+      const checkbox = option.querySelector('.groupware-checkbox');
+
+      option.classList.add('hidden');
+      option.classList.remove('flex');
+
+      if (checkbox) {
+        checkbox.checked = false;
+      }
+    };
+
+    const showGroupwareOption = (option) => {
+      option.classList.remove('hidden');
+      option.classList.add('flex');
+    };
+
+    const updateGroupwareOptions = () => {
+      const selectedSoftwareIds = getSelectedSoftwareIds();
+      let visibleGroupwareCount = 0;
+
+      groupwareOptions.forEach((option) => {
+        const groupwareSoftwareId = option.dataset.groupwareSoftwareId;
+        const isConnectedToSelectedSoftware = selectedSoftwareIds.includes(groupwareSoftwareId);
+
+        if (selectedSoftwareIds.length > 0 && isConnectedToSelectedSoftware) {
+          showGroupwareOption(option);
+          visibleGroupwareCount += 1;
+        } else {
+          hideGroupwareOption(option);
+        }
+      });
+
+      if (groupwareEmptyMessage) {
+        if (selectedSoftwareIds.length === 0) {
+          groupwareEmptyMessage.textContent = 'Select a product first to see related sub products.';
+          groupwareEmptyMessage.classList.remove('hidden');
+        } else if (visibleGroupwareCount === 0) {
+          groupwareEmptyMessage.textContent = 'No sub products are connected to the selected product.';
+          groupwareEmptyMessage.classList.remove('hidden');
+        } else {
+          groupwareEmptyMessage.classList.add('hidden');
+        }
+      }
+
+      if (groupwareDropdown && selectedSoftwareIds.length === 0) {
+        groupwareDropdown.removeAttribute('open');
+      }
+
+      updateSoftwareSelectedText();
+      updateGroupwareSelectedText();
+    };
+
+    softwareCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', updateGroupwareOptions);
     });
+
+    groupwareCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', updateGroupwareSelectedText);
+    });
+
+    updateGroupwareOptions();
+
+    if (form && contentField && errorMessage) {
+      form.addEventListener('submit', (event) => {
+        const editorContent = contentField.editor.getDocument().toString().trim();
+
+        if (!editorContent) {
+          event.preventDefault();
+          errorMessage.classList.remove('hidden');
+          contentField.classList.add('border-red-500');
+          contentField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          errorMessage.classList.add('hidden');
+          contentField.classList.remove('border-red-500');
+        }
+      });
+    }
   });
 </script>
