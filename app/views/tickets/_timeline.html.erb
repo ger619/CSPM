@@ -22,7 +22,7 @@
           <div class="mt-3 pe-4">
             <h3 class="truncate text-sm font-black text-[#0A1629] dark:text-white"><%= event.user.name %></h3>
             <time class="mb-1.5 block text-xs font-medium text-slate-400"><%= event.created_at.strftime("%B %d, %Y %H:%M") %></time>
-            <p class="text-sm leading-snug text-slate-600 dark:text-slate-300"><%= event.details %></p>
+            <p class="text-sm leading-snug text-slate-600 dark:text-slate-300 truncate"><%= event.details %></p>
           </div>
         </li>
       <% end %>
