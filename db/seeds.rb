@@ -40,11 +40,12 @@ Client.create!(name: 'Greater Care', email: 'client@greatercare.com', user_id: U
 Software.create!(name: 'Greater Care', user_id: User.find_by(email: 'project@greatercare.com').id)
 Groupware.create!(name: 'Greater Care', software_id: Software.find_by(name: 'Greater Care').id, user_id: User.find_by(email: 'admin@greatercare.com').id)
 
-statuses = %w[Decline Accept Pending Approved Assigned On-Hold Completed In-Progress Rejected Cancelled Closed Resolved Reopened New Under\ Development Work\ in\ Progress QA\ Testing Awaiting\ Build Client\ Confirmation\ Pending]
+statuses = %w[Decline Accept Pending Approved Assigned On-Hold Completed In-Progress Rejected Cancelled
+Closed Resolved Reopened Initiation Development Deploy Production Quality\ Assurance User\ Acceptance\ Test
+Under\ Development Work\ in\ Progress QA\ Testing Awaiting\ Build Client\ Confirmation\ Pending]
 
 statuses.each do |status_name|
   Status.find_or_create_by!(name: status_name) do |status|
     status.user_id = admin.id
   end
 end
-
