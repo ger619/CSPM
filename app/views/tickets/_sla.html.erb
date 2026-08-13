@@ -1,105 +1,50 @@
-<div>
-  <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent)%>
-    <p class="font-bold">
-      Time Created:
-      <span class="font-extralight">
-        <%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %>
-      </span>
-    </p>
-    <p class="font-bold">
-      Target Response Time:
-      <span class="font-extralight">
-        <%= @ticket.initial_response_deadline.strftime("%d %b %Y at %I:%M %p") %>
-      </span>
-    </p>
-    <p class="font-bold">
-      Target Repair Time:
-      <span class="font-extralight">
-        <%= @ticket.target_repair_deadline.strftime("%d %b %Y at %I:%M %p") %>
-      </span>
-    </p>
-    <p class="font-bold">
-      Target Resolution Time:
-      <span class="font-extralight">
-        <%= @ticket.resolution_deadline.strftime("%d %b %Y at %I:%M %p") %>
-      </span>
-    </p>
-<!--
-    <p class="font-bold">
-      SLA Initial Response Deadline Breached:
-      <span class="font-extralight">
-        <%# if @ticket.initial_response_deadline > DateTime.now %>
+<section class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+  <p class="mb-3 text-xs font-bold uppercase tracking-wide text-slate-400">SLA</p>
 
-        <%# else %>
+  <% if current_user.has_role? :admin or current_user.has_role?('project manager') or current_user.has_role?(:agent) %>
+    <dl class="space-y-3">
+      <div class="flex items-baseline justify-between gap-3">
+        <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Time created</dt>
+        <dd class="text-right text-sm font-bold text-[#0A1024] dark:text-white"><%= @ticket.created_at.strftime("%d %b %Y at %I:%M %p") %></dd>
+      </div>
+      <div class="flex items-baseline justify-between gap-3">
+        <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Target response time</dt>
+        <dd class="text-right text-sm font-bold text-[#0A1024] dark:text-white"><%= @ticket.initial_response_deadline.strftime("%d %b %Y at %I:%M %p") %></dd>
+      </div>
+      <div class="flex items-baseline justify-between gap-3">
+        <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Target repair time</dt>
+        <dd class="text-right text-sm font-bold text-[#0A1024] dark:text-white"><%= @ticket.target_repair_deadline.strftime("%d %b %Y at %I:%M %p") %></dd>
+      </div>
+      <div class="flex items-baseline justify-between gap-3">
+        <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Target resolution time</dt>
+        <dd class="text-right text-sm font-bold text-[#0A1024] dark:text-white"><%= @ticket.resolution_deadline.strftime("%d %b %Y at %I:%M %p") %></dd>
+      </div>
 
-        <%# end %>
-      </span>
-
-
-      <span class="font-extralight">
-        <%# if @ticket.initial_response_deadline > DateTime.now %>
-          <%#= distance_of_time_in_words(DateTime.now, @ticket.initial_response_deadline) %>
-        <%# else %>
-          <%#= distance_of_time_in_words(@ticket.initial_response_deadline, DateTime.now) %>
-        <%# end %>
-
-        <%# if @ticket.initial_response_deadline > DateTime.now || @ticket.updated_at > DateTime.now %>
-          <%#= distance_of_time_in_words(DateTime.now, [@ticket.initial_response_deadline, @ticket.updated_at].max) %>
-        <%# else %>
-          <%#= distance_of_time_in_words([@ticket.initial_response_deadline, @ticket.updated_at].max, DateTime.now) %>
-        <%# end %>
-
-      </span>
-
-
-    </p>
-    -->
-
-
-    <p>
-      <span class="font-bold capitalize">
-        Target Response Time SLA Status:
-      </span>
-      <span class="font-extralight">
-        <% if @sla_ticket.present? %>
-          <%= @sla_ticket.sla_status %>
-        <% end %>
-      </span>
-
-    </p>
-
-    <p>
-      <span class="font-bold">
-        Target Repair Time SLA Status:
-      </span>
-      <span class="font-extralight">
-        <% if @sla_ticket.present? %>
-          <%= @sla_ticket.sla_target_response_deadline %>
-        <% end %>
-      </span>
-
-    </p>
-    <p>
-      <span class="font-bold">
-        Target Resolution Time SLA Status:
-      </span>
-      <span class="font-extralight">
-        <% if @sla_ticket.present? %>
-          <%= @sla_ticket.sla_resolution_deadline %>
-        <% end %>
-      </span>
-
-    </p>
+      <div class="border-t border-slate-100 pt-3 dark:border-slate-800">
+        <div class="flex items-baseline justify-between gap-3">
+          <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Response SLA status</dt>
+          <dd class="text-right text-sm font-bold text-[#0D9C66]"><%= @sla_ticket.present? ? @sla_ticket.sla_status : "—" %></dd>
+        </div>
+        <div class="mt-3 flex items-baseline justify-between gap-3">
+          <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Repair SLA status</dt>
+          <dd class="text-right text-sm font-bold text-[#0D9C66]"><%= @sla_ticket.present? ? @sla_ticket.sla_target_response_deadline : "—" %></dd>
+        </div>
+        <div class="mt-3 flex items-baseline justify-between gap-3">
+          <dt class="text-sm font-semibold text-slate-500 dark:text-slate-400">Resolution SLA status</dt>
+          <dd class="text-right text-sm font-bold text-[#0D9C66]"><%= @sla_ticket.present? ? @sla_ticket.sla_resolution_deadline : "—" %></dd>
+        </div>
+      </div>
+    </dl>
   <% end %>
-  <p>
-      <span class="font-bold">
-        Target Due Date:
-      </span>
-      <span class="font-extralight">
-        <% if @ticket.due_date.present? %>
-          <%= @ticket.due_date %> (<%= distance_of_time_in_words(DateTime.now, @ticket.due_date) %>)
-        <% end %>
-      </span>
 
+  <div class="<%= 'mt-3 border-t border-slate-100 pt-3 dark:border-slate-800' if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %> flex items-baseline justify-between gap-3">
+    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Target due date</p>
+    <p class="text-right text-sm font-bold text-[#0A1024] dark:text-white">
+      <% if @ticket.due_date.present? %>
+        <%= @ticket.due_date %> <span class="font-medium text-slate-400">(<%= distance_of_time_in_words(DateTime.now, @ticket.due_date) %>)</span>
+      <% else %>
+        Not set
+      <% end %>
     </p>
-</div>
+  </div>
+</section>

@@ -1,20 +1,17 @@
 <% if current_user.has_role? :admin or current_user.has_role?('project manager') %>
-  <div class="mt-6">
-    <%= form_with url: add_team_project_path(@project), method: :post, local: true do %>
-      <%= label_tag :team_id, 'Select Team', class: "block mb-1 text-sm font-medium" %>
-      
-      <div class="flex flex-col md:flex-row md:items-end gap-4">
-        <div class="flex-1">
-          <%= select_tag :team_id,
-            options_from_collection_for_select(Team.all, :id, :name),
-            class: "w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500",
-            placeholder: 'Select team' %>
-        </div>
-
-        <div>
-          <%= submit_tag 'Add Team', class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] px-4 py-2 rounded font-bold text-sm' %>
-        </div>
+  <%= form_with url: add_team_project_path(@project), method: :post, local: true do %>
+    <div class="flex flex-col gap-4 md:flex-row md:items-end">
+      <div class="flex-1">
+        <%= label_tag :team_id, "Select team", class: "mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400" %>
+        <%= select_tag :team_id,
+                       options_from_collection_for_select(Team.all, :id, :name),
+                       class: "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#3F8CFF] focus:outline-none focus:ring-2 focus:ring-[#3F8CFF]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200",
+                       placeholder: "Select team" %>
       </div>
-    <% end %>
-  </div>
+
+      <div>
+        <%= submit_tag "Add team", class: "w-full rounded-lg bg-[#3F8CFF] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#3A81EB] hover:shadow active:scale-[0.98] md:w-auto" %>
+      </div>
+    </div>
+  <% end %>
 <% end %>

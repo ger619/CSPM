@@ -1,5 +1,5 @@
 <div class="mb-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-  <div class="bg-gradient-to-r from-[#0A1629] via-[#1a237e] to-[#3F8CFF] px-4 py-5 text-white sm:px-6 lg:px-8">
+  <div class="bg-gradient-to-r from-[#131D58] via-[#1a2670] to-[#0D9C66] px-4 py-5 text-white sm:px-6 lg:px-8">
     <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
       <div class="flex min-w-0 items-start gap-4">
         <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/10 shadow-lg backdrop-blur sm:h-20 sm:w-20">
@@ -11,13 +11,13 @@
         </div>
 
         <div class="min-w-0">
-          <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-100">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-white/60">
             Support Desk
           </p>
           <h1 class="mt-1 line-clamp-2 text-xl font-black tracking-tight text-white sm:text-3xl">
             <%= @project.title %>
           </h1>
-          <p class="mt-2 line-clamp-2 max-w-3xl text-sm leading-6 text-blue-100 sm:text-base">
+          <p class="mt-2 line-clamp-2 max-w-3xl text-sm leading-6 text-white/80 sm:text-base">
             <%= @project.description.presence || "No project description available." %>
           </p>
         </div>
@@ -25,7 +25,7 @@
 
       <div class="flex flex-col gap-3 sm:flex-row lg:flex-shrink-0">
         <%= link_to new_project_ticket_path(@project),
-                    class: "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white px-5 text-sm font-black text-[#3F8CFF] shadow-lg shadow-blue-950/10 transition hover:-translate-y-0.5 hover:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-white/30 sm:w-auto" do %>
+                    class: "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#0D9C66] px-5 text-sm font-black text-white shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-[#0B8558] focus:outline-none focus:ring-4 focus:ring-white/30 sm:w-auto" do %>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
           </svg>
@@ -35,7 +35,7 @@
         <% unless current_user.has_role?(:client) %>
           <%= link_to manage_users_project_path(@project),
                       data: { turbo_frame: "modal" },
-                      class: "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-5 text-sm font-black text-white shadow-lg shadow-blue-950/10 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white hover:text-[#3F8CFF] focus:outline-none focus:ring-4 focus:ring-white/30 sm:w-auto" do %>
+                      class: "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-5 text-sm font-black text-white shadow-lg shadow-black/10 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white hover:text-[#131D58] focus:outline-none focus:ring-4 focus:ring-white/30 sm:w-auto" do %>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
             </svg>
@@ -51,7 +51,7 @@
       <p class="text-xs font-bold uppercase tracking-wide text-slate-400">
         Tickets
       </p>
-      <p class="mt-1 text-2xl font-black text-[#0A1629] dark:text-white">
+      <p class="mt-1 text-2xl font-black text-[#0A1024] dark:text-white">
         <%= @project.tickets.count %>
       </p>
     </div>
@@ -86,10 +86,10 @@
 </div>
 
 <% if flash[:prompt] %>
-  <div id="custom-alert" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1629]/70 px-4 backdrop-blur-sm">
+  <div id="custom-alert" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1024]/70 px-4 backdrop-blur-sm">
     <div class="w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
-      <div class="bg-gradient-to-r from-[#0A1629] via-[#1a237e] to-[#3F8CFF] px-6 py-5 text-white">
-        <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-100">
+      <div class="bg-gradient-to-r from-[#131D58] via-[#1a2670] to-[#0D9C66] px-6 py-5 text-white">
+        <p class="text-xs font-bold uppercase tracking-[0.25em] text-white/60">
           Notice
         </p>
         <h2 class="mt-1 text-xl font-black">
@@ -104,7 +104,7 @@
 
         <div class="mt-6 flex justify-end">
           <button id="close-alert"
-                  class="inline-flex h-11 items-center justify-center rounded-2xl bg-[#3F8CFF] px-6 text-sm font-black text-white shadow-lg shadow-blue-500/20 transition hover:bg-[#3A81EB] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/25">
+                  class="inline-flex h-11 items-center justify-center rounded-2xl bg-[#131D58] px-6 text-sm font-black text-white shadow-lg shadow-[#131D58]/20 transition hover:bg-[#1a2670] focus:outline-none focus:ring-4 focus:ring-[#131D58]/25">
             OK
           </button>
         </div>

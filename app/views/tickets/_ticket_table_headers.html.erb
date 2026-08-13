@@ -1,17 +1,12 @@
 <tr class="bg-gradient-to-r from-[#0A1629] via-[#1A237E] to-[#3F8CFF] text-white">
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Date of Issue</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Ticket ID</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Issue Type</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Severity</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Summary</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Assigned To</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Status</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Progress</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Reported By</th>
-  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Last Updated</th>
-  <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm">Actions</th>
-  <% if current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?('project manager') || current_user.has_role?(:observer) %>
-    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm hide-on-sidebar">Edits</th>
-    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-sm hide-on-sidebar">Last Edit</th>
-  <% end %>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Date</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Ticket ID</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Issue Type</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Severity</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Summary</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Assignee</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Status</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Progress</th>
+  <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Reporter</th>
+  <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-[0.16em] sm:text-xs">Actions</th>
 </tr>

@@ -209,7 +209,7 @@ class ProjectController < ApplicationController
     @non_craft_silicon_users = @project.users.reject { |user| user.email.end_with?('@craftsilicon.com') }
 
     # Get the staff who have the email of Craft silicon
-    @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@craftsilicon.com') }
+    @craft_silicon_users = @project.users.select { |user| user.email.end_with?('@greatercare.com') }
     render layout: false
   end
 
