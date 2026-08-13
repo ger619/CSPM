@@ -182,7 +182,8 @@
             <% end %>
 
             <!-- Project -->
-            <%= link_to(
+            <% if !current_user.has_role?(:client) %>
+              <%= link_to(
                     product_index_path,
                     title: "Projects",
                     class: "group flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition lg:group-data-[state=collapsed]/side:justify-center lg:group-data-[state=collapsed]/side:px-0 #{current_page?(product_index_path) ? 'bg-[#131D58] text-white shadow-md shadow-[#131D58]/20' : 'text-slate-600 hover:bg-slate-100 hover:text-[#131D58] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}"
@@ -193,6 +194,7 @@
                     </svg>
                   </span>
                 <span class="flex-1 lg:group-data-[state=collapsed]/side:hidden">Projects</span>
+            <% end %>
             <% end %>
 
               <!-- Quality Assurance -->
