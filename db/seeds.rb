@@ -20,16 +20,16 @@ Role.find_or_create_by!(name: 'sales')
 Role.find_or_create_by!(name: 'ceo')
 Role.find_or_create_by!(name: 'hod')
 
-a = User.create!(email: 'admin@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin')
+a = User.create!(email: 'admin@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Jay', last_name: 'Admin', first_login: true)
 a.add_role(:admin)
 
-b = User.create!(email: 'project@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Project', last_name: 'Manager')
+b = User.create!(email: 'project@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Project', last_name: 'Manager', first_login: true)
 b.add_role('project manager')
 
-c = User.create!(email: 'agent@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Agent', last_name: 'Active')
+c = User.create!(email: 'agent@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Agent', last_name: 'Active', first_login: true)
 c.add_role(:agent)
 
-d = User.create!(email: 'client@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Client', last_name: 'Active')
+d = User.create!(email: 'client@greatercare.com', password: 'password', confirmed_at: DateTime.now , confirmation_sent_at: DateTime.now, first_name: 'Client', last_name: 'Active', first_login: true)
 d.add_role(:client)
 admin = User.find_by!(email: 'admin@greatercare.com')
 
@@ -40,10 +40,11 @@ Client.create!(name: 'Greater Care', email: 'client@greatercare.com', user_id: U
 Software.create!(name: 'Greater Care', user_id: User.find_by(email: 'project@greatercare.com').id)
 Groupware.create!(name: 'Greater Care', software_id: Software.find_by(name: 'Greater Care').id, user_id: User.find_by(email: 'admin@greatercare.com').id)
 
-statuses = %w[Decline Accept Pending Approved Assigned On-Hold Completed In-Progress Rejected Cancelled Closed]
+statuses = %w[Decline Accept Pending Approved Assigned On-Hold Completed In-Progress Rejected Cancelled Closed Resolved Reopened New Under\ Development Work\ in\ Progress QA\ Testing Awaiting\ Build Client\ Confirmation\ Pending]
 
 statuses.each do |status_name|
   Status.find_or_create_by!(name: status_name) do |status|
     status.user_id = admin.id
   end
 end
+
