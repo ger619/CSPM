@@ -162,10 +162,10 @@
               </li>
               <li>
                 <%= button_to destroy_user_session_path,
-                            method: :delete,
-                            data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-                            class: "flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50" do %>
-                 Sign Out
+                              method: :delete,
+                              data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                              class: "flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50" do %>
+                  Sign Out
                 <% end %>
               </li>
             </ul>
@@ -177,72 +177,89 @@
 <% end %>
 
 <script>
-  document.addEventListener("turbo:load", () => {
-    const searchInput = document.getElementById("searchInput");
-    const clearSearch = document.getElementById("clearSearch");
-    const notificationButton = document.getElementById("dropdownNotificationButton");
-    const notificationDropdown = document.getElementById("dropdownNotification");
-    const profileButton = document.getElementById("dropdownProfile");
-    const profileDropdown = document.getElementById("dropdownItem");
+  (function () {
+    if (window.__headerDropdownsInitialized) return;
+    window.__headerDropdownsInitialized = true;
 
-    if (searchInput && clearSearch) {
-      const toggleClearButton = () => {
-        if (searchInput.value.trim().length > 0) {
-          clearSearch.classList.remove("hidden");
-          clearSearch.classList.add("inline-flex");
-        } else {
-          clearSearch.classList.add("hidden");
-          clearSearch.classList.remove("inline-flex");
-        }
-      };
-
-      toggleClearButton();
-
-      searchInput.addEventListener("input", toggleClearButton);
-
-      clearSearch.addEventListener("click", () => {
-        searchInput.value = "";
-        toggleClearButton();
-        searchInput.focus();
-      });
+    function toggleClearButton(searchInput) {
+      const clearSearch = document.getElementById("clearSearch");
+      if (!clearSearch) return;
+      if (searchInput.value.trim().length > 0) {
+        clearSearch.classList.remove("hidden");
+        clearSearch.classList.add("inline-flex");
+      } else {
+        clearSearch.classList.add("hidden");
+        clearSearch.classList.remove("inline-flex");
+      }
     }
 
-    const closeDropdowns = (except = null) => {
-      if (notificationDropdown && except !== "notification") {
-        notificationDropdown.classList.add("hidden");
+    function syncClearButtonState() {
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) toggleClearButton(searchInput);
+    }
+
+    function closeDropdowns(except) {
+      const notificationDropdown = document.getElementById("dropdownNotification");
+      const profileDropdown = document.getElementById("dropdownItem");
+      if (notificationDropdown && except !== "notification") notificationDropdown.classList.add("hidden");
+      if (profileDropdown && except !== "profile") profileDropdown.classList.add("hidden");
+    }
+
+    // Delegated listeners on document: attached exactly once, work regardless
+    // of when the header markup appears in the DOM or how Turbo swaps it in,
+    // so nothing needs to be re-initialized after navigation.
+
+    document.addEventListener("input", (event) => {
+      if (event.target && event.target.id === "searchInput") {
+        toggleClearButton(event.target);
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      const clearBtn = event.target.closest("#clearSearch");
+      if (clearBtn) {
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+          searchInput.value = "";
+          toggleClearButton(searchInput);
+          searchInput.focus();
+        }
+        return;
       }
 
-      if (profileDropdown && except !== "profile") {
-        profileDropdown.classList.add("hidden");
-      }
-    };
-
-    if (notificationButton && notificationDropdown) {
-      notificationButton.addEventListener("click", (event) => {
+      const notificationButton = event.target.closest("#dropdownNotificationButton");
+      if (notificationButton) {
         event.stopPropagation();
         closeDropdowns("notification");
-        notificationDropdown.classList.toggle("hidden");
-      });
-    }
+        const dropdown = document.getElementById("dropdownNotification");
+        if (dropdown) dropdown.classList.toggle("hidden");
+        return;
+      }
 
-    if (profileButton && profileDropdown) {
-      profileButton.addEventListener("click", (event) => {
+      const profileButton = event.target.closest("#dropdownProfile");
+      if (profileButton) {
         event.stopPropagation();
         closeDropdowns("profile");
-        profileDropdown.classList.toggle("hidden");
-      });
-    }
+        const dropdown = document.getElementById("dropdownItem");
+        if (dropdown) dropdown.classList.toggle("hidden");
+        return;
+      }
 
-    document.addEventListener("click", () => {
+      // Clicks inside an open dropdown (including "Edit Profile" / "Sign Out")
+      // should not be treated as an outside click that closes it prematurely.
+      if (event.target.closest("#dropdownNotification") || event.target.closest("#dropdownItem")) {
+        return;
+      }
+
       closeDropdowns();
     });
 
-    [notificationDropdown, profileDropdown].forEach((dropdown) => {
-      if (!dropdown) return;
-
-      dropdown.addEventListener("click", (event) => {
-        event.stopPropagation();
-      });
-    });
-  });
+    // Re-sync the clear-button visibility on every kind of Turbo navigation,
+    // plus a normal DOMContentLoaded fallback for the very first load.
+    document.addEventListener("turbo:load", syncClearButtonState);
+    document.addEventListener("turbo:render", syncClearButtonState);
+    document.addEventListener("turbo:frame-load", syncClearButtonState);
+    document.addEventListener("DOMContentLoaded", syncClearButtonState);
+    syncClearButtonState();
+  })();
 </script>
