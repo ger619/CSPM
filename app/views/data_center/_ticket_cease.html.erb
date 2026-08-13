@@ -1,170 +1,178 @@
 <% if @tickets.any? %>
-  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <h2 class="text-xl font-bold mb-4 text-center">
-      Ticket Status Report as of <%= Time.now.strftime("%d/%b/%Y at %I:%M %p") %> for
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 
-      <% if current_user.has_role?(:ceo) %>
-        <% ceo_clients = Client.joins(projects: :users).where(projects: { id: current_user.projects.ids }).distinct %>
-        <% if ceo_clients.count == 1 %>
-          <%= ceo_clients.first.name %>
-        <% elsif ceo_clients.count == 2 %>
-          <%= ceo_clients.map(&:name).join(' and ') %>
-        <% else %>
-          <%= ceo_clients.map(&:name).to_sentence %>
-        <% end %>
-      <% elsif params[:client_ids].present? %>
-        <% selected_clients = Client.where(id: params[:client_ids]) %>
-        <% if selected_clients.count == 1 %>
-          <%= selected_clients.first.name %>
-        <% elsif selected_clients.count == 2 %>
-          <%= selected_clients.map(&:name).join(' and ') %>
+    <!-- Report header + chart -->
+    <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+      <h2 class="text-center text-lg font-black text-[#0A1024] dark:text-white sm:text-xl">
+        Ticket Status Report as of <%= Time.now.strftime("%d/%b/%Y at %I:%M %p") %> for
+        <% if current_user.has_role?(:ceo) %>
+          <% ceo_clients = Client.joins(projects: :users).where(projects: { id: current_user.projects.ids }).distinct %>
+          <% if ceo_clients.count == 1 %>
+            <%= ceo_clients.first.name %>
+          <% elsif ceo_clients.count == 2 %>
+            <%= ceo_clients.map(&:name).join(' and ') %>
+          <% else %>
+            <%= ceo_clients.map(&:name).to_sentence %>
+          <% end %>
+        <% elsif params[:client_ids].present? %>
+          <% selected_clients = Client.where(id: params[:client_ids]) %>
+          <% if selected_clients.count == 1 %>
+            <%= selected_clients.first.name %>
+          <% elsif selected_clients.count == 2 %>
+            <%= selected_clients.map(&:name).join(' and ') %>
+          <% else %>
+            All Clients
+          <% end %>
         <% else %>
           All Clients
         <% end %>
-      <% else %>
-        All Clients
-      <% end %>
+      </h2>
 
-    </h2>
-    <div class="grid grid-cols-3">
-      <div class="col-span-2">
-        <%= pie_chart @status_counts, height: "400px", library: { title: { text: "Ticket Status Distribution" } } %>
-      </div>
+      <div class="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="lg:col-span-2">
+          <%= pie_chart @status_counts, height: "360px", library: { title: { text: "Ticket Status Distribution" } } %>
+        </div>
 
-      <div class="col-span-1">
-        <div class="p-2">
-          <h1 class="font-semibold">Total Tickets</h1>
-          <% @status_counts.each do |status, count| %>
-            <li><%= status %>: <%= count %></li>
-          <% end %>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+          <p class="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Total tickets</p>
+          <ul class="space-y-1.5">
+            <% @status_counts.each do |status, count| %>
+              <li class="flex items-center justify-between gap-3 text-sm">
+                <span class="font-semibold text-slate-600 dark:text-slate-300"><%= status %></span>
+                <span class="rounded-full bg-white px-2.5 py-0.5 text-xs font-black text-[#0A1024] shadow-sm dark:bg-slate-800 dark:text-white"><%= count %></span>
+              </li>
+            <% end %>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
-  <div class="mx-auto mb-4 px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-end gap-2">
-      <%= link_to "Download Status Report",
-                  cease_fire_report_path(
-                    format: :xlsx,
-                    start_date: params[:start_date],
-                    end_date: params[:end_date],
-                    priority: params[:priority],
-                    status: params[:status],
-                    client_ids: params[:client_ids]
-                  ),
-                  class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
 
+    <!-- Actions + table -->
+    <div class="mt-6 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+      <div class="flex flex-wrap items-center justify-end gap-2">
+        <%= link_to "Download Status Report",
+                    cease_fire_report_path(
+                      format: :xlsx,
+                      start_date: params[:start_date],
+                      end_date: params[:end_date],
+                      priority: params[:priority],
+                      status: params[:status],
+                      client_ids: params[:client_ids]
+                    ),
+                    class: "rounded-lg bg-[#0D9C66] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#0B8558] hover:shadow active:scale-[0.98]" %>
 
-      <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
-        <%= f.submit "Clear", class: 'bg-gray-500 hover:bg-gray-700 p-2 rounded font-bold rounded-lg text-slate-100' %>
-      <% end %>
-      <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
-        <% if @clients.present? && @clients.first.present? %>
-          <%= link_to "Send To CEO",
-                      email_report_path(client_id: @clients.first.id),
-                      data: { 'turbo_method': :get, 'turbo-confirm': "Are you sure you want to send the report for #{@clients.first.name} to #{@clients.first.client_contact_person} at #{@clients.first.client_contact_person_email}?" },
-                      class: "bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100" %>
-        <% else %>
-          <div class="flex justify-end my-4">
-            <span class="text-gray-500">No clients available to email the report.</span>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-    <table id="ceasefire" class="table-auto w-full mt-2">
-      <thead>
-      <tr>
-        <th class="border border-black px-4 py-2">Ticket ID</th>
-        <th class="border border-black px-4 py-2">Project Name</th>
-        <th class="border border-black px-4 py-2">Severity</th>
-        <th class="border border-black px-4 py-2">Summary</th>
-        <th class="border border-black px-4 py-2">Issue Type</th>
-        <th class="border border-black px-4 py-2">Status</th>
-        <th class="border border-black px-4 py-2">Assigned To</th>
-        <th class="border border-black px-4 py-2">Reporter</th>
-        <th class="border border-black px-4 py-2">Details</th>
-        <th class="border border-black px-4 py-2">Created</th>
-        <th class="border border-black px-4 py-2">Status Updated At</th>
-        <th class="border border-black px-4 py-2">Last Comment Updated At</th>
-        <th class="border border-black px-4 py-2">Due Date</th>
-        <% if !current_user.has_role?(:ceo) %>
-          <th class="border border-black px-4 py-2">View</th>
+        <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
+          <%= f.submit "Clear", class: 'rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700' %>
         <% end %>
 
-      </tr>
-      </thead>
-      <tbody>
-      <% @tickets.each do |ticket| %>
-        <% row_class = case ticket.statuses.first&.name
-                       when 'New'
-                         'bg-red-500'
-                       when 'Closed', 'Resolved'
-                         'bg-emerald-100 text-black'
-                       when 'Reopened'
-                         'bg-red-900 text-slate-100'
-                       when 'Under Development'
-                         'bg-blue-300'
-                       when 'Work in Progress'
-                         'bg-[#CCCCCC] text-black'
-                       when 'QA Testing'
-                         'bg-pink-500'
-                       when 'Awaiting Build'
-                         'bg-gray-800 text-slate-100'
-                       when 'Client Confirmation Pending'
-                         'bg-yellow-100 text-black'
-                       when 'On-Hold'
-                         'bg-red-600 text-slate-100'
-                       when 'Assigned'
-                         'bg-blue-800 text-slate-100'
-                       when 'Declined'
-                         'bg-gray-800 text-slate-100'
-                       else
-                         ''
-                       end %>
-        <tr class="<%= row_class %>">
-          <td class="border border border-black px-4 py-2"><%= ticket.unique_id %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.project.title %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.priority %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.subject %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.issue %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.statuses.first&.name || "N/A" %></td>
-          <td class="border border border-black px-4 py-2">
-            <div class="flex flex-col gap-2">
-              <% ticket.users.each do |user| %>
-                <% if user.name.present? %>
-                  <span class="font-medium"><%= user.name %></span>
-                  <span class="font-semibold">
-                    <% if user.teams.any? %>
-                      (<%= user.teams.map(&:name).join(', ') %>)
-                    <% else %>
-                      (No Team Assigned)
-                    <% end %>
-                  </span>
-                <% end %>
-              <% end %>
-            </div>
-          </td>
-          <td class="border border border-black px-4 py-2">
-            <% ticket.users.each do |user| %>
-              <% if user.name.present? %>
-                <%= user.name %>
-              <% end %>
-            <% end %>
-          </td>
-          <td class="border border border-black px-4 py-2"><%= ticket.user.name %></td>
-          <td class="border border border-black px-4 py-2 break-words overflow-hidden"><%= raw ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip.truncate(3000) %></td>
-          <td class="border border border-black px-4 py-2"><%= ticket.created_at.strftime("%d/%b/%Y %I:%M:%S %p") %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
-          <td class="border border-black px-4 py-2"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
-          <% if !current_user.has_role?(:ceo) %>
-            <td class="border border-black px-4 py-2">
-              <%= link_to 'VIEW', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-slate-100' %>
-            </td>
+        <% if current_user.has_role?(:admin) or current_user.has_role?(:observer) %>
+          <% if @clients.present? && @clients.first.present? %>
+            <%= link_to "Send To CEO",
+                        email_report_path(client_id: @clients.first.id),
+                        data: { 'turbo_method': :get, 'turbo-confirm': "Are you sure you want to send the report for #{@clients.first.name} to #{@clients.first.client_contact_person} at #{@clients.first.client_contact_person_email}?" },
+                        class: "rounded-lg bg-[#131D58] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#1a2670] active:scale-[0.98]" %>
+          <% else %>
+            <span class="text-sm font-semibold text-slate-400">No clients available to email the report.</span>
           <% end %>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+        <% end %>
+      </div>
+
+      <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+        <div class="overflow-x-auto">
+          <table id="ceasefire" class="w-full min-w-[1200px] text-left text-sm text-slate-700 dark:text-slate-300">
+            <thead class="bg-gradient-to-r from-[#131D58] via-[#1a2670] to-[#0D9C66] text-xs uppercase tracking-wide text-white">
+            <tr>
+              <th class="px-3 py-3 font-bold">Ticket ID</th>
+              <th class="px-3 py-3 font-bold">Project Name</th>
+              <th class="px-3 py-3 font-bold">Severity</th>
+              <th class="px-3 py-3 font-bold">Summary</th>
+              <th class="px-3 py-3 font-bold">Issue Type</th>
+              <th class="px-3 py-3 font-bold">Status</th>
+              <th class="px-3 py-3 font-bold">Assigned To</th>
+              <th class="px-3 py-3 font-bold">Reporter</th>
+              <th class="px-3 py-3 font-bold">Details</th>
+              <th class="px-3 py-3 font-bold">Created</th>
+              <th class="px-3 py-3 font-bold">Status Updated At</th>
+              <th class="px-3 py-3 font-bold">Last Comment Updated At</th>
+              <th class="px-3 py-3 font-bold">Due Date</th>
+              <% if !current_user.has_role?(:ceo) %>
+                <th class="px-3 py-3 text-right font-bold">View</th>
+              <% end %>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            <% @tickets.each do |ticket| %>
+              <% status_name = ticket.statuses.first&.name %>
+              <% status_pill_class = case status_name
+                                     when 'New'
+                                       'bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300'
+                                     when 'Closed', 'Resolved'
+                                       'bg-[#0D9C66]/10 text-[#0D9C66]'
+                                     when 'Reopened'
+                                       'bg-red-800 text-white'
+                                     when 'Under Development'
+                                       'bg-[#131D58]/10 text-[#131D58] dark:bg-[#131D58]/30 dark:text-[#8FA3E6]'
+                                     when 'Work in Progress'
+                                       'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200'
+                                     when 'QA Testing'
+                                       'bg-pink-100 text-pink-800 dark:bg-pink-500/15 dark:text-pink-300'
+                                     when 'Awaiting Build'
+                                       'border border-slate-300 text-slate-600 dark:border-slate-600 dark:text-slate-300'
+                                     when 'Client Confirmation Pending'
+                                       'bg-purple-100 text-purple-800 dark:bg-purple-500/15 dark:text-purple-300'
+                                     when 'On-Hold'
+                                       'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300'
+                                     when 'Assigned'
+                                       'bg-[#131D58]/10 text-[#131D58] dark:bg-[#131D58]/30 dark:text-[#8FA3E6]'
+                                     when 'Declined'
+                                       'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
+                                     else
+                                       'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
+                                     end %>
+              <tr class="bg-white transition hover:bg-[#131D58]/[0.03] dark:bg-slate-900 dark:hover:bg-slate-800">
+                <td class="whitespace-nowrap px-3 py-3 text-xs font-black uppercase text-[#131D58] dark:text-[#8FA3E6]"><%= ticket.unique_id %></td>
+                <td class="max-w-[160px] truncate px-3 py-3 font-semibold"><%= ticket.project.title %></td>
+                <td class="px-3 py-3">
+                  <%= render partial: "tickets/priority_severity", locals: { ticket: ticket } %>
+                </td>
+                <td class="max-w-xs truncate px-3 py-3"><%= ticket.subject %></td>
+                <td class="whitespace-nowrap px-3 py-3"><%= ticket.issue %></td>
+                <td class="whitespace-nowrap px-3 py-3">
+                  <span class="rounded-full px-2.5 py-1 text-xs font-bold <%= status_pill_class %>"><%= status_name || "N/A" %></span>
+                </td>
+                <td class="px-3 py-3">
+                  <div class="flex max-w-[220px] flex-wrap gap-1.5">
+                    <% ticket.users.each do |user| %>
+                      <% if user.name.present? %>
+                          <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                            <%= user.name %>
+                            <% if user.teams.any? %>
+                              <span class="font-medium text-slate-400">· <%= user.teams.map(&:name).join(', ') %></span>
+                            <% else %>
+                              <span class="font-medium text-slate-400">· No team</span>
+                            <% end %>
+                          </span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </td>
+                <td class="whitespace-nowrap px-3 py-3 font-semibold"><%= ticket.user.name %></td>
+                <td class="max-w-sm truncate px-3 py-3 text-slate-500 dark:text-slate-400"><%= raw ticket.content.to_trix_html.gsub(/\[.*?\]/, '').strip.truncate(3000) %></td>
+                <td class="whitespace-nowrap px-3 py-3 text-slate-500 dark:text-slate-400"><%= ticket.created_at.strftime("%d/%b/%Y %I:%M:%S %p") %></td>
+                <td class="whitespace-nowrap px-3 py-3 text-slate-500 dark:text-slate-400"><%= ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
+                <td class="whitespace-nowrap px-3 py-3 text-slate-500 dark:text-slate-400"><%= ticket.issues.order(updated_at: :desc).first&.updated_at&.strftime('%d/%b/%Y %I:%M:%S %p') || 'N/A' %></td>
+                <td class="whitespace-nowrap px-3 py-3 text-slate-500 dark:text-slate-400"><%= ticket.due_date&.strftime('%d/%b/%Y') || 'N/A' %></td>
+                <% if !current_user.has_role?(:ceo) %>
+                  <td class="whitespace-nowrap px-3 py-3 text-right">
+                    <%= link_to 'View', project_ticket_path(ticket.project, ticket), target: "_blank", class: 'rounded-lg bg-[#0D9C66] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0B8558] hover:shadow active:scale-[0.98]' %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>
