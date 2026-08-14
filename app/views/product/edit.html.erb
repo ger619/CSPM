@@ -1,179 +1,200 @@
 <% provide(:title, "Edit Project: #{@product.client.name}") %>
 
-<%= form_with model: @product, url: product_path(@product), method: :patch, local: true, data: { turbo: false } do |f| %>
-  <% if @product.errors.any? %>
-    <div class="mb-4 text-red-600">
-      <%= pluralize(@product.errors.count, "error") %> prevented this product from being saved:
-      <ul>
-        <% @product.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
+<div class="min-h-screen bg-gray-50 px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+  <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6">
+    <h1 class="text-xl sm:text-2xl font-bold text-[#131D58] mb-6">Edit Project: <%= @product.client.name %></h1>
+
+    <%= form_with model: @product, url: product_path(@product), method: :patch, local: true, data: { turbo: false } do |f| %>
+      <div class="space-y-5">
+        <% if @product.errors.any? %>
+          <div class="bg-red-50 border border-red-100 p-4 rounded-lg">
+            <p class="text-red-700 font-semibold mb-2"><%= pluralize(@product.errors.count, "error") %> prevented this product from being saved:</p>
+            <ul class="list-disc list-inside text-red-600 text-sm space-y-0.5">
+              <% @product.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="relative z-0 w-full mb-6 group">
-    <!-- Client -->
-    <%= f.label :client_id, 'Client Available*', class: "block font-medium mb-1" %>
-    <%= f.collection_select :client_id, Client.all, :id, :name,
-                            { prompt: "Select Client" },
-                            class: "w-full mb-4 p-2 border rounded" %>
-  </div>
-
-
-
-  <!-- Assignee -->
-
-  <div class="grid grid-cols-2 gap-2">
-    <div class="relative z-0 w-full mb-6 group">
-      <!-- Image -->
-      <%= f.label :image, 'Product Image', class: "block font-medium mb-1" %>
-      <%= f.file_field :image, class: "w-full mb-4 p-2 border rounded" %>
-    </div>
-    <!-- Description -->
-    <div class="relative z-0 w-full mb-6 group">
-      <%= f.label :user_id, 'Assignee*', class: "block font-medium mb-1" %>
-      <%= f.select :user_id,
-                   User.with_agent_project_manager_role.order(:first_name, :last_name).map { |u| [u.name, u.id] },
-                   { prompt: 'Assign User' },
-                   class: "w-full mb-4 p-2 border rounded" %>
-    </div>
-  </div>
-  <div class="grid grid-cols-2 gap-2">
-    <!-- Description -->
-    <div class="relative z-0 w-full mb-6 group">
-      <!-- Software Categories -->
-      <%= f.label :software_ids, 'Product Categories *', class: "block font-medium mb-1" %>
-      <%= f.collection_select :software_ids, Software.all, :id, :name,
-                              { prompt: "Select Product" },
-                              { class: "w-full mb-4 p-2 border rounded" } %>
-    </div>
-    <div class="relative z-0 w-full mb-6 group">
-      <!-- Groupware Subcategories -->
-      <%= f.label :groupware_ids, 'Sub Categories *', class: "block font-medium mb-1" %>
-      <%= f.collection_select :groupware_ids, Groupware.all, :id, :name,
-                              { prompt: "Select Sub Product" },
-                              { class: "w-full mb-4 p-2 border rounded" } %>
-    </div>
-  </div>
-
-  <!-- Script Modules -->
-  <div class="relative z-0 w-full mb-6 group">
-    <%= f.label :name, ('Budget*'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
-    <%= f.number_field :budget, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
-    <% if @product.errors[:name].any? %>
-      <div class="text-red-500 text-sm"><%= @product.errors[:budget].join(', ') %></div>
-    <% end %>
-  </div>
-
-  <!-- Milestones -->
-  <div id="milestones-container">
-    <% @product.milestones.each_with_index do |milestone, index| %>
-      <div class="milestone-field grid grid-cols-5 gap-4 mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg" id="milestone-<%= index %>">
-        
-        <!-- Status -->
-        <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-          <%= f.select "milestones_attributes[#{index}][status_id]",
-            Status.where(name: ['Development', 'User Acceptance Test', 'Pilot', 'Quality Assurance', 'Deploy', 'Production']).map { |s| [s.name, s.id] },
-            { selected: milestone.status_id },
-            class: "status-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
+        <!-- Client -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl">
+          <div class="relative z-0 w-full group">
+            <%= f.label :client_id, 'Client Available*', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.collection_select :client_id, Client.all, :id, :name,
+                                    { prompt: "Select Client" },
+                                    class: "w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] text-sm bg-white" %>
+          </div>
         </div>
 
-        <!-- Percentage -->
-        <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Percentage</label>
-          <%= f.number_field "milestones_attributes[#{index}][percentage]",
-            value: milestone.percentage,
-            step: "0.01",
-            class: "percentage-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white",
-            oninput: "calculateAmount(this, #{@product.budget || 0})" %>
+        <!-- Image + Assignee -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="relative z-0 w-full group">
+            <%= f.label :image, 'Product Image', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.file_field :image, class: "w-full p-2 border border-gray-300 rounded-lg text-sm bg-white file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-[#131D58] file:text-white file:text-sm file:font-medium file:cursor-pointer" %>
+          </div>
+          <div class="relative z-0 w-full group">
+            <%= f.label :user_id, 'Assignee*', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.select :user_id,
+                         User.with_agent_project_manager_role.order(:first_name, :last_name).map { |u| [u.name, u.id] },
+                         { prompt: 'Assign User' },
+                         class: "w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] text-sm bg-white" %>
+          </div>
         </div>
 
-        <!-- Amount -->
-        <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
-          <input type="text" readonly
-            value="<%= milestone.amount %>"
-            class="amount-display bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <!-- Categories -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="relative z-0 w-full group">
+            <%= f.label :software_ids, 'Product Categories *', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.collection_select :software_ids, Software.all, :id, :name,
+                                    { prompt: "Select Product" },
+                                    { class: "w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] text-sm bg-white" } %>
+          </div>
+          <div class="relative z-0 w-full group">
+            <%= f.label :groupware_ids, 'Sub Categories *', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.collection_select :groupware_ids, Groupware.all, :id, :name,
+                                    { prompt: "Select Sub Product" },
+                                    { class: "w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] text-sm bg-white" } %>
+          </div>
         </div>
 
-        <!-- Paid Checkbox -->
-        <div class="flex items-center">
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mr-2">Paid</label>
-          <%= f.check_box "milestones_attributes[#{index}][paid]",
-            { checked: milestone.paid },
-            true,
-            false %>
+        <!-- Budget -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl">
+          <div class="relative z-0 w-full group">
+            <%= f.label :name, ('Budget*'), class: "block text-sm font-medium text-[#131D58] mb-2"  %>
+            <%= f.number_field :budget, class: "border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] block w-full p-2.5 text-sm bg-white", placeholder: '', required: true %>
+            <% if @product.errors[:name].any? %>
+              <div class="text-red-600 text-sm mt-1"><%= @product.errors[:budget].join(', ') %></div>
+            <% end %>
+          </div>
         </div>
 
-        <!-- Remove Button -->
-        <div class="flex items-end">
-          <input type="hidden" name="product[milestones_attributes][<%= index %>][_destroy]" value="false">
-          <button type="button"
-                  class="mt-4 p-2 bg-red-600 hover:bg-red-800 text-white rounded remove-milestone text-sm font-medium"
-                  onclick="this.closest('.milestone-field').remove()">
-            Remove
+        <!-- Milestones -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl">
+          <h3 class="text-base font-semibold text-[#131D58] mb-4">Milestones</h3>
+          <div id="milestones-container" class="space-y-4">
+            <% @product.milestones.each_with_index do |milestone, index| %>
+              <div class="milestone-field grid grid-cols-2 sm:grid-cols-5 gap-4 p-4 bg-white border border-gray-200 rounded-lg" id="milestone-<%= index %>">
+
+                <!-- Status -->
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-[#131D58]">Status</label>
+                  <%= f.select "milestones_attributes[#{index}][status_id]",
+                    Status.where(name: ['Development', 'User Acceptance Test', 'Pilot', 'Quality Assurance', 'Deploy', 'Production']).map { |s| [s.name, s.id] },
+                    { selected: milestone.status_id },
+                    class: "status-select bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] w-full p-2.5" %>
+                </div>
+
+                <!-- Percentage -->
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-[#131D58]">Percentage</label>
+                  <%= f.number_field "milestones_attributes[#{index}][percentage]",
+                    value: milestone.percentage,
+                    step: "0.01",
+                    class: "percentage-input bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] w-full p-2.5",
+                    oninput: "calculateAmount(this, #{@product.budget || 0})" %>
+                </div>
+
+                <!-- Amount -->
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-[#131D58]">Amount</label>
+                  <input type="text" readonly
+                    value="<%= milestone.amount %>"
+                    class="amount-display bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
+                </div>
+
+                <!-- Paid Checkbox -->
+                <div class="flex items-center">
+                  <label class="text-sm font-medium text-[#131D58] mr-2">Paid</label>
+                  <%= f.check_box "milestones_attributes[#{index}][paid]",
+                    { checked: milestone.paid, class: "h-4 w-4 rounded border-gray-300 text-[#0D9C67] focus:ring-[#0D9C67]" },
+                    true,
+                    false %>
+                </div>
+
+                <!-- Remove Button -->
+                <div class="flex items-end">
+                  <input type="hidden" name="product[milestones_attributes][<%= index %>][_destroy]" value="false">
+                  <button type="button"
+                          class="px-3 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg remove-milestone text-sm font-medium transition-colors"
+                          onclick="this.closest('.milestone-field').remove()">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Add Milestone Button -->
+          <button type="button" id="add-milestone-button" class="mt-4 inline-flex items-center gap-2 px-3 py-2 bg-[#131D58] hover:bg-[#0E1642] text-white text-sm font-medium rounded-lg transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add Milestone
           </button>
         </div>
+
+        <!-- Documents -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl">
+          <h3 class="text-base font-semibold text-[#131D58] mb-4">Attached Documents</h3>
+          <div id="documents-container" class="space-y-4">
+            <%= f.fields_for :documents do |doc| %>
+              <div class="document-field p-3 bg-white border border-gray-200 rounded-lg">
+                <%= doc.label :name, "Document Name", class: "block mb-1 text-sm font-medium text-[#131D58]" %>
+                <%= doc.text_field :name, class: "border border-gray-300 rounded-lg p-2 w-full mb-2 text-sm focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67]" %>
+
+                <% if doc.object.file.attached? %>
+                  <p class="text-sm text-gray-500 mb-2">Current File:
+                    <%= link_to doc.object.file.filename.to_s, rails_blob_path(doc.object.file, disposition: "attachment"), class: "text-[#0D9C67] hover:text-[#0B8659] underline" %>
+                  </p>
+                <% end %>
+
+                <%= doc.label :file, "Upload File", class: "block mb-1 text-sm font-medium text-[#131D58]" %>
+                <%= doc.file_field :file, class: "border border-gray-300 rounded-lg p-2 w-full text-sm" %>
+                <%= doc.hidden_field :_destroy %>
+                <%= link_to "Remove", "#", class: "remove-document text-red-600 hover:text-red-700 text-sm font-medium mt-2 inline-block", data: { action: "click->form#removeDocument" } %>
+              </div>
+            <% end %>
+          </div>
+          <button type="button" id="add-document-button" class="mt-4 inline-flex items-center gap-2 px-3 py-2 bg-[#131D58] hover:bg-[#0E1642] text-white text-sm font-medium rounded-lg transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add Document
+          </button>
+        </div>
+
+        <!-- Start/End Dates -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <%= f.label :start_date, 'Start Date*', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.date_field :start_date, required: true, class: "w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] text-sm bg-white" %>
+          </div>
+          <div>
+            <%= f.label :end_date, 'End Date*', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+            <%= f.date_field :end_date, required: true, class: "w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] text-sm bg-white" %>
+          </div>
+        </div>
+
+
+        <!-- Content -->
+        <div class="bg-[#F4F5FA] p-4 rounded-xl">
+          <%= f.label :content, 'Subject*', class: "block text-sm font-medium text-[#131D58] mb-2" %>
+          <div data-controller="text-limit" data-text-limit-limit-value="3000">
+            <p id="char-count" class="text-sm text-gray-500 mb-2">0/3000</p>
+            <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px] border border-gray-300 rounded-lg bg-white' %>
+          </div>
+        </div>
+
+
+        <!-- Submit -->
+        <div class="flex justify-end pt-2">
+          <%= f.submit "Update Product", class: "bg-[#0D9C67] hover:bg-[#0B8659] text-white px-6 py-2.5 rounded-lg font-semibold transition-colors cursor-pointer" %>
+        </div>
       </div>
     <% end %>
   </div>
-
-  <!-- Add Milestone Button -->
-  <button type="button" id="add-milestone-button" class="mt-4 p-2 bg-blue-500 text-white rounded">
-    Add Milestone
-  </button>
-
-
-  <!-- Documents -->
-  <h3 class="mt-6 mb-2 font-semibold">Attached Documents</h3>
-  <div id="documents-container">
-    <%= f.fields_for :documents do |doc| %>
-      <div class="document-field mb-4">
-        <%= doc.label :name, "Document Name", class: "block mb-1" %>
-        <%= doc.text_field :name, class: "border rounded p-2 w-full mb-2" %>
-
-        <% if doc.object.file.attached? %>
-          <p class="text-sm text-gray-600">Current File:
-            <%= link_to doc.object.file.filename.to_s, rails_blob_path(doc.object.file, disposition: "attachment"), class: "text-blue-500 underline" %>
-          </p>
-        <% end %>
-
-        <%= doc.label :file, "Upload File", class: "block mb-1" %>
-        <%= doc.file_field :file, class: "border rounded p-2 w-full" %>
-        <%= doc.hidden_field :_destroy %>
-        <%= link_to "Remove", "#", class: "remove-document text-red-500", data: { action: "click->form#removeDocument" } %>
-      </div>
-    <% end %>
-  </div>
-  <button type="button" id="add-document-button" class="p-2 bg-blue-500 text-white rounded mb-4">Add Document</button>
-
-  <!-- Start/End Dates -->
-  <div class="grid grid-cols-2 gap-4">
-    <div>
-      <%= f.label :start_date, 'Start Date*', class: "block font-medium mb-1" %>
-      <%= f.date_field :start_date, required: true, class: "w-full p-2 border rounded mb-4" %>
-    </div>
-    <div>
-      <%= f.label :end_date, 'End Date*', class: "block font-medium mb-1" %>
-      <%= f.date_field :end_date, required: true, class: "w-full p-2 border rounded mb-4" %>
-    </div>
-  </div>
-
-
-  <!-- Content -->
-  <%= f.label :content, 'Subject*', class: "block font-medium mb-1" %>
-  <div data-controller="text-limit" data-text-limit-limit-value="3000">
-    <p id="char-count">0/3000</p>
-    <%= f.rich_text_area :content, id: "content", data: { text_limit_target: "content" }, class: 'min-h-[300px]' %>
-  </div>
-
-
-
-  <!-- Submit -->
-  <%= f.submit "Update Product", class: "bg-green-600 text-white p-3 rounded font-semibold" %>
-<% end %>
+</div>
 <script>
   // Add Milestone Button
   document.getElementById('add-milestone-button').addEventListener('click', function () {
@@ -182,14 +203,14 @@
     const budget = document.getElementById('product_budget').value || 0;
 
     const newField = document.createElement('div');
-    newField.classList.add('milestone-field', 'grid', 'grid-cols-4', 'gap-4', 'mb-4', 'p-4', 'bg-gray-100', 'dark:bg-gray-800', 'rounded-lg');
+    newField.classList.add('milestone-field', 'grid', 'grid-cols-2', 'sm:grid-cols-4', 'gap-4', 'mb-4', 'p-4', 'bg-white', 'border', 'border-gray-200', 'rounded-lg');
     newField.id = `milestone-${timestamp}`;
 
     newField.innerHTML = `
       <div>
-        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+        <label class="block mb-2 text-sm font-medium text-[#131D58]">Status</label>
         <select name="product[milestones_attributes][${timestamp}][status_id]"
-                class="status-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                class="status-select bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] w-full p-2.5">
           <%= options_from_collection_for_select(
                 Status.where(name: ['Development', 'User Acceptance Test', 'Pilot', 'Quality Assurance', 'Deploy', 'Production']),
                 :id,
@@ -199,23 +220,23 @@
       </div>
 
       <div>
-        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Percentage</label>
+        <label class="block mb-2 text-sm font-medium text-[#131D58]">Percentage</label>
         <input type="number" step="0.01"
               name="product[milestones_attributes][${timestamp}][percentage]"
-              class="percentage-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              class="percentage-input bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67] w-full p-2.5"
               oninput="calculateAmount(this, ${budget})">
       </div>
 
       <div>
-        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
+        <label class="block mb-2 text-sm font-medium text-[#131D58]">Amount</label>
         <input type="text" readonly
-              class="amount-display bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+              class="amount-display bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
       </div>
 
       <div class="flex items-end">
         <input type="hidden" name="product[milestones_attributes][${timestamp}][_destroy]" value="false">
         <button type="button"
-                class="mt-4 p-2 bg-red-600 hover:bg-red-800 text-white roundedremove-milestone text-sm font-medium"
+                class="px-3 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg remove-milestone text-sm font-medium transition-colors"
                 onclick="this.closest('.milestone-field').remove()">
           Remove
         </button>
@@ -238,14 +259,14 @@
     const container = document.getElementById('documents-container');
     const index = Date.now(); // unique index
     const newField = document.createElement('div');
-    newField.classList.add('document-field', 'mb-4');
+    newField.classList.add('document-field', 'mb-4', 'p-3', 'bg-white', 'border', 'border-gray-200', 'rounded-lg');
     newField.innerHTML = `
-      <label class="block mb-1">Document Name</label>
-      <input type="text" name="product[documents_attributes][${index}][name]" class="border rounded p-2 w-full mb-2" placeholder="Document Name">
-      <label class="block mb-1">Upload File</label>
-      <input type="file" name="product[documents_attributes][${index}][file]" class="border rounded p-2 w-full">
+      <label class="block mb-1 text-sm font-medium text-[#131D58]">Document Name</label>
+      <input type="text" name="product[documents_attributes][${index}][name]" class="border border-gray-300 rounded-lg p-2 w-full mb-2 text-sm" placeholder="Document Name">
+      <label class="block mb-1 text-sm font-medium text-[#131D58]">Upload File</label>
+      <input type="file" name="product[documents_attributes][${index}][file]" class="border border-gray-300 rounded-lg p-2 w-full text-sm">
       <input type="hidden" name="product[documents_attributes][${index}][_destroy]" value="false">
-      <a href="#" class="remove-document text-red-500">Remove</a>
+      <a href="#" class="remove-document text-red-600 hover:text-red-700 text-sm font-medium mt-2 inline-block">Remove</a>
     `;
     container.appendChild(newField);
   });

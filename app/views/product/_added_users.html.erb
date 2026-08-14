@@ -1,8 +1,8 @@
-<h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200 mb-3">Assigned Agents</h3>
+<h3 class="font-semibold text-sm text-[#131D58] mb-3">Assigned Agents</h3>
 <div class="flex flex-wrap gap-2 items-center">
   <% if @product.users.any? %>
     <% @product.users.each do |user| %>
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#E8EAF3] text-[#131D58]">
           <% if user.name.present? %>
             <%= user.name %>
           <% else %>
@@ -11,6 +11,6 @@
       </span>
     <% end %>
   <% else %>
-    <p class="text-gray-600 dark:text-gray-300">No users assigned to this product yet.</p>
+    <p class="text-sm text-gray-500">No users assigned to this product yet.</p>
   <% end %>
 </div>

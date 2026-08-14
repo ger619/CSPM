@@ -1,22 +1,21 @@
-<!-- Improved layout with better spacing -->
-<div class="px-4 py-4">
-  <p class="text-left capitalize"> 
+<div class="px-4 pt-4">
+  <p class="text-left capitalize text-sm text-gray-600 leading-snug">
     <%= truncate(product.content.to_plain_text, length: 50) %>
   </p>
 </div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 px-4">  <!-- Added horizontal padding here -->
+<div class="grid grid-cols-3 gap-2 px-4 py-3">
     <div class="p-2">
-      <h3 class="text-sm font-light mb-2">Tasks</h3>
-      <p class="text-sm font-semibold">
+      <h3 class="text-xs font-medium text-gray-400 mb-1">Tasks</h3>
+      <p class="text-sm font-bold text-[#131D58]">
         <%= product.tasks.joins(:statuses).where(statuses: { name: 'Closed' }).count %> / <%= product.tasks.count %>
       </p>
     </div>
     <div class="p-2">
-      <h3 class="text-sm font-light mb-2">Budget</h3>
-      <p class="text-sm font-semibold">US <%= product&.budget || 0 %></p>
+      <h3 class="text-xs font-medium text-gray-400 mb-1">Budget</h3>
+      <p class="text-sm font-bold text-[#131D58]">US <%= product&.budget || 0 %></p>
     </div>
     <div class="p-2">
-      <h3 class="text-sm font-light mb-2">Due On</h3>
-      <p class="text-sm md:text-sm font-semibold"><%= product.end_date.strftime("%d-%b-%y") if product.end_date %></p>
+      <h3 class="text-xs font-medium text-gray-400 mb-1">Due On</h3>
+      <p class="text-sm font-bold text-[#131D58]"><%= product.end_date.strftime("%d-%b-%y") if product.end_date %></p>
     </div>
 </div>
