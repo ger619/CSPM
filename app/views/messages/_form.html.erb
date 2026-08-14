@@ -1,18 +1,23 @@
-<div class="mt-6">
-  <h2 class="text-lg font-semibold">Add Message</h2>
+<div class="mt-4 bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+  <h2 class="text-sm font-semibold text-[#131D58] mb-3 flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+    Add Message
+  </h2>
   <%= form_with(model: [@task, @message || @task.messages.build], local: true) do |form| %>
-    <div class="relative z-0 w-full mb-6 group">
+    <div class="relative z-0 w-full mb-4 group">
       <div data-controller="text-limit" data-text-limit-limit-value="1200">
-        <p id="char-count">0/1200</p>
+        <p id="char-count" class="text-xs text-gray-400 mb-1.5">0/1200</p>
 
         <%= form.rich_text_area :content, id: "content",
                                 data: { text_limit_target: "content", is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?('agent') },
-                                class: "min-h-[300px] #{'border-red-500' if @message&.errors&.dig(:content)&.any?}" %>
+                                class: "min-h-[160px] border border-gray-300 rounded-lg bg-white #{'border-red-500' if @message&.errors&.dig(:content)&.any?}" %>
         <% if @message&.errors&.dig(:content)&.any? %>
-          <span id="content-error" class="text-red-500 text-sm"><%= @message.errors[:content].join(', ') %></span>
+          <span id="content-error" class="text-red-600 text-sm mt-1 block"><%= @message.errors[:content].join(', ') %></span>
         <% end %>
       </div>
     </div>
-    <%= form.submit "Post Message", class: "px-4 py-2 bg-blue-500 text-white rounded" %>
+    <%= form.submit "Post Message", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-[#0D9C67] hover:bg-[#0B8659] text-white text-sm font-semibold rounded-lg transition-colors cursor-pointer" %>
   <% end %>
 </div>

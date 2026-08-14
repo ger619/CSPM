@@ -1,10 +1,21 @@
-
 <% if task.priority == 'SEVERITY 1' %>
-  <span class="p-2 rounded-md font-semibold text-sm bg-red-100 text-red-800">SEVERITY 1</span>
+  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-semibold text-xs bg-red-50 text-red-700 ring-1 ring-red-200">
+    <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+    SEVERITY 1
+  </span>
 <% elsif task.priority == 'SEVERITY 2' %>
-  <span class="p-2  rounded-md font-semibold text-sm bg-orange-100 text-orange-800">SEVERITY 2</span>
+  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-semibold text-xs bg-orange-50 text-orange-700 ring-1 ring-orange-200">
+    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+    SEVERITY 2
+  </span>
 <% elsif task.priority == 'SEVERITY 3' %>
-  <span class="p-2 rounded-md font-semibold text-sm bg-yellow-100 text-yellow-800">SEVERITY 3</span>
+  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-semibold text-xs bg-yellow-50 text-yellow-700 ring-1 ring-yellow-200">
+    <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+    SEVERITY 3
+  </span>
 <% else %>
-  <span class="p-2 rounded-md font-semibold text-sm bg-blue-100 text-blue-800">SEVERITY 4</span>
+  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-semibold text-xs bg-[#E8EAF3] text-[#131D58] ring-1 ring-[#131D58]/10">
+    <span class="w-1.5 h-1.5 rounded-full bg-[#131D58]"></span>
+    SEVERITY 4
+  </span>
 <% end %>
