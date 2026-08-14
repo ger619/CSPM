@@ -1,3 +1,8 @@
-<% provide(:title, "Edit CS sub product") %>
+<% provide(:title, "Edit CS Product: #{@groupware.name}") %>
 
-<%= render 'groupwares/edit_form' %>
+<div class="min-h-screen bg-gray-50 px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+  <div class="max-w-lg mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6">
+    <h1 class="text-xl sm:text-2xl font-bold text-[#131D58] mb-6">Edit Groupware Product</h1>
+    <%= render 'groupwares/edit_form' %>
+  </div>
+</div>

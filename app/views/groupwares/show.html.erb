@@ -1,29 +1,70 @@
-<% provide(:title, "Sub products for CS products: #{@software.name}") %>
+<% provide(:title, "#{@groupware.name}") %>
 
-<% if flash[:notice] %>
-  <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
-    <p><%= flash[:notice] %></p>
-  </div>
-<% elsif flash[:alert] %>
-  <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
-    <p><%= flash[:alert] %></p>
-  </div>
-<% end %>
-
-<div class="flex gap-2">
-Sub Product: <%= @groupware.name %>
-
-
-
-  <% if current_user.has_role? :admin  %>
-    <div class="flex gap-1">
-      <%= button_to 'Back', software_path(@software.id), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-
-      <%= button_to 'Add Module +', new_software_groupware_script_path(@software, @groupware), method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
+<div class="min-h-screen bg-gray-50 px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+  <% if flash[:notice] %>
+    <div class="flex items-start gap-3 bg-[#E3F6EC] border border-[#0D9C67]/30 text-[#0B4A32] px-4 py-3 rounded-xl mb-4 shadow-sm">
+      <svg class="w-5 h-5 flex-shrink-0 text-[#0D9C67] mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <p class="text-sm font-medium"><%= flash[:notice] %></p>
+    </div>
+  <% elsif flash[:alert] %>
+    <div class="flex items-start gap-3 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-4 shadow-sm">
+      <svg class="w-5 h-5 flex-shrink-0 text-red-600 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+      </svg>
+      <p class="text-sm font-medium"><%= flash[:alert] %></p>
     </div>
   <% end %>
+
+  <div class="flex items-center gap-3 mb-5">
+    <%= link_to software_path(@groupware.software), class: "p-2 rounded-lg bg-white border border-gray-100 shadow-sm hover:bg-[#F4F5FA] text-gray-500 hover:text-[#131D58] transition-colors flex-shrink-0" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <div class="min-w-0">
+      <h1 class="text-xl sm:text-2xl font-bold text-[#131D58] truncate"><%= @groupware.name %></h1>
+      <p class="text-sm text-gray-500">Groupware product under <%= @groupware.software.name %></p>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-5 sm:p-6">
+    <div class="flex flex-col sm:flex-row gap-6">
+      <% if @groupware.image.present? %>
+        <div class="flex-shrink-0">
+          <%= image_tag @groupware.image, class: "w-24 h-24 rounded-xl object-cover border border-gray-100" %>
+        </div>
+      <% end %>
+
+      <div class="flex-1 space-y-4">
+        <div>
+          <h2 class="text-xs font-semibold text-[#131D58] uppercase tracking-wide mb-1">Description</h2>
+          <p class="text-sm text-gray-600 capitalize"><%= @groupware.description.presence || "No description provided." %></p>
+        </div>
+        <div>
+          <h2 class="text-xs font-semibold text-[#131D58] uppercase tracking-wide mb-1">Project Manager</h2>
+          <p class="text-sm text-gray-600">
+            <%= @groupware.user.present? ? @groupware.user.name : "No user assigned" %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <% if current_user.has_role?(:admin) %>
+      <div class="flex flex-wrap items-center gap-2 mt-6 pt-5 border-t border-gray-100">
+        <%= link_to edit_software_groupware_path(@groupware.software, @groupware), class: 'inline-flex items-center gap-1.5 bg-[#131D58] hover:bg-[#0E1642] px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors' do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+          </svg>
+          Edit
+        <% end %>
+        <% if can? :destroy, @groupware %>
+          <%= button_to 'Delete', [@groupware.software, @groupware], method: :delete,
+              data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' },
+              class: 'inline-flex items-center gap-1.5 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg font-semibold text-sm text-red-600 transition-colors' %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
-
-<!-- add scripts -->
-
-<%= render 'scripts/script' %>

@@ -1,87 +1,127 @@
+<% if @client.empty? %>
+  <div class="flex flex-col items-center justify-center text-center py-16 px-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+    <div class="w-14 h-14 rounded-full bg-[#E8EAF3] flex items-center justify-center mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-[#131D58]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.001-.001a5.988 5.988 0 0 1-.94-3.197m5.058-9.021A5.25 5.25 0 1 0 12 15.75 5.25 5.25 0 0 0 15.058 5.25Z" />
+      </svg>
+    </div>
+    <p class="text-sm font-semibold text-[#131D58] mb-1">No clients yet</p>
+    <p class="text-sm text-gray-500">Add a client to start assigning projects and tracking their tickets.</p>
+  </div>
+<% else %>
 
-<div class="overflow-x-auto shadow-md sm:rounded-lg h-full w-[100%] ">
-  <table class="w-full text-sm text-left rtl:text-right">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-6 py-3">
-        Name of the Client
-      </th>
-      <th scope="col" class="px-6 py-3">
-        No of Users Per Client
-      </th>
-      <th scope="col" class="px-6 py-3">
-        No of Projects Per Client
-      </th>
-      <th scope="col" class="px-6 py-3">
-        No of Tickets Per Client
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Email Address
-      </th>
-
-      <th scope="col" class="px-6 py-3">
-        Phone Number
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Name of The Contact Person
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Client Phone Number
-      </th>
-      <th scope="col" class="px-6 py-3">
-        Client Contact Person Email
-      </th>
-      <% if can?(:edit, @client) || can?(:delete, @client) %>
-        <th scope="col" class="px-6 py-3">
-          ACTIONS
-        </th>
+  <!-- Desktop / large tablet table (scrolls horizontally if needed) -->
+  <div class="hidden lg:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm bg-white">
+    <table class="w-full text-sm text-left text-gray-600">
+      <thead class="text-xs uppercase bg-[#F4F5FA] text-[#131D58] font-semibold">
+      <tr>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap">Client</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap text-center">Users</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap text-center">Projects</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap text-center">Tickets</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap">Email</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap">Phone</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap">Contact Person</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap">Contact Phone</th>
+        <th scope="col" class="px-5 py-3 whitespace-nowrap">Contact Email</th>
+        <% if can?(:edit, @client) || can?(:delete, @client) %>
+          <th scope="col" class="px-5 py-3 whitespace-nowrap text-right">Actions</th>
+        <% end %>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+      <% @client.each do |client| %>
+        <tr class="bg-white hover:bg-[#F4F5FA] transition-colors">
+          <td class="px-5 py-4 font-semibold text-[#131D58] whitespace-nowrap"><%= client.name %></td>
+          <td class="px-5 py-4 text-center">
+            <span class="inline-flex items-center justify-center min-w-[1.75rem] px-2 py-1 rounded-full text-xs font-semibold bg-[#E8EAF3] text-[#131D58]"><%= client.users_count %></span>
+          </td>
+          <td class="px-5 py-4 text-center">
+            <span class="inline-flex items-center justify-center min-w-[1.75rem] px-2 py-1 rounded-full text-xs font-semibold bg-[#E8EAF3] text-[#131D58]"><%= client.projects_count %></span>
+          </td>
+          <td class="px-5 py-4 text-center">
+            <span class="inline-flex items-center justify-center min-w-[1.75rem] px-2 py-1 rounded-full text-xs font-semibold bg-[#E3F6EC] text-[#0B4A32]"><%= client.projects.sum { |project| project.tickets.count } %></span>
+          </td>
+          <td class="px-5 py-4 truncate max-w-[11rem]"><%= client.email %></td>
+          <td class="px-5 py-4 whitespace-nowrap"><%= client.phone %></td>
+          <td class="px-5 py-4 truncate max-w-[9rem]"><%= client.client_contact_person %></td>
+          <td class="px-5 py-4 whitespace-nowrap"><%= client.client_contact_phone_number %></td>
+          <td class="px-5 py-4 truncate max-w-[11rem]"><%= client.client_contact_person_email %></td>
+          <% if can?(:edit, client) || can?(:delete, client) %>
+            <td class="px-5 py-4 text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>">
+              <div class="relative flex justify-end">
+                <%= render partial: 'client/action_dropdown', locals: { client: client } %>
+              </div>
+            </td>
+          <% end %>
+        </tr>
       <% end %>
-    </tr>
-    </thead>
-    <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile / tablet cards -->
+  <div class="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
     <% @client.each do |client| %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
-        <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap ">
-          <%= client.name   %>
-        </th>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.users_count %>
-        </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.projects_count %>
-        </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.projects.sum { |project| project.tickets.count } %>
-        </td>
-
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.email %>
-        </td>
-
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.phone %>
-        </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.client_contact_person %>
-        </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.client_contact_phone_number %>
-        </td>
-        <td class="px-6 py-4 truncate w-64">
-          <%= client.client_contact_person_email %>
-        </td>
-
-        <!-- Actions li -->
-        <% if can?(:edit, client) || can?(:delete, client) %>
-          <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>">
-            <div class="relative flex justify-start"> 
+      <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <p class="font-semibold text-[#131D58] truncate"><%= client.name %></p>
+          <% if can?(:edit, client) || can?(:delete, client) %>
+            <div data-controller="dropdown" data-dropdown-ticket-id-value="<%= client.id %>" class="flex-shrink-0">
               <%= render partial: 'client/action_dropdown', locals: { client: client } %>
             </div>
-          </td>
-        <% end %>
+          <% end %>
+        </div>
 
-      </tr>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <div class="bg-[#F4F5FA] rounded-lg py-2 text-center">
+            <p class="text-xs text-gray-500">Users</p>
+            <p class="text-sm font-bold text-[#131D58]"><%= client.users_count %></p>
+          </div>
+          <div class="bg-[#F4F5FA] rounded-lg py-2 text-center">
+            <p class="text-xs text-gray-500">Projects</p>
+            <p class="text-sm font-bold text-[#131D58]"><%= client.projects_count %></p>
+          </div>
+          <div class="bg-[#F4F5FA] rounded-lg py-2 text-center">
+            <p class="text-xs text-gray-500">Tickets</p>
+            <p class="text-sm font-bold text-[#131D58]"><%= client.projects.sum { |project| project.tickets.count } %></p>
+          </div>
+        </div>
+
+        <div class="space-y-1.5 text-sm text-gray-600">
+          <% if client.email.present? %>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+              </svg>
+              <span class="truncate"><%= client.email %></span>
+            </div>
+          <% end %>
+          <% if client.phone.present? %>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h1.5a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+              </svg>
+              <span><%= client.phone %></span>
+            </div>
+          <% end %>
+          <% if client.client_contact_person.present? %>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              <span class="truncate">
+                Contact: <%= client.client_contact_person %><%= " (#{client.client_contact_phone_number})" if client.client_contact_phone_number.present? %>
+              </span>
+            </div>
+          <% end %>
+          <% if client.client_contact_person_email.present? %>
+            <div class="flex items-center gap-2 pl-5">
+              <span class="truncate text-xs text-gray-400"><%= client.client_contact_person_email %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-    </tbody>
-  </table>
-</div>
+  </div>
+<% end %>

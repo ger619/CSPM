@@ -1,0 +1,32 @@
+<% ticket.statuses.each do |status| %>
+  <% case status.name %>
+  <% when 'Resolved' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-[#E3F6EC] text-[#0B4A32] ring-1 ring-[#0D9C67]/20 whitespace-nowrap">Resolved</span>
+  <% when 'Closed' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-600 ring-1 ring-gray-200 whitespace-nowrap">Closed</span>
+  <% when 'Reopened' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-red-50 text-red-700 ring-1 ring-red-200 whitespace-nowrap">Reopened</span>
+  <% when 'New' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-red-50 text-red-700 ring-1 ring-red-200 whitespace-nowrap">New</span>
+  <% when 'Under Development' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-[#E8EAF3] text-[#131D58] ring-1 ring-[#131D58]/10 whitespace-nowrap">Under Development</span>
+  <% when 'Work in Progress' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-700 ring-1 ring-gray-200 whitespace-nowrap">Work In Progress</span>
+  <% when 'QA Testing' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-pink-50 text-pink-700 ring-1 ring-pink-200 whitespace-nowrap">QA Testing</span>
+  <% when 'Awaiting Build' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-white text-gray-600 ring-1 ring-gray-300 whitespace-nowrap">Awaiting Build</span>
+  <% when 'Client Confirmation Pending' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-purple-50 text-purple-700 ring-1 ring-purple-200 whitespace-nowrap">Client Confirmation Pending</span>
+  <% when 'On-Hold' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-yellow-50 text-yellow-700 ring-1 ring-yellow-200 whitespace-nowrap">On-Hold</span>
+  <% when 'Assigned' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-[#E8EAF3] text-[#131D58] ring-1 ring-[#131D58]/10 whitespace-nowrap">Assigned</span>
+  <% when 'Approved' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-[#E3F6EC] text-[#0B4A32] ring-1 ring-[#0D9C67]/20 whitespace-nowrap">Approved</span>
+  <% when 'Pending' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gradient-to-r from-[#E3F6EC] to-gray-100 text-[#0B4A32] ring-1 ring-[#0D9C67]/20 whitespace-nowrap">Pending</span>
+  <% when 'Declined' %>
+    <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-600 ring-1 ring-gray-200 whitespace-nowrap">Declined</span>
+  <% end %>
+<% end %>

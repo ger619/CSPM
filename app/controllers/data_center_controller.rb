@@ -557,36 +557,6 @@ class DataCenterController < ApplicationController
     redirect_back fallback_location: root_path, notice: 'Ticket emails sent to team members.'
   end
 
-  # CBK Report for Groupware/Elma
-
-  def cbk_groupware_report
-    # groupware Report
-
-    if params[:groupware_id].present?
-      @groupware = Groupware.find(params[:groupware_id])
-      @tickets = Ticket.joins(software: :groupwares)
-        .where(groupwares: { id: @groupware.id })
-        .joins(:sla_tickets)
-
-      if params[:start_date].present? && params[:end_date].present?
-        start_date = Date.parse(params[:start_date])
-        end_date = Date.parse(params[:end_date])
-        @tickets = @tickets.where('tickets.created_at >= ? AND tickets.created_at <= ?', start_date.beginning_of_day, end_date.end_of_day)
-      end
-
-      @tickets = @tickets.joins(project: :client).where(clients: { country_code: params[:country_code] }) if params[:country_code].present?
-    else
-      @tickets = Ticket.none
-    end
-    start_date = Date.parse(params[:start_date]) if params[:start_date].present?
-    month_name = start_date ? Date::MONTHNAMES[start_date.month] : Date::MONTHNAMES[Date.today.month]
-
-    respond_to do |format|
-      format.html { render :cbk_groupware_report }
-      format.csv { send_data generate_cbk_groupware_report_csv(@tickets), filename: "cbk_report_for #{month_name} and #{Date.today}.csv" }
-    end
-  end
-
   private
 
   def generate_orm_report_csv(tickets, ticket_counts, project_status_counts)
@@ -832,27 +802,5 @@ class DataCenterController < ApplicationController
     end
 
     bom + csv_data
-  end
-
-  def generate_cbk_groupware_report_csv(tickets)
-    CSV.generate(headers: true) do |csv|
-      csv << ['Ticket ID', 'Project Name', 'Severity', 'Summary', 'Issue Type', 'Status',
-              'Assignee', 'Reporter by', 'Created At', 'Closed']
-
-      tickets.each do |ticket|
-        csv << [
-          ticket.unique_id,
-          ticket.project.title,
-          ticket.priority,
-          ticket.subject,
-          ticket.issue,
-          ticket.statuses.first&.name || 'N/A',
-          ticket.users.map(&:name).select(&:present?).join(', '),
-          ticket.user.name,
-          ticket.created_at.strftime('%m/%d/%Y %H:%M'),
-          (ticket.add_statuses.order(updated_at: :desc).first&.updated_at&.strftime('%m/%d/%Y %H:%M') || 'N/A' if %w[Closed Resolved].include?(ticket.statuses.first&.name))
-        ]
-      end
-    end
   end
 end
