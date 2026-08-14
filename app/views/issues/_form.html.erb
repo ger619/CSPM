@@ -1,4 +1,4 @@
-<div id="new_message_form">
+<div id="new_message_form" class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
   <% issue ||= Issue.new %>
   <% if current_page?(project_ticket_path(@project, @ticket)) %>
 
@@ -6,12 +6,19 @@
                   html: { multipart: true },
                   data: { controller: 'messages', turbo: false },
                   remote: true) do |f| %>
-      <div class="space-y-4">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
+      <div class="space-y-5">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[#0D9C66]/10 text-[#0D9C66]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-black text-[#0A1024] dark:text-white">Message <span class="text-red-500">*</span></h3>
+        </div>
 
         <!-- Message Content -->
         <div data-controller="text-limit" data-text-limit-limit-value="3000">
-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1" id="char-count">0/3000</p>
+          <p class="mb-1.5 text-xs font-semibold text-slate-400" id="char-count">0/3000</p>
 
           <div data-controller="trix-sync">
             <%= f.rich_text_area :content,
@@ -20,11 +27,11 @@
                                    text_limit_target: "content",
                                    is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
                                  },
-                                 class: "trix-content w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white min-h-[200px] #{'border-red-500' if issue.errors[:content].any?}" %>
+                                 class: "trix-content min-h-[200px] w-full rounded-xl border border-slate-200 p-3 shadow-sm transition focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white #{'border-red-500' if issue.errors[:content].any?}" %>
           </div>
 
           <% if issue.errors[:content].any? %>
-            <p class="mt-1 text-sm text-red-600 dark:text-red-400" id="content-error">
+            <p class="mt-1.5 text-xs font-semibold text-red-600" id="content-error">
               <%= issue.errors[:content].join(', ') %>
             </p>
           <% end %>
@@ -33,33 +40,33 @@
         <% unless current_user.has_role?(:client) %>
           <!-- User Selection -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notify Users</label>
+            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Notify users</label>
             <div class="relative">
               <input type="text" id="searchUser"
-                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white"
-                     placeholder="Search User..."
+                     class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition placeholder-slate-400 focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500"
+                     placeholder="Search user..."
                      onclick="showDropdown()"
                      onkeyup="filterUserDropdown()"
                      autocomplete="off">
 
-              <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
+              <div id="selectedUsers" class="mt-2 flex flex-wrap gap-1.5"></div>
               <div id="hiddenUserInputs">
                 <%= hidden_field_tag "team[user_ids][]", "" %>
               </div>
 
-              <div id="userDropdown" class="hidden absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div id="userDropdown" class="hidden absolute z-10 mt-1.5 w-full rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
                 <div class="p-2">
                   <div class="flex justify-end">
-                    <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <button type="button" onclick="hideDropdown()" class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
                       </svg>
                     </button>
                   </div>
 
-                  <div id="externalUsers" class="user-list">
+                  <div id="externalUsers" class="user-list max-h-52 overflow-y-auto">
                     <% project.users.distinct.order(:first_name).each do |user| %>
-                      <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      <div class="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-[#131D58]/10 hover:text-[#131D58] dark:text-slate-200"
                            data-user-id="<%= user.id %>"
                            onclick="selectUser(this)">
                         <%= user.name %>
@@ -73,24 +80,24 @@
 
           <!-- Message Type -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message Visibility</label>
+            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Message visibility</label>
             <%= f.select :message_type,
                          options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
                                             selected: issue.message_type || "external"),
                          {},
-                         class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>
+                         class: "block w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" %>
           </div>
         <% end %>
 
         <!-- Form Actions -->
-        <div class="flex justify-end gap-3 pt-2">
+        <div class="flex flex-col-reverse gap-2 border-t border-slate-100 pt-4 dark:border-slate-800 sm:flex-row sm:justify-end">
           <button type="button"
-                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                  class="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
                   data-action="click->messages#toggleForm">
             Cancel
           </button>
-          <%= f.submit "Post Message",
-                       class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          <%= f.submit "Post message",
+                       class: "rounded-lg bg-[#0D9C66] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#0B8558] hover:shadow active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#0D9C66]/40" %>
         </div>
       </div>
     <% end %>
@@ -101,12 +108,19 @@
                   html: { multipart: true },
                   data: { controller: 'messages' },
                   remote: true) do |f| %>
-      <div class="space-y-4">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Message *</h3>
+      <div class="space-y-5">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[#0D9C66]/10 text-[#0D9C66]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-black text-[#0A1024] dark:text-white">Message <span class="text-red-500">*</span></h3>
+        </div>
 
         <!-- Message Content -->
         <div data-controller="text-limit" data-text-limit-limit-value="3000">
-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1" id="char-count">0/3000</p>
+          <p class="mb-1.5 text-xs font-semibold text-slate-400" id="char-count">0/3000</p>
 
           <div data-controller="trix-sync">
             <%= f.rich_text_area :content,
@@ -115,11 +129,11 @@
                                    text_limit_target: "content",
                                    is_admin: current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent)
                                  },
-                                 class: "trix-content w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white min-h-[200px] #{'border-red-500' if issue.errors[:content].any?}" %>
+                                 class: "trix-content min-h-[200px] w-full rounded-xl border border-slate-200 p-3 shadow-sm transition focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white #{'border-red-500' if issue.errors[:content].any?}" %>
           </div>
 
           <% if issue.errors[:content].any? %>
-            <p class="mt-1 text-sm text-red-600 dark:text-red-400" id="content-error">
+            <p class="mt-1.5 text-xs font-semibold text-red-600" id="content-error">
               <%= issue.errors[:content].join(', ') %>
             </p>
           <% end %>
@@ -128,33 +142,33 @@
         <% unless current_user.has_role?(:client) %>
           <!-- User Selection -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notify Users</label>
+            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Notify users</label>
             <div class="relative">
               <input type="text" id="searchUser"
-                     class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white"
-                     placeholder="Search User..."
+                     class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition placeholder-slate-400 focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500"
+                     placeholder="Search user..."
                      onclick="showDropdown()"
                      onkeyup="filterUserDropdown()"
                      autocomplete="off">
 
-              <div id="selectedUsers" class="flex flex-wrap gap-2 mt-2"></div>
+              <div id="selectedUsers" class="mt-2 flex flex-wrap gap-1.5"></div>
               <div id="hiddenUserInputs">
                 <%= hidden_field_tag "team[user_ids][]", "" %>
               </div>
 
-              <div id="userDropdown" class="hidden absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div id="userDropdown" class="hidden absolute z-10 mt-1.5 w-full rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
                 <div class="p-2">
                   <div class="flex justify-end">
-                    <button type="button" onclick="hideDropdown()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <button type="button" onclick="hideDropdown()" class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
                       </svg>
                     </button>
                   </div>
 
-                  <div id="externalUsers" class="user-list">
+                  <div id="externalUsers" class="user-list max-h-52 overflow-y-auto">
                     <% project.users.distinct.order(:first_name).each do |user| %>
-                      <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      <div class="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-[#131D58]/10 hover:text-[#131D58] dark:text-slate-200"
                            data-user-id="<%= user.id %>"
                            onclick="selectUser(this)">
                         <%= user.name %>
@@ -168,24 +182,24 @@
 
           <!-- Message Type -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message Visibility</label>
+            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Message visibility</label>
             <%= f.select :message_type,
                          options_for_select([["Reply To Customer", "external"], ["Add Internal Note", "internal"]],
                                             selected: issue.message_type || "external"),
                          {},
-                         class: "w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm dark:bg-gray-700 dark:text-white" %>
+                         class: "block w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" %>
           </div>
         <% end %>
 
         <!-- Form Actions -->
-        <div class="flex justify-end gap-3 pt-2">
+        <div class="flex flex-col-reverse gap-2 border-t border-slate-100 pt-4 dark:border-slate-800 sm:flex-row sm:justify-end">
           <button type="button"
-                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                  class="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
                   data-action="click->messages#toggleForm">
             Cancel
           </button>
-          <%= f.submit "Post Message",
-                       class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          <%= f.submit "Post message",
+                       class: "rounded-lg bg-[#0D9C66] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#0B8558] hover:shadow active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#0D9C66]/40" %>
         </div>
       </div>
     <% end %>
@@ -223,7 +237,7 @@
 
       // Update Selected UI
       let tag = document.createElement("div");
-      tag.className = "bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-2 text-sm";
+      tag.className = "bg-[#131D58]/10 text-[#131D58] px-2.5 py-1 rounded-full flex items-center gap-1.5 text-xs font-bold";
       tag.innerHTML = `${userName} <span onclick="removeUser('${userId}', this)" class="cursor-pointer text-red-500">×</span>`;
       document.getElementById("selectedUsers").appendChild(tag);
 
@@ -253,7 +267,7 @@
     // Add back to dropdown
     let dropdown = document.getElementById("userDropdown");
     let item = document.createElement("div");
-    item.className = "px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer";
+    item.className = "cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-[#131D58]/10 hover:text-[#131D58] dark:text-slate-200";
     item.setAttribute("data-user-id", userId);
     item.setAttribute("onclick", "selectUser(this)");
     item.textContent = element.parentElement.textContent.replace('×', '').trim();

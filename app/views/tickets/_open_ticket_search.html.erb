@@ -1,35 +1,35 @@
-<div class="grid grid-cols-2 mb-4 ">
-  <div class="grid col-span-1">
-    <div class="flex gap-1">
-      <%= button_to project_index_path, method: :get, class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' do %>
-        &#8656; Back
-      <% end %>
-    </div>
-  </div>
-  <!-- Search on the right -->
-  <div class="grid col-span-1 justify-end">
-    <div class="flex flex-col md:flex-row items-start md:items-center w-full">
-      <%= form_with url: all_open_tickets_project_tickets_path(@project), method: :get, local: true do %>
-        <input type="text" name="search" value="<%= params[:search] %>" placeholder="Search tickets..." class="border border-gray-300 h-10 w-96 px-5 pr-10 rounded-md font-medium placeholder-current focus:outline-none dark:bg-gray-700 dark:border-gray-50 dark:text-slate-100" />
-        <button type="submit" class='bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-2'>Search</button>
-      <% end %>
-      <%= form_with url: all_open_tickets_project_tickets_path(@project), method: :get, local: true do %>
-        <button type="submit" class='bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-2'>Clear</button>
-      <% end %>
-    </div>
+<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <%= button_to project_index_path, method: :get, class: 'group inline-flex w-fit items-center gap-1.5 rounded-lg border border-[#131D58]/20 bg-white px-4 py-2.5 text-sm font-bold text-[#131D58] shadow-sm transition hover:border-[#131D58] hover:bg-[#131D58]/5 dark:border-slate-700 dark:bg-slate-900 dark:text-[#8FA3E6]' do %>
+    <svg class="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+    </svg>
+    Back
+  <% end %>
+
+  <!-- Search -->
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+    <%= form_with url: all_open_tickets_project_tickets_path(@project), method: :get, local: true, class: "flex gap-2" do %>
+      <input type="text" name="search" value="<%= params[:search] %>" placeholder="Search tickets..."
+             class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm transition placeholder-slate-400 focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500 sm:w-80" />
+      <button type="submit" class="flex-shrink-0 rounded-lg bg-[#131D58] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#1a2670] active:scale-[0.98]">Search</button>
+    <% end %>
+    <%= form_with url: all_open_tickets_project_tickets_path(@project), method: :get, local: true do %>
+      <button type="submit" class="w-full flex-shrink-0 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 sm:w-auto">Clear</button>
+    <% end %>
   </div>
 </div>
+
 <% if flash[:prompt] %>
-  <div id="custom-alert" 
-       class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+  <div id="custom-alert"
+       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm"
        data-controller="open-ticket-search"
        data-open-ticket-search-target="alert">
-    <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
-      <h2 class="text-xl font-semibold mb-4 text-gray-800">Notice</h2>
-      <p class="text-gray-600"><%= flash[:prompt] %></p>
+    <div class="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-700 dark:bg-slate-800">
+      <h2 class="text-base font-black text-[#0A1024] dark:text-white">Notice</h2>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-300"><%= flash[:prompt] %></p>
       <div class="mt-4 text-right">
-        <button id="close-alert" 
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        <button id="close-alert"
+                class="rounded-lg bg-[#131D58] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#1a2670] active:scale-[0.98]"
                 data-action="click->open-ticket-search#closeAlert">
           OK
         </button>

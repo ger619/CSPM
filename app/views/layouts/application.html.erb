@@ -8,7 +8,7 @@
   <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
-  <%= favicon_link_tag asset_path('loading.png') %>
+  <%= favicon_link_tag asset_path('logo-mark.png') %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <%= Sentry.get_trace_propagation_meta.html_safe %>
@@ -23,48 +23,38 @@
     rel="stylesheet"
     type="text/css"
     href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
+    />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
 <main class="flex">
   <!-- Sidebar -->
-  <% if current_user && user_signed_in?  %>
-  <div id="sidebar" class="transparent h-screen transition-all duration-300 w-64">
-    <%= render 'layouts/sidebar' %>
-  </div>
+  <% if current_user && user_signed_in? %>
+    <%#
+      This div is the real spacer for the fixed <aside> rendered inside the
+      partial. It starts at w-0 (mobile: sidebar is an overlay drawer, no
+      reserved space) and lg:w-[280px] (desktop: expanded by default). The
+      sidebar controller lives here and adjusts the inline width directly
+      when collapsing/expanding on desktop or crossing the lg breakpoint.
+    %>
+    <div
+      id="sidebar"
+      data-controller="sidebar"
+      class="h-screen shrink-0 transition-[width] duration-300 ease-in-out w-0 lg:w-[280px]"
+    >
+      <%= render "layouts/sidebar" %>
+    </div>
 
-  <!-- Main Content -->
-  <div id="mainContent" class="p-4 flex-1 transition-all duration-300 bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
-    <%= turbo_frame_tag "modal" %>
-    <%= render 'layouts/topbar' %>
-    <%= yield %>
-  </div>
+    <div id="mainContent" class="min-w-0 p-4 pt-20 lg:pt-4 flex-1 transition-all duration-300 bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+      <%= turbo_frame_tag "modal" %>
+      <%= render 'layouts/topbar' %>
+      <%= yield %>
+    </div>
   <% else %>
-    <main class="mx-auto bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
-      <%= render 'layouts/sidebar' %>
-      <div class="p-8 ml-16">
-        <%= render 'layouts/topbar' %>
-        <%= yield %>
-      </div>
-    </main>
+    <div class="mx-auto bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
+      <%= yield %>
+    </div>
   <% end %>
 </main>
-
-
-<script>
-  document.addEventListener('turbo:load', () => {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-
-      if (sidebar.classList.contains('w-64')) {
-        mainContent.classList.add('ml-16');
-        mainContent.classList.remove('ml-64');
-      } else {
-        mainContent.classList.add('ml-64');
-        mainContent.classList.remove('ml-16');
-      }
-  });
-</script>
 </body>
 </html>

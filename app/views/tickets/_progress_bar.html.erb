@@ -6,24 +6,24 @@
 <% stroke_dashoffset = circumference - (progress.to_f / 100) * circumference %>
 
 <% color = if ticket.progress_percentage.nil?
-             '#9CA3AF' # gray-400
+             '#9CA3AF' # gray-400, no data yet
            elsif ticket.progress_percentage < 30
-             '#DC2626' # red-600
+             '#DC2626' # red-600, needs attention
            elsif ticket.progress_percentage < 60
-             '#2563EB' # blue-600
+             '#131D58' # brand navy, in progress
            else
-             ticket.progress_percentage >= 100 ? '#000000' : '#16A34A' # black or green-600
+             ticket.progress_percentage >= 100 ? '#131D58' : '#0D9C66' # brand navy at 100%, brand green while trending to done
            end %>
 
-<div class="relative flex items-center justify-center w-16 h-16">
-  <!-- SVG Donut -->
+<div class="relative flex h-12 w-12 flex-shrink-0 items-center justify-center sm:h-14 sm:w-14">
   <svg
     height="100%"
     width="100%"
     viewBox="0 0 <%= radius * 2 %> <%= radius * 2 %>"
-    class="transform -rotate-90"
+    class="-rotate-90 transform"
+    role="img"
+    aria-label="<%= progress %>% complete"
   >
-    <!-- Background Circle -->
     <circle
       stroke="#E5E7EB"
       fill="transparent"
@@ -32,7 +32,6 @@
       cx="<%= radius %>"
       cy="<%= radius %>"
       />
-    <!-- Progress Circle -->
     <circle
       stroke="<%= color %>"
       fill="transparent"
@@ -45,8 +44,7 @@
       cy="<%= radius %>"
       />
   </svg>
-  <!-- Centered Label -->
-  <div class="absolute text-sm font-bold" style="color: <%= color %>">
+  <div class="absolute text-xs font-black sm:text-sm" style="color: <%= color %>">
     <%= progress %>%
   </div>
 </div>

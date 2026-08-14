@@ -1,6 +1,15 @@
-<% @tasks.each do |task| %>
-  <%= task.name %>
-  <%= task.description %>
+<div class="min-h-screen bg-gray-50 px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+  <div class="mb-5">
+    <h1 class="text-xl sm:text-2xl font-bold text-[#131D58]">Tasks</h1>
+    <p class="text-sm text-gray-500 mt-0.5">All tasks across this project</p>
+  </div>
 
-
-<% end %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+    <% @tasks.each do |task| %>
+      <div class="bg-white border border-gray-100 shadow-sm hover:shadow-md rounded-xl transition-shadow p-4">
+        <h2 class="text-sm font-semibold text-[#131D58] mb-1"><%= task.name %></h2>
+        <p class="text-sm text-gray-600 line-clamp-3"><%= task.description %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

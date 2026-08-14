@@ -35,7 +35,7 @@ class Project < ApplicationRecord
   end
 
   def craftsilicon_users
-    User.where('email LIKE ANY (array[?, ?, ?]) AND active = ?', '%@craftsilicon.com', '%@craftsilicon.co.tz', '%@little.africa', true)
+    User.where('email LIKE ANY (array[?]) AND active = ?', '%@greatercare.com', true)
   end
   # To have pick a list of users who have role agent only on a dropdown list at the view to assign a project
 

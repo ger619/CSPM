@@ -1,34 +1,39 @@
-<div class="grid grid-cols-2 ">
-  <div class="col-span-1 flex">
-    <div class="flex flex-wrap gap-1 m-2 ">
-      <button onclick="history.back()" class="bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 h-12 items-center rounded font-bold rounded-md text-slate-100">
-        &#8656; Back
-      </button>
-    </div>
-    <div class="flex items-center gap-3 sm:gap-4">
+<div class="bg-white border border-gray-100 rounded-xl shadow-sm p-4 sm:p-5 mb-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+  <div class="flex items-start sm:items-center gap-3 sm:gap-4 flex-wrap">
+    <button onclick="history.back()" class="inline-flex items-center gap-1.5 bg-[#131D58] hover:bg-[#0E1642] px-3 py-2 rounded-lg font-semibold text-sm text-white transition-colors flex-shrink-0">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Back
+    </button>
 
-      <div class="flex flex-row gap-4">
-        <h1 class="text-lg sm:text-xl md:text-2xl font-semibold">
-          <%= link_to @product.client.name, product_path(@product.id) %> / <span class="text-md font-light"> <%= render partial: 'tasks/priority', locals: { task: @task } %> </span>
-          <span class="text-sm"> from <%= @task.start_date %> to <%= @task.start_date %> </span>
-        </h1>
-        <p class="text-xs sm:text-sm md:text-base">
-          <span class="font-medium">
-          </span>
-        </p>
-      </div>
+    <div class="flex flex-col gap-1 min-w-0">
+      <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-[#131D58] flex flex-wrap items-center gap-2">
+        <%= link_to @product.client.name, product_path(@product.id), class: "hover:text-[#0D9C67] transition-colors" %>
+        <span class="text-gray-300 font-normal">/</span>
+        <span class="text-sm font-normal"><%= render partial: 'tasks/priority', locals: { task: @task } %></span>
+      </h1>
+      <p class="text-xs sm:text-sm text-gray-500">
+        from <span class="font-medium text-gray-700"><%= @task.start_date %></span> to <span class="font-medium text-gray-700"><%= @task.start_date %></span>
+      </p>
     </div>
   </div>
+
   <!-- Search on the right -->
-  <div class="grid col-span-1 justify-end">
-    <div class="flex flex-col md:flex-row items-start md:items-center w-full">
-      <%= form_with url: product_task_path(@product, @task), method: :get, class: 'flex gap-2' do |f| %>
-        <%= f.text_field :query, placeholder: "Search ", class: "border bg-white dark:bg-gray-800  border-[#3F8CFF] p-1 hover:border-[#3A81EB] border-2 rounded-lg" %>
-        <%= f.submit "Search", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 mr-2'  %>
-      <% end %>
-      <%= form_with url: product_task_path(@product, @task), method: :get, class: 'flex' do |f| %>
-        <%= f.submit "Clear", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100'  %>
-      <% end %>
-    </div>
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+    <%= form_with url: product_task_path(@product, @task), method: :get, class: 'flex gap-2 flex-1' do |f| %>
+      <div class="relative flex-grow">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <%= f.text_field :query, placeholder: "Search", class: "w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0D9C67] focus:border-[#0D9C67]" %>
+      </div>
+      <%= f.submit "Search", class: 'bg-[#0D9C67] hover:bg-[#0B8659] px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors whitespace-nowrap'  %>
+    <% end %>
+    <%= form_with url: product_task_path(@product, @task), method: :get, class: 'flex' do |f| %>
+      <%= f.submit "Clear", class: 'w-full sm:w-auto bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium text-sm text-gray-700 transition-colors'  %>
+    <% end %>
   </div>
 </div>

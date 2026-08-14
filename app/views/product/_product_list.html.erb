@@ -1,76 +1,76 @@
-<div class="overflow-x-auto shadow-md sm:rounded-lg h-full">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead class="text-xs  uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 w-[100%]">
+<div class="overflow-x-auto rounded-xl border border-gray-100 shadow-sm bg-white h-full">
+  <table class="w-full text-sm text-left text-gray-600">
+    <thead class="text-xs uppercase bg-[#F4F5FA] text-[#131D58] font-semibold">
     <tr>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-4 sm:px-6 py-3">
         Name of Project
       </th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-4 sm:px-6 py-3">
         Production Description
       </th>
-      <th scope="col" class="px-6 py-3 hide-in-sidebar">
+      <th scope="col" class="px-4 sm:px-6 py-3 hide-in-sidebar">
         Start Date
       </th>
-      <th scope="col" class="px-6 py-3 hide-in-sidebar">
+      <th scope="col" class="px-4 sm:px-6 py-3 hide-in-sidebar">
         End Date
       </th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-4 sm:px-6 py-3">
         Assignee
       </th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-4 sm:px-6 py-3">
         Product Category
       </th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="px-4 sm:px-6 py-3">
         Clients
       </th>
-      <th scope="col" class="px-6 py-3 ">
+      <th scope="col" class="px-4 sm:px-6 py-3 text-right">
         Actions
       </th>
     </tr>
     </thead>
-    <tbody class="text-sm font-normal text-gray-900 dark:text-gray-400">
+    <tbody class="text-sm font-normal text-gray-700 divide-y divide-gray-100">
     <% @product.each do |product|  %>
       <% if product.added_to?(current_user) or current_user.has_role?(:admin) %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-left">
-          <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-left">
-            <%= link_to product.name, product_path(product.id) %>
+        <tr class="bg-white hover:bg-[#F4F5FA] transition-colors h-12 text-left">
+          <th scope="row" class="px-4 sm:px-6 py-4 font-medium whitespace-nowrap text-left">
+            <%= link_to product.name, product_path(product.id), class: "text-[#131D58] hover:text-[#0D9C67] font-semibold" %>
           </th>
-          <td class="px-6 py-4">
+          <td class="px-4 sm:px-6 py-4">
             <%= product.description.truncate(50) %>
           </td>
-          <td class="px-6 py-4 hide-in-sidebar">
+          <td class="px-4 sm:px-6 py-4 hide-in-sidebar">
             <%= product.start_date.strftime("%d-%b-%y") %>
           </td>
-          <td class="px-6 py-4 hide-in-sidebar">
+          <td class="px-4 sm:px-6 py-4 hide-in-sidebar">
             <% if product.end_date.present? %>
               <% if product.end_date <= Date.today %>
-                <p class="text-red-900 p-1 rounded font-bold">
+                <span class="inline-flex items-center rounded-full bg-red-50 text-red-700 text-xs font-semibold px-2.5 py-1">
                   <%= product.end_date.strftime("%d-%b-%y") %>
-                </p>
+                </span>
               <% else %>
-                <p class="bg-red-green p-1 rounded">
+                <span class="inline-flex items-center rounded-full bg-[#E3F6EC] text-[#0B4A32] text-xs font-semibold px-2.5 py-1">
                   <%= product.end_date.strftime("%d-%b-%y") %>
-                </p>
+                </span>
               <% end %>
             <% end %>
           </td>
-          <td class="px-6 py-4">
+          <td class="px-4 sm:px-6 py-4">
             <%= product.user.name %>
           </td>
-          <td class="px-6 py-4 capitalize">
+          <td class="px-4 sm:px-6 py-4 capitalize">
             <% product.softwares.each do |software| %>  <!-- Iterate through software for the current project -->
               <%= software.name %>
             <% end %>
           </td>
-          <td class="px-6 py-4 capitalize ">
+          <td class="px-4 sm:px-6 py-4 capitalize ">
             <% if product.client.present? && product.client.name.present? %>
               <%= product.client.name %>
             <% end %>
           </td>
 
-          <!-- Actions 11 -->
-          <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= product.id %>">
-            <div class="relative w-full flex justify-start">
+          <!-- Actions -->
+          <td class="px-4 sm:px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= product.id %>">
+            <div class="relative w-full flex justify-end">
               <%= render partial: 'product/action_dropdown', locals: { product: product } %>
             </div>
           </td>
@@ -80,15 +80,15 @@
     </tbody>
   </table>
 </div>
-<div class="flex gap-10 mt-5">
+<div class="flex items-center justify-between gap-4 mt-5">
   <!-- Pagination Controls -->
-  <div class="pagination">
+  <div class="pagination flex items-center gap-4">
     <% if @page > 1 %>
-      <%= link_to 'Previous', product_index_path(@product, page: @page - 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <%= link_to 'Previous', product_index_path(@product, page: @page - 1, query: params[:query]), class: 'bg-[#131D58] hover:bg-[#0E1642] px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors' %>
     <% end %>
-    <span>Page <%= @page %> of <%= @total_pages %></span>
+    <span class="text-sm text-gray-500">Page <span class="font-semibold text-[#131D58]"><%= @page %></span> of <%= @total_pages %></span>
     <% if @page < @total_pages %>
-      <%= link_to 'Next', product_index_path(@product, page: @page + 1, query: params[:query]), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
+      <%= link_to 'Next', product_index_path(@product, page: @page + 1, query: params[:query]), class: 'bg-[#131D58] hover:bg-[#0E1642] px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors' %>
     <% end %>
   </div>
 </div>

@@ -1,62 +1,83 @@
 <% provide(:title, "Edit details for: #{@user.name}") %>
 
 <% if current_user.first_login == true %>
-  <div class="mt-14 p-4 flex flex-col">
-    <%= form_with model: @user, url: user_path(@user), method: :patch do |f| %>
-      <h1 class="font-bold">Edit Roles *</h1>
-      <p class="text-red-900 p-2 capitalize font-bold">
-        <%= @user.errors[:roles].join('') %>
-      </p>
-      <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
-        <div class="flex-row mx-auto">
-          <div class="mb-5">
-            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              First Name
-            </label>
-            <%= f.text_field :first_name, autofocus: true, autocomplete: 'name', class: "p-2 border #{current_user.has_role?(:admin) ? 'border-[#3F8CFF] hover:border-[#3A81EB]' : 'border-[#B2B8C2] hover:border-[#3A81EB]'} border-2 rounded-lg w-full dark:text-black", placeholder: 'Jay', required: current_user.has_role?(:admin), readonly: !current_user.has_role?(:admin) %>
-          </div>
-          <div class="mb-5">
-            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Last Name
-            </label>
-            <%= f.text_field :last_name, autofocus: true, autocomplete: 'name', class: "p-2 border #{current_user.has_role?(:admin) ? 'border-[#3F8CFF] hover:border-[#3A81EB]' : 'border-[#B2B8C2] hover:border-[#3A81EB]'} border-2 rounded-lg w-full dark:text-black", placeholder: 'Strong', required: current_user.has_role?(:admin), readonly: !current_user.has_role?(:admin) %>
-          </div>
-          <div class="capitalize pb-4">
-            <label for="roles" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Edit Roles
-            </label>
-            <% if current_user.has_role?(:admin) %>
-            <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator]), :id, :name do |b| %>
-              <div class="mb-2">
-                <%= b.check_box(class: "mr-2") %>
-                <%= b.label(class: "ml-2") %>
-              </div>
-            <% end %>
-              <% else %>
-            <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator admin observer sales ceo]), :id, :name do |b| %>
-              <div class="mb-2">
-                <%= b.check_box(class: "mr-2") %>
-                <%= b.label(class: "ml-2") %>
-              </div>
-            <% end %>
-              <% end %>
-          </div>
-          <div class="capitalize pb-4 gap-2">
-            <label for="client_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Select Client
-            </label>
-            <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name, selected: @user.client_id), { prompt: 'Select Client', include_blank: true }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" %>
-          </div>
+  <div class="min-h-screen bg-slate-50 px-4 py-10 dark:bg-slate-950 sm:px-6">
+    <div class="mx-auto max-w-2xl">
+      <%= form_with model: @user, url: user_path(@user), method: :patch do |f| %>
+        <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+          <p class="text-xs font-bold uppercase tracking-wide text-[#131D58] dark:text-[#8FA3E6]">Welcome</p>
+          <h1 class="mt-1 text-lg font-black text-[#0A1024] dark:text-white">Edit roles <span class="text-red-500">*</span></h1>
 
-          <div class="capitalize pb-4 gap-2">
-            <label for="client_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Select Location
-            </label>
-            <%= f.select :location_id, options_from_collection_for_select(Location.all, :id, ->(location) { "#{location.city}, #{location.country}" }, selected: @user.location_id), { prompt: 'Select City, Country', include_blank: true }, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-white" %>
-          </div>
+          <% if @user.errors[:roles].any? %>
+            <p class="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm font-bold capitalize text-red-700 dark:bg-red-500/10 dark:text-red-300">
+              <%= @user.errors[:roles].join('') %>
+            </p>
+          <% end %>
+
+          <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+            <div class="mt-5 space-y-5">
+              <div>
+                <label for="first_name" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  First name
+                </label>
+                <%= f.text_field :first_name, autofocus: true, autocomplete: 'name',
+                                 class: "block w-full rounded-lg border-2 px-3 py-2.5 text-sm font-medium shadow-sm transition focus:outline-none focus:ring-2 dark:bg-slate-800 dark:text-white #{current_user.has_role?(:admin) ? 'border-[#131D58]/30 hover:border-[#131D58] focus:border-[#131D58] focus:ring-[#131D58]/20' : 'border-slate-200 dark:border-slate-700'}",
+                                 placeholder: 'Jay', required: current_user.has_role?(:admin), readonly: !current_user.has_role?(:admin) %>
+              </div>
+
+              <div>
+                <label for="last_name" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Last name
+                </label>
+                <%= f.text_field :last_name, autofocus: true, autocomplete: 'name',
+                                 class: "block w-full rounded-lg border-2 px-3 py-2.5 text-sm font-medium shadow-sm transition focus:outline-none focus:ring-2 dark:bg-slate-800 dark:text-white #{current_user.has_role?(:admin) ? 'border-[#131D58]/30 hover:border-[#131D58] focus:border-[#131D58] focus:ring-[#131D58]/20' : 'border-slate-200 dark:border-slate-700'}",
+                                 placeholder: 'Strong', required: current_user.has_role?(:admin), readonly: !current_user.has_role?(:admin) %>
+              </div>
+
+              <div>
+                <label for="roles" class="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Edit roles
+                </label>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+                  <% if current_user.has_role?(:admin) %>
+                    <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator]), :id, :name do |b| %>
+                      <label class="mb-2 flex items-center gap-2 capitalize last:mb-0">
+                        <%= b.check_box(class: "h-4 w-4 rounded border-slate-300 text-[#131D58] focus:ring-[#131D58]") %>
+                        <%= b.label(class: "text-sm font-medium text-slate-700 dark:text-slate-200") %>
+                      </label>
+                    <% end %>
+                  <% else %>
+                    <%= f.collection_check_boxes :role_ids, Role.distinct.all.where.not(name: %w[editor creator admin observer sales ceo]), :id, :name do |b| %>
+                      <label class="mb-2 flex items-center gap-2 capitalize last:mb-0">
+                        <%= b.check_box(class: "h-4 w-4 rounded border-slate-300 text-[#131D58] focus:ring-[#131D58]") %>
+                        <%= b.label(class: "text-sm font-medium text-slate-700 dark:text-slate-200") %>
+                      </label>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+
+              <div>
+                <label for="client_id" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Select client
+                </label>
+                <%= f.select :client_id, options_from_collection_for_select(Client.all, :id, :name, selected: @user.client_id), { prompt: 'Select client', include_blank: true },
+                             class: "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white" %>
+              </div>
+
+              <div>
+                <label for="location_id" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Select location
+                </label>
+                <%= f.select :location_id, options_from_collection_for_select(Location.all, :id, ->(location) { "#{location.city}, #{location.country}" }, selected: @user.location_id), { prompt: 'Select city, country', include_blank: true },
+                             class: "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white" %>
+              </div>
+            </div>
+
+            <%= f.submit 'Save', class: 'mt-6 w-full rounded-lg bg-[#0D9C66] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#0B8558] hover:shadow active:scale-[0.98] sm:w-auto', id: 'button' %>
+          <% end %>
         </div>
-        <%= f.submit 'Save', class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100', id: 'button' %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 <% end %>

@@ -147,11 +147,11 @@ class User < ApplicationRecord
   private
 
   def email_domain_must_be_certified
-    allowed_domains = %w[craftsilicon.com little.africa craftsilicon.co.tz]
+    allowed_domains = %w[greatercare.com klinix.com]
     domain = email.split('@').last
     return if allowed_domains.include?(domain)
 
-    errors.add(:email, 'must be from a certified domain (craftsilicon.com or little.africa)')
+    errors.add(:email, 'must be from a certified domain (greatercare.com or klinix.com)')
   end
 
   def must_have_a_role

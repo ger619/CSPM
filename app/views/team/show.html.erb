@@ -1,46 +1,99 @@
 <% provide(:title, "Details for team: #{@team.name}") %>
 
-<% if flash[:notice] %>
-  <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
-    <p><%= flash[:notice] %></p>
-  </div>
-<% elsif flash[:alert] %>
-  <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
-    <p><%= flash[:alert] %></p>
-  </div>
-<% end %>
+<div class="min-h-screen bg-gray-50 px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+  <% if flash[:notice] %>
+    <div class="flex items-start gap-3 bg-[#E3F6EC] border border-[#0D9C67]/30 text-[#0B4A32] px-4 py-3 rounded-xl mb-4 shadow-sm">
+      <svg class="w-5 h-5 flex-shrink-0 text-[#0D9C67] mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <p class="text-sm font-medium"><%= flash[:notice] %></p>
+    </div>
+  <% elsif flash[:alert] %>
+    <div class="flex items-start gap-3 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-4 shadow-sm">
+      <svg class="w-5 h-5 flex-shrink-0 text-red-600 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+      </svg>
+      <p class="text-sm font-medium"><%= flash[:alert] %></p>
+    </div>
+  <% end %>
 
-<div class="overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
-    <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-4 py-2">Name of Person</th>
-      <th scope="col" class="px-4 px-2">Tickets Open</th>
-      <th scope="col" class="px-4 px-2">Tickets Closed Today</th>
-      <th scope="col" class="px-4 px-2">Projects Assigned</th>
-      <th scope="col" class="px-4 px-2">View</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @team.users.each do |user| %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-12 text-center">
-        <td class="px-4 py-4 font-medium text-left">
-          <p class="text-gray-700 dark:text-gray-300"><%= user.name %></p>
-        </td>
-        <td class="px-4 py-4 text-left">
-          <%= @assigned_today_counts[user.id] %>
-        </td>
-        <td class="px-4 py-4 text-left">
-          <%= @closed_today_counts[user.id] %>
-        </td>
-        <td class="px-4 py-4 text-left">
-          <%= user.projects.count %>
-        </td>
-        <td class="px-4 py-4 text-left">
-          <%= link_to 'View', show_team_member_team_path(@team, user_id: user.id), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100' %>
-        </td>
-      </tr>
+  <div class="flex items-center gap-3 mb-5">
+    <%= link_to team_index_path, class: "p-2 rounded-lg bg-white border border-gray-100 shadow-sm hover:bg-[#F4F5FA] text-gray-500 hover:text-[#131D58] transition-colors flex-shrink-0" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
     <% end %>
-    </tbody>
-  </table>
+    <div class="min-w-0">
+      <h1 class="text-xl sm:text-2xl font-bold text-[#131D58] truncate"><%= @team.name %></h1>
+      <p class="text-sm text-gray-500"><%= pluralize(@team.users.count, 'member') %></p>
+    </div>
+  </div>
+
+  <% if @team.users.empty? %>
+    <div class="flex flex-col items-center justify-center text-center py-16 px-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+      <p class="text-sm text-gray-500">No members assigned to this team yet.</p>
+    </div>
+  <% else %>
+    <!-- Desktop / tablet table -->
+    <div class="hidden sm:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm bg-white">
+      <table class="w-full text-sm text-left text-gray-600">
+        <thead class="text-xs uppercase bg-[#F4F5FA] text-[#131D58] font-semibold">
+        <tr>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap">Name</th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap">Tickets Open</th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap">Closed Today</th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap">Projects Assigned</th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-right">View</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+        <% @team.users.each do |user| %>
+          <tr class="bg-white hover:bg-[#F4F5FA] transition-colors">
+            <td class="px-6 py-4 font-semibold text-[#131D58]"><%= user.name %></td>
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center justify-center min-w-[1.75rem] px-2 py-1 rounded-full text-xs font-semibold bg-[#E8EAF3] text-[#131D58]">
+                <%= @assigned_today_counts[user.id] %>
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center justify-center min-w-[1.75rem] px-2 py-1 rounded-full text-xs font-semibold bg-[#E3F6EC] text-[#0B4A32]">
+                <%= @closed_today_counts[user.id] %>
+              </span>
+            </td>
+            <td class="px-6 py-4"><%= user.projects.count %></td>
+            <td class="px-6 py-4 text-right">
+              <%= link_to 'View', show_team_member_team_path(@team, user_id: user.id), class: 'inline-flex items-center gap-1.5 bg-[#131D58] hover:bg-[#0E1642] px-3 py-2 rounded-lg font-semibold text-xs text-white transition-colors' %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="sm:hidden grid grid-cols-1 gap-3">
+      <% @team.users.each do |user| %>
+        <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+          <div class="flex items-start justify-between gap-2 mb-3">
+            <p class="font-semibold text-[#131D58]"><%= user.name %></p>
+            <%= link_to 'View', show_team_member_team_path(@team, user_id: user.id), class: 'flex-shrink-0 inline-flex items-center gap-1.5 bg-[#131D58] hover:bg-[#0E1642] px-3 py-1.5 rounded-lg font-semibold text-xs text-white transition-colors' %>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-[#F4F5FA] rounded-lg py-2">
+              <p class="text-xs text-gray-500">Open</p>
+              <p class="text-sm font-bold text-[#131D58]"><%= @assigned_today_counts[user.id] %></p>
+            </div>
+            <div class="bg-[#F4F5FA] rounded-lg py-2">
+              <p class="text-xs text-gray-500">Closed Today</p>
+              <p class="text-sm font-bold text-[#131D58]"><%= @closed_today_counts[user.id] %></p>
+            </div>
+            <div class="bg-[#F4F5FA] rounded-lg py-2">
+              <p class="text-xs text-gray-500">Projects</p>
+              <p class="text-sm font-bold text-[#131D58]"><%= user.projects.count %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>

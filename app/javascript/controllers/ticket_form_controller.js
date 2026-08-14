@@ -44,6 +44,7 @@ export default class extends Controller {
           });
         })
         .catch((error) => {
+          // eslint-disable-next-line no-console
           console.error('Error fetching groupwares:', error);
           groupwareSelect.innerHTML = '<option value="">Error loading groupwares</option>';
         });

@@ -1,42 +1,74 @@
+<% if @status.empty? %>
+  <div class="flex flex-col items-center justify-center text-center py-16 px-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+    <div class="w-14 h-14 rounded-full bg-[#E8EAF3] flex items-center justify-center mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-[#131D58]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m6 3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    </div>
+    <p class="text-sm font-semibold text-[#131D58] mb-1">No statuses yet</p>
+    <p class="text-sm text-gray-500">Add a status label to start using it across projects and tickets.</p>
+  </div>
+<% else %>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%] ">
-  <table class="w-full text-sm text-left rtl:text-right">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-6 py-3">
-        Name of the Status
-      </th>
-      <% if can? :edit, @status %>
-        <th scope="col" class="px-6 py-3">
-          EDIT
-        </th>
-      <% end %>
-      <% if can? :edit, @status %>
-        <th scope="col" class="px-6 py-3">
-          DELETE
-        </th>
-      <% end %>
-    </tr>
-    </thead>
-    <tbody>
-    <% @status.each do |status| %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 h-[12px]">
-        <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap ">
-          <%= status.name   %>
-        </th>
-
-        <% if can? :edit, status %>
-          <td class="px-4 py-4">
-            <%= link_to 'EDIT', edit_status_path(status), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
-          </td>
-        <% end %>
-        <td class="px-4 py-4">
-          <% if can? :delete, status %>
-            <%= button_to 'DELETE', status, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-2 border-red-900 p-2 rounded-lg uppercase text-red-900 font-bold"  %>
-          <% end %>
-        </td>
+  <!-- Desktop / tablet table -->
+  <div class="hidden sm:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm bg-white">
+    <table class="w-full text-sm text-left text-gray-600">
+      <thead class="text-xs uppercase bg-[#F4F5FA] text-[#131D58] font-semibold">
+      <tr>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">Name of the Status</th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-right">Actions</th>
       </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+      <% @status.each do |status| %>
+        <tr class="bg-white hover:bg-[#F4F5FA] transition-colors">
+          <td class="px-6 py-4 font-semibold text-[#131D58] whitespace-nowrap">
+            <%= status.name %>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-end gap-2">
+              <% if can? :edit, status %>
+                <%= link_to edit_status_path(status), class: 'inline-flex items-center gap-1.5 bg-[#131D58] hover:bg-[#0E1642] px-3 py-1.5 rounded-lg font-semibold text-xs text-white transition-colors' do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-3.5 w-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                  </svg>
+                  Edit
+                <% end %>
+              <% end %>
+              <% if can? :delete, status %>
+                <%= button_to 'Delete', status, method: :delete,
+                    data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' },
+                    class: "inline-flex items-center gap-1.5 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg font-semibold text-xs text-red-600 transition-colors" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile cards -->
+  <div class="sm:hidden grid grid-cols-1 gap-3">
+    <% @status.each do |status| %>
+      <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-4 flex items-center justify-between gap-3">
+        <p class="font-semibold text-[#131D58] truncate"><%= status.name %></p>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <% if can? :edit, status %>
+            <%= link_to edit_status_path(status), class: 'inline-flex items-center gap-1.5 bg-[#131D58] hover:bg-[#0E1642] px-3 py-1.5 rounded-lg font-semibold text-xs text-white transition-colors' do %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-3.5 w-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+              </svg>
+              Edit
+            <% end %>
+          <% end %>
+          <% if can? :delete, status %>
+            <%= button_to 'Delete', status, method: :delete,
+                data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' },
+                class: "inline-flex items-center gap-1.5 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg font-semibold text-xs text-red-600 transition-colors" %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-    </tbody>
-  </table>
-</div>
+  </div>
+<% end %>

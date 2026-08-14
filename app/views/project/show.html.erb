@@ -1,175 +1,232 @@
 <% provide(:title, "Support Desk: #{@project.title}") %>
 
-<% if flash[:notice] %>
-  <div class="bg-[#1a237e] border border-[#4caf50] text-white px-4 py-3 rounded mb-4 shadow-md">
-    <p><%= flash[:notice] %></p>
-  </div>
-<% elsif flash[:alert] %>
-  <div class="bg-red-600 border border-red-400 text-white px-4 py-3 rounded mb-4 shadow-md">
-    <p><%= flash[:alert] %></p>
-  </div>
-<% end %>
-
-<%= render 'tickets/ticket_topbar' %>
-
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-    <!-- First Column -->
-    <div class="space-y-2 col-span-1">
-      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
-        <div class="flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-          </svg>
-        </div>
-        <div class="flex flex-col">
-          <h2 class="text-md font-light">Support Desk Manager</h2>
-          <p class="text-sm font-semibold"><%= @project.user&.name || 'No Project Manager Assigned' %></p>
+<div class="min-h-screen bg-slate-50 px-4 py-6 dark:bg-slate-950 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl">
+    <% if flash[:notice] %>
+      <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-emerald-800 shadow-sm dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200 sm:px-5">
+        <div class="flex items-start gap-3">
+          <div class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900 dark:text-emerald-300">
+            ✓
+          </div>
+          <div>
+            <p class="text-sm font-bold">Success</p>
+            <p class="mt-1 text-sm"><%= flash[:notice] %></p>
+          </div>
         </div>
       </div>
-
-      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
-        <div class="flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
-          </svg>
-        </div>
-        <div class="flex flex-col">
-          <h2 class="text-md font-light">Date to Commence</h2>
-          <p class="text-sm font-semibold"><%= @project.start_date.strftime("%d %b %Y") %></p>
+    <% elsif flash[:alert] %>
+      <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-red-800 shadow-sm dark:border-red-900 dark:bg-red-950 dark:text-red-200 sm:px-5">
+        <div class="flex items-start gap-3">
+          <div class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300">
+            !
+          </div>
+          <div>
+            <p class="text-sm font-bold">Alert</p>
+            <p class="mt-1 text-sm"><%= flash[:alert] %></p>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Second Column -->
-    <div class="space-y-4 col-span-2">
-      <div class="grid grid-cols-2 gap-2">
-        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4">
-          <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+    <% end %>
+
+    <section class="mb-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="border-b border-slate-100 px-4 py-3 dark:border-slate-800 sm:px-6">
+        <%= render "tickets/ticket_topbar" %>
+      </div>
+
+      <!-- Collapsed-by-default admin panels -->
+      <div class="divide-y divide-slate-100 dark:divide-slate-800">
+        <details class="group">
+          <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-3 sm:px-6">
+            <span class="text-sm font-bold text-[#0A1629] dark:text-white">People on this project</span>
+            <svg class="h-4 w-4 flex-shrink-0 text-slate-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
+          </summary>
+          <div class="px-4 pb-4 sm:px-6">
+            <%= render "project/assign_people" %>
           </div>
-          <div class="flex flex-col">
-            <h2 class="text-md font-light">All Open Tickets</h2>
-            <p class="text-md font-semibold "><%= @total_tickets_open %></p>
-          </div>
-          <div class="flex">
-            <%= link_to "View",
-                        project_path(@project, filter: 'Open'),
-                        class: "bg-blue-600 text-white font-medium rounded-md p-2 no-underline hover:bg-blue-700 transition" %>
-          </div>
-        </div>
-        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
-          <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-          </div>
-          <div class="flex flex-col">
-            <h2 class="text-md font-light">All Closed Tickets</h2>
-            <p class="text-md font-semibold"><%= @closed_tickets %></p>
-          </div>
-          <div class="flex items-center justify-end">
-            <%= link_to "View",
-                        project_path(@project, filter: 'Closed_for_all'),
-                        class: "bg-blue-600 text-white font-medium rounded p-2 no-underline hover:bg-blue-700 transition" %>
-          </div>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4">
-          <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-            </svg>
-          </div>
-          <div class="flex flex-col">
-            <h2 class="text-md font-light">My Open Tickets</h2>
-            <p class="text-md font-semibold "><%= @assigned_and_tickets %></p>
-          </div>
-          <div class="flex items-center justify-end">
-            <%= link_to "View",
-                        project_path(@project, filter: 'Assigned_opened'),
-                        class: "bg-blue-600 text-white font-medium rounded-md p-2 no-underline hover:bg-blue-700 transition" %>
-          </div>
-        </div>
-        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
-          <div class="flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-          </svg>
-          </div>
-          <div class="flex flex-col">
-            <h2 class="text-md font-light">My Assigned & Closed</h2>
-            <p class="text-md font-semibold"><%= @closed_assigned_tickets %></p>
-          </div>
-          <div class="flex items-center justify-end">
-            <%= link_to "View",
-                project_path(@project, filter: 'Assigned_closed'),
-                class: "bg-blue-600 text-white font-medium rounded-md p-2 no-underline hover:bg-blue-700 transition" %>
-          </div>
-        </div>
-      </div>
-    </div>
+        </details>
 
+        <details class="group">
+          <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-3 sm:px-6">
+            <span class="text-sm font-bold text-[#0A1629] dark:text-white">Add a team to this project</span>
+            <svg class="h-4 w-4 flex-shrink-0 text-slate-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+          <div class="px-4 pb-4 sm:px-6">
+            <%= render "project/add_teams" %>
+          </div>
+        </details>
 
-    <!-- Third Column -->
-    <div class="px-16 grid grid-cols-[auto_1fr_auto] gap-3 sm:gap-4 col-span-2">
-      <div class="flex flex-col">
-        <h2 class="text-md font-light">Products</h2>
-        <div class="text-md font-semibold">
-          <% if @project.softwares.any? %>
-            <ul class="flex flex-wrap gap-4 items-center">
-              <% @project.softwares.each do |software| %>
-                <% software.groupwares.each do |groupware| %>
-                  <% active_groupware = @project.tickets.where(groupware_id: groupware.id).count %>
-                  <% if active_groupware > 0 %>
-                    <li class="flex items-center gap-2">
-                  <span>
-                    <%= image_tag(groupware.image.presence || 'default.png', class: 'sm:h-6 md:h-10 rounded-md object-cover') %>
-                  </span>
-                      <span class="text-md font-semibold"><%= groupware.name %></span>
-                    </li>
-                  <% end %>
-                <% end %>
+        <details class="group">
+          <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-3 sm:px-6">
+            <span class="text-sm font-bold text-[#0A1629] dark:text-white">Manage assigned users</span>
+            <svg class="h-4 w-4 flex-shrink-0 text-slate-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+          <div class="px-4 pb-4 sm:px-6">
+            <%= render "project/add_assign" %>
+          </div>
+        </details>
+      </div>
+
+      <!-- Overview: condensed into single-row strips -->
+      <div class="border-t border-slate-100 p-4 dark:border-slate-800 sm:p-6">
+        <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 class="text-base font-black text-[#0A1629] dark:text-white">Support Desk Summary</h2>
+          <div class="rounded-full bg-[#3F8CFF]/10 px-3 py-1 text-xs font-bold text-[#3F8CFF]">
+            <%= @ticket_count %> Total Tickets
+          </div>
+        </div>
+
+        <!-- Manager / date / stat pills, one row -->
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-800 dark:bg-slate-900/60">
+            <p class="truncate text-[10px] font-bold uppercase tracking-wide text-slate-400">Manager</p>
+            <p class="mt-0.5 truncate text-sm font-black text-[#0A1629] dark:text-white">
+              <%= @project.user&.name || "Unassigned" %>
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-800 dark:bg-slate-900/60">
+            <p class="truncate text-[10px] font-bold uppercase tracking-wide text-slate-400">Commence</p>
+            <p class="mt-0.5 truncate text-sm font-black text-[#0A1629] dark:text-white">
+              <%= @project.start_date.present? ? @project.start_date.strftime("%d %b %Y") : "Not set" %>
+            </p>
+          </div>
+
+          <%= link_to project_path(@project, filter: "Open"),
+                      class: "group/card rounded-2xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition hover:border-[#3F8CFF]/40 hover:shadow-md dark:border-slate-800 dark:bg-slate-900" do %>
+            <p class="truncate text-[10px] font-bold uppercase tracking-wide text-slate-400">Open</p>
+            <p class="mt-0.5 text-lg font-black text-[#0A1629] group-hover/card:text-[#3F8CFF] dark:text-white"><%= @total_tickets_open %></p>
+          <% end %>
+
+          <%= link_to project_path(@project, filter: "Closed_for_all"),
+                      class: "group/card rounded-2xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition hover:border-green-400/60 hover:shadow-md dark:border-slate-800 dark:bg-slate-900" do %>
+            <p class="truncate text-[10px] font-bold uppercase tracking-wide text-slate-400">Closed</p>
+            <p class="mt-0.5 text-lg font-black text-[#0A1629] group-hover/card:text-green-600 dark:text-white"><%= @closed_tickets %></p>
+          <% end %>
+
+          <%= link_to project_path(@project, filter: "Assigned_opened"),
+                      class: "group/card rounded-2xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition hover:border-amber-400/60 hover:shadow-md dark:border-slate-800 dark:bg-slate-900" do %>
+            <p class="truncate text-[10px] font-bold uppercase tracking-wide text-slate-400">My open</p>
+            <p class="mt-0.5 text-lg font-black text-[#0A1629] group-hover/card:text-amber-600 dark:text-white"><%= @assigned_and_tickets %></p>
+          <% end %>
+
+          <%= link_to project_path(@project, filter: "Assigned_closed"),
+                      class: "group/card rounded-2xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition hover:border-slate-400/60 hover:shadow-md dark:border-slate-800 dark:bg-slate-900" do %>
+            <p class="truncate text-[10px] font-bold uppercase tracking-wide text-slate-400">Mine closed</p>
+            <p class="mt-0.5 text-lg font-black text-[#0A1629] dark:text-white"><%= @closed_assigned_tickets %></p>
+          <% end %>
+        </div>
+
+        <!-- Active sub products, inline chips -->
+        <% active_groupwares = [] %>
+        <% @project.softwares.each do |software| %>
+          <% software.groupwares.each do |groupware| %>
+            <% active_groupware = @project.tickets.where(groupware_id: groupware.id).count %>
+            <% active_groupwares << groupware if active_groupware.positive? %>
+          <% end %>
+        <% end %>
+
+        <% if active_groupwares.any? %>
+          <div class="mt-3 flex flex-wrap items-center gap-2">
+            <span class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Active products</span>
+            <% active_groupwares.uniq.each do |groupware| %>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 py-1 pl-1 pr-3 text-xs font-bold text-slate-700 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-200">
+            <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+              <% if groupware.image.present? %>
+                <%= image_tag(groupware.image, class: "h-full w-full object-cover") %>
+              <% else %>
+                <%= image_tag "logo-mark.png", class: "h-3.5 w-3.5 object-contain" %>
               <% end %>
-            </ul>
+            </span>
+            <%= groupware.name %>
+          </span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+
+    <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="border-b border-slate-200 bg-slate-50 px-4 py-4 dark:border-slate-800 dark:bg-slate-900/60 sm:px-6">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-wide text-[#3F8CFF]">
+              Tickets
+            </p>
+            <h2 class="text-lg font-black text-[#0A1629] dark:text-white sm:text-xl">
+              Support Desk Tickets
+            </h2>
+          </div>
+
+          <div class="rounded-full bg-[#3F8CFF]/10 px-4 py-2 text-xs font-bold text-[#3F8CFF]">
+            <%= @ticket_count %> Total
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto p-4 sm:p-6">
+        <% if @project.assigned_to?(current_user) || current_user.has_role?(:admin) || current_user.has_role?(:agent) || current_user.has_role?(:observer) %>
+          <%= render "tickets/ticket" %>
+        <% else %>
+          <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
+            <h3 class="text-lg font-black text-[#0A1629] dark:text-white">
+              You do not have access to these tickets.
+            </h3>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              Please contact an administrator if you believe this is incorrect.
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="mt-6 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm font-bold text-[#0A1629] dark:text-white">
+            Pagination
+          </p>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Page <span class="font-bold text-[#3F8CFF]"><%= @page %></span>
+            of
+            <span class="font-bold text-[#3F8CFF]"><%= @total_pages.zero? ? 1 : @total_pages %></span>
+          </p>
+        </div>
+
+        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+          <% if @page > 1 %>
+            <%= link_to project_path(@project, params.permit!.merge(page: @page - 1)),
+                        class: "inline-flex h-11 w-full items-center justify-center rounded-2xl border border-[#3F8CFF]/30 bg-white px-5 text-sm font-bold text-[#3F8CFF] shadow-sm transition hover:bg-[#3F8CFF] hover:text-white focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/20 sm:w-auto" do %>
+              Previous
+            <% end %>
           <% else %>
-            <p>No sub-product present</p>
+            <span class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 px-5 text-sm font-bold text-slate-400 dark:border-slate-800 dark:bg-slate-800 sm:w-auto">
+              Previous
+            </span>
+          <% end %>
+
+          <div class="hidden rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300 sm:block">
+            <%= @page %> / <%= @total_pages.zero? ? 1 : @total_pages %>
+          </div>
+
+          <% if @page < @total_pages %>
+            <%= link_to project_path(@project, params.permit!.merge(page: @page + 1)),
+                        class: "inline-flex h-11 w-full items-center justify-center rounded-2xl bg-[#3F8CFF] px-5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-[#3A81EB] focus:outline-none focus:ring-4 focus:ring-[#3F8CFF]/25 sm:w-auto" do %>
+              Next
+            <% end %>
+          <% else %>
+            <span class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 px-5 text-sm font-bold text-slate-400 dark:border-slate-800 dark:bg-slate-800 sm:w-auto">
+              Next
+            </span>
           <% end %>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="border-2 border-gray-200 rounded-lg dark:border-gray-700">
-  
-  <div class="flex pt-2 mb-4 rounded bg-gray-50 dark:bg-gray-800 min-h-full w-full">
-    <% if @project.assigned_to?(current_user) or current_user.has_role?(:admin) or current_user.has_role?(:agent) or current_user.has_role?(:observer) %>
-      <%= render 'tickets/ticket' %>
-    <% end %>
-    
-  </div>
-  <h1>Total Tickets:
-    <span class="font-medium">
-      <%= @ticket_count %>
-    </span>
-  </h1>
-</div>
-
-<div class="flex flex-col md:flex-row gap-10 mt-5">
-  <!-- Pagination Controls -->
-  <div class="pagination">
-    <% if @page > 1 %>
-      <%= link_to 'Previous', project_path(@project, params.permit!.merge(page: @page - 1)), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-    <% end %>
-
-    <span>Page <%= @page %> of <%= @total_pages %></span>
-
-    <% if @page < @total_pages %>
-      <%= link_to 'Next', project_path(@project, params.permit!.merge(page: @page + 1)), class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100' %>
-    <% end %>
+    </section>
   </div>
 </div>

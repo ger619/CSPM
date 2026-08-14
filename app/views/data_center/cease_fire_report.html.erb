@@ -1,122 +1,130 @@
 <% provide(:title, "Tickets Status") %>
 
-<div class="flex items-center justify-between mb-6">
-  <!-- Left: Title and Subtext -->
-  <div class="flex flex-col items-center justify-center w-full">
-    <h1 class="text-2xl font-bold text-center">
-      <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
-        Cease Fire Report
-      <% else %>
-        Status Report
+<div class="min-h-screen bg-slate-50 px-4 py-6 dark:bg-slate-950 sm:px-6 lg:px-8">
+  <div>
+
+    <div class="mb-6 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <!-- Title and Subtext -->
+      <div class="flex flex-1 flex-col items-center text-center sm:items-start sm:text-left">
+        <h1 class="text-xl font-black text-[#0A1024] dark:text-white sm:text-2xl">
+          <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') %>
+            Cease Fire Report
+          <% else %>
+            Status Report
+          <% end %>
+        </h1>
+        <span class="mt-1 text-xs font-semibold text-red-600 dark:text-red-400">
+          (Leave the date field blank if you want all the data from inception to date*)
+        </span>
+        <div id="flash-container" class="w-full"></div>
+      </div>
+
+      <!-- Manage Button (admin only) -->
+      <% if current_user.has_role?(:admin) %>
+        <%= link_to commonly_selected_clients_path, data: { turbo_frame: "modal" },
+                    class: "flex flex-shrink-0 items-center gap-2 rounded-lg border-2 border-[#131D58] bg-white px-4 py-2 font-bold text-[#131D58] transition-colors duration-200 hover:bg-[#131D58] hover:text-white dark:bg-slate-900" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+          </svg>
+          <span>Manage Common Clients</span>
+        <% end %>
       <% end %>
-    </h1>
-    <span class="text-xs text-red mt-1">
-      (Leave the date field blank if you want all the data from inception to date*)
-    </span>
-    <div id="flash-container"></div>
-  </div>
+    </div>
 
-  <!-- Right: Manage Button (admin only) -->
-  <% if current_user.has_role?(:admin) %>
-    <%= link_to commonly_selected_clients_path, data: { turbo_frame: "modal" },
-          class: "ml-4 flex-shrink-0 flex items-center gap-2 border-2 border-blue-500 bg-white hover:bg-blue-500 px-4 py-2 rounded-lg text-blue-500 hover:text-white font-medium transition-colors duration-200" do %>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-      </svg>
-      <span>Manage Common Clients</span>
-    <% end %>
-  <% end %>
-</div>
+    <!-- Filter Form -->
+    <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+      <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-7">
 
-<div class="p-2 w-full flex-wrap">
-  <%= form_with url: cease_fire_report_path, method: :get, local: true do |f| %>
-    <div class="flex flex-wrap justify-center gap-2">
-      <div class="flex flex-col relative gap-2">
-        <label for="searchStatus" class="capitalize text-sm font-bold w-full align-middle pt-3">Status</label>
-        <!-- Searchable Input -->
-        <input type="text" id="searchStatus" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Status...">
-        <!-- Dropdown List -->
-        <div id="statusDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
-          <% ['New', 'Resolved', 'Closed', 'Reopened', 'Under Development', 'QA Testing', 'Awaiting Build', 'Client Confirmation Pending', 'On-Hold', 'Assigned', 'Declined', 'Work in Progress'].each do |status| %>
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
-              <label>
-                <input type="checkbox" value="<%= status %>" data-status-name="<%= status %>" class="status-checkbox mr-2 capitalize">
-                <%= status %>
-              </label>
+          <!-- Status dropdown -->
+          <div class="relative flex flex-col gap-1.5">
+            <label for="searchStatus" class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</label>
+            <input type="text" id="searchStatus"
+                   class="w-full rounded-lg border-2 border-[#131D58]/30 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition placeholder-slate-400 hover:border-[#131D58] focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+                   placeholder="Search status...">
+
+            <div id="statusDropdown" class="absolute top-full z-10 mt-1 hidden max-h-60 w-full overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
+              <% ['New', 'Resolved', 'Closed', 'Reopened', 'Under Development', 'QA Testing', 'Awaiting Build', 'Client Confirmation Pending', 'On-Hold', 'Assigned', 'Declined', 'Work in Progress'].each do |status| %>
+                <div class="dropdown-item cursor-pointer px-3 py-2 text-sm font-medium text-slate-700 hover:bg-[#131D58]/10 dark:text-slate-100">
+                  <label class="flex cursor-pointer items-center gap-2">
+                    <input type="checkbox" value="<%= status %>" data-status-name="<%= status %>" class="status-checkbox h-4 w-4 rounded border-slate-300 text-[#131D58] focus:ring-[#131D58]">
+                    <%= status %>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+
+            <div id="selectedStatusesWrapper"></div>
+          </div>
+
+          <!-- Clients dropdown -->
+          <% if !current_user.has_role?(:ceo) %>
+            <div class="relative flex flex-col gap-1.5">
+              <label for="searchClient" class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Client</label>
+              <input type="text" id="searchClient"
+                     class="w-full rounded-lg border-2 border-[#131D58]/30 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition placeholder-slate-400 hover:border-[#131D58] focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+                     placeholder="Search client...">
+
+              <div id="clientDropdown" class="absolute top-full z-10 mt-1 hidden max-h-60 w-full overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
+                <div class="dropdown-item cursor-pointer px-3 py-2 text-sm font-medium text-slate-700 hover:bg-[#131D58]/10 dark:text-slate-100">
+                  <label class="flex cursor-pointer items-center gap-2">
+                    <input type="checkbox" value="" data-client-name="All Clients" class="client-checkbox h-4 w-4 rounded border-slate-300 text-[#131D58] focus:ring-[#131D58]">
+                    All Clients
+                  </label>
+                </div>
+                <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
+                  <div class="dropdown-item cursor-pointer px-3 py-2 text-sm font-medium text-slate-700 hover:bg-[#131D58]/10 dark:text-slate-100">
+                    <label class="flex cursor-pointer items-center gap-2">
+                      <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox h-4 w-4 rounded border-slate-300 text-[#131D58] focus:ring-[#131D58] capitalize">
+                      <%= client.name %>
+                    </label>
+                  </div>
+                <% end %>
+              </div>
+
+              <div id="selectedClientsWrapper"></div>
             </div>
           <% end %>
-        </div>
 
-        <!-- Hidden Input to store multiple selected statuses -->
-        <div id="selectedStatusesWrapper"></div>
-      </div>
-
-      <!-- CLients dropdown -->
-      <% if !current_user.has_role?(:ceo) %>
-        <div class="flex flex-col relative gap-2">
-          <label for="searchClient" class="capitalize text-sm font-bold w-full align-middle pt-3">Client</label>
-
-          <div class="flex gap-2">
-            <!-- Search Input -->
-            <input type="text" id="searchClient" class="border border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-lg bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100 w-full px-4 py-2" placeholder="Search Client..." onkeyup="filterClientDropdown()">
+          <!-- Date range -->
+          <div class="flex flex-col gap-1.5">
+            <%= f.label :start_date, "Start date", class: "text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400" %>
+            <%= f.date_field :start_date, value: params[:start_date], class: "w-full rounded-lg border-2 border-[#131D58]/30 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:border-[#131D58] focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:bg-slate-800 dark:text-slate-100" %>
           </div>
 
-          <!-- Dropdown List -->
-          <div id="clientDropdown" class="absolute top-20 left-0 w-full bg-white border border-[#3F8CFF] rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto hidden z-10">
-            <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
-              <label>
-                <input type="checkbox" value="" data-client-name="All Clients" class="client-checkbox mr-2">
-                All Clients
-              </label>
-            </div>
-            <% (current_user.has_role?(:admin) || current_user.has_role?(:observer) ? Client.all : Client.joins(:projects).where(projects: { id: current_user.projects.pluck(:id) }).distinct).each do |client| %>
-              <div class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer bg-slate-100 dark:bg-gray-900 text-gray-900 dark:text-slate-100">
-                <label>
-                  <input type="checkbox" value="<%= client.id %>" data-client-name="<%= client.name %>" class="client-checkbox mr-2 capitalize">
-                  <%= client.name %>
-                </label>
-              </div>
+          <div class="flex flex-col gap-1.5">
+            <%= f.label :end_date, "End date", class: "text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400" %>
+            <%= f.date_field :end_date, value: params[:end_date], class: "w-full rounded-lg border-2 border-[#131D58]/30 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:border-[#131D58] focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:bg-slate-800 dark:text-slate-100" %>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <%= f.label :priority, "Severity", class: "text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400" %>
+            <%= f.select :priority,
+                         options_for_select(['SEVERITY 1', 'SEVERITY 2', 'SEVERITY 3', 'SEVERITY 4'], params[:priority]),
+                         { include_blank: 'All Severities' },
+                         prompt: 'Select priority',
+                         class: "w-full rounded-lg border-2 border-[#131D58]/30 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:border-[#131D58] focus:border-[#131D58] focus:outline-none focus:ring-2 focus:ring-[#131D58]/20 dark:bg-slate-800 dark:text-slate-100" %>
+          </div>
+
+          <div class="flex flex-col gap-1.5 mt-5">
+            <% if current_user.has_role? :admin %>
+              <button type="button" id="precheckCommonClientsBtn" class="rounded-lg border-2 border-green-500 p-2.5 text-sm font-bold text-green-600 transition duration-200 hover:bg-green-600 hover:text-white">
+                Preselect Clients
+              </button>
             <% end %>
           </div>
-
-          <!-- Hidden Input to store multiple selected client IDs -->
-          <div id="selectedClientsWrapper"></div>
+          <div class="flex flex-col gap-1.5 mt-5">
+            <%= f.submit "Generate Report", class: 'w-full rounded-lg bg-[#0D9C66] p-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#0B8558] hover:shadow active:scale-[0.98] sm:w-auto' %>
+          </div>
         </div>
       <% end %>
-
-
-      <div class="flex flex-col gap-2">
-        <%= f.label :start_date, "Start Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :start_date, value: params[:start_date], class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <%= f.label :end_date, "End Date", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.date_field :end_date, value: params[:end_date], class: "border py-2 px-4 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
-      </div>
-      <div class="flex flex-col gap-2">
-        <%= f.label :priority, "Severity", class: "capitalize text-sm font-bold w-full align-middle pt-3" %>
-        <%= f.select :priority,
-                     options_for_select(['SEVERITY 1', 'SEVERITY 2', 'SEVERITY 3', 'SEVERITY 4'], params[:priority]),
-                     { include_blank: 'All Severities' },
-                     prompt: 'Select Priority',
-                     class: "border py-2 pl-4 pr-8 border-[#3F8CFF] hover:border-[#3A81EB] border-2 rounded-md dark:bg-gray-900" %>
-
-      </div>
-      <div class="flex  flex-cols-2 gap-2 pt-10">
-        <% if current_user.has_role? :admin %>
-          <!-- Preselect commonly selected clients button -->
-          <button type="button" id="precheckCommonClientsBtn" class="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white p-2 rounded-lg transition duration-200">
-            Preselect Common Clients
-          </button>
-        <% end %>
-        <%= f.submit "Generate Report", class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-lg text-slate-100 w-full sm:w-auto' %>
-      </div>
     </div>
-  <% end %>
-</div>
 
-<%= render 'data_center/ticket_cease' %>
+    <div class="mt-6">
+      <%= render 'data_center/ticket_cease' %>
+    </div>
+  </div>
+</div>
 
 <script>
   document.addEventListener("turbo:load", () => {
@@ -215,24 +223,24 @@
           });
 
           clientDropdown.innerHTML = '';
-          
+
           // Add common clients first with a separator
           if (commonClientItems.length > 0) {
             const header = document.createElement("div");
             header.className = "px-4 py-2 font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700";
             header.textContent = "Common Clients";
             clientDropdown.appendChild(header);
-            
+
             commonClientItems.forEach(item => {
               item.classList.add("common-client");
               clientDropdown.appendChild(item);
             });
-            
+
             const separator = document.createElement("div");
             separator.className = "border-t border-gray-200 dark:border-gray-600 my-1";
             clientDropdown.appendChild(separator);
           }
-          
+
           // Add other clients
           otherClientItems.forEach(item => clientDropdown.appendChild(item));
 
@@ -247,7 +255,7 @@
         } else {
           // When deselecting - restore original order
           clientDropdown.innerHTML = originalDropdownOrder;
-          
+
           // Uncheck all checkboxes
           document.querySelectorAll(".client-checkbox").forEach((checkbox) => {
             checkbox.checked = false;
@@ -289,8 +297,6 @@
         flashDiv.remove();
       }, 5000);
     }
-
-
 
     // Setup for "Status" dropdown
     setupDropdown(

@@ -1,77 +1,75 @@
 <% if current_user.has_role?(:admin) || current_user.has_role?('project manager') || current_user.has_role?(:agent) %>
-  <div class="col-span-2 mt-6" data-controller="status-modal">
-    <div class="flex items-center justify-between mb-2">
-      <div class="text-sm font-semibold uppercase tracking-wider">Assigned Users</div>
+  <section class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900" data-controller="status-modal">
+    <div class="mb-3 flex items-center justify-between">
+      <p class="text-xs font-bold uppercase tracking-wide text-slate-400">Assigned users</p>
       <% unless (@ticket.statuses.first&.name == 'Closed' or @ticket.statuses.first&.name == 'Resolved') && !current_user.has_role?(:admin) %>
         <button
-            data-action="click->status-modal#openModal"
-            class="ml-2 px-2 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-400 transition"
-            aria-label="Assign users"
-          >
-            Select
-          </button>
+          data-action="click->status-modal#openModal"
+          class="rounded-lg bg-[#3F8CFF] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#3A81EB] hover:shadow active:scale-[0.98]"
+          aria-label="Assign users"
+        >
+          Select
+        </button>
       <% end %>
-
     </div>
 
-    <div class="flex flex-wrap items-center gap-2">
+    <div class="flex flex-wrap items-center gap-1.5">
       <% if @ticket.users.any? %>
         <% @ticket.users.each do |user| %>
-          <span class="text-base font-medium">
+          <span class="rounded-full bg-[#3F8CFF]/10 px-3 py-1 text-xs font-bold text-[#3F8CFF]">
             <%= user.name %>
-            <% unless user == @ticket.users.last %>,
-          <% end %>
           </span>
         <% end %>
       <% else %>
-        <p class="text-red-500 text-sm">
+        <p class="text-sm font-semibold text-red-500">
           No agents assigned. Please assign at least one agent to this ticket.
         </p>
       <% end %>
     </div>
 
     <!-- Assign Users Modal -->
-    <div class="hidden fixed inset-0 bg-gray-500 bg-opacity-50 overflow-y-auto h-full w-full z-50" 
+    <div class="hidden fixed inset-0 z-50 h-full w-full overflow-y-auto bg-slate-900/50 backdrop-blur-sm"
          data-status-modal-target="modal">
-      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-medium">Assign Users Modal</h3>
+      <div class="relative top-20 mx-auto w-[90%] max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-700 dark:bg-slate-800">
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="text-base font-black text-[#0A1629] dark:text-white">Assign users</h3>
           <button
             data-action="click->status-modal#closeModal"
-            class="focus:outline-none text-gray-500 hover:text-gray-700"
+            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
+            <span class="sr-only">Close</span>
           </button>
         </div>
 
         <%= form_with url: assign_tag_project_ticket_path(@project, @ticket, data: { turbo: false }), local: true do %>
           <div class="mb-4">
-            <%= label_tag :user_id, "Select User", class: "block text-sm font-medium mb-1" %>
+            <%= label_tag :user_id, "Select user", class: "mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400" %>
             <% available_users = User.with_assigned_role.where.not(id: @ticket.users.pluck(:id)).where(id: @project.users.pluck(:id)).order(:first_name).distinct %>
             <% if available_users.any? %>
               <%= select_tag :user_id, options_from_collection_for_select(available_users, :id, :name || :email),
-                  class: "mt-1 block w-full pl-3 pr-10 py-2 text-base dark:bg-gray-700 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+                             class: "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#3F8CFF] focus:outline-none focus:ring-2 focus:ring-[#3F8CFF]/20 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200" %>
             <% else %>
-              <p class="text-sm">No available users to assign.</p>
+              <p class="text-sm font-semibold text-slate-400">No available users to assign.</p>
             <% end %>
           </div>
 
-          <div class="flex justify-end space-x-3">
+          <div class="flex justify-end gap-2">
             <button
               type="button"
               data-action="click->status-modal#closeModal"
-              class="px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               Cancel
             </button>
             <% if available_users.any? %>
-              <%= submit_tag "Assign User", class: "px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+              <%= submit_tag "Assign user", class: "rounded-lg bg-[#3F8CFF] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#3A81EB] hover:shadow active:scale-[0.98]" %>
             <% end %>
           </div>
         <% end %>
       </div>
     </div>
-  </div>
+  </section>
 <% end %>

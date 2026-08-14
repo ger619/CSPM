@@ -1,42 +1,65 @@
-<div class="overflow-x-auto shadow-md sm:rounded-lg h-full w-full">
-  <table class="w-full text-sm text-left rtl:text-right">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<% if @software.empty? %>
+  <div class="flex flex-col items-center justify-center text-center py-16 px-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+    <div class="w-14 h-14 rounded-full bg-[#E8EAF3] flex items-center justify-center mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-[#131D58]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.653v-2.914a2.25 2.25 0 0 0-.659-1.591l-5.432-5.432a2.25 2.25 0 0 0-1.591-.659h-6.336c-.597 0-1.17.237-1.591.659l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.914c0 .653.28 1.267.75 1.653m16.5 0a2.184 2.184 0 0 1-1.5.591H5.25a2.185 2.185 0 0 1-1.5-.591m16.5 0v-.416c0-.966-.784-1.75-1.75-1.75h-2.36c-.5 0-.933.375-.994.87-.078.65-.635 1.13-1.29 1.13h-1.212c-.655 0-1.212-.48-1.29-1.13-.06-.495-.494-.87-.994-.87h-2.36c-.966 0-1.75.784-1.75 1.75v.416" />
+      </svg>
+    </div>
+    <p class="text-sm font-semibold text-[#131D58] mb-1">No software products yet</p>
+    <p class="text-sm text-gray-500">Add a software product to start grouping projects under it.</p>
+  </div>
+<% else %>
+
+  <!-- Desktop / tablet table -->
+  <div class="hidden sm:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm bg-white">
+    <table class="w-full text-sm text-left text-gray-600">
+      <thead class="text-xs uppercase bg-[#F4F5FA] text-[#131D58] font-semibold">
       <tr>
-        <th scope="col" class="px-6 py-3 w-1/4"> 
-          Name of the software
-        </th>
-        <th scope="col" class="px-6 py-3 w-1/2"> 
-          Description of the software
-        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap w-1/4">Name of the Software</th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">Description</th>
         <% if can?(:edit, @software) || can?(:delete, @software) %>
-          <th scope="col" class="px-6 py-3">
-            ACTIONS
-          </th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-right">Actions</th>
         <% end %>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
       <% @software.each do |software| %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-          <td class="px-6 py-4 font-medium whitespace-nowrap w-1/4"> 
-            <%= link_to software.name, software_path(software.id) %>
+        <tr class="bg-white hover:bg-[#F4F5FA] transition-colors">
+          <td class="px-6 py-4 font-semibold whitespace-nowrap">
+            <%= link_to software.name, software_path(software.id), class: "text-[#131D58] hover:text-[#0D9C67] font-semibold" %>
           </td>
-          <td class="px-6 py-4 w-1/2">  
-            <div class="truncate">
-              <%= software.description %>
-            </div>
+          <td class="px-6 py-4 text-gray-600">
+            <div class="truncate max-w-xl"><%= software.description %></div>
           </td>
-
           <% if can?(:edit, software) || can?(:delete, software) %>
-            <!-- Actions li -->
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>"> 
-              <div class="relative flex justify-start"> 
+            <td class="px-6 py-4 text-right" data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>">
+              <div class="relative flex justify-end">
                 <%= render partial: 'software/action_dropdown', locals: { software: software } %>
               </div>
             </td>
           <% end %>
         </tr>
       <% end %>
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile cards -->
+  <div class="sm:hidden grid grid-cols-1 gap-3">
+    <% @software.each do |software| %>
+      <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <%= link_to software.name, software_path(software.id), class: "text-[#131D58] font-semibold text-base truncate block" %>
+            <p class="text-sm text-gray-500 mt-0.5 line-clamp-2"><%= software.description %></p>
+          </div>
+          <% if can?(:edit, software) || can?(:delete, software) %>
+            <div data-controller="dropdown" data-dropdown-ticket-id-value="<%= software.id %>" class="flex-shrink-0">
+              <%= render partial: 'software/action_dropdown', locals: { software: software } %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
